@@ -225,6 +225,6 @@ Spelling and grammar are lightly cleaned for readability while preserving the or
 - **Prompt:** "Add the last prompts with code changes to the prompt history with a commit ref."
 - **Input Tokens (est):** ~20
 - **Output Tokens (est):** ~400
-- **Commit:** pending — this is the commit
+- **Commit:** `1c270fd` — Update PromptProgression with Prompts 14–17 and fix #13 commit ref
 - **Files Created/Modified:**
   - `PromptProgression.md` (modified — fixed Prompt #13 commit hash, added Prompts #14–17)
