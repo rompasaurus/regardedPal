@@ -236,7 +236,7 @@ Spelling and grammar are lightly cleaned for readability while preserving the or
 - **Prompt:** "I need a website deployment process guide for GitHub Pages. I have a registered domain on Squarespace and I would like to deploy this site on GitHub and link my domain to this page."
 - **Input Tokens (est):** ~45
 - **Output Tokens (est):** ~2,800
-- **Commit:** pending — this is the commit
+- **Commit:** `38baa75` — Add deployment guide and CNAME file for Squarespace domain setup
 - **Files Created/Modified:**
   - `website/DEPLOY.md` (created — 13-section deployment guide: GitHub Pages setup, first deployment, CNAME file, Squarespace DNS configuration with step-by-step record setup, HTTPS, mkdocs.yml update, end-to-end verification checklist, troubleshooting)
   - `website/docs/CNAME` (created — placeholder CNAME file, update with real domain before deploying)
