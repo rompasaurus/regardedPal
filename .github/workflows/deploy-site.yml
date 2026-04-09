@@ -8,7 +8,9 @@ on:
       - 'website/**'
       - '.github/workflows/deploy-site.yml'
 
-# Allow the workflow to write to the gh-pages branch
+# Write permission needed to push built HTML to the gh-pages branch.
+# In GitHub Pages settings, set Source to:
+#   "Deploy from a branch" → gh-pages → / (root)
 permissions:
   contents: write
 
