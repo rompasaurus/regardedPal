@@ -180,6 +180,51 @@ Spelling and grammar are lightly cleaned for readability while preserving the or
 - **Prompt:** "Let's update the prompts with the last ones I sent through — divide and describe them. Commit the changes, and also apply the git commit as another field in the prompt progression where the prompt's changes were applied. Don't be afraid to clean up the spelling and grammar a bit. Report this prompt as well."
 - **Input Tokens (est):** ~65
 - **Output Tokens (est):** ~2,500
-- **Commit:** pending — this is the commit
+- **Commit:** `78ea1a0` — Backfill commit hash in PromptProgression.md (Prompt 13)
 - **Files Created/Modified:**
   - `PromptProgression.md` (modified — full grammar/spelling pass, added commit hash field to all entries, added Prompts #11–13)
+
+---
+
+## Prompt #14
+- **Date/Time:** 2026-04-09
+- **Prompt:** "Walk me through how I could deploy this on GitHub Pages and the pricing structure — hopefully free — and if a domain can be linked to a GitHub Pages account."
+- **Input Tokens (est):** ~35
+- **Output Tokens (est):** ~900
+- **Commit:** `633b084` — Add GitHub Actions workflow for automatic Pages deployment
+- **Files Created/Modified:**
+  - `.github/workflows/deploy-site.yml` (created — workflow that triggers on pushes to `website/` on main, installs MkDocs Material, and runs `mkdocs gh-deploy`)
+
+---
+
+## Prompt #15
+- **Date/Time:** 2026-04-09
+- **Prompt:** "Can you embed the concept images instead of linking to the GitHub page on the website?"
+- **Input Tokens (est):** ~30
+- **Output Tokens (est):** ~300
+- **Commit:** `e358a1f` — Embed prototype SVG renders directly in enclosure design page
+- **Files Created/Modified:**
+  - `website/docs/assets/images/prototype-v1.svg` (created — copied from docs/concepts/)
+  - `website/docs/assets/images/prototype-v2.svg` (created — copied from docs/concepts/)
+  - `website/docs/docs/hardware/enclosure-design.md` (modified — replaced GitHub links with inline `![img]()` embeds)
+
+---
+
+## Prompt #16
+- **Date/Time:** 2026-04-09
+- **Prompt:** "Should the site folder be in the gitignore or will that need to be included to render on the GitHub Pages?"
+- **Input Tokens (est):** ~25
+- **Output Tokens (est):** ~150
+- **Commit:** n/a — explanation only, no files changed
+- **Files Created/Modified:** none
+
+---
+
+## Prompt #17
+- **Date/Time:** 2026-04-09
+- **Prompt:** "Add the last prompts with code changes to the prompt history with a commit ref."
+- **Input Tokens (est):** ~20
+- **Output Tokens (est):** ~400
+- **Commit:** pending — this is the commit
+- **Files Created/Modified:**
+  - `PromptProgression.md` (modified — fixed Prompt #13 commit hash, added Prompts #14–17)
