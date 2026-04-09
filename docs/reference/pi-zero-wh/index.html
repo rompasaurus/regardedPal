@@ -12,13 +12,13 @@
         <meta name="author" content="rompasaurus">
       
       
-        <link rel="canonical" href="https://dilder.dev/docs/software/project-structure/">
+        <link rel="canonical" href="https://dilder.dev/docs/reference/pi-zero-wh/">
       
       
-        <link rel="prev" href="../../setup/dev-environment/">
+        <link rel="prev" href="../../software/project-structure/">
       
       
-        <link rel="next" href="../../reference/pi-zero-wh/">
+        <link rel="next" href="../waveshare-eink/">
       
       
         
@@ -29,7 +29,7 @@
     
     
       
-        <title>Project Structure - Dilder</title>
+        <title>Pi Zero WH - Dilder</title>
       
     
     
@@ -92,7 +92,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#project-structure" class="md-skip">
+        <a href="#raspberry-pi-zero-wh-official-reference" class="md-skip">
           Skip to content
         </a>
       
@@ -126,7 +126,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Project Structure
+              Pi Zero WH
             
           </span>
         </div>
@@ -1107,6 +1107,97 @@
                 
   
   
+  
+  
+    
+    
+    
+    
+      
+      
+        
+          
+          
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_3_4" id="__nav_3_4_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Software
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Software
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../software/project-structure/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Project Structure
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
     
   
   
@@ -1128,17 +1219,17 @@
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_4" checked>
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_5" checked>
         
           
-          <label class="md-nav__link" for="__nav_3_4" id="__nav_3_4_label" tabindex="">
+          <label class="md-nav__link" for="__nav_3_5" id="__nav_3_5_label" tabindex="">
             
   
   
   <span class="md-ellipsis">
     
   
-    Software
+    Reference
   
 
     
@@ -1149,12 +1240,12 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_4_label" aria-expanded="true">
-          <label class="md-nav__title" for="__nav_3_4">
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_5_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_3_5">
             <span class="md-nav__icon md-icon"></span>
             
   
-    Software
+    Reference
   
 
           </label>
@@ -1183,7 +1274,7 @@
   <span class="md-ellipsis">
     
   
-    Project Structure
+    Pi Zero WH
   
 
     
@@ -1201,7 +1292,7 @@
   <span class="md-ellipsis">
     
   
-    Project Structure
+    Pi Zero WH
   
 
     
@@ -1227,10 +1318,10 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#repository-layout" class="md-nav__link">
+  <a href="#hardware-specifications" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Repository Layout
+        Hardware Specifications
       
     </span>
   </a>
@@ -1238,22 +1329,44 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#planned-module-responsibilities" class="md-nav__link">
+  <a href="#complete-40-pin-gpio-pinout" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Planned Module Responsibilities
+        Complete 40-Pin GPIO Pinout
       
     </span>
   </a>
   
-    <nav class="md-nav" aria-label="Planned Module Responsibilities">
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#gpio-electrical-limits" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        GPIO Electrical Limits
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#protocol-pin-assignments" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Protocol Pin Assignments
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Protocol Pin Assignments">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#coredisplaypy" class="md-nav__link">
+  <a href="#spi-used-by-the-e-ink-display" class="md-nav__link">
     <span class="md-ellipsis">
       
-        core/display.py
+        SPI (used by the e-ink display)
       
     </span>
   </a>
@@ -1261,10 +1374,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#coreinputpy" class="md-nav__link">
+  <a href="#i2c" class="md-nav__link">
     <span class="md-ellipsis">
       
-        core/input.py
+        I²C
       
     </span>
   </a>
@@ -1272,10 +1385,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#corelooppy" class="md-nav__link">
+  <a href="#uart" class="md-nav__link">
     <span class="md-ellipsis">
       
-        core/loop.py
+        UART
       
     </span>
   </a>
@@ -1283,21 +1396,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#petpetpy" class="md-nav__link">
+  <a href="#hardware-pwm" class="md-nav__link">
     <span class="md-ellipsis">
       
-        pet/pet.py
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#petanimationspy" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        pet/animations.py
+        Hardware PWM
       
     </span>
   </a>
@@ -1310,41 +1412,24 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#asset-format" class="md-nav__link">
+  <a href="#gpio-numbering-bcm-vs-physical" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Asset Format
-      
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="Asset Format">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#sprites" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Sprites
+        GPIO Numbering — BCM vs Physical
       
     </span>
   </a>
   
 </li>
-        
-          <li class="md-nav__item">
-  <a href="#fonts" class="md-nav__link">
+      
+        <li class="md-nav__item">
+  <a href="#official-links" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Fonts
+        Official Links
       
     </span>
   </a>
-  
-</li>
-        
-      </ul>
-    </nav>
   
 </li>
       
@@ -1357,69 +1442,6 @@
 
               
             
-          </ul>
-        </nav>
-      
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    
-    
-    
-    
-      
-      
-        
-          
-          
-        
-      
-    
-    
-    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
-      
-        
-        
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_5" >
-        
-          
-          <label class="md-nav__link" for="__nav_3_5" id="__nav_3_5_label" tabindex="">
-            
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Reference
-  
-
-    
-  </span>
-  
-  
-
-            <span class="md-nav__icon md-icon"></span>
-          </label>
-        
-        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_5_label" aria-expanded="false">
-          <label class="md-nav__title" for="__nav_3_5">
-            <span class="md-nav__icon md-icon"></span>
-            
-  
-    Reference
-  
-
-          </label>
-          <ul class="md-nav__list" data-md-scrollfix>
-            
               
                 
   
@@ -1427,35 +1449,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../reference/pi-zero-wh/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Pi Zero WH
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../reference/waveshare-eink/" class="md-nav__link">
+      <a href="../waveshare-eink/" class="md-nav__link">
         
   
   
@@ -1803,10 +1797,10 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#repository-layout" class="md-nav__link">
+  <a href="#hardware-specifications" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Repository Layout
+        Hardware Specifications
       
     </span>
   </a>
@@ -1814,22 +1808,44 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#planned-module-responsibilities" class="md-nav__link">
+  <a href="#complete-40-pin-gpio-pinout" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Planned Module Responsibilities
+        Complete 40-Pin GPIO Pinout
       
     </span>
   </a>
   
-    <nav class="md-nav" aria-label="Planned Module Responsibilities">
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#gpio-electrical-limits" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        GPIO Electrical Limits
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#protocol-pin-assignments" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Protocol Pin Assignments
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Protocol Pin Assignments">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#coredisplaypy" class="md-nav__link">
+  <a href="#spi-used-by-the-e-ink-display" class="md-nav__link">
     <span class="md-ellipsis">
       
-        core/display.py
+        SPI (used by the e-ink display)
       
     </span>
   </a>
@@ -1837,10 +1853,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#coreinputpy" class="md-nav__link">
+  <a href="#i2c" class="md-nav__link">
     <span class="md-ellipsis">
       
-        core/input.py
+        I²C
       
     </span>
   </a>
@@ -1848,10 +1864,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#corelooppy" class="md-nav__link">
+  <a href="#uart" class="md-nav__link">
     <span class="md-ellipsis">
       
-        core/loop.py
+        UART
       
     </span>
   </a>
@@ -1859,21 +1875,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#petpetpy" class="md-nav__link">
+  <a href="#hardware-pwm" class="md-nav__link">
     <span class="md-ellipsis">
       
-        pet/pet.py
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#petanimationspy" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        pet/animations.py
+        Hardware PWM
       
     </span>
   </a>
@@ -1886,41 +1891,24 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#asset-format" class="md-nav__link">
+  <a href="#gpio-numbering-bcm-vs-physical" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Asset Format
-      
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="Asset Format">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#sprites" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Sprites
+        GPIO Numbering — BCM vs Physical
       
     </span>
   </a>
   
 </li>
-        
-          <li class="md-nav__item">
-  <a href="#fonts" class="md-nav__link">
+      
+        <li class="md-nav__item">
+  <a href="#official-links" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Fonts
+        Official Links
       
     </span>
   </a>
-  
-</li>
-        
-      </ul>
-    </nav>
   
 </li>
       
@@ -1944,103 +1932,529 @@
   
 
 
-<h1 id="project-structure">Project Structure<a class="headerlink" href="#project-structure" title="Permanent link">&para;</a></h1>
-<p>Directory layout and module overview for the Dilder firmware. This page reflects the planned structure — it will be fleshed out as Phase 2 (firmware) begins.</p>
+<h1 id="raspberry-pi-zero-wh-official-reference">Raspberry Pi Zero WH — Official Reference<a class="headerlink" href="#raspberry-pi-zero-wh-official-reference" title="Permanent link">&para;</a></h1>
+<p>Source: <a href="https://www.raspberrypi.com/documentation/computers/raspberry-pi.html">raspberrypi.com/documentation</a></p>
 <hr />
-<h2 id="repository-layout">Repository Layout<a class="headerlink" href="#repository-layout" title="Permanent link">&para;</a></h2>
-<div class="language-text highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>dilder/
-</span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>├── README.md                    # Project overview and phase tracker
-</span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>├── PromptProgression.md         # Every AI prompt logged with token counts
-</span><span id="__span-0-4"><a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>│
-</span><span id="__span-0-5"><a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>├── docs/                        # Raw research and reference docs
-</span><span id="__span-0-6"><a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a>│   ├── hardware-research.md     # Component specs and enclosure design
-</span><span id="__span-0-7"><a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a>│   ├── setup-guide.md           # Full Pi Zero + display setup walkthrough
-</span><span id="__span-0-8"><a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a>│   └── concepts/
-</span><span id="__span-0-9"><a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a>│       ├── prototype-v1.svg
-</span><span id="__span-0-10"><a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a>│       └── prototype-v2.svg
-</span><span id="__span-0-11"><a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a>│
-</span><span id="__span-0-12"><a id="__codelineno-0-12" name="__codelineno-0-12" href="#__codelineno-0-12"></a>├── website/                     # This website (MkDocs project)
-</span><span id="__span-0-13"><a id="__codelineno-0-13" name="__codelineno-0-13" href="#__codelineno-0-13"></a>│   ├── mkdocs.yml
-</span><span id="__span-0-14"><a id="__codelineno-0-14" name="__codelineno-0-14" href="#__codelineno-0-14"></a>│   └── docs/
-</span><span id="__span-0-15"><a id="__codelineno-0-15" name="__codelineno-0-15" href="#__codelineno-0-15"></a>│
-</span><span id="__span-0-16"><a id="__codelineno-0-16" name="__codelineno-0-16" href="#__codelineno-0-16"></a>└── firmware/                    # Pi Zero code (Phase 2+)
-</span><span id="__span-0-17"><a id="__codelineno-0-17" name="__codelineno-0-17" href="#__codelineno-0-17"></a>    ├── main.py                  # Entry point
-</span><span id="__span-0-18"><a id="__codelineno-0-18" name="__codelineno-0-18" href="#__codelineno-0-18"></a>    ├── requirements.txt
-</span><span id="__span-0-19"><a id="__codelineno-0-19" name="__codelineno-0-19" href="#__codelineno-0-19"></a>    ├── venv/                    # (not committed)
-</span><span id="__span-0-20"><a id="__codelineno-0-20" name="__codelineno-0-20" href="#__codelineno-0-20"></a>    │
-</span><span id="__span-0-21"><a id="__codelineno-0-21" name="__codelineno-0-21" href="#__codelineno-0-21"></a>    ├── core/
-</span><span id="__span-0-22"><a id="__codelineno-0-22" name="__codelineno-0-22" href="#__codelineno-0-22"></a>    │   ├── display.py           # Display driver wrapper
-</span><span id="__span-0-23"><a id="__codelineno-0-23" name="__codelineno-0-23" href="#__codelineno-0-23"></a>    │   ├── input.py             # Button input handler
-</span><span id="__span-0-24"><a id="__codelineno-0-24" name="__codelineno-0-24" href="#__codelineno-0-24"></a>    │   └── loop.py              # Main game loop
-</span><span id="__span-0-25"><a id="__codelineno-0-25" name="__codelineno-0-25" href="#__codelineno-0-25"></a>    │
-</span><span id="__span-0-26"><a id="__codelineno-0-26" name="__codelineno-0-26" href="#__codelineno-0-26"></a>    ├── pet/
-</span><span id="__span-0-27"><a id="__codelineno-0-27" name="__codelineno-0-27" href="#__codelineno-0-27"></a>    │   ├── pet.py               # Pet state machine
-</span><span id="__span-0-28"><a id="__codelineno-0-28" name="__codelineno-0-28" href="#__codelineno-0-28"></a>    │   ├── mood.py              # Mood/stat system
-</span><span id="__span-0-29"><a id="__codelineno-0-29" name="__codelineno-0-29" href="#__codelineno-0-29"></a>    │   └── animations.py        # Sprite animation sequences
-</span><span id="__span-0-30"><a id="__codelineno-0-30" name="__codelineno-0-30" href="#__codelineno-0-30"></a>    │
-</span><span id="__span-0-31"><a id="__codelineno-0-31" name="__codelineno-0-31" href="#__codelineno-0-31"></a>    └── assets/
-</span><span id="__span-0-32"><a id="__codelineno-0-32" name="__codelineno-0-32" href="#__codelineno-0-32"></a>        ├── sprites/             # 1-bit PNG sprites (250×122 or smaller)
-</span><span id="__span-0-33"><a id="__codelineno-0-33" name="__codelineno-0-33" href="#__codelineno-0-33"></a>        └── fonts/               # TTF fonts for display text
+<h2 id="hardware-specifications">Hardware Specifications<a class="headerlink" href="#hardware-specifications" title="Permanent link">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th>Spec</th>
+<th>Value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>SoC</td>
+<td>BCM2835</td>
+</tr>
+<tr>
+<td>CPU</td>
+<td>ARM1176JZF-S, 1GHz single-core</td>
+</tr>
+<tr>
+<td>RAM</td>
+<td>512MB LPDDR2 SDRAM</td>
+</tr>
+<tr>
+<td>Wi-Fi</td>
+<td>802.11 b/g/n 2.4GHz</td>
+</tr>
+<tr>
+<td>Bluetooth</td>
+<td>4.2 + BLE</td>
+</tr>
+<tr>
+<td>USB</td>
+<td>Micro-USB OTG</td>
+</tr>
+<tr>
+<td>Video</td>
+<td>Mini HDMI</td>
+</tr>
+<tr>
+<td>Camera</td>
+<td>CSI connector (flex cable)</td>
+</tr>
+<tr>
+<td>Storage</td>
+<td>Micro SD</td>
+</tr>
+<tr>
+<td>GPIO</td>
+<td>2×20 40-pin header (pre-soldered on WH)</td>
+</tr>
+<tr>
+<td>Dimensions</td>
+<td>65 × 30 × 5mm</td>
+</tr>
+<tr>
+<td>Operating temp</td>
+<td>0°C to 70°C</td>
+</tr>
+<tr>
+<td>Recommended power</td>
+<td>5V DC, 2.5A</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="complete-40-pin-gpio-pinout">Complete 40-Pin GPIO Pinout<a class="headerlink" href="#complete-40-pin-gpio-pinout" title="Permanent link">&para;</a></h2>
+<div class="admonition warning">
+<p class="admonition-title">3.3V only</p>
+<p>GPIO pins are <strong>3.3V logic</strong>. They are NOT 5V tolerant. Applying 5V to any GPIO pin will permanently damage the SoC.</p>
+</div>
+<table>
+<thead>
+<tr>
+<th>Physical Pin</th>
+<th>BCM GPIO</th>
+<th>Primary Function</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>—</td>
+<td>3.3V power</td>
+<td>~500mA total rail</td>
+</tr>
+<tr>
+<td>2</td>
+<td>—</td>
+<td>5V power</td>
+<td>Direct from USB</td>
+</tr>
+<tr>
+<td>3</td>
+<td>GPIO 2</td>
+<td>I²C SDA1</td>
+<td>1.8kΩ pull-up onboard</td>
+</tr>
+<tr>
+<td>4</td>
+<td>—</td>
+<td>5V power</td>
+<td></td>
+</tr>
+<tr>
+<td>5</td>
+<td>GPIO 3</td>
+<td>I²C SCL1</td>
+<td>1.8kΩ pull-up onboard</td>
+</tr>
+<tr>
+<td>6</td>
+<td>—</td>
+<td>GND</td>
+<td></td>
+</tr>
+<tr>
+<td>7</td>
+<td>GPIO 4</td>
+<td>GPCLK0</td>
+<td>General-purpose clock</td>
+</tr>
+<tr>
+<td>8</td>
+<td>GPIO 14</td>
+<td>UART TXD0</td>
+<td>Serial transmit</td>
+</tr>
+<tr>
+<td>9</td>
+<td>—</td>
+<td>GND</td>
+<td></td>
+</tr>
+<tr>
+<td>10</td>
+<td>GPIO 15</td>
+<td>UART RXD0</td>
+<td>Serial receive</td>
+</tr>
+<tr>
+<td>11</td>
+<td>GPIO 17</td>
+<td>GPIO</td>
+<td><strong>e-Paper RST</strong></td>
+</tr>
+<tr>
+<td>12</td>
+<td>GPIO 18</td>
+<td>PWM0 / PCM CLK</td>
+<td>Hardware PWM</td>
+</tr>
+<tr>
+<td>13</td>
+<td>GPIO 27</td>
+<td>GPIO</td>
+<td></td>
+</tr>
+<tr>
+<td>14</td>
+<td>—</td>
+<td>GND</td>
+<td></td>
+</tr>
+<tr>
+<td>15</td>
+<td>GPIO 22</td>
+<td>GPIO</td>
+<td></td>
+</tr>
+<tr>
+<td>16</td>
+<td>GPIO 23</td>
+<td>GPIO</td>
+<td></td>
+</tr>
+<tr>
+<td>17</td>
+<td>—</td>
+<td>3.3V power</td>
+<td>Second 3.3V source</td>
+</tr>
+<tr>
+<td>18</td>
+<td>GPIO 24</td>
+<td>GPIO</td>
+<td><strong>e-Paper BUSY</strong></td>
+</tr>
+<tr>
+<td>19</td>
+<td>GPIO 10</td>
+<td>SPI0 MOSI</td>
+<td><strong>e-Paper DIN</strong></td>
+</tr>
+<tr>
+<td>20</td>
+<td>—</td>
+<td>GND</td>
+<td></td>
+</tr>
+<tr>
+<td>21</td>
+<td>GPIO 9</td>
+<td>SPI0 MISO</td>
+<td>Unused by e-paper</td>
+</tr>
+<tr>
+<td>22</td>
+<td>GPIO 25</td>
+<td>GPIO</td>
+<td><strong>e-Paper DC</strong></td>
+</tr>
+<tr>
+<td>23</td>
+<td>GPIO 11</td>
+<td>SPI0 SCLK</td>
+<td><strong>e-Paper CLK</strong></td>
+</tr>
+<tr>
+<td>24</td>
+<td>GPIO 8</td>
+<td>SPI0 CE0</td>
+<td><strong>e-Paper CS</strong></td>
+</tr>
+<tr>
+<td>25</td>
+<td>—</td>
+<td>GND</td>
+<td></td>
+</tr>
+<tr>
+<td>26</td>
+<td>GPIO 7</td>
+<td>SPI0 CE1</td>
+<td></td>
+</tr>
+<tr>
+<td>27</td>
+<td>GPIO 0</td>
+<td>ID EEPROM SDA</td>
+<td>HAT ID — reserved</td>
+</tr>
+<tr>
+<td>28</td>
+<td>GPIO 1</td>
+<td>ID EEPROM SCL</td>
+<td>HAT ID — reserved</td>
+</tr>
+<tr>
+<td>29</td>
+<td>GPIO 5</td>
+<td>GPIO</td>
+<td><strong>Button UP</strong></td>
+</tr>
+<tr>
+<td>30</td>
+<td>—</td>
+<td>GND</td>
+<td></td>
+</tr>
+<tr>
+<td>31</td>
+<td>GPIO 6</td>
+<td>GPIO</td>
+<td><strong>Button DOWN</strong></td>
+</tr>
+<tr>
+<td>32</td>
+<td>GPIO 12</td>
+<td>PWM0</td>
+<td></td>
+</tr>
+<tr>
+<td>33</td>
+<td>GPIO 13</td>
+<td>PWM1</td>
+<td><strong>Button LEFT</strong></td>
+</tr>
+<tr>
+<td>34</td>
+<td>—</td>
+<td>GND</td>
+<td></td>
+</tr>
+<tr>
+<td>35</td>
+<td>GPIO 19</td>
+<td>PCM FS / PWM</td>
+<td><strong>Button RIGHT</strong></td>
+</tr>
+<tr>
+<td>36</td>
+<td>GPIO 16</td>
+<td>GPIO</td>
+<td></td>
+</tr>
+<tr>
+<td>37</td>
+<td>GPIO 26</td>
+<td>GPIO</td>
+<td><strong>Button CENTER</strong></td>
+</tr>
+<tr>
+<td>38</td>
+<td>GPIO 20</td>
+<td>PCM DIN</td>
+<td></td>
+</tr>
+<tr>
+<td>39</td>
+<td>—</td>
+<td>GND</td>
+<td></td>
+</tr>
+<tr>
+<td>40</td>
+<td>GPIO 21</td>
+<td>PCM DOUT</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<p>Pins marked <strong>bold</strong> are used by the Dilder hardware — see <a href="../../hardware/wiring-pinout/">Wiring &amp; Pinout</a> for the full assignment table.</p>
+<hr />
+<h2 id="gpio-electrical-limits">GPIO Electrical Limits<a class="headerlink" href="#gpio-electrical-limits" title="Permanent link">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Logic voltage</td>
+<td>3.3V max</td>
+</tr>
+<tr>
+<td>HIGH input threshold</td>
+<td>≥ 1.8V</td>
+</tr>
+<tr>
+<td>LOW input threshold</td>
+<td>≤ 0.8V</td>
+</tr>
+<tr>
+<td>Max current per GPIO pin</td>
+<td>16mA</td>
+</tr>
+<tr>
+<td>Max total GPIO current</td>
+<td>50mA</td>
+</tr>
+<tr>
+<td>3.3V rail current</td>
+<td>~500mA</td>
+</tr>
+<tr>
+<td>Internal pull resistors</td>
+<td>~50kΩ (software configurable)</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="protocol-pin-assignments">Protocol Pin Assignments<a class="headerlink" href="#protocol-pin-assignments" title="Permanent link">&para;</a></h2>
+<h3 id="spi-used-by-the-e-ink-display">SPI (used by the e-ink display)<a class="headerlink" href="#spi-used-by-the-e-ink-display" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Signal</th>
+<th>BCM GPIO</th>
+<th>Physical Pin</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>MOSI</td>
+<td>GPIO 10</td>
+<td>19</td>
+</tr>
+<tr>
+<td>MISO</td>
+<td>GPIO 9</td>
+<td>21</td>
+</tr>
+<tr>
+<td>SCLK</td>
+<td>GPIO 11</td>
+<td>23</td>
+</tr>
+<tr>
+<td>CE0 (CS)</td>
+<td>GPIO 8</td>
+<td>24</td>
+</tr>
+<tr>
+<td>CE1</td>
+<td>GPIO 7</td>
+<td>26</td>
+</tr>
+</tbody>
+</table>
+<p>SPI mode for the Waveshare display: <strong>Mode 0</strong> (CPOL=0, CPHA=0), MSB-first.</p>
+<h3 id="i2c">I²C<a class="headerlink" href="#i2c" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Signal</th>
+<th>BCM GPIO</th>
+<th>Physical Pin</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>SDA1</td>
+<td>GPIO 2</td>
+<td>3</td>
+</tr>
+<tr>
+<td>SCL1</td>
+<td>GPIO 3</td>
+<td>5</td>
+</tr>
+</tbody>
+</table>
+<h3 id="uart">UART<a class="headerlink" href="#uart" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Signal</th>
+<th>BCM GPIO</th>
+<th>Physical Pin</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>TXD0</td>
+<td>GPIO 14</td>
+<td>8</td>
+</tr>
+<tr>
+<td>RXD0</td>
+<td>GPIO 15</td>
+<td>10</td>
+</tr>
+</tbody>
+</table>
+<h3 id="hardware-pwm">Hardware PWM<a class="headerlink" href="#hardware-pwm" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Signal</th>
+<th>BCM GPIO</th>
+<th>Physical Pin</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>PWM0</td>
+<td>GPIO 12</td>
+<td>32</td>
+</tr>
+<tr>
+<td>PWM1</td>
+<td>GPIO 13</td>
+<td>33</td>
+</tr>
+<tr>
+<td>PWM0 (alt)</td>
+<td>GPIO 18</td>
+<td>12</td>
+</tr>
+<tr>
+<td>PWM1 (alt)</td>
+<td>GPIO 19</td>
+<td>35</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="gpio-numbering-bcm-vs-physical">GPIO Numbering — BCM vs Physical<a class="headerlink" href="#gpio-numbering-bcm-vs-physical" title="Permanent link">&para;</a></h2>
+<div class="admonition danger">
+<p class="admonition-title">Always use BCM numbers in code</p>
+<p>The Waveshare library and RPi.GPIO default to <strong>BCM numbering</strong> — the number after "GPIO" (e.g. GPIO 17 = BCM 17). Physical pin numbers are the 1–40 positions on the header. These are different. Using physical numbering by mistake will connect to the wrong pin.</p>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="kn">import</span><span class="w"> </span><span class="nn">RPi.GPIO</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">GPIO</span>
+</span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="n">GPIO</span><span class="o">.</span><span class="n">setmode</span><span class="p">(</span><span class="n">GPIO</span><span class="o">.</span><span class="n">BCM</span><span class="p">)</span>   <span class="c1"># use BCM — always set this</span>
+</span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="n">GPIO</span><span class="o">.</span><span class="n">setup</span><span class="p">(</span><span class="mi">17</span><span class="p">,</span> <span class="n">GPIO</span><span class="o">.</span><span class="n">OUT</span><span class="p">)</span> <span class="c1"># GPIO 17 = physical pin 11</span>
 </span></code></pre></div>
-<div class="admonition note">
-<p class="admonition-title">Firmware not yet written</p>
-<p>The <code>firmware/</code> directory structure above is the planned layout. Phase 2 will establish this scaffold.</p>
 </div>
 <hr />
-<h2 id="planned-module-responsibilities">Planned Module Responsibilities<a class="headerlink" href="#planned-module-responsibilities" title="Permanent link">&para;</a></h2>
-<h3 id="coredisplaypy"><code>core/display.py</code><a class="headerlink" href="#coredisplaypy" title="Permanent link">&para;</a></h3>
-<p>Thin wrapper around the Waveshare e-Paper library:</p>
-<ul>
-<li>Initializes the display</li>
-<li>Exposes <code>render(image)</code> for full refresh and <code>render_partial(image)</code> for partial</li>
-<li>Handles cleanup and sleep mode</li>
-<li>Manages refresh rate limiting (prevent over-refreshing)</li>
-</ul>
-<h3 id="coreinputpy"><code>core/input.py</code><a class="headerlink" href="#coreinputpy" title="Permanent link">&para;</a></h3>
-<p>Button input manager:</p>
-<ul>
-<li>Sets up GPIO pins with internal pull-ups</li>
-<li>Provides event-based callbacks: <code>on_press(button, callback)</code></li>
-<li>Handles software debouncing (10ms default)</li>
-<li>Button constants: <code>BTN_UP</code>, <code>BTN_DOWN</code>, <code>BTN_LEFT</code>, <code>BTN_RIGHT</code>, <code>BTN_SELECT</code></li>
-</ul>
-<h3 id="corelooppy"><code>core/loop.py</code><a class="headerlink" href="#corelooppy" title="Permanent link">&para;</a></h3>
-<p>Main game loop:</p>
-<ul>
-<li>10Hz target tick rate (100ms per tick)</li>
-<li>Calls <code>pet.tick()</code> on each loop iteration</li>
-<li>Reads pending input events and dispatches to pet state machine</li>
-<li>Triggers display refresh when pet state changes</li>
-</ul>
-<h3 id="petpetpy"><code>pet/pet.py</code><a class="headerlink" href="#petpetpy" title="Permanent link">&para;</a></h3>
-<p>Pet state machine:</p>
-<ul>
-<li>States: <code>IDLE</code>, <code>EATING</code>, <code>PLAYING</code>, <code>SLEEPING</code>, <code>SICK</code></li>
-<li>Tracks stats: hunger, happiness, energy, age</li>
-<li>Stat decay over time (hunger increases, happiness decreases)</li>
-<li>State transitions driven by input and stat thresholds</li>
-</ul>
-<h3 id="petanimationspy"><code>pet/animations.py</code><a class="headerlink" href="#petanimationspy" title="Permanent link">&para;</a></h3>
-<p>Sprite animation sequences:</p>
-<ul>
-<li>Each animation is a list of <code>(image_path, duration_ms)</code> tuples</li>
-<li><code>Animator</code> class tracks current frame, advances on tick</li>
-<li>Renders to a PIL <code>Image</code> object passed to <code>display.render_partial()</code></li>
-</ul>
-<hr />
-<h2 id="asset-format">Asset Format<a class="headerlink" href="#asset-format" title="Permanent link">&para;</a></h2>
-<h3 id="sprites">Sprites<a class="headerlink" href="#sprites" title="Permanent link">&para;</a></h3>
-<ul>
-<li>Format: 1-bit PNG (black and white only)</li>
-<li>Coordinate space: 250×122 (full display) or any sub-region</li>
-<li>Naming: <code>{state}_{frame:02d}.png</code> — e.g., <code>idle_00.png</code>, <code>idle_01.png</code></li>
-</ul>
-<h3 id="fonts">Fonts<a class="headerlink" href="#fonts" title="Permanent link">&para;</a></h3>
-<ul>
-<li>Format: TTF</li>
-<li>Recommended: <a href="https://github.com/IdreesInc/Monocraft">Monocraft</a> or any bitmap-style monospace font</li>
-<li>Size: 8px–16px works well at 250×122 resolution</li>
-</ul>
+<h2 id="official-links">Official Links<a class="headerlink" href="#official-links" title="Permanent link">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th>Resource</th>
+<th>URL</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Pi Zero W product page</td>
+<td><a href="https://www.raspberrypi.com/products/raspberry-pi-zero-w/">raspberrypi.com/products/raspberry-pi-zero-w</a></td>
+</tr>
+<tr>
+<td>Hardware documentation</td>
+<td><a href="https://www.raspberrypi.com/documentation/computers/raspberry-pi.html">raspberrypi.com/documentation/computers/raspberry-pi.html</a></td>
+</tr>
+<tr>
+<td>GPIO documentation</td>
+<td><a href="https://www.raspberrypi.com/documentation/computers/raspberry-pi.html#gpio">raspberrypi.com/documentation/computers/raspberry-pi.html#gpio</a></td>
+</tr>
+<tr>
+<td>Schematics (PDF)</td>
+<td><a href="https://datasheets.raspberrypi.com/rpizero/raspberry-pi-zero-w-reduced-schematics.pdf">datasheets.raspberrypi.com/rpizero</a></td>
+</tr>
+<tr>
+<td>Interactive pinout</td>
+<td><a href="https://pinout.xyz">pinout.xyz</a></td>
+</tr>
+</tbody>
+</table>
 
 
 
@@ -2080,7 +2494,7 @@
       <nav class="md-footer__inner md-grid" aria-label="Footer" >
         
           
-          <a href="../../setup/dev-environment/" class="md-footer__link md-footer__link--prev" aria-label="Previous: Dev Environment">
+          <a href="../../software/project-structure/" class="md-footer__link md-footer__link--prev" aria-label="Previous: Project Structure">
             <div class="md-footer__button md-icon">
               
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
@@ -2090,20 +2504,20 @@
                 Previous
               </span>
               <div class="md-ellipsis">
-                Dev Environment
+                Project Structure
               </div>
             </div>
           </a>
         
         
           
-          <a href="../../reference/pi-zero-wh/" class="md-footer__link md-footer__link--next" aria-label="Next: Pi Zero WH">
+          <a href="../waveshare-eink/" class="md-footer__link md-footer__link--next" aria-label="Next: Waveshare e-Paper HAT">
             <div class="md-footer__title">
               <span class="md-footer__direction">
                 Next
               </span>
               <div class="md-ellipsis">
-                Pi Zero WH
+                Waveshare e-Paper HAT
               </div>
             </div>
             <div class="md-footer__button md-icon">
