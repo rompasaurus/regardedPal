@@ -228,3 +228,15 @@ Spelling and grammar are lightly cleaned for readability while preserving the or
 - **Commit:** `1c270fd` — Update PromptProgression with Prompts 14–17 and fix #13 commit ref
 - **Files Created/Modified:**
   - `PromptProgression.md` (modified — fixed Prompt #13 commit hash, added Prompts #14–17)
+
+---
+
+## Prompt #18
+- **Date/Time:** 2026-04-09
+- **Prompt:** "I need a website deployment process guide for GitHub Pages. I have a registered domain on Squarespace and I would like to deploy this site on GitHub and link my domain to this page."
+- **Input Tokens (est):** ~45
+- **Output Tokens (est):** ~2,800
+- **Commit:** pending — this is the commit
+- **Files Created/Modified:**
+  - `website/DEPLOY.md` (created — 13-section deployment guide: GitHub Pages setup, first deployment, CNAME file, Squarespace DNS configuration with step-by-step record setup, HTTPS, mkdocs.yml update, end-to-end verification checklist, troubleshooting)
+  - `website/docs/CNAME` (created — placeholder CNAME file, update with real domain before deploying)
