@@ -112,7 +112,7 @@ Spelling and grammar are lightly cleaned for readability while preserving the or
 - **Prompt:** "Let's kick off the website implementation. Look through the plan and start fleshing this out. Make sure while implementing the site to notate every step taken in a website implementation process MD, which will have a nicely structured TOC and detailed step-by-step notes on the process of creating this static site — to act as instruction and documentation. I also need a detailed guide on how to add and update content and the structure of the site, and further steps to deploy on Digital Ocean for as cheap as possible, and the best way to secure a domain for a website. Come up with domain ideas as well. Add steps to create a Patreon and Discord account. Don't forget to update PromptProgression with any prompt I input — don't be afraid to clean spelling and grammar before putting it in there too."
 - **Input Tokens (est):** ~180
 - **Output Tokens (est):** ~35,000
-- **Commit:** pending — included in this session's commit
+- **Commit:** `0360ba9` — Build out full MkDocs website scaffold and dev tooling (Prompts 9–13)
 - **Files Created/Modified:**
   - `website/mkdocs.yml` (created — full MkDocs Material config with blog plugin, nav, social links, extensions)
   - `website/docs/index.md` (created — landing page)
@@ -145,7 +145,7 @@ Spelling and grammar are lightly cleaned for readability while preserving the or
 - **Prompt:** "Give me a Python setup CLI script I can run to deploy this locally, with nice logging and status output when it is running, and various helper options for this project."
 - **Input Tokens (est):** ~40
 - **Output Tokens (est):** ~4,500
-- **Commit:** pending — included in this session's commit
+- **Commit:** `0360ba9` — Build out full MkDocs website scaffold and dev tooling (Prompts 9–13)
 - **Files Created/Modified:**
   - `website/dev.py` (created — CLI with subcommands: check, install, serve, build, deploy, clean, status; ANSI colour output with spinner; argparse; no external dependencies)
 
@@ -156,7 +156,7 @@ Spelling and grammar are lightly cleaned for readability while preserving the or
 - **Prompt:** "Give me a nice selection menu interface instead of a list of commands."
 - **Input Tokens (est):** ~15
 - **Output Tokens (est):** ~3,800
-- **Commit:** pending — included in this session's commit
+- **Commit:** `0360ba9` — Build out full MkDocs website scaffold and dev tooling (Prompts 9–13)
 - **Files Created/Modified:**
   - `website/dev.py` (modified — replaced no-args fallback with interactive arrow-key menu: ↑↓ navigation, live description footer, env status badges, returns to menu after each command)
 
@@ -167,7 +167,7 @@ Spelling and grammar are lightly cleaned for readability while preserving the or
 - **Prompt:** "There seems to be a build failure when I build via the CLI script."
 - **Input Tokens (est):** ~180 (included full error output)
 - **Output Tokens (est):** ~500
-- **Commit:** pending — included in this session's commit
+- **Commit:** `0360ba9` — Build out full MkDocs website scaffold and dev tooling (Prompts 9–13)
 - **Files Created/Modified:**
   - `website/docs/blog/.authors.yml` (created — required by MkDocs blog plugin for named authors)
   - `website/docs/blog/index.md` (modified — removed dead RSS link that wasn't a source file)
