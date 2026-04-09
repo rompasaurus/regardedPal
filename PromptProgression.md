@@ -240,3 +240,16 @@ Spelling and grammar are lightly cleaned for readability while preserving the or
 - **Files Created/Modified:**
   - `website/DEPLOY.md` (created — 13-section deployment guide: GitHub Pages setup, first deployment, CNAME file, Squarespace DNS configuration with step-by-step record setup, HTTPS, mkdocs.yml update, end-to-end verification checklist, troubleshooting)
   - `website/docs/CNAME` (created — placeholder CNAME file, update with real domain before deploying)
+
+---
+
+## Prompt #19
+- **Date/Time:** 2026-04-09
+- **Prompt:** "Add my Patreon page to the site."
+- **Input Tokens (est):** ~15
+- **Output Tokens (est):** ~100
+- **Commit:** `3b36905` — Add real Patreon URL (MchenrysDevelopment) across site
+- **Files Created/Modified:**
+  - `website/mkdocs.yml` (modified — Patreon social link updated)
+  - `website/docs/community/support.md` (modified — Patreon URL updated)
+  - `website/docs/about/contact.md` (modified — Patreon URL updated)
