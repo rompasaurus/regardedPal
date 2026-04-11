@@ -469,7 +469,7 @@ Spelling and grammar are lightly cleaned for readability while preserving the or
 - **Prompt:** "That worked. Let's update the documentation and provide a step-by-step walkthrough of this script and setup process in the setup document. Also update the prompts doc with all the prompts we used here and the last session, then divide, describe, commit, and push this code."
 - **Input Tokens (est):** ~50
 - **Output Tokens (est):** ~12,000
-- **Commit:** *(see below)*
+- **Commit:** `8f0df95` — Add C SDK dev environment, setup CLI, and first-time hardware guide
 - **Files Created/Modified:**
   - `dev-setup/pico-and-display-first-time-setup.md` (modified — added "Automated Setup Script" section at the top with full walkthrough: command reference, 14-step table with automated/manual flags, example `--status` output, resume instructions)
   - `website/docs/docs/setup/first-time-setup.md` (modified — added matching setup script walkthrough with MkDocs admonitions and step table)
@@ -484,7 +484,7 @@ Spelling and grammar are lightly cleaned for readability while preserving the or
 - **Prompt:** "Now that the dev environment is set up, let's make a Python GUI to interface with the Pico — view logs, debug, and create a simple utility to draw images and type text on an emulated e-ink display that can then be either saved locally or sent to the e-ink display live. When saved, add it to an assets folder in the root of this project directory. Also, if there are any other useful utilities that can be added to enhance the development and usage of the Pico W, add them to this Python UI. Let's make this in Tkinter and put it in the root of this project in a directory called DevTool. Also I need an in-depth walkthrough of this implementation in the folder as well — an MD with a TOC and step-by-step instructions."
 - **Input Tokens (est):** ~150
 - **Output Tokens (est):** ~55,000
-- **Commit:** *(see below)*
+- **Commit:** `cf5cd3a` — Add DevTool — Tkinter GUI for Pico W development
 - **Files Created/Modified:**
   - `DevTool/devtool.py` (created — 950-line Tkinter GUI with five tabs: display emulator with pencil/eraser/line/rect/text tools and save/load/send; serial monitor with connect/disconnect/send/log; firmware flash utility with BOOTSEL detection and build buttons; asset manager with preview and delete; GPIO pin reference viewer; dark theme; threaded serial I/O)
   - `DevTool/requirements.txt` (created — pyserial, Pillow)
@@ -496,10 +496,10 @@ Spelling and grammar are lightly cleaned for readability while preserving the or
 
 ## Prompt #37
 - **Date/Time:** 2026-04-11
-- **Prompt:** "Add a utility tab to walk through connecting the Pico via USB, and also add a Wi-Fi option as well in the GUI as a tab. Be descriptive and simple as possible. And add a documentation tab to reference how to use the application."
+- **Prompt:** "Add a utility tab to walk through connecting the Pico via USB, and also add a Wi-Fi option as well in the GUI as a tab. Be descriptive and as simple as possible. And add a documentation tab to reference how to use the application."
 - **Input Tokens (est):** ~50
 - **Output Tokens (est):** ~25,000
-- **Commit:** *(see below)*
+- **Commit:** `cdae51f` — Add Connect and Docs tabs to DevTool
 - **Files Created/Modified:**
   - `DevTool/devtool.py` (modified — added two new tabs: ConnectionUtility with USB serial walkthrough (4 steps with live Check buttons for device detection, serial port, permissions, plus link to Serial Monitor) and Wi-Fi walkthrough (C code examples, CMake config, network scanner, TCP connection tester with IP/port input); DocumentationTab with searchable TOC sidebar, styled headings/code blocks, Find/Clear search with highlight, covers all 7 tabs plus keyboard shortcuts, file formats, and troubleshooting)
   - `DevTool/README.md` (modified — updated TOC, launch table, and architecture table for 7 tabs; added Section 9 Connection Utility with USB and Wi-Fi step tables; added Section 10 Documentation tab description; renumbered remaining sections)
@@ -512,7 +512,32 @@ Spelling and grammar are lightly cleaned for readability while preserving the or
 - **Prompt:** "Allow me to run the sudo for serial permissions in the DevTool."
 - **Input Tokens (est):** ~15
 - **Output Tokens (est):** ~5,000
-- **Commit:** *(see below)*
+- **Commit:** `b8985c7` — Add sudo serial permissions button to DevTool Connect tab
 - **Files Created/Modified:**
   - `DevTool/devtool.py` (modified — added "Fix: Add me to serial group" button in the Connect tab USB walkthrough; `_fix_serial_perms()` method auto-detects the correct group, tries `pkexec` for a graphical sudo prompt first, falls back to opening a terminal emulator with the command, shows confirmation dialog before running, reports success with logout reminder)
   - `PromptProgression.md` (modified — added Prompt #38)
+
+---
+
+## Prompt #39
+- **Date/Time:** 2026-04-11
+- **Prompt:** "The DevTool was suspended but didn't close. Help me close this and prevent this in the future."
+- **Input Tokens (est):** ~20
+- **Output Tokens (est):** ~2,000
+- **Commit:** `586dff9` — Ignore Ctrl+Z (SIGTSTP) in DevTool to prevent zombie suspends
+- **Files Created/Modified:**
+  - `DevTool/devtool.py` (modified — added `signal.signal(signal.SIGTSTP, signal.SIG_IGN)` at startup to ignore Ctrl+Z; killed the suspended process with `kill -9`)
+
+---
+
+## Prompt #40
+- **Date/Time:** 2026-04-11
+- **Prompt:** "Update the prompts and add the latest assets as well. Clean up spelling and grammar."
+- **Input Tokens (est):** ~20
+- **Output Tokens (est):** ~3,000
+- **Commit:** *(see below)*
+- **Files Created/Modified:**
+  - `assets/garbage.pbm` (added — test image saved from DevTool display emulator)
+  - `assets/garbage.bin` (added — raw display buffer of the test image)
+  - `assets/garbage.png` (added — PNG export of the test image)
+  - `PromptProgression.md` (modified — added Prompts #39–40, backfilled commit hashes for #37–38, grammar and spelling pass)
