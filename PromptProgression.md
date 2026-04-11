@@ -549,7 +549,7 @@ Spelling and grammar are lightly cleaned for readability while preserving the or
 - **Prompt:** "We need to update the website with all the new documentation and Python tools created. Follow the structure of the site and update this."
 - **Input Tokens (est):** ~30
 - **Output Tokens (est):** ~60,000
-- **Commit:** *(see below)*
+- **Commit:** `b408ab1` — Update website with Tools docs, blog post, prompt log, and DevTool Programs tab
 - **Files Created/Modified:**
   - `website/docs/docs/tools/devtool.md` (created — DevTool documentation page with installation, tabs overview, file formats, and architecture)
   - `website/docs/docs/tools/setup-cli.md` (created — setup.py documentation page with step tables, features, and status dashboard)
@@ -569,6 +569,6 @@ Spelling and grammar are lightly cleaned for readability while preserving the or
 - **Prompt:** "Divide, describe, and commit. Update the prompts, fix grammar. Check all the latest Claude session for prompts."
 - **Input Tokens (est):** ~25
 - **Output Tokens (est):** ~2,000
-- **Commit:** *(see below)*
+- **Commit:** `b408ab1` — Update website with Tools docs, blog post, prompt log, and DevTool Programs tab
 - **Files Created/Modified:**
   - `PromptProgression.md` (modified — added Prompt #42)
