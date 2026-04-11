@@ -541,3 +541,34 @@ Spelling and grammar are lightly cleaned for readability while preserving the or
   - `assets/garbage.bin` (added — raw display buffer of the test image)
   - `assets/garbage.png` (added — PNG export of the test image)
   - `PromptProgression.md` (modified — added Prompts #39–40, backfilled commit hashes for #37–38, grammar and spelling pass)
+
+---
+
+## Prompt #41
+- **Date/Time:** 2026-04-11
+- **Prompt:** "We need to update the website with all the new documentation and Python tools created. Follow the structure of the site and update this."
+- **Input Tokens (est):** ~30
+- **Output Tokens (est):** ~60,000
+- **Commit:** *(see below)*
+- **Files Created/Modified:**
+  - `website/docs/docs/tools/devtool.md` (created — DevTool documentation page with installation, tabs overview, file formats, and architecture)
+  - `website/docs/docs/tools/setup-cli.md` (created — setup.py documentation page with step tables, features, and status dashboard)
+  - `website/docs/docs/tools/website-dev.md` (created — website dev.py documentation page with commands and workflow)
+  - `website/docs/blog/posts/phase-1-devtools.md` (created — blog post covering setup CLI, DevTool GUI, and C-first development decisions)
+  - `website/mkdocs.yml` (modified — added Tools section to nav with DevTool, Setup CLI, Website Dev CLI)
+  - `website/docs/docs/index.md` (modified — added Tools subsection with links to all three tool pages)
+  - `website/docs/docs/software/project-structure.md` (modified — complete rewrite: updated repo layout to include DevTool, dev-setup, hardware-design, assets, website planning docs; rewrote planned modules from MicroPython to C SDK; updated comparison table)
+  - `website/docs/index.md` (modified — updated current phase to reflect dev tooling progress, added Dev Tools quick link card, added tools link to "How This Project Works" section)
+  - `website/docs/prompts/index.md` (modified — added Prompts #10–40, covering website deployment, GitHub Pages, hardware migration, C SDK setup, DevTool development)
+  - `PromptProgression.md` (modified — added Prompt #41)
+
+---
+
+## Prompt #42
+- **Date/Time:** 2026-04-11
+- **Prompt:** "Divide, describe, and commit. Update the prompts, fix grammar. Check all the latest Claude session for prompts."
+- **Input Tokens (est):** ~25
+- **Output Tokens (est):** ~2,000
+- **Commit:** *(see below)*
+- **Files Created/Modified:**
+  - `PromptProgression.md` (modified — added Prompt #42)

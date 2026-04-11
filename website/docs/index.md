@@ -18,10 +18,11 @@ If you've ever wanted to follow a project from "I have an idea" to "here's a wor
 
 ## Current Phase
 
-!!! info "Phase 1 — Hardware Assembly (Pico W)"
-    We have a Pico W and a Waveshare 2.13" V3 e-ink display on hand. Next: wire them up, flash MicroPython, and get pixels on screen.
+!!! info "Phase 1 — Hardware Assembly & Dev Tooling (Pico W)"
+    The Pico W and Waveshare 2.13" V3 e-ink display are wired up and running C firmware via the SDK. The development environment is fully operational with an automated setup CLI, a Tkinter DevTool GUI for display emulation and serial debugging, and Hello World programs verified on hardware.
 
-    [See the hardware docs :material-arrow-right:](docs/hardware/materials-list.md){ .md-button }
+    [Setup Guide :material-arrow-right:](docs/setup/first-time-setup.md){ .md-button }
+    [DevTool :material-arrow-right:](docs/tools/devtool.md){ .md-button }
 
 ---
 
@@ -59,6 +60,14 @@ Check the [build journal](blog/index.md) for the most recent post.
 
     [:octicons-arrow-right-24: Join Discord](community/discord.md)
 
+-   :material-tools: **Dev Tools**
+
+    ---
+
+    DevTool GUI, setup CLI, and website dev CLI — built to support the workflow.
+
+    [:octicons-arrow-right-24: Browse Tools](docs/tools/devtool.md)
+
 -   :fontawesome-brands-patreon: **Patreon**
 
     ---
@@ -78,6 +87,7 @@ The entire development process is public:
 - **Every prompt** submitted to the AI assistant is logged in the [Prompt Log](prompts/index.md)
 - **Every hardware decision** is documented in the [Docs](docs/index.md)
 - **Every build step** is written up in the [Blog](blog/index.md)
+- **All dev tools** are documented in the [Tools section](docs/tools/devtool.md)
 - **All source files** are on [GitHub](https://github.com/rompasaurus/dilder)
 
 This is learn-in-public taken to its logical extreme.

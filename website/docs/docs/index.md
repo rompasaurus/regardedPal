@@ -28,6 +28,14 @@ Code architecture and reference.
 
 - [Project Structure](software/project-structure.md) — directory layout and module overview
 
+### Tools
+
+Python utilities built to support the development workflow.
+
+- [DevTool (GUI)](tools/devtool.md) — Tkinter app with display emulator, serial monitor, firmware flash, asset manager, and more
+- [Setup CLI](tools/setup-cli.md) — interactive step-by-step environment setup for the Pico W C SDK toolchain
+- [Website Dev CLI](tools/website-dev.md) — MkDocs site management with interactive menu
+
 ### Reference
 
 Official hardware documentation.

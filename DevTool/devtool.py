@@ -19,6 +19,7 @@ import io
 import json
 import os
 import platform
+import random
 import re
 import serial
 import serial.tools.list_ports
@@ -245,8 +246,8 @@ class DisplayEmulator(ttk.Frame):
         """Draw a square brush at the given pixel position."""
         size = self.size_var.get()
         half = size // 2
-        for dy in range(-half, half + size % 1):
-            for dx in range(-half, half + size % 1):
+        for dy in range(-half, -half + size):
+            for dx in range(-half, -half + size):
                 self._set_pixel(px + dx, py + dy, value)
 
     def _on_click(self, event):
@@ -2054,6 +2055,584 @@ class DocumentationTab(ttk.Frame):
 
 
 # ─────────────────────────────────────────────────────────────────────────────
+# Programs Tab — Deploy animated programs to emulator / Pico
+# ─────────────────────────────────────────────────────────────────────────────
+
+# ── Sassy Octopus pixel art (drawn on a 250x122 canvas) ──
+# Outline-style curvy octopus with 6 tentacle legs, positioned left side.
+
+import math
+
+def _draw_ellipse_outline(pixels, cx, cy, rx, ry, thickness=2):
+    """Draw an ellipse outline into pixel buffer."""
+    for angle_deg in range(360):
+        a = math.radians(angle_deg)
+        for t in range(thickness):
+            r_off = t - thickness // 2
+            x = int(cx + (rx + r_off * 0.5) * math.cos(a))
+            y = int(cy + (ry + r_off * 0.5) * math.sin(a))
+            if 0 <= x < DISPLAY_W and 0 <= y < DISPLAY_H:
+                pixels[y][x] = 1
+
+
+def _draw_filled_ellipse(pixels, cx, cy, rx, ry, value=1):
+    """Draw a filled ellipse into pixel buffer."""
+    for y in range(max(0, cy - ry), min(DISPLAY_H, cy + ry + 1)):
+        for x in range(max(0, cx - rx), min(DISPLAY_W, cx + rx + 1)):
+            dx, dy = x - cx, y - cy
+            if rx > 0 and ry > 0 and (dx * dx) / (rx * rx) + (dy * dy) / (ry * ry) <= 1.0:
+                pixels[y][x] = value
+
+
+def _draw_curve(pixels, points, thickness=2):
+    """Draw a smooth curve through a list of (x, y) points using line segments."""
+    for i in range(len(points) - 1):
+        x0, y0 = points[i]
+        x1, y1 = points[i + 1]
+        dist = max(1, int(math.hypot(x1 - x0, y1 - y0)))
+        for step in range(dist + 1):
+            t = step / dist
+            x = int(x0 + t * (x1 - x0))
+            y = int(y0 + t * (y1 - y0))
+            half = thickness // 2
+            for dy in range(-half, -half + thickness):
+                for dx in range(-half, -half + thickness):
+                    px, py = x + dx, y + dy
+                    if 0 <= px < DISPLAY_W and 0 <= py < DISPLAY_H:
+                        pixels[py][px] = 1
+
+
+def _draw_octopus(pixels, mouth_open=False):
+    """Draw the outline-style curvy octopus on the left side of the display."""
+    # Head — large oval, outline only
+    head_cx, head_cy = 35, 25
+    head_rx, head_ry = 24, 20
+    _draw_ellipse_outline(pixels, head_cx, head_cy, head_rx, head_ry, thickness=2)
+
+    # Clear inside of head to white (so it's just an outline)
+    _draw_filled_ellipse(pixels, head_cx, head_cy, head_rx - 2, head_ry - 2, value=0)
+
+    # Eyes — oval outlines with pupils
+    for ex in [24, 46]:
+        # Eye outline
+        _draw_ellipse_outline(pixels, ex, 23, 6, 7, thickness=2)
+        _draw_filled_ellipse(pixels, ex, 23, 4, 5, value=0)
+        # Pupil (solid dot, slightly off-center down)
+        _draw_filled_ellipse(pixels, ex + 1, 25, 2, 3, value=1)
+        # Highlight (white dot top-left of pupil)
+        if 0 <= 23 - 2 < DISPLAY_H and 0 <= ex - 1 < DISPLAY_W:
+            pixels[21][ex - 1] = 0
+            pixels[21][ex] = 0
+            pixels[22][ex - 1] = 0
+
+    # Eyebrows — cute little arcs above each eye
+    brow_l = [(16, 13), (19, 11), (22, 10), (25, 11), (27, 12)]
+    brow_r = [(43, 12), (45, 11), (48, 10), (51, 11), (54, 13)]
+    _draw_curve(pixels, brow_l, thickness=1)
+    _draw_curve(pixels, brow_r, thickness=1)
+
+    # Mouth
+    if mouth_open:
+        # Open mouth — oval outline
+        _draw_ellipse_outline(pixels, 35, 37, 6, 4, thickness=2)
+        _draw_filled_ellipse(pixels, 35, 37, 4, 2, value=0)
+    else:
+        # Smile — curved arc
+        smile = []
+        for i in range(20):
+            t = i / 19.0
+            x = int(26 + t * 18)
+            y = int(35 + 6 * math.sin(t * math.pi))
+            smile.append((x, y))
+        _draw_curve(pixels, smile, thickness=2)
+
+    # Cheeks — small circles for blush marks
+    for cx_blush in [16, 54]:
+        for dx in range(-2, 3):
+            for dy in range(-1, 2):
+                px, py = cx_blush + dx, 34 + dy
+                if 0 <= px < DISPLAY_W and 0 <= py < DISPLAY_H:
+                    if abs(dx) + abs(dy) <= 2:
+                        pixels[py][px] = 1
+
+    # Body transition — slight curve below head connecting to tentacles
+    body_l = [(11, 42), (9, 46), (8, 50), (9, 54)]
+    body_r = [(59, 42), (61, 46), (62, 50), (61, 54)]
+    _draw_curve(pixels, body_l, thickness=2)
+    _draw_curve(pixels, body_r, thickness=2)
+
+    # 6 curvy tentacle legs hanging down from the body
+    tentacle_starts = [
+        (9, 54),   # leftmost
+        (19, 52),  # inner-left
+        (30, 53),  # center-left
+        (40, 53),  # center-right
+        (51, 52),  # inner-right
+        (61, 54),  # rightmost
+    ]
+
+    # Each tentacle is a wavy curve going downward
+    for i, (sx, sy) in enumerate(tentacle_starts):
+        pts = []
+        wave_dir = 1 if i % 2 == 0 else -1
+        amplitude = 6 + (i % 3) * 2
+        for step in range(30):
+            t = step / 29.0
+            x = sx + wave_dir * amplitude * math.sin(t * math.pi * 2.5)
+            y = sy + t * 50
+            pts.append((int(x), int(y)))
+        # Clip to display bounds
+        pts = [(x, y) for x, y in pts if 0 <= y < DISPLAY_H]
+        if len(pts) > 1:
+            _draw_curve(pixels, pts, thickness=2)
+
+        # Suction cups — small dots along the tentacle
+        for j in range(2, len(pts) - 1, 4):
+            cx_cup, cy_cup = pts[j]
+            # Offset cup to the inside of the curve
+            if j + 1 < len(pts):
+                nx, ny = pts[j + 1]
+                off_x = 1 if nx > cx_cup else -1
+                cup_x = cx_cup + off_x * 2
+                if 0 <= cup_x < DISPLAY_W and 0 <= cy_cup < DISPLAY_H:
+                    pixels[cy_cup][cup_x] = 1
+                    if 0 <= cy_cup + 1 < DISPLAY_H:
+                        pixels[cy_cup + 1][cup_x] = 1
+
+    # Redraw head outline on top (tentacles may overlap)
+    _draw_ellipse_outline(pixels, head_cx, head_cy, head_rx, head_ry, thickness=2)
+
+
+def _draw_chat_bubble(pixels, text, mouth_open=False):
+    """Draw a speech bubble to the right of the octopus with wrapped text."""
+    bx, by = 75, 3
+    bw, bh = 170, 72
+
+    # Rounded rectangle outline
+    r = 5  # corner radius
+    # Top and bottom edges
+    for x in range(bx + r, bx + bw - r):
+        for t in range(2):
+            pixels[by + t][x] = 1
+            pixels[by + bh - 1 - t][x] = 1
+    # Left and right edges
+    for y in range(by + r, by + bh - r):
+        for t in range(2):
+            pixels[y][bx + t] = 1
+            pixels[y][bx + bw - 1 - t] = 1
+    # Rounded corners (quarter circles)
+    corners = [(bx + r, by + r), (bx + bw - 1 - r, by + r),
+               (bx + r, by + bh - 1 - r), (bx + bw - 1 - r, by + bh - 1 - r)]
+    for ccx, ccy in corners:
+        for angle_deg in range(360):
+            a = math.radians(angle_deg)
+            for t in range(2):
+                x = int(ccx + (r - t) * math.cos(a))
+                y = int(ccy + (r - t) * math.sin(a))
+                if 0 <= x < DISPLAY_W and 0 <= y < DISPLAY_H:
+                    # Only draw if in the corner quadrant
+                    if (bx <= x <= bx + bw - 1) and (by <= y <= by + bh - 1):
+                        pixels[y][x] = 1
+
+    # Speech tail — triangle pointing left toward octopus mouth
+    tail_tip_x, tail_tip_y = 68, 38  # tip near mouth
+    tail_base_top = (bx, 33)
+    tail_base_bot = (bx, 43)
+    # Draw two lines forming the tail
+    _draw_curve(pixels, [tail_base_top, (tail_tip_x, tail_tip_y)], thickness=1)
+    _draw_curve(pixels, [(tail_tip_x, tail_tip_y), tail_base_bot], thickness=1)
+    # Clear the bubble wall between the tail base points
+    for y in range(34, 43):
+        pixels[y][bx] = 0
+        pixels[y][bx + 1] = 0
+
+    # Render text inside bubble
+    _render_tiny_text(pixels, bx + 8, by + 8, text, bw - 16)
+
+    # Tagline below bubble
+    _render_tiny_text(pixels, bx + 8, by + bh + 6, "~ SASSY OCTOPUS ~", bw)
+
+
+# Tiny 5x7 bitmap font for rendering text without Pillow
+_TINY_FONT = {}
+
+def _init_tiny_font():
+    """Initialize a minimal 5-wide bitmap font (uppercase + basic punctuation)."""
+    if _TINY_FONT:
+        return
+    glyphs = {
+        'A': ["01110","10001","10001","11111","10001","10001","10001"],
+        'B': ["11110","10001","10001","11110","10001","10001","11110"],
+        'C': ["01110","10001","10000","10000","10000","10001","01110"],
+        'D': ["11110","10001","10001","10001","10001","10001","11110"],
+        'E': ["11111","10000","10000","11110","10000","10000","11111"],
+        'F': ["11111","10000","10000","11110","10000","10000","10000"],
+        'G': ["01110","10001","10000","10111","10001","10001","01110"],
+        'H': ["10001","10001","10001","11111","10001","10001","10001"],
+        'I': ["11111","00100","00100","00100","00100","00100","11111"],
+        'J': ["00111","00010","00010","00010","00010","10010","01100"],
+        'K': ["10001","10010","10100","11000","10100","10010","10001"],
+        'L': ["10000","10000","10000","10000","10000","10000","11111"],
+        'M': ["10001","11011","10101","10101","10001","10001","10001"],
+        'N': ["10001","10001","11001","10101","10011","10001","10001"],
+        'O': ["01110","10001","10001","10001","10001","10001","01110"],
+        'P': ["11110","10001","10001","11110","10000","10000","10000"],
+        'Q': ["01110","10001","10001","10001","10101","10010","01101"],
+        'R': ["11110","10001","10001","11110","10100","10010","10001"],
+        'S': ["01110","10001","10000","01110","00001","10001","01110"],
+        'T': ["11111","00100","00100","00100","00100","00100","00100"],
+        'U': ["10001","10001","10001","10001","10001","10001","01110"],
+        'V': ["10001","10001","10001","10001","01010","01010","00100"],
+        'W': ["10001","10001","10001","10101","10101","10101","01010"],
+        'X': ["10001","10001","01010","00100","01010","10001","10001"],
+        'Y': ["10001","10001","01010","00100","00100","00100","00100"],
+        'Z': ["11111","00001","00010","00100","01000","10000","11111"],
+        '0': ["01110","10001","10011","10101","11001","10001","01110"],
+        '1': ["00100","01100","00100","00100","00100","00100","01110"],
+        '2': ["01110","10001","00001","00110","01000","10000","11111"],
+        '3': ["01110","10001","00001","00110","00001","10001","01110"],
+        '4': ["00010","00110","01010","10010","11111","00010","00010"],
+        '5': ["11111","10000","11110","00001","00001","10001","01110"],
+        '6': ["01110","10001","10000","11110","10001","10001","01110"],
+        '7': ["11111","00001","00010","00100","01000","01000","01000"],
+        '8': ["01110","10001","10001","01110","10001","10001","01110"],
+        '9': ["01110","10001","10001","01111","00001","10001","01110"],
+        ' ': ["00000","00000","00000","00000","00000","00000","00000"],
+        '.': ["00000","00000","00000","00000","00000","01100","01100"],
+        ',': ["00000","00000","00000","00000","00100","00100","01000"],
+        '!': ["00100","00100","00100","00100","00100","00000","00100"],
+        '?': ["01110","10001","00001","00110","00100","00000","00100"],
+        "'": ["00100","00100","01000","00000","00000","00000","00000"],
+        '"': ["01010","01010","10100","00000","00000","00000","00000"],
+        '-': ["00000","00000","00000","11111","00000","00000","00000"],
+        '~': ["00000","00000","01000","10101","00010","00000","00000"],
+        '/': ["00001","00010","00010","00100","01000","01000","10000"],
+        '(': ["00010","00100","01000","01000","01000","00100","00010"],
+        ')': ["01000","00100","00010","00010","00010","00100","01000"],
+        ':': ["00000","01100","01100","00000","01100","01100","00000"],
+        '%': ["11001","11010","00010","00100","01000","01011","10011"],
+    }
+    for ch, rows in glyphs.items():
+        _TINY_FONT[ch] = rows
+
+
+def _render_tiny_text(pixels, x0, y0, text, max_width):
+    """Render text into pixel buffer using the tiny bitmap font.
+    Wraps words to fit within max_width pixels."""
+    _init_tiny_font()
+    char_w = 6  # 5px glyph + 1px spacing
+    line_h = 9  # 7px glyph + 2px spacing
+    chars_per_line = max(1, max_width // char_w)
+
+    # Word-wrap
+    words = text.split()
+    lines = []
+    current = ""
+    for word in words:
+        test = (current + " " + word).strip() if current else word
+        if len(test) <= chars_per_line:
+            current = test
+        else:
+            if current:
+                lines.append(current)
+            current = word[:chars_per_line]  # truncate long words
+    if current:
+        lines.append(current)
+
+    for line_idx, line in enumerate(lines):
+        cy = y0 + line_idx * line_h
+        if cy + 7 >= DISPLAY_H:
+            break
+        for ci, ch in enumerate(line):
+            cx = x0 + ci * char_w
+            if cx + 5 >= DISPLAY_W:
+                break
+            glyph = _TINY_FONT.get(ch.upper(), _TINY_FONT.get(' '))
+            if glyph:
+                for row_idx, row in enumerate(glyph):
+                    for col_idx, bit in enumerate(row):
+                        if bit == '1':
+                            px, py = cx + col_idx, cy + row_idx
+                            if 0 <= px < DISPLAY_W and 0 <= py < DISPLAY_H:
+                                pixels[py][px] = 1
+
+
+SASSY_QUOTES = [
+    "BIRDS ARENT REAL. THEY CHARGE ON POWER LINES!",
+    "THE MOON IS JUST THE BACK OF THE SUN.",
+    "WIFI IS JUST SPICY AIR.",
+    "FISH ARE JUST WET BIRDS.",
+    "I DONT HAVE BONES AND THATS A FLEX.",
+    "MATTRESSES ARE BODY SHELVES.",
+    "CLOUDS ARE GOVERNMENT PILLOWS.",
+    "PIGEONS ARE DRONES. WAKE UP.",
+    "THE OCEAN IS JUST SKY JUICE.",
+    "GRAVITY IS A SUBSCRIPTION SERVICE.",
+    "SLEEP IS FREE DEATH TRIAL.",
+    "STAIRS ARE JUST BROKEN ESCALATORS.",
+    "THE FLOOR IS JUST A BIG SHELF.",
+    "DOORS ARE WALLS THAT GAVE UP.",
+    "EGGS ARE JUST BONELESS CHICKENS.",
+    "IM 90% WATER. IM BASICALLY A SPLASH.",
+    "SAND IS JUST ANGRY ROCKS.",
+    "YOUR SKELETON IS WET RIGHT NOW.",
+    "TREES ARE JUST GROUND HAIR.",
+    "LAVA IS JUST EARTH SAUCE.",
+    "MATH IS JUST SPICY COUNTING.",
+    "MIRRORS ARE JUST WATER THAT TRIED HARDER.",
+    "SOCKS ARE JUST FOOT PRISONS.",
+    "A BURRITO IS A SLEEPING BAG FOR FOOD.",
+    "OCTOBER HAS NO OCTOS IN IT. SUS.",
+    "INK IS MY DEFENSE MECHANISM. AND COMEDY.",
+    "8 ARMS AND ZERO PATIENCE.",
+    "I HUG THINGS 4X BETTER THAN YOU.",
+    "SPAGHETTI IS JUST BONELESS TENTACLES.",
+    "JELLYFISH ARE JUST OCEAN GHOSTS.",
+]
+
+
+def _generate_octopus_frame(mouth_open, quote):
+    """Generate a full 250x122 frame with the octopus and chat bubble."""
+    pixels = [[0] * DISPLAY_W for _ in range(DISPLAY_H)]
+    _draw_octopus(pixels, mouth_open)
+    _draw_chat_bubble(pixels, quote, mouth_open)
+    return pixels
+
+
+def _pixels_to_packed(pixels):
+    """Convert 2D pixel array to packed bytes."""
+    byte_width = (DISPLAY_W + 7) // 8
+    data = bytearray(byte_width * DISPLAY_H)
+    for y in range(DISPLAY_H):
+        for x in range(DISPLAY_W):
+            if pixels[y][x]:
+                byte_idx = y * byte_width + x // 8
+                bit_idx = 7 - (x % 8)
+                data[byte_idx] |= (1 << bit_idx)
+    return bytes(data)
+
+
+class ProgramsTab(ttk.Frame):
+    """Deploy animated programs to the emulator preview and/or Pico display."""
+
+    PROGRAMS = {
+        "sassy_octopus": {
+            "name": "Sassy Octopus",
+            "desc": "A sassy octopus blurts unhinged conspiracies and jokes,\n"
+                    "alternating between a smile and open-mouth expression.",
+        },
+    }
+
+    def __init__(self, parent, app):
+        super().__init__(parent)
+        self.app = app
+        self.running_program = None
+        self._stop_event = threading.Event()
+        self._build_ui()
+
+    def _build_ui(self):
+        # ── Program list (left) ──
+        list_frame = ttk.Frame(self)
+        list_frame.pack(side=tk.LEFT, fill=tk.BOTH, padx=5, pady=5, expand=False)
+
+        ttk.Label(list_frame, text="Programs", font=("JetBrains Mono", 12, "bold")).pack(anchor=tk.W)
+
+        self.prog_list = tk.Listbox(
+            list_frame, width=28, bg=BG_DARK, fg=FG_TEXT,
+            selectbackground=FG_ACCENT, selectforeground=BG_DARK,
+            font=("JetBrains Mono", 10),
+        )
+        self.prog_list.pack(fill=tk.BOTH, expand=True, pady=(5, 0))
+        self.prog_list.bind("<<ListboxSelect>>", self._on_select)
+
+        for key, info in self.PROGRAMS.items():
+            self.prog_list.insert(tk.END, info["name"])
+
+        # Buttons
+        btn_frame = ttk.Frame(list_frame)
+        btn_frame.pack(fill=tk.X, pady=(5, 0))
+
+        self.preview_btn = ttk.Button(btn_frame, text="Preview", command=self._preview_program)
+        self.preview_btn.pack(side=tk.LEFT, padx=2)
+
+        self.deploy_btn = ttk.Button(btn_frame, text="Deploy to Pico", command=self._deploy_to_pico)
+        self.deploy_btn.pack(side=tk.LEFT, padx=2)
+
+        self.stop_btn = ttk.Button(btn_frame, text="Stop", command=self._stop_program, state=tk.DISABLED)
+        self.stop_btn.pack(side=tk.LEFT, padx=2)
+
+        # ── Preview area (right) ──
+        preview_frame = ttk.LabelFrame(self, text="Preview", padding=5)
+        preview_frame.pack(side=tk.LEFT, fill=tk.BOTH, expand=True, padx=5, pady=5)
+
+        self.preview_canvas = tk.Canvas(
+            preview_frame,
+            width=DISPLAY_W * 3,
+            height=DISPLAY_H * 3,
+            bg=EINK_WHITE,
+            highlightthickness=1,
+            highlightbackground=FG_DIM,
+        )
+        self.preview_canvas.pack()
+
+        self.desc_label = ttk.Label(preview_frame, text="Select a program to preview or deploy.",
+                                     wraplength=600)
+        self.desc_label.pack(pady=5)
+
+        self.status_label = ttk.Label(preview_frame, text="", foreground=FG_GREEN)
+        self.status_label.pack(pady=2)
+
+    def _get_selected_key(self):
+        sel = self.prog_list.curselection()
+        if not sel:
+            return None
+        keys = list(self.PROGRAMS.keys())
+        return keys[sel[0]]
+
+    def _on_select(self, event=None):
+        key = self._get_selected_key()
+        if key:
+            info = self.PROGRAMS[key]
+            self.desc_label.config(text=info["desc"])
+            # Show a static preview frame
+            self._show_static_preview(key)
+
+    def _show_static_preview(self, prog_key):
+        """Show a single frame on the preview canvas."""
+        if prog_key == "sassy_octopus":
+            pixels = _generate_octopus_frame(False, random.choice(SASSY_QUOTES))
+            self._render_preview(pixels)
+
+    def _render_preview(self, pixels, scale=3):
+        """Render a pixel buffer onto the preview canvas."""
+        self.preview_canvas.delete("all")
+        for y in range(DISPLAY_H):
+            for x in range(DISPLAY_W):
+                if pixels[y][x]:
+                    self.preview_canvas.create_rectangle(
+                        x * scale, y * scale,
+                        x * scale + scale, y * scale + scale,
+                        fill=EINK_BLACK, outline=EINK_BLACK,
+                    )
+
+    def _preview_program(self):
+        """Run the selected program in the emulator preview (animated)."""
+        key = self._get_selected_key()
+        if not key:
+            messagebox.showinfo("Select Program", "Select a program from the list first.")
+            return
+
+        self._stop_event.clear()
+        self.preview_btn.config(state=tk.DISABLED)
+        self.deploy_btn.config(state=tk.DISABLED)
+        self.stop_btn.config(state=tk.NORMAL)
+        self.status_label.config(text="Running preview...")
+
+        if key == "sassy_octopus":
+            t = threading.Thread(target=self._run_sassy_octopus, args=(False,), daemon=True)
+            t.start()
+
+    def _deploy_to_pico(self):
+        """Run the selected program, sending each frame to the Pico display."""
+        key = self._get_selected_key()
+        if not key:
+            messagebox.showinfo("Select Program", "Select a program from the list first.")
+            return
+
+        port = find_pico_serial()
+        if not port:
+            messagebox.showwarning("No Pico", "No Pico W detected on USB serial.")
+            return
+
+        self._stop_event.clear()
+        self.preview_btn.config(state=tk.DISABLED)
+        self.deploy_btn.config(state=tk.DISABLED)
+        self.stop_btn.config(state=tk.NORMAL)
+        self.status_label.config(text=f"Deploying to {port}...")
+        self.app.log(f"Deploying {self.PROGRAMS[key]['name']} to Pico on {port}")
+
+        if key == "sassy_octopus":
+            t = threading.Thread(target=self._run_sassy_octopus, args=(True,), daemon=True)
+            t.start()
+
+    def _stop_program(self):
+        """Stop the currently running program."""
+        self._stop_event.set()
+        self.stop_btn.config(state=tk.DISABLED)
+
+    def _run_sassy_octopus(self, deploy_to_pico):
+        """Animate the sassy octopus — alternating expressions + quotes."""
+        ser = None
+        if deploy_to_pico:
+            port = find_pico_serial()
+            if port:
+                try:
+                    ser = serial.Serial(port, DEFAULT_BAUD, timeout=2,
+                                        write_timeout=3)
+                except serial.SerialException as e:
+                    self.after(0, lambda: messagebox.showerror("Serial Error", str(e)))
+                    self._finish_program()
+                    return
+
+        mouth_open = False
+        quote = random.choice(SASSY_QUOTES)
+        frame_count = 0
+
+        try:
+            while not self._stop_event.is_set():
+                # Switch expression and quote every other frame
+                if frame_count % 2 == 0:
+                    mouth_open = not mouth_open
+                    if mouth_open:
+                        quote = random.choice(SASSY_QUOTES)
+
+                pixels = _generate_octopus_frame(mouth_open, quote)
+
+                # Update preview canvas
+                self.after(0, lambda p=pixels: self._render_preview(p))
+
+                # Send to Pico if deploying
+                if ser and ser.is_open:
+                    try:
+                        data = _pixels_to_packed(pixels)
+                        ser.write(b"IMG:")
+                        ser.write(struct.pack("<HH", DISPLAY_W, DISPLAY_H))
+                        ser.write(data)
+                        ser.flush()
+                        self.after(0, lambda fc=frame_count: self.status_label.config(
+                            text=f"Frame {fc} sent to Pico", foreground=FG_GREEN))
+                    except (serial.SerialException, serial.SerialTimeoutException) as e:
+                        self.after(0, lambda: self.status_label.config(
+                            text="Pico write failed — check connection", foreground=FG_RED))
+                        # Don't kill ser — try again next frame
+                elif deploy_to_pico and ser is None:
+                    # Pico wasn't found, just preview locally
+                    if frame_count == 0:
+                        self.after(0, lambda: self.status_label.config(
+                            text="No Pico — previewing locally", foreground=FG_YELLOW))
+
+                frame_count += 1
+                # Wait 3 seconds between frames (e-ink refresh is slow)
+                for _ in range(30):
+                    if self._stop_event.is_set():
+                        break
+                    time.sleep(0.1)
+        finally:
+            if ser:
+                ser.close()
+            self._finish_program()
+
+    def _finish_program(self):
+        """Reset UI after program stops."""
+        def _do():
+            self.preview_btn.config(state=tk.NORMAL)
+            self.deploy_btn.config(state=tk.NORMAL)
+            self.stop_btn.config(state=tk.DISABLED)
+            self.status_label.config(text="Stopped.", foreground=FG_DIM)
+        self.after(0, _do)
+
+
+# ─────────────────────────────────────────────────────────────────────────────
 # Main Application
 # ─────────────────────────────────────────────────────────────────────────────
 
@@ -2112,15 +2691,19 @@ class DilderDevTool(tk.Tk):
         self.asset_tab = AssetManager(self.notebook, self)
         self.notebook.add(self.asset_tab, text="  Assets  ")
 
-        # Tab 5: Pin Viewer
+        # Tab 5: Programs
+        self.programs_tab = ProgramsTab(self.notebook, self)
+        self.notebook.add(self.programs_tab, text="  Programs  ")
+
+        # Tab 6: Pin Viewer
         self.pin_tab = PinViewer(self.notebook, self)
         self.notebook.add(self.pin_tab, text="  GPIO Pins  ")
 
-        # Tab 6: Connection Utility
+        # Tab 7: Connection Utility
         self.conn_tab = ConnectionUtility(self.notebook, self)
         self.notebook.add(self.conn_tab, text="  Connect  ")
 
-        # Tab 7: Documentation
+        # Tab 8: Documentation
         self.docs_tab = DocumentationTab(self.notebook, self)
         self.notebook.add(self.docs_tab, text="  Docs  ")
 

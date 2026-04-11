@@ -1,6 +1,6 @@
 # Project Structure
 
-Directory layout and module overview for the Dilder firmware. This page reflects the planned structure — it will be fleshed out as Phase 2 (firmware) begins.
+Directory layout and module overview for the Dilder project.
 
 ---
 
@@ -10,87 +10,97 @@ Directory layout and module overview for the Dilder firmware. This page reflects
 dilder/
 ├── README.md                    # Project overview and phase tracker
 ├── PromptProgression.md         # Every AI prompt logged with token counts
+├── setup.py                     # Interactive CLI for first-time dev environment setup
+│
+├── DevTool/                     # Tkinter GUI for Pico W development
+│   ├── devtool.py               # Main application (9 classes, 7 tabs)
+│   ├── requirements.txt         # Python dependencies (pyserial, Pillow)
+│   └── README.md                # Comprehensive usage walkthrough
+│
+├── dev-setup/                   # Hardware setup resources
+│   ├── pico-and-display-first-time-setup.md  # Step-by-step hardware guide
+│   ├── hello-world/             # C project — e-ink display Hello World
+│   │   ├── main.c
+│   │   ├── CMakeLists.txt
+│   │   └── lib/                 # Waveshare driver files (cloned at setup)
+│   ├── hello-world-serial/      # C project — serial-only Hello World
+│   │   ├── main.c
+│   │   └── CMakeLists.txt
+│   ├── Dockerfile               # Reproducible ARM cross-compile container
+│   └── docker-compose.yml
+│
+├── hardware-design/             # Enclosure and component planning
+│   └── hardware-planning.md     # Dimensions, button options, CAD plan, print costs
 │
 ├── docs/                        # Raw research and reference docs
-│   ├── hardware-research.md     # Component specs and enclosure design
+│   ├── hardware-research.md     # Component specs and GPIO budget
+│   ├── setup-guide.md           # Original setup walkthrough
 │   └── concepts/
-│       ├── prototype-v1.svg
-│       └── prototype-v2.svg
+│       ├── prototype-v1.svg     # Enclosure concept render v1
+│       └── prototype-v2.svg     # Dimension-accurate concept render v2
 │
-├── website/                     # This website (MkDocs project)
-│   ├── mkdocs.yml
-│   └── docs/
+├── assets/                      # Saved display images from DevTool
+│   ├── *.pbm                    # Portable Bitmap format
+│   ├── *.bin                    # Raw display buffer
+│   └── *.png                    # PNG exports
 │
-└── firmware/                    # MicroPython code for Pico W (Phase 2+)
-    ├── main.py                  # Entry point (runs on boot)
-    ├── boot.py                  # Pre-boot config (Wi-Fi setup, etc.)
-    ├── epd2in13_V3.py           # Waveshare display driver (uploaded from lib)
-    ├── epdconfig.py             # SPI/GPIO config for driver
-    │
-    ├── core/
-    │   ├── display.py           # Display driver wrapper
-    │   ├── input.py             # Button input handler
-    │   └── loop.py              # Main game loop
-    │
-    ├── pet/
-    │   ├── pet.py               # Pet state machine
-    │   ├── mood.py              # Mood/stat system
-    │   └── animations.py        # Sprite animation sequences
-    │
-    └── assets/
-        ├── sprites/             # 1-bit PBM/raw sprites (250×122 or smaller)
-        └── fonts/               # Bitmap font data (framebuf built-in or custom)
+├── website/                     # This website (MkDocs Material project)
+│   ├── mkdocs.yml               # Site configuration
+│   ├── dev.py                   # Website dev CLI (serve, build, deploy)
+│   ├── requirements.txt         # MkDocs dependencies
+│   ├── PLAN.md                  # Site architecture plan
+│   ├── IMPLEMENTATION.md        # Build process documentation
+│   ├── CONTENT-GUIDE.md         # Content management guide
+│   ├── DEPLOY.md                # GitHub Pages deployment guide
+│   └── docs/                    # Site content (Markdown)
+│
+└── firmware/                    # C firmware for Pico W (Phase 2+)
+    ├── main.c                   # Entry point
+    ├── core/                    # Display, input, game loop
+    ├── pet/                     # Pet state machine, mood, animations
+    └── assets/                  # Sprites and fonts
 ```
 
 !!! note "Firmware not yet written"
     The `firmware/` directory structure above is the planned layout. Phase 2 will establish this scaffold.
 
 !!! warning "Flash storage limits"
-    The Pico W has 2MB of flash. MicroPython firmware uses ~700KB, leaving ~1.3MB for your code and assets. Keep sprite files small — use 1-bit monochrome bitmaps, not PNGs with metadata.
+    The Pico W has 2MB of flash. C firmware is much smaller than MicroPython, but keep sprite files small — use 1-bit monochrome bitmaps, not PNGs with metadata.
 
 ---
 
-## Planned Module Responsibilities
+## Planned Firmware Modules (C)
 
-### `core/display.py`
+The firmware is written in C using the Pico SDK. The planned module structure:
+
+### `core/display.c`
 
 Thin wrapper around the Waveshare e-Paper driver:
 
-- Initializes SPI and the display
-- Exposes `render(buf)` for full refresh and `render_partial(buf)` for partial
+- Initializes SPI and the display via the Pico SDK
+- Exposes `display_render()` for full refresh and `display_render_partial()` for partial
 - Handles cleanup and sleep mode
 - Manages refresh rate limiting (prevent over-refreshing)
 
-### `core/input.py`
+### `core/input.c`
 
 Button input manager:
 
-- Sets up GPIO pins with internal pull-ups
-- Provides event-based callbacks or polling: `is_pressed(button)`
+- Sets up GPIO pins with internal pull-ups via `gpio_set_pulls()`
+- Provides polling: `input_is_pressed(button)`
 - Handles software debouncing (~10ms default)
-- Button constants: `BTN_UP`, `BTN_DOWN`, `BTN_LEFT`, `BTN_RIGHT`, `BTN_SELECT`
+- Button constants: `BTN_UP` (GP2), `BTN_DOWN` (GP3), `BTN_LEFT` (GP4), `BTN_RIGHT` (GP5), `BTN_SELECT` (GP6)
 
-```python
-from machine import Pin
-
-class Input:
-    BTN_UP     = Pin(2, Pin.IN, Pin.PULL_UP)
-    BTN_DOWN   = Pin(3, Pin.IN, Pin.PULL_UP)
-    BTN_LEFT   = Pin(4, Pin.IN, Pin.PULL_UP)
-    BTN_RIGHT  = Pin(5, Pin.IN, Pin.PULL_UP)
-    BTN_SELECT = Pin(6, Pin.IN, Pin.PULL_UP)
-```
-
-### `core/loop.py`
+### `core/loop.c`
 
 Main game loop:
 
 - 10Hz target tick rate (100ms per tick)
-- Calls `pet.tick()` on each loop iteration
+- Calls `pet_tick()` on each loop iteration
 - Reads pending input events and dispatches to pet state machine
 - Triggers display refresh when pet state changes
 
-### `pet/pet.py`
+### `pet/pet.c`
 
 Pet state machine:
 
@@ -99,13 +109,13 @@ Pet state machine:
 - Stat decay over time (hunger increases, happiness decreases)
 - State transitions driven by input and stat thresholds
 
-### `pet/animations.py`
+### `pet/animations.c`
 
 Sprite animation sequences:
 
-- Each animation is a list of `(sprite_data, duration_ms)` tuples
-- `Animator` class tracks current frame, advances on tick
-- Renders to a `framebuf.FrameBuffer` passed to `display.render_partial()`
+- Each animation is an array of `{sprite_data, duration_ms}` structs
+- Animator tracks current frame, advances on tick
+- Renders to a framebuffer passed to `display_render_partial()`
 
 ---
 
@@ -113,29 +123,31 @@ Sprite animation sequences:
 
 ### Sprites
 
-- Format: 1-bit monochrome (raw bytearray or PBM)
+- Format: 1-bit monochrome (raw byte arrays or PBM)
 - Coordinate space: 250×122 (full display) or any sub-region
 - Naming: `{state}_{frame:02d}.pbm` — e.g., `idle_00.pbm`, `idle_01.pbm`
+- The [DevTool](../tools/devtool.md) display emulator can create and preview sprites at exact display resolution
 
 !!! tip "Why not PNG?"
-    MicroPython doesn't include PIL/Pillow. The `framebuf` module works with raw byte arrays. Pre-convert sprites to 1-bit raw format on your dev machine before uploading.
+    The Pico W firmware works with raw byte arrays for display rendering. Pre-convert sprites to 1-bit raw format on your dev machine using the DevTool or command-line tools before embedding in firmware.
 
 ### Fonts
 
-- MicroPython's built-in `framebuf.text()` provides an 8×8 pixel font
-- For larger text, use bitmap font arrays or a custom font renderer
+- For small text, use bitmap font arrays compiled into the firmware
+- For larger text, use a custom font renderer
 - Recommended size: 8px–16px works well at 250×122 resolution
 
 ---
 
 ## Key Differences from Pi Zero Development
 
-| Aspect | Pico W (MicroPython) | Pi Zero (CPython + Linux) |
-|--------|---------------------|--------------------------|
-| Graphics | `framebuf.FrameBuffer` | `PIL.Image` + `ImageDraw` |
-| GPIO | `machine.Pin` | `RPi.GPIO` |
-| SPI | `machine.SPI` | `spidev` |
-| File I/O | 2MB flash, no SD | Full Linux filesystem |
-| Imports | Upload `.py` files to flash | `pip install` packages |
-| Debugging | REPL over USB serial | SSH + debugpy |
+| Aspect | Pico W (C SDK) | Pi Zero (CPython + Linux) |
+|--------|---------------|--------------------------|
+| Language | C with Pico SDK | Python with PIL/Pillow |
+| Graphics | Raw framebuffer | `PIL.Image` + `ImageDraw` |
+| GPIO | `gpio_init()` / `gpio_get()` | `RPi.GPIO` |
+| SPI | Pico SDK `spi_init()` | `spidev` |
+| File I/O | 2MB flash, no filesystem | Full Linux filesystem |
+| Build | CMake + Ninja cross-compile | `pip install` packages |
+| Debugging | Serial over USB + SWD | SSH + debugpy |
 | Boot | Instant (~1s) | 30–90 seconds |
