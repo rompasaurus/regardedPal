@@ -572,3 +572,16 @@ Spelling and grammar are lightly cleaned for readability while preserving the or
 - **Commit:** `b408ab1` — Update website with Tools docs, blog post, prompt log, and DevTool Programs tab
 - **Files Created/Modified:**
   - `PromptProgression.md` (modified — added Prompt #42)
+
+---
+
+## Prompt #43
+- **Date/Time:** 2026-04-11
+- **Prompt:** "Also the software on the site needs the READMEs for the GUI app and a guide on the CLI setup."
+- **Input Tokens (est):** ~25
+- **Output Tokens (est):** ~40,000
+- **Commit:** *(see below)*
+- **Files Created/Modified:**
+  - `website/docs/docs/tools/devtool.md` (rewritten — expanded from summary to full documentation matching DevTool/README.md: all 7 tabs with detailed usage instructions, drawing tools, serial monitor, flash firmware, asset manager, GPIO reference, connection utility with USB/Wi-Fi walkthroughs, documentation tab, file format specifications with byte layouts, class architecture, threading model, troubleshooting table)
+  - `website/docs/docs/tools/setup-cli.md` (rewritten — expanded from summary to comprehensive guide matching dev-setup/pico-and-display-first-time-setup.md: 14-step walkthrough table, hardware requirements, software installed, Pico W and Waveshare specs, C vs MicroPython rationale, display connection with side-view diagram and pin mapping, troubleshooting tables for build/flash/serial/display issues, quick reference card)
+  - `PromptProgression.md` (modified — added Prompt #43)
