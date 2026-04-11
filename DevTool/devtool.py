@@ -580,7 +580,7 @@ class DisplayEmulator(ttk.Frame):
             messagebox.showerror("Error", "Pillow is required for PNG support.\n\npip install Pillow")
 
     def _send_to_pico(self):
-        """Send the current image to the Pico W via serial."""
+        """Send the current image to the Pico W via serial (non-blocking)."""
         port = find_pico_serial()
         if not port:
             messagebox.showwarning("No Pico", "No Pico W detected on USB serial.")
@@ -589,16 +589,21 @@ class DisplayEmulator(ttk.Frame):
         data = self._pixels_to_bytes()
         self.app.log(f"Sending {len(data)} bytes to {port}...")
 
-        try:
-            with serial.Serial(port, DEFAULT_BAUD, timeout=2) as ser:
-                # Protocol: send "IMG:" header followed by raw bytes
-                ser.write(b"IMG:")
-                ser.write(struct.pack("<HH", DISPLAY_W, DISPLAY_H))
-                ser.write(data)
-                ser.flush()
-            self.app.log(f"Image sent to Pico W ({len(data)} bytes)")
-        except serial.SerialException as e:
-            messagebox.showerror("Serial Error", str(e))
+        def _do_send():
+            try:
+                with serial.Serial(port, DEFAULT_BAUD, timeout=2,
+                                    write_timeout=5) as ser:
+                    ser.write(b"IMG:")
+                    ser.write(struct.pack("<HH", DISPLAY_W, DISPLAY_H))
+                    ser.write(data)
+                    ser.flush()
+                self.app.log(f"Image sent to Pico W ({len(data)} bytes)")
+            except serial.SerialTimeoutException:
+                self.app.log("Send timed out — Pico may not be reading serial data")
+            except serial.SerialException as e:
+                self.after(0, lambda: messagebox.showerror("Serial Error", str(e)))
+
+        threading.Thread(target=_do_send, daemon=True).start()
 
 
 # ─────────────────────────────────────────────────────────────────────────────

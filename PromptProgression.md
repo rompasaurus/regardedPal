@@ -535,7 +535,7 @@ Spelling and grammar are lightly cleaned for readability while preserving the or
 - **Prompt:** "Update the prompts and add the latest assets as well. Clean up spelling and grammar."
 - **Input Tokens (est):** ~20
 - **Output Tokens (est):** ~3,000
-- **Commit:** *(see below)*
+- **Commit:** `5025ec6` — Add test assets and update PromptProgression through Prompt #40
 - **Files Created/Modified:**
   - `assets/garbage.pbm` (added — test image saved from DevTool display emulator)
   - `assets/garbage.bin` (added — raw display buffer of the test image)
