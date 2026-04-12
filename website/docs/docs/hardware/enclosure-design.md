@@ -85,6 +85,42 @@ These constraints must be satisfied by any enclosure design:
 
 ---
 
+## 3D Printing Pipeline
+
+A full analysis of printing technologies, third-party services, CAD workflows, and cost estimates is available in the dedicated pipeline document:
+
+**[3D Printing Prototyping Pipeline](../../../../hardware-design/3d-printing-pipeline.md)**
+
+### Technology Summary
+
+| Technology | Home Printer? | Service Cost (Dilder case) | Best For |
+|------------|---------------|---------------------------|----------|
+| **FDM/FFF** | Yes ($150–$1500) | $1–$5 | Cheapest rapid iteration |
+| **SLA/MSLA** | Yes ($150–$3500) | $1–$8 | Best surface finish |
+| **SLS** | No (service only) | $4–$25 | Strongest functional parts |
+| **MJF** | No (service only) | $3–$20 | Best price/quality via services |
+
+### Recommended Approach
+
+| Phase | Method | Material | Est. Cost |
+|-------|--------|----------|-----------|
+| Fit-check prototypes | Home FDM or JLCPCB SLA | PLA / standard resin | $0.50–$15 |
+| Functional prototypes | Home FDM or JLCPCB MJF | PETG / PA12 nylon | $0.65–$18 |
+| Final enclosure | JLCPCB MJF | PA12 nylon (dark grey) | $8–$18 shipped |
+
+### Top Service Options
+
+| Service | Dilder Case Price | Lead Time | Notes |
+|---------|------------------|-----------|-------|
+| **JLCPCB** | $3–10 + $5–10 shipping | 7–15 days | Cheapest, bundle with PCB orders |
+| **Craftcloud** | $5–15 + varies | 3–14 days | Price-comparison marketplace |
+| **Xometry** | $12–30 (shipping included) | 3–10 days | Fastest US option |
+
+!!! tip "Combine with PCB orders"
+    If ordering PCBs from JLCPCB, add the 3D-printed case to the same shipment to eliminate separate shipping costs. MJF PA12 nylon is the recommended material — no layer lines, strong snap-fits, dark grey finish.
+
+---
+
 ## Future Revisions
 
 - **v3:** Incorporate real component fits once hardware is assembled — verify display + board stack height, button stem clearance

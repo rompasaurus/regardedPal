@@ -110,6 +110,7 @@ nav:
           - Materials List: docs/hardware/materials-list.md
           - Wiring & Pinout: docs/hardware/wiring-pinout.md
           - Enclosure Design: docs/hardware/enclosure-design.md
+          - 3D Printing Pipeline: docs/hardware/3d-printing-pipeline.md
       - Setup:
           - First-Time Setup (C SDK): docs/setup/first-time-setup.md
           - Pico W Setup: docs/setup/pi-zero-setup.md

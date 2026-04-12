@@ -608,3 +608,23 @@ This is part of the transparency experiment — showing AI-assisted development 
 - **Input Tokens (est):** ~60
 - **Output Tokens (est):** ~80,000
 - **Files:** `PromptProgression.md` (added Prompts #64–66), `website/docs/prompts/index.md` (added Prompts #64–66)
+
+---
+
+## Prompt #67 — 2026-04-12
+
+**Prompt:** "Let's continue the hardware design process. Let's make a 3D print prototyping pipeline MD analysis document and go through every viable off-the-shelf 3D printing option, technologies and price points, and use this to evaluate the most cost-effective and quickest way to CAD design and print a case and mounting system for this hardware. Give a pros and cons list between all the available 3D printing technologies and tech stacks and overhead behind it. Also deep-dive into third-party print options and the pros and cons and price options for this as well. Build a robust document for this with a TOC and pricing estimates. Give several viable options after research."
+
+- **Input Tokens (est):** ~120
+- **Output Tokens (est):** ~15,000
+- **Files:** `hardware-design/3d-printing-pipeline.md` (created — 15-section analysis: FDM/SLA/SLS/MJF technologies, 9 third-party services, material guide, CAD comparison, pricing, 5 ranked options, decision framework, scaling path)
+
+---
+
+## Prompt #68 — 2026-04-12
+
+**Prompt:** "Ok update the prompts with this and commit and push this doc and update the website as well."
+
+- **Input Tokens (est):** ~25
+- **Output Tokens (est):** ~8,000
+- **Files:** `PromptProgression.md` (added #67–68), `website/docs/prompts/index.md` (added #67–68), `website/docs/docs/hardware/3d-printing-pipeline.md` (created), `website/docs/docs/hardware/enclosure-design.md` (added pipeline summary), `website/mkdocs.yml` (added nav entry)
