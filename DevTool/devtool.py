@@ -4753,11 +4753,58 @@ class ProgramsTab(ttk.Frame):
         variant = self._get_display_variant()
         self.app.log(f"[programs] Display variant set to: {variant}")
 
+    # Pico W flash: 2MB total, but the UF2 bootloader + SDK runtime take ~28KB.
+    # Rendering code (drawing functions, font, body RLE) is ~15KB.
+    # Each quote is a C string + mood byte in the quotes.h header.
+    PICO_FLASH_KB = 2048  # 2MB total flash
+
+    # Base firmware size in KB (SDK runtime + SPI driver + display driver +
+    # rendering code + font + body RLE). Measured from compiled .uf2 files:
+    # hello-world=106KB, img-receiver=74KB, angry-octopus(45 quotes)=104KB,
+    # supportive(160 quotes)=113KB → base ~95KB + ~0.05KB/quote.
+    _FW_BASE_KB = 95
+
+    def _estimate_firmware_kb(self, key):
+        """Estimate compiled .uf2 firmware size for a program in KB."""
+        if key in self._OCTOPUS_CONFIGS:
+            quotes_list = self._OCTOPUS_CONFIGS[key][0]
+            num_quotes = len(quotes_list)
+            if isinstance(quotes_list[0], dict):
+                text_bytes = sum(len(q["text"]) + 2 for q in quotes_list)  # +2 for mood+null
+            else:
+                text_bytes = sum(len(q) + 2 for q in quotes_list)
+            # Each quote is a struct: pointer(4) + mood(1) + padding(3) + string data
+            quote_overhead = num_quotes * 8 + text_bytes
+            return self._FW_BASE_KB + (quote_overhead + 1023) // 1024
+        return self._FW_BASE_KB  # fallback
+
     def _on_select(self, event=None):
         key = self._get_selected_key()
         if key:
             info = self.PROGRAMS[key]
-            self.desc_label.config(text=info["desc"])
+
+            # Estimate firmware size
+            est_kb = self._estimate_firmware_kb(key)
+            free_kb = self.PICO_FLASH_KB - est_kb
+            pct_used = (est_kb / self.PICO_FLASH_KB) * 100
+
+            # Get quote count
+            if key in self._OCTOPUS_CONFIGS:
+                quotes_list = self._OCTOPUS_CONFIGS[key][0]
+                num_quotes = len(quotes_list)
+            else:
+                num_quotes = 0
+
+            size_info = (
+                f"\n\n"
+                f"Firmware: ~{est_kb} KB  |  "
+                f"Pico flash: {self.PICO_FLASH_KB} KB  |  "
+                f"Free after deploy: {free_kb} KB ({100 - pct_used:.1f}% free)\n"
+                f"Quotes: {num_quotes}  |  "
+                f"Flash used: {pct_used:.1f}%"
+            )
+
+            self.desc_label.config(text=info["desc"] + size_info)
             # Show a static preview frame
             self._show_static_preview(key)
 
