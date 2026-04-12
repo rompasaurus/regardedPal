@@ -81,6 +81,9 @@
 #define MOOD_ANGRY    3
 #define MOOD_SAD      4
 #define MOOD_CHAOTIC  5
+#define MOOD_HUNGRY   6
+#define MOOD_TIRED    7
+#define MOOD_SLAPHAPPY 8
 
 /* Mouth expressions */
 #define EXPR_SMIRK    0
@@ -91,6 +94,9 @@
 #define EXPR_ANGRY    5
 #define EXPR_SAD      6
 #define EXPR_CHAOTIC  7
+#define EXPR_HUNGRY   8
+#define EXPR_TIRED    9
+#define EXPR_SLAPHAPPY 10
 
 /* Landscape frame buffer (1 = black pixel, packed MSB-first) */
 static uint8_t frame[IMG_ROW_BYTES * IMG_H];
@@ -454,6 +460,104 @@ static void draw_mouth_chaotic(void) {
     }
 }
 
+static void draw_pupils_hungry(void) {
+    /* Pupils shifted upward — staring at imaginary food */
+    fill_circle(23, 23, 4, 1);
+    fill_circle(49, 23, 4, 1);
+    fill_circle(21, 21, 1, 0);
+    fill_circle(47, 21, 1, 0);
+}
+
+static void draw_mouth_hungry(void) {
+    /* Drooling open mouth — wide oval + drool drops */
+    int cx = 35, cy = 40, rx = 8, ry = 5;
+    /* White interior */
+    for (int dy = -(ry-1); dy <= ry-1; dy++)
+        for (int dx = -(rx-1); dx <= rx-1; dx++)
+            if (dx*dx*(ry-1)*(ry-1) + dy*dy*(rx-1)*(rx-1) <= (rx-1)*(rx-1)*(ry-1)*(ry-1))
+                px_clr_off(cx+dx, cy+dy);
+    /* Black border */
+    for (int dy = -ry; dy <= ry; dy++)
+        for (int dx = -rx; dx <= rx; dx++) {
+            if (dx*dx*ry*ry + dy*dy*rx*rx > rx*rx*ry*ry) continue;
+            for (int nd = 0; nd < 4; nd++) {
+                int nx = dx + ((nd==0)?-1:(nd==1)?1:0);
+                int ny = dy + ((nd==2)?-1:(nd==3)?1:0);
+                if (nx*nx*ry*ry + ny*ny*rx*rx > rx*rx*ry*ry) {
+                    px_set_off(cx+dx, cy+dy);
+                    break;
+                }
+            }
+        }
+    /* Drool drops */
+    for (int dy = 1; dy < 6; dy++) px_set_off(33, cy+ry+dy);
+    for (int dy = 1; dy < 4; dy++) px_set_off(37, cy+ry+dy+1);
+}
+
+static void draw_pupils_tired(void) {
+    /* Tiny sleepy pupils low in half-closed eyes */
+    for (int dx = -1; dx <= 1; dx++) {
+        px_set_off(22+dx, 27); px_set_off(22+dx, 28);
+        px_set_off(48+dx, 27); px_set_off(48+dx, 28);
+    }
+}
+
+static void draw_lids_tired(void) {
+    /* Half-closed eyelids: fill top half of eye sockets black */
+    for (int ecx_i = 0; ecx_i < 2; ecx_i++) {
+        int ecx = (ecx_i == 0) ? 22 : 48;
+        for (int dy = -4; dy < -1; dy++)
+            for (int dx = -4; dx <= 4; dx++)
+                if (dx*dx + dy*dy <= 16)
+                    px_set_off(ecx+dx, 25+dy);
+    }
+}
+
+static void draw_mouth_tired(void) {
+    /* Yawn mouth — tall oval, open wide vertically */
+    int cx = 35, cy = 40, rx = 5, ry = 7;
+    for (int dy = -(ry-1); dy <= ry-1; dy++)
+        for (int dx = -(rx-1); dx <= rx-1; dx++)
+            if (dx*dx*(ry-1)*(ry-1) + dy*dy*(rx-1)*(rx-1) <= (rx-1)*(rx-1)*(ry-1)*(ry-1))
+                px_clr_off(cx+dx, cy+dy);
+    for (int dy = -ry; dy <= ry; dy++)
+        for (int dx = -rx; dx <= rx; dx++) {
+            if (dx*dx*ry*ry + dy*dy*rx*rx > rx*rx*ry*ry) continue;
+            for (int nd = 0; nd < 4; nd++) {
+                int nx = dx + ((nd==0)?-1:(nd==1)?1:0);
+                int ny = dy + ((nd==2)?-1:(nd==3)?1:0);
+                if (nx*nx*ry*ry + ny*ny*rx*rx > rx*rx*ry*ry) {
+                    px_set_off(cx+dx, cy+dy);
+                    break;
+                }
+            }
+        }
+}
+
+static void draw_eyes_slaphappy(void) {
+    /* Left eye: squint shut (fill back to black, white slit) */
+    for (int dy = -4; dy <= 4; dy++)
+        for (int dx = -4; dx <= 4; dx++)
+            if (dx*dx + dy*dy <= 16)
+                px_set_off(22+dx, 25+dy);
+    for (int dx = -3; dx <= 3; dx++)
+        px_clr_off(22+dx, 25);
+    /* Right eye: oversized pupil */
+    fill_circle(49, 26, 9, 1);
+}
+
+static void draw_mouth_slaphappy(void) {
+    /* Wide wobbly grin */
+    for (int x = 22; x < 49; x++) {
+        float t = (x - 22) / 26.0f;
+        int base = 38 + ((x-35)*(x-35)) / 20;
+        int wobble = (int)(1.5f * sinf(t * 3.14159f * 4.0f));
+        int y = base + wobble;
+        px_set_off(x, y);
+        px_set_off(x, y+1);
+    }
+}
+
 /* ─── Chat bubble ─── */
 
 static void draw_bubble(void) {
@@ -582,23 +686,30 @@ static void render_frame(const Quote *q, int expr) {
         case MOOD_ANGRY:    draw_pupils_angry();    break;
         case MOOD_SAD:      draw_pupils_sad();      break;
         case MOOD_CHAOTIC:  draw_pupils_chaotic();  break;
+        case MOOD_HUNGRY:   draw_pupils_hungry();   break;
+        case MOOD_TIRED:    draw_pupils_tired();    break;
         default:            draw_pupils_normal();   break;
     }
 
-    /* 3b. Eyebrows for angry/sad moods */
-    if (q->mood == MOOD_ANGRY) draw_brows_angry();
-    if (q->mood == MOOD_SAD)   draw_brows_sad();
+    /* 3b. Eyebrows / eyelids / special eyes */
+    if (q->mood == MOOD_ANGRY)     draw_brows_angry();
+    if (q->mood == MOOD_SAD)       draw_brows_sad();
+    if (q->mood == MOOD_TIRED)     draw_lids_tired();
+    if (q->mood == MOOD_SLAPHAPPY) draw_eyes_slaphappy();
 
     /* 4. Mouth expression (with Y_OFF) */
     switch (expr) {
-        case EXPR_OPEN:     draw_mouth_open();     break;
-        case EXPR_SMILE:    draw_mouth_smile();    break;
-        case EXPR_WEIRD:    draw_mouth_weird();    break;
-        case EXPR_UNHINGED: draw_mouth_unhinged(); break;
-        case EXPR_ANGRY:    draw_mouth_angry();    break;
-        case EXPR_SAD:      draw_mouth_sad();      break;
-        case EXPR_CHAOTIC:  draw_mouth_chaotic();  break;
-        default:            draw_mouth_smirk();    break;
+        case EXPR_OPEN:      draw_mouth_open();      break;
+        case EXPR_SMILE:     draw_mouth_smile();     break;
+        case EXPR_WEIRD:     draw_mouth_weird();     break;
+        case EXPR_UNHINGED:  draw_mouth_unhinged();  break;
+        case EXPR_ANGRY:     draw_mouth_angry();     break;
+        case EXPR_SAD:       draw_mouth_sad();       break;
+        case EXPR_CHAOTIC:   draw_mouth_chaotic();   break;
+        case EXPR_HUNGRY:    draw_mouth_hungry();    break;
+        case EXPR_TIRED:     draw_mouth_tired();     break;
+        case EXPR_SLAPHAPPY: draw_mouth_slaphappy(); break;
+        default:             draw_mouth_smirk();     break;
     }
 
     /* 5. Chat bubble outline (with Y_OFF via draw_bubble) */
@@ -661,18 +772,24 @@ static uint32_t rng_next(void) {
 static const uint8_t cycle_normal[]   = {EXPR_SMIRK, EXPR_OPEN, EXPR_SMILE, EXPR_OPEN};
 static const uint8_t cycle_weird[]    = {EXPR_WEIRD, EXPR_OPEN, EXPR_WEIRD, EXPR_SMILE};
 static const uint8_t cycle_unhinged[] = {EXPR_UNHINGED, EXPR_OPEN, EXPR_UNHINGED, EXPR_OPEN};
-static const uint8_t cycle_angry[]    = {EXPR_ANGRY, EXPR_OPEN, EXPR_ANGRY, EXPR_ANGRY};
-static const uint8_t cycle_sad[]      = {EXPR_SAD, EXPR_OPEN, EXPR_SAD, EXPR_SMILE};
-static const uint8_t cycle_chaotic[]  = {EXPR_CHAOTIC, EXPR_OPEN, EXPR_UNHINGED, EXPR_WEIRD};
+static const uint8_t cycle_angry[]     = {EXPR_ANGRY, EXPR_OPEN, EXPR_ANGRY, EXPR_ANGRY};
+static const uint8_t cycle_sad[]       = {EXPR_SAD, EXPR_OPEN, EXPR_SAD, EXPR_SMILE};
+static const uint8_t cycle_chaotic[]   = {EXPR_CHAOTIC, EXPR_OPEN, EXPR_UNHINGED, EXPR_WEIRD};
+static const uint8_t cycle_hungry[]    = {EXPR_HUNGRY, EXPR_OPEN, EXPR_HUNGRY, EXPR_SMILE};
+static const uint8_t cycle_tired[]     = {EXPR_TIRED, EXPR_OPEN, EXPR_TIRED, EXPR_TIRED};
+static const uint8_t cycle_slaphappy[] = {EXPR_SLAPHAPPY, EXPR_OPEN, EXPR_SLAPHAPPY, EXPR_SMILE};
 
 static const uint8_t *mood_cycle(uint8_t mood) {
     switch (mood) {
-        case MOOD_WEIRD:    return cycle_weird;
-        case MOOD_UNHINGED: return cycle_unhinged;
-        case MOOD_ANGRY:    return cycle_angry;
-        case MOOD_SAD:      return cycle_sad;
-        case MOOD_CHAOTIC:  return cycle_chaotic;
-        default:            return cycle_normal;
+        case MOOD_WEIRD:     return cycle_weird;
+        case MOOD_UNHINGED:  return cycle_unhinged;
+        case MOOD_ANGRY:     return cycle_angry;
+        case MOOD_SAD:       return cycle_sad;
+        case MOOD_CHAOTIC:   return cycle_chaotic;
+        case MOOD_HUNGRY:    return cycle_hungry;
+        case MOOD_TIRED:     return cycle_tired;
+        case MOOD_SLAPHAPPY: return cycle_slaphappy;
+        default:             return cycle_normal;
     }
 }
 

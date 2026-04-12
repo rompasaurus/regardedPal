@@ -11,6 +11,9 @@ dev-setup/angry-octopus/build/
 dev-setup/conspiratorial-octopus/build/
 dev-setup/sad-octopus/build/
 dev-setup/chaotic-octopus/build/
+dev-setup/hungry-octopus/build/
+dev-setup/tired-octopus/build/
+dev-setup/slaphappy-octopus/build/
 
 # Generated quote data (DevTool generates at build time)
 dev-setup/*/quotes.h
@@ -33,6 +36,12 @@ dev-setup/sad-octopus/lib/
 dev-setup/sad-octopus/pico_sdk_import.cmake
 dev-setup/chaotic-octopus/lib/
 dev-setup/chaotic-octopus/pico_sdk_import.cmake
+dev-setup/hungry-octopus/lib/
+dev-setup/hungry-octopus/pico_sdk_import.cmake
+dev-setup/tired-octopus/lib/
+dev-setup/tired-octopus/pico_sdk_import.cmake
+dev-setup/slaphappy-octopus/lib/
+dev-setup/slaphappy-octopus/pico_sdk_import.cmake
 
 # Python
 __pycache__/

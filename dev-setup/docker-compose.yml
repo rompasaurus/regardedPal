@@ -68,3 +68,30 @@ services:
       - ./chaotic-octopus:/project
       - ./hello-world/lib:/project/lib
     working_dir: /project
+
+  build-hungry-octopus:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    volumes:
+      - ./hungry-octopus:/project
+      - ./hello-world/lib:/project/lib
+    working_dir: /project
+
+  build-tired-octopus:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    volumes:
+      - ./tired-octopus:/project
+      - ./hello-world/lib:/project/lib
+    working_dir: /project
+
+  build-slaphappy-octopus:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    volumes:
+      - ./slaphappy-octopus:/project
+      - ./hello-world/lib:/project/lib
+    working_dir: /project

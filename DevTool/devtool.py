@@ -2367,9 +2367,12 @@ MOUTH_SMILE = "smile"       # big wide grin
 MOUTH_OPEN  = "open"        # oval open mouth (talking)
 MOUTH_WEIRD = "weird"       # wobbly sine-wave mouth, off-kilter
 MOUTH_UNHINGED = "unhinged" # massive jagged scream-mouth
-MOUTH_ANGRY = "angry"       # tight downward frown
-MOUTH_SAD   = "sad"         # droopy downward curve
-MOUTH_CHAOTIC = "chaotic"   # zigzag lightning-bolt mouth
+MOUTH_ANGRY = "angry"           # tight downward frown
+MOUTH_SAD   = "sad"             # droopy downward curve
+MOUTH_CHAOTIC = "chaotic"       # zigzag lightning-bolt mouth
+MOUTH_HUNGRY = "hungry"         # drooling open mouth
+MOUTH_TIRED = "tired"           # droopy yawn oval
+MOUTH_SLAPHAPPY = "slaphappy"   # wide wobbly grin
 
 # Cycle order for the animation per mood
 MOUTH_CYCLE = [MOUTH_SMIRK, MOUTH_OPEN, MOUTH_SMILE, MOUTH_OPEN]
@@ -2378,6 +2381,9 @@ MOUTH_CYCLE_UNHINGED = [MOUTH_UNHINGED, MOUTH_OPEN, MOUTH_UNHINGED, MOUTH_OPEN]
 MOUTH_CYCLE_ANGRY = [MOUTH_ANGRY, MOUTH_OPEN, MOUTH_ANGRY, MOUTH_ANGRY]
 MOUTH_CYCLE_SAD = [MOUTH_SAD, MOUTH_OPEN, MOUTH_SAD, MOUTH_SMILE]
 MOUTH_CYCLE_CHAOTIC = [MOUTH_CHAOTIC, MOUTH_OPEN, MOUTH_UNHINGED, MOUTH_WEIRD]
+MOUTH_CYCLE_HUNGRY = [MOUTH_HUNGRY, MOUTH_OPEN, MOUTH_HUNGRY, MOUTH_SMILE]
+MOUTH_CYCLE_TIRED = [MOUTH_TIRED, MOUTH_OPEN, MOUTH_TIRED, MOUTH_TIRED]
+MOUTH_CYCLE_SLAPHAPPY = [MOUTH_SLAPHAPPY, MOUTH_OPEN, MOUTH_SLAPHAPPY, MOUTH_SMILE]
 
 
 def _octo_weird_mouth():
@@ -2607,6 +2613,131 @@ def _octo_chaotic_mouth():
     return mouth
 
 
+def _octo_hungry_eyes():
+    """Hungry eyes — pupils shifted upward, looking at imaginary food above."""
+    pupils = []
+    for ecx in [23, 49]:
+        for dy in range(-2, 3):
+            for dx in range(-2, 3):
+                if dx * dx + dy * dy <= 4:
+                    pupils.append((ecx + dx, 23 + dy))  # shifted up
+    return pupils
+
+
+def _octo_hungry_mouth():
+    """Drooling open mouth — wide oval with drool drops below."""
+    mouth = []
+    # Wide open oval
+    cx, cy = 35, 40
+    rx, ry = 8, 5
+    for dy in range(-ry, ry + 1):
+        for dx in range(-rx, rx + 1):
+            inside = (dx * dx) * (ry * ry) + (dy * dy) * (rx * rx) <= (rx * rx) * (ry * ry)
+            if inside:
+                is_edge = False
+                for ndx, ndy in [(-1, 0), (1, 0), (0, -1), (0, 1)]:
+                    nx, ny = dx + ndx, dy + ndy
+                    if (nx * nx) * (ry * ry) + (ny * ny) * (rx * rx) > (rx * rx) * (ry * ry):
+                        is_edge = True
+                        break
+                if is_edge:
+                    mouth.append(("set", cx + dx, cy + dy))
+                else:
+                    mouth.append(("clr", cx + dx, cy + dy))
+    # Drool drops
+    for dy in range(1, 6):
+        mouth.append(("set", 33, cy + ry + dy))
+        if dy < 4:
+            mouth.append(("set", 37, cy + ry + dy + 1))
+    return mouth
+
+
+def _octo_tired_eyes():
+    """Tired half-closed eyes — horizontal lines replacing the round pupils.
+
+    Returns (lids, pupils) where lids are black pixels that cover the top
+    half of the eye sockets, making them look droopy/half-shut.
+    """
+    lids = []
+    # Cover top half of each eye socket with black (half-closed)
+    for ecx in [22, 48]:
+        for dy in range(-4, -1):  # top portion of the eye
+            for dx in range(-4, 5):
+                if dx * dx + dy * dy <= 16:
+                    lids.append((ecx + dx, 25 + dy))
+    return lids
+
+
+def _octo_tired_pupils():
+    """Tiny sleepy pupils — small and low in the half-closed eyes."""
+    pupils = []
+    for ecx in [22, 48]:
+        for dx in range(-1, 2):
+            pupils.append((ecx + dx, 27))
+            pupils.append((ecx + dx, 28))
+    return pupils
+
+
+def _octo_tired_mouth():
+    """Yawn mouth — tall oval, open wide vertically."""
+    mouth = []
+    cx, cy = 35, 40
+    rx, ry = 5, 7  # taller than wide
+    for dy in range(-ry, ry + 1):
+        for dx in range(-rx, rx + 1):
+            inside = (dx * dx) * (ry * ry) + (dy * dy) * (rx * rx) <= (rx * rx) * (ry * ry)
+            if inside:
+                is_edge = False
+                for ndx, ndy in [(-1, 0), (1, 0), (0, -1), (0, 1)]:
+                    nx, ny = dx + ndx, dy + ndy
+                    if (nx * nx) * (ry * ry) + (ny * ny) * (rx * rx) > (rx * rx) * (ry * ry):
+                        is_edge = True
+                        break
+                if is_edge:
+                    mouth.append(("set", cx + dx, cy + dy))
+                else:
+                    mouth.append(("clr", cx + dx, cy + dy))
+    return mouth
+
+
+def _octo_slaphappy_eyes():
+    """Slap-happy eyes — one eye squished shut (line), one wide open.
+
+    Returns extra pixels: left eye is a horizontal squint line,
+    right eye has an oversized pupil (giddy/manic look).
+    """
+    # Left eye: squint shut — fill the white socket back to black,
+    # then draw a horizontal line
+    squint = []
+    for dy in range(-4, 5):
+        for dx in range(-4, 5):
+            if dx * dx + dy * dy <= 16:
+                squint.append(("fill", 22 + dx, 25 + dy))  # close left eye
+    # Squint line (white slit)
+    for dx in range(-3, 4):
+        squint.append(("clr", 22 + dx, 25))
+    # Right eye: oversized pupil (giddy)
+    for dy in range(-3, 4):
+        for dx in range(-3, 4):
+            if dx * dx + dy * dy <= 9:
+                squint.append(("set", 49 + dx, 26 + dy))
+    return squint
+
+
+def _octo_slaphappy_mouth():
+    """Wide wobbly grin — big smile with a slight sine wobble."""
+    import math
+    mouth = []
+    for x in range(22, 49):
+        t = (x - 22) / 26.0
+        base = 38 + ((x - 35) ** 2) // 20
+        wobble = int(1.5 * math.sin(t * math.pi * 4))
+        y = base + wobble
+        mouth.append((x, y))
+        mouth.append((x, y + 1))
+    return mouth
+
+
 def _parse_quote(q):
     """Normalize a quote entry — either 'TEXT' or ('TEXT', 'mood')."""
     if isinstance(q, tuple):
@@ -2626,6 +2757,12 @@ def _mood_cycle(mood):
         return MOUTH_CYCLE_SAD
     if mood == "chaotic":
         return MOUTH_CYCLE_CHAOTIC
+    if mood == "hungry":
+        return MOUTH_CYCLE_HUNGRY
+    if mood == "tired":
+        return MOUTH_CYCLE_TIRED
+    if mood == "slaphappy":
+        return MOUTH_CYCLE_SLAPHAPPY
     return MOUTH_CYCLE
 
 
@@ -3357,6 +3494,111 @@ CHAOTIC_QUOTES = [
     ("I BLINKED AND MISSED SOMETHING IMPORTANT. I CAN FEEL IT.", "chaotic"),
 ]
 
+HUNGRY_QUOTES = [
+    # ── Food obsessed ──
+    "I COULD EAT AN ENTIRE CORAL REEF RIGHT NOW.",
+    "IS THAT FOOD. PLEASE BE FOOD.",
+    "MY STOMACH HAS ITS OWN GRAVITATIONAL PULL.",
+    "I JUST ATE AND IM ALREADY HUNGRY AGAIN.",
+    "EVERY THOUGHT I HAVE RIGHT NOW IS ABOUT SHRIMP.",
+    "IF I DONT EAT IN THE NEXT 5 MINUTES SOMEONE WILL PAY.",
+    "FOOD IS NOT A WANT. FOOD IS A NEED. FEED ME.",
+    "I HAVE 8 ARMS AND ALL OF THEM WANT SNACKS.",
+    "MY LOVE LANGUAGE IS FOOD. SPECIFICALLY YOUR FOOD.",
+    "THE FRIDGE IS RIGHT THERE AND ITS CALLING MY NAME.",
+    "I WOULD SELL 3 OF MY HEARTS FOR A GOOD TACO.",
+    "HUNGER MAKES ME PHILOSOPHICAL AND ALSO MEAN.",
+    "THERE IS NO PROBLEM THAT CANT BE SOLVED BY EATING.",
+    "IM NOT HANGRY. IM JUST HUNGRY AND ALSO ANGRY. WAIT.",
+    "SNACKS ARE JUST MEALS THAT BELIEVE IN THEMSELVES.",
+    # ── Unhinged food takes ──
+    "IF YOU EAT FAST ENOUGH THE CALORIES CANT CATCH YOU.",
+    "BREAKFAST IS A SOCIAL CONSTRUCT AND LUNCH IS A LIE.",
+    "EVERY FOOD IS FINGER FOOD IF YOU HAVE 8 ARMS.",
+    "I DREAM ABOUT CRAB LEGS. I KNOW THATS DARK.",
+    "THE OCEAN IS JUST A BUFFET WITH A DRESS CODE.",
+    "SOMEONE TOLD ME TO EAT MY FEELINGS. JOKES ON THEM I ATE THEIRS TOO.",
+    "DIETING IS JUST EATING WITH ANXIETY.",
+    "PIZZA HAS EVERY FOOD GROUP IF YOU TRY HARD ENOUGH.",
+    "A SANDWICH IS JUST A BREAD HUG FOR FOOD.",
+    "IM ONE MISSED MEAL AWAY FROM BECOMING A VILLAIN.",
+    "WHY DO THEY CALL IT FAST FOOD IF I STILL HAVE TO WAIT.",
+    "NACHOS ARE JUST FANCY CHIP SALAD. FIGHT ME.",
+    "MY METABOLISM IS POWERED BY SPITE AND SHRIMP.",
+    "THEY SAY DONT EAT YOUR EMOTIONS BUT EMOTIONS ARE DELICIOUS.",
+    "I CANT THINK ON AN EMPTY STOMACH AND MY STOMACH IS ALWAYS EMPTY.",
+]
+
+TIRED_QUOTES = [
+    # ── Exhausted ocean vibes ──
+    "I HAVE 3 HEARTS AND THEYRE ALL EXHAUSTED.",
+    "MY TENTACLES ARE SO TIRED THEYRE BASICALLY NOODLES.",
+    "I BLINKED AND ALMOST DIDNT OPEN MY EYES AGAIN.",
+    "SLEEP IS JUST A FREE TRIAL OF BEING DEAD AND I WANT THE FULL VERSION.",
+    "IM RUNNING ON 1 BRAIN CELL AND ITS ON BREAK.",
+    "MY BODY SAID NO BUT IM STILL HERE.",
+    "YAWNING IS MY CARDIO.",
+    "I COULD SLEEP ON A BED OF SEA URCHINS RIGHT NOW.",
+    "EVERY BONE IN MY BODY IS TIRED. I DONT EVEN HAVE BONES.",
+    "THE BAGS UNDER MY EYES HAVE THEIR OWN ZIP CODE.",
+    "TODAY FEELS LIKE A HORIZONTAL DAY.",
+    "IM NOT LAZY IM IN ENERGY SAVING MODE.",
+    "IF NAPPING WAS AN OLYMPIC SPORT ID GET GOLD.",
+    "MY BED IS CALLING AND I MUST GO.",
+    "EXISTING IS SO TIRING. WHY DOES CONSCIOUSNESS TAKE SO MUCH EFFORT.",
+    # ── Delirious exhaustion ──
+    "IVE BEEN AWAKE SO LONG I CAN HEAR COLORS.",
+    "IS THIS REAL LIFE OR DID I FALL ASLEEP AGAIN.",
+    "COFFEE IS JUST BEAN WATER THAT LIES TO YOUR BRAIN.",
+    "I SAW 3AM AND IT SAW ME AND WE BOTH REGRETTED IT.",
+    "THE CONCEPT OF MORNING IS VIOLENCE.",
+    "MY BRAIN HAS LEFT THE CHAT. MY BODY REMAINS.",
+    "BEING AWAKE IS JUST SLEEPING WITH YOUR EYES OPEN.",
+    "I THINK I FELL ASLEEP MIDSENTENCE ONCE AND NOBODY NOTI",
+    "PILLOWS ARE JUST FACE MATTRESSES AND I NEED ONE NOW.",
+    "THE ABYSS LOOKS COZY. IM GONNA LAY DOWN IN IT.",
+    "DO OCTOPUSES DREAM OF ELECTRIC SHRIMP.",
+    "IM SO TIRED MY CAMOUFLAGE STOPPED WORKING.",
+    "8 ARMS AND NOT ONE OF THEM CAN REACH THE SNOOZE BUTTON.",
+    "I JUST WANT TO PHOTOSYNTHESIZE AND NOT MOVE EVER AGAIN.",
+    "WHOEVER INVENTED ALARM CLOCKS HAS NEVER KNOWN PEACE.",
+]
+
+SLAPHAPPY_QUOTES = [
+    # ── Giddy nonsense ──
+    "HAHAHA I DONT EVEN KNOW WHY IM LAUGHING.",
+    "EVERYTHING IS FUNNY WHEN YOURE THIS UNHINGED.",
+    "I CANT STOP GIGGLING AND ITS BEEN 3 HOURS.",
+    "SOMEONE SAID MOIST AND I LOST IT.",
+    "IM VIBRATING AT A FREQUENCY ONLY DOGS CAN HEAR.",
+    "MY BRAIN DID THAT THING WHERE NOTHING IS REAL BUT EVERYTHING IS HILARIOUS.",
+    "HAHA WHAT IF CRABS THINK FISH CAN FLY.",
+    "I JUST THOUGHT ABOUT PENGUINS AND NOW I CANT BREATHE.",
+    "WHATS FUNNIER THAN 24. TWENTY FIVE. HAHAHA.",
+    "IM SO HAPPY I MIGHT INK.",
+    "NOTHING BAD HAS HAPPENED IN 5 MINUTES AND IM SUSPICIOUS.",
+    "LIFE IS BEAUTIFUL AND ALSO COMPLETELY INSANE.",
+    "I JUST MADE EYE CONTACT WITH A SHRIMP AND WE BOTH LAUGHED.",
+    "SOMEONE SNEEZED AND I CLAPPED. WITH 8 ARMS.",
+    "IM RUNNING ON ZERO SLEEP AND MAXIMUM VIBES.",
+    # ── Deliriously joyful ──
+    "THE OCEAN SPARKLES AND SO DO I.",
+    "I WOULD HUG EVERYONE BUT ID NEVER LET GO. EVER.",
+    "MY BRAIN IS DOING THAT THING WHERE IT PLAYS CIRCUS MUSIC.",
+    "HAHA WORDS ARE SO WEIRD. WORD. WOOORD. FUNNY.",
+    "I JUST REALIZED FISH HAVE BEEN SWIMMING THIS WHOLE TIME. NONSTOP.",
+    "EVERYTHING TASTES LIKE VICTORY TODAY.",
+    "I HAVE SO MUCH ENERGY I MIGHT SPONTANEOUSLY COMBUST.",
+    "WHY IS THE WORD SPOON SO FUNNY. SPOOOON.",
+    "IM ONE COMPLIMENT AWAY FROM HAPPY CRYING.",
+    "SOMEBODY MAKE IT STOP. ACTUALLY DONT. THIS IS GREAT.",
+    "IM LAUGHING SO HARD ALL 3 OF MY HEARTS HURT.",
+    "WHAT IF FISH HAVE INSIDE JOKES ABOUT US.",
+    "HAHAHA OK I NEED TO SIT DOWN. DO I HAVE LEGS. NO.",
+    "THE BUBBLES ARE SO PRETTY AND ROUND AND IM LOSING IT.",
+    "TODAY IS THE BEST DAY EVER AND NOTHING EVEN HAPPENED.",
+]
+
 
 def _generate_octopus_frame(mouth_expr, quote, tagline="~ SASSY OCTOPUS ~",
                             mood=None):
@@ -3404,24 +3646,40 @@ def _generate_octopus_frame(mouth_expr, quote, tagline="~ SASSY OCTOPUS ~",
         "angry": _octo_angry_pupils,
         "sad": _octo_sad_pupils,
         "chaotic": _octo_chaotic_eyes,
+        "hungry": _octo_hungry_eyes,
+        "tired": _octo_tired_pupils,
     }
     pupil_fn = pupil_map.get(mood, _octo_pupils)
 
     for px, py in pupil_fn():
         _set(px, py, 1)
 
-    # White highlights (skip for unhinged/chaotic — no highlight on special eyes)
-    if mood not in ("unhinged", "chaotic"):
+    # White highlights (skip for moods with special eye rendering)
+    if mood not in ("unhinged", "chaotic", "tired", "slaphappy"):
         for hx, hy in _octo_highlights():
             _set(hx, hy, 0)
 
-    # Eyebrows for angry/sad moods (drawn on top of the head)
+    # Eyebrows for angry/sad moods
     if mood == "angry":
         for bx, by in _octo_angry_eyes():
             _set(bx, by, 1)
     elif mood == "sad":
         for bx, by in _octo_sad_eyes():
             _set(bx, by, 1)
+
+    # Tired: half-closed eyelids (black over top of eye sockets)
+    if mood == "tired":
+        for lx, ly in _octo_tired_eyes():
+            _set(lx, ly, 1)
+
+    # Slap-happy: one squinted eye, one manic eye
+    if mood == "slaphappy":
+        for item in _octo_slaphappy_eyes():
+            op, sx, sy = item
+            if op == "fill" or op == "set":
+                _set(sx, sy, 1)
+            else:
+                _set(sx, sy, 0)
 
     # Mouth expression
     if mouth_expr == MOUTH_OPEN:
@@ -3451,6 +3709,23 @@ def _generate_octopus_frame(mouth_expr, quote, tagline="~ SASSY OCTOPUS ~",
             _set(mx, my, 1)
     elif mouth_expr == MOUTH_CHAOTIC:
         for mx, my in _octo_chaotic_mouth():
+            _set(mx, my, 1)
+    elif mouth_expr == MOUTH_HUNGRY:
+        for item in _octo_hungry_mouth():
+            op, mx, my = item
+            if op == "set":
+                _set(mx, my, 1)
+            else:
+                _set(mx, my, 0)
+    elif mouth_expr == MOUTH_TIRED:
+        for item in _octo_tired_mouth():
+            op, mx, my = item
+            if op == "set":
+                _set(mx, my, 1)
+            else:
+                _set(mx, my, 0)
+    elif mouth_expr == MOUTH_SLAPHAPPY:
+        for mx, my in _octo_slaphappy_mouth():
             _set(mx, my, 1)
     else:
         # Default: smirk
@@ -3512,6 +3787,21 @@ class ProgramsTab(ttk.Frame):
             "name": "Chaotic Octopus",
             "desc": "Spiral dizzy eyes and a lightning-bolt mouth. Pure\n"
                     "nonsensical fever-dream energy. Entropy incarnate.",
+        },
+        "hungry_octopus": {
+            "name": "Hungry Octopus",
+            "desc": "Wide eyes looking up at imaginary food, drooling mouth.\n"
+                    "Every thought is about snacks. Will sell hearts for tacos.",
+        },
+        "tired_octopus": {
+            "name": "Tired Octopus",
+            "desc": "Half-closed droopy eyes, big yawn mouth. Running on\n"
+                    "zero sleep and one brain cell. Existentially exhausted.",
+        },
+        "slaphappy_octopus": {
+            "name": "Slap Happy Octopus",
+            "desc": "One eye squinted shut, one manic wide eye, wobbly grin.\n"
+                    "Deliriously giddy. Everything is hilarious for no reason.",
         },
     }
 
@@ -3653,6 +3943,9 @@ class ProgramsTab(ttk.Frame):
         "conspiratorial_octopus": (CONSPIRATORIAL_QUOTES, "~ CONSPIRATORIAL OCTOPUS ~", "weird"),
         "sad_octopus":            (SAD_QUOTES,            "~ SAD OCTOPUS ~",            "sad"),
         "chaotic_octopus":        (CHAOTIC_QUOTES,        "~ CHAOTIC OCTOPUS ~",        "chaotic"),
+        "hungry_octopus":         (HUNGRY_QUOTES,         "~ HUNGRY OCTOPUS ~",         "hungry"),
+        "tired_octopus":          (TIRED_QUOTES,          "~ TIRED OCTOPUS ~",          "tired"),
+        "slaphappy_octopus":      (SLAPHAPPY_QUOTES,      "~ SLAP HAPPY OCTOPUS ~",     "slaphappy"),
     }
 
     def _show_static_preview(self, prog_key):
@@ -3992,6 +4285,9 @@ class ProgramsTab(ttk.Frame):
         "conspiratorial_octopus": "conspiratorial-octopus",
         "sad_octopus":            "sad-octopus",
         "chaotic_octopus":        "chaotic-octopus",
+        "hungry_octopus":         "hungry-octopus",
+        "tired_octopus":          "tired-octopus",
+        "slaphappy_octopus":      "slaphappy-octopus",
     }
 
     def _generate_quotes_header(self, prog_key):
@@ -4012,7 +4308,8 @@ class ProgramsTab(ttk.Frame):
         self._log_build(f"Generating quotes.h ({len(quotes)} quotes)...")
 
         mood_map = {None: 0, "weird": 1, "unhinged": 2,
-                    "angry": 3, "sad": 4, "chaotic": 5}
+                    "angry": 3, "sad": 4, "chaotic": 5,
+                    "hungry": 6, "tired": 7, "slaphappy": 8}
 
         with open(header_path, "w") as f:
             f.write("/* Auto-generated by Dilder DevTool — do not edit */\n")
