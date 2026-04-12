@@ -964,3 +964,48 @@ Spelling and grammar are lightly cleaned for readability while preserving the or
   - `dev-setup/supportive-octopus/CMakeLists.txt` (modified — same changes)
   - `DevTool/devtool.py` (modified — replaced `_generate_frames_header` with `_generate_quotes_header` that outputs ~17KB string header instead of ~4MB bitmap data)
   - `.gitignore` (modified — `frames.h` → `quotes.h`)
+
+---
+
+## Prompt #75
+- **Date/Time:** 2026-04-12
+- **Prompt:** "OK let's look at the DevTool GUI documentation — the screenshots are nice but too damn big to really read. Can we run the test with the GUI again but with a smaller window and capture more readable screenshots?"
+- **Input Tokens (est):** ~50
+- **Output Tokens (est):** ~15,000
+- **Commit:** `75fb79a` — Retake DevTool screenshots at compact 900x550 window size
+- **Files Created/Modified:**
+  - `DevTool/capture_screenshots.py` (created — automated screenshot capture script that launches the DevTool at 900x550, cycles through all 8 tabs, and saves PNGs via ImageMagick `import`)
+  - `website/docs/assets/images/devtool/*.png` (35 files modified — all screenshots resized from 1908x2040 to 976x720, total image size reduced from ~2.5MB to ~1.3MB)
+
+---
+
+## Prompt #76
+- **Date/Time:** 2026-04-12
+- **Prompt:** "The website still shows the old small pics."
+- **Input Tokens (est):** ~10
+- **Output Tokens (est):** ~1,000
+- **Commit:** n/a — confirmed GitHub Actions deployed successfully; issue was CDN cache (max-age 600s), resolved with hard refresh
+- **Files Created/Modified:** none
+
+---
+
+## Prompt #77
+- **Date/Time:** 2026-04-12
+- **Prompt:** "The tool demo screenshots are all the same blank canvases — nothing shows on them in the screenshots."
+- **Input Tokens (est):** ~20
+- **Output Tokens (est):** ~20,000
+- **Commit:** `7e06495` — Retake all DevTool screenshots with real drawn content
+- **Files Created/Modified:**
+  - `DevTool/capture_screenshots.py` (rewritten — draws real content for each tool: pencil sine wave, eraser with gap, crossing lines, nested rectangles, overlapping filled rects, multi-size text, house scene with roof/door/tree/sun, inverted version, simulated serial output with heartbeats, Sassy Octopus preview with quote)
+  - `website/docs/assets/images/devtool/*.png` (16 detail screenshots replaced — each now shows actual tool output instead of blank canvas copies)
+
+---
+
+## Prompt #78
+- **Date/Time:** 2026-04-12
+- **Prompt:** "Perfect. Take all my prompts in this session not in the prompt progression and add them. Fix the grammar and spelling and commit."
+- **Input Tokens (est):** ~25
+- **Output Tokens (est):** ~8,000
+- **Commit:** *(see below)*
+- **Files Created/Modified:**
+  - `PromptProgression.md` (modified — added Prompts #75–78, grammar and spelling cleanup)
