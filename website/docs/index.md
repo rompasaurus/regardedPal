@@ -1,3 +1,5 @@
+<div id="octopus-banner"></div>
+
 # Dilder
 
 **A real-time build journal for an open-source AI-assisted virtual pet.**
