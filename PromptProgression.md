@@ -800,7 +800,7 @@ Spelling and grammar are lightly cleaned for readability while preserving the or
 - **Prompt:** "Update the hardware research — add a section for batteries and expected battery life. Include 2000mAh and 3000mAh options and viable options for that and expected price. Update prompts and website documentation with everything as well. Commit and push."
 - **Input Tokens (est):** ~40
 - **Output Tokens (est):** ~10,000
-- **Commit:** `pending`
+- **Commit:** `1e27cb4` — Add battery and power research to hardware docs and website
 - **Files Created/Modified:**
   - `docs/hardware-research.md` (modified — added Battery & Power section with board power consumption, LiPo options up to 3000mAh, battery life estimates, charging solutions, wiring diagrams for Pico/XIAO/Pi Zero, AAA NiMH alternative, and recommendation)
   - `website/docs/docs/hardware/materials-list.md` (modified — updated battery section with specific recommendations, added no-boost-converter tip)
