@@ -2512,6 +2512,39 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#prompt-64-2026-04-12" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Prompt #64 — 2026-04-12
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#prompt-65-2026-04-12" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Prompt #65 — 2026-04-12
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#prompt-66-2026-04-12" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Prompt #66 — 2026-04-12
+      
+    </span>
+  </a>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -3173,6 +3206,39 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#prompt-64-2026-04-12" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Prompt #64 — 2026-04-12
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#prompt-65-2026-04-12" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Prompt #65 — 2026-04-12
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#prompt-66-2026-04-12" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Prompt #66 — 2026-04-12
+      
+    </span>
+  </a>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -3656,6 +3722,30 @@
 <li><strong>Input Tokens (est):</strong> ~40</li>
 <li><strong>Output Tokens (est):</strong> ~10,000</li>
 <li><strong>Files:</strong> <code>docs/hardware-research.md</code> (added Battery &amp; Power section with board power consumption, LiPo options, battery life estimates, charging solutions, wiring diagrams, AAA alternative), <code>website/docs/docs/hardware/materials-list.md</code> (updated battery section), <code>website/docs/prompts/index.md</code> (added Prompts #54–63), <code>PromptProgression.md</code> (added Prompts #60–63)</li>
+</ul>
+<hr />
+<h2 id="prompt-64-2026-04-12">Prompt #64 — 2026-04-12<a class="headerlink" href="#prompt-64-2026-04-12" title="Permanent link">&para;</a></h2>
+<p><strong>Prompt:</strong> "Ok the testing pulled screenshot for the website. I also need the devtool and the setup to have screenshots walkthrough as well and detailed documentation. Also scan code changes and ensure the tests are up to date."</p>
+<ul>
+<li><strong>Input Tokens (est):</strong> ~50</li>
+<li><strong>Output Tokens (est):</strong> ~120,000</li>
+<li><strong>Files:</strong> Created complete test framework in <code>testing/</code>: <code>test_dependency_gate.py</code> (DevTool dependency gate + Docker health check tests), <code>test_docker_step.py</code> (Step 15 Docker tests), <code>test_test_setup.py</code> (<code>--test-setup</code> flag tests), <code>test_cli_screenshots.py</code> (ANSI-to-PNG rendering via Playwright). Updated <code>test_prerequisites.py</code> (Tkinter/pyserial checks), <code>test_vscode_extensions.py</code> (Code OSS detection), <code>test_cli_navigation.py</code> (step count + <code>--test-setup</code>), <code>guide_generator.py</code> (setup_cli descriptions). Generated 35 DevTool + 4 Setup CLI screenshots. 147 tests passing.</li>
+</ul>
+<hr />
+<h2 id="prompt-65-2026-04-12">Prompt #65 — 2026-04-12<a class="headerlink" href="#prompt-65-2026-04-12" title="Permanent link">&para;</a></h2>
+<p><strong>Prompt:</strong> "Get a few more screenshots for the setup.py util. I want every step captured and put into documentation. Also attach all the screenshots to the associated documentation and update the website to show it."</p>
+<ul>
+<li><strong>Input Tokens (est):</strong> ~50</li>
+<li><strong>Output Tokens (est):</strong> ~150,000</li>
+<li><strong>Files:</strong> Rewrote <code>test_cli_screenshots.py</code> with parametrized tests for all 15 steps. Generated 19 Setup CLI PNGs (4 global + 15 steps). Copied 54 screenshots into <code>website/docs/assets/images/</code>. Rewrote <code>setup-cli.md</code> (19 embedded screenshots, full step walkthrough), <code>devtool.md</code> (28 embedded screenshots, every tab), updated <code>first-time-setup.md</code> (7 screenshots at key sections). 162 tests passing. MkDocs builds with all images resolving.</li>
+</ul>
+<hr />
+<h2 id="prompt-66-2026-04-12">Prompt #66 — 2026-04-12<a class="headerlink" href="#prompt-66-2026-04-12" title="Permanent link">&para;</a></h2>
+<p><strong>Prompt:</strong> "Looks good, let's update the prompts. Look through the entire list of relevant session history in Claude and ensure the entire prompts with error messages are put into the prompt history. Clean up grammar and spelling and account for any prompts that haven't been listed yet. Update while running the commits on all the staged code changes. Be descriptive and push it."</p>
+<ul>
+<li><strong>Input Tokens (est):</strong> ~60</li>
+<li><strong>Output Tokens (est):</strong> ~80,000</li>
+<li><strong>Files:</strong> <code>PromptProgression.md</code> (added Prompts #64–66), <code>website/docs/prompts/index.md</code> (added Prompts #64–66)</li>
 </ul>
 
 
