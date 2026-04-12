@@ -4633,6 +4633,67 @@ class ProgramsTab(ttk.Frame):
         },
     }
 
+    # Tree structure for the program selector (max 3 levels deep).
+    # Each entry is (category_label, children) where children are either
+    # program keys (strings) or nested (subcategory_label, [...]) tuples.
+    PROGRAM_TREE = [
+        ("Tools", [
+            "hello_world",
+            "hello_world_serial",
+            "img_receiver",
+        ]),
+        ("Octopus", [
+            ("Classic", [
+                "sassy_octopus",
+                "supportive_octopus",
+            ]),
+            ("Intense", [
+                "angry_octopus",
+                "chaotic_octopus",
+                "conspiratorial_octopus",
+            ]),
+            ("Melancholy", [
+                "sad_octopus",
+                "tired_octopus",
+                "nostalgic_octopus",
+                "homesick_octopus",
+            ]),
+            ("Playful", [
+                "slaphappy_octopus",
+                "excited_octopus",
+                "horny_octopus",
+            ]),
+            ("Relaxed", [
+                "chill_octopus",
+                "lazy_octopus",
+                "fat_octopus",
+                "hungry_octopus",
+            ]),
+            ("Interactive", [
+                "mood_selector",
+            ]),
+        ]),
+    ]
+
+    # Tool programs don't have octopus configs but need names/descriptions
+    _TOOL_PROGRAMS = {
+        "hello_world": {
+            "name": "Hello World",
+            "desc": "Basic e-ink display test. Draws a pattern to verify\n"
+                    "the display is wired correctly and SPI is working.",
+        },
+        "hello_world_serial": {
+            "name": "Hello World Serial",
+            "desc": "Serial-only test program. Prints messages over USB CDC\n"
+                    "at 115200 baud without driving the display.",
+        },
+        "img_receiver": {
+            "name": "Image Receiver",
+            "desc": "Receives raw 1-bit bitmap data over USB serial and\n"
+                    "displays it on the e-ink screen. Used by DevTool.",
+        },
+    }
+
     DISPLAY_VARIANTS = [
         ("V2",  "2.13\" V2 (SSD1675B)"),
         ("V3",  "2.13\" V3 (SSD1680)"),
@@ -4649,23 +4710,51 @@ class ProgramsTab(ttk.Frame):
         self._build_ui()
 
     def _build_ui(self):
-        # ── Program list (left) ──
+        # ── Program tree (left) ──
         list_frame = ttk.Frame(self)
         list_frame.pack(side=tk.LEFT, fill=tk.Y, padx=5, pady=5)
 
         ttk.Label(list_frame, text="Programs", font=("JetBrains Mono", 12, "bold")).pack(anchor=tk.W)
 
-        self.prog_list = tk.Listbox(
-            list_frame, width=28, bg=BG_DARK, fg=FG_TEXT,
-            selectbackground=FG_ACCENT, selectforeground=BG_DARK,
-            font=("JetBrains Mono", 10),
-            exportselection=False,
-        )
-        self.prog_list.pack(fill=tk.BOTH, expand=True, pady=(5, 0))
-        self.prog_list.bind("<<ListboxSelect>>", self._on_select)
+        style = ttk.Style()
+        style.configure("Prog.Treeview",
+                         background=BG_DARK, foreground=FG_TEXT,
+                         fieldbackground=BG_DARK,
+                         font=("JetBrains Mono", 10),
+                         rowheight=22)
+        style.map("Prog.Treeview",
+                   background=[("selected", FG_ACCENT)],
+                   foreground=[("selected", BG_DARK)])
 
-        for key, info in self.PROGRAMS.items():
-            self.prog_list.insert(tk.END, info["name"])
+        self.prog_tree = ttk.Treeview(
+            list_frame, style="Prog.Treeview",
+            show="tree", selectmode="browse",
+        )
+        self.prog_tree.column("#0", width=220, minwidth=180)
+        self.prog_tree.pack(fill=tk.BOTH, expand=True, pady=(5, 0))
+        self.prog_tree.bind("<<TreeviewSelect>>", self._on_select)
+
+        # Populate tree from PROGRAM_TREE structure
+        self._tree_id_to_key = {}  # maps treeview item id -> program key
+        all_programs = {**self.PROGRAMS, **self._TOOL_PROGRAMS}
+
+        for category_label, children in self.PROGRAM_TREE:
+            cat_id = self.prog_tree.insert("", tk.END, text=category_label, open=True)
+            for child in children:
+                if isinstance(child, tuple):
+                    # Subcategory
+                    sub_label, sub_children = child
+                    sub_id = self.prog_tree.insert(cat_id, tk.END, text=sub_label, open=True)
+                    for prog_key in sub_children:
+                        name = all_programs.get(prog_key, {}).get("name", prog_key)
+                        item_id = self.prog_tree.insert(sub_id, tk.END, text=name)
+                        self._tree_id_to_key[item_id] = prog_key
+                else:
+                    # Direct program under category
+                    prog_key = child
+                    name = all_programs.get(prog_key, {}).get("name", prog_key)
+                    item_id = self.prog_tree.insert(cat_id, tk.END, text=name)
+                    self._tree_id_to_key[item_id] = prog_key
 
         # Buttons
         btn_frame = ttk.Frame(list_frame)
@@ -4736,11 +4825,11 @@ class ProgramsTab(ttk.Frame):
         self.status_label.pack(pady=2)
 
     def _get_selected_key(self):
-        sel = self.prog_list.curselection()
+        sel = self.prog_tree.selection()
         if not sel:
             return None
-        keys = list(self.PROGRAMS.keys())
-        return keys[sel[0]]
+        item_id = sel[0]
+        return self._tree_id_to_key.get(item_id)
 
     def _get_display_variant(self):
         """Return the short variant key (V2, V3, V3a, V4) from the dropdown."""
@@ -4780,33 +4869,39 @@ class ProgramsTab(ttk.Frame):
 
     def _on_select(self, event=None):
         key = self._get_selected_key()
-        if key:
-            info = self.PROGRAMS[key]
+        if not key:
+            # Category node selected (not a program) — clear preview
+            return
 
-            # Estimate firmware size
-            est_kb = self._estimate_firmware_kb(key)
-            free_kb = self.PICO_FLASH_KB - est_kb
-            pct_used = (est_kb / self.PICO_FLASH_KB) * 100
+        all_programs = {**self.PROGRAMS, **self._TOOL_PROGRAMS}
+        info = all_programs.get(key)
+        if not info:
+            return
 
-            # Get quote count
-            if key in self._OCTOPUS_CONFIGS:
-                quotes_list = self._OCTOPUS_CONFIGS[key][0]
-                num_quotes = len(quotes_list)
-            else:
-                num_quotes = 0
+        # Estimate firmware size
+        est_kb = self._estimate_firmware_kb(key)
+        free_kb = self.PICO_FLASH_KB - est_kb
+        pct_used = (est_kb / self.PICO_FLASH_KB) * 100
 
-            size_info = (
-                f"\n\n"
-                f"Firmware: ~{est_kb} KB  |  "
-                f"Pico flash: {self.PICO_FLASH_KB} KB  |  "
-                f"Free after deploy: {free_kb} KB ({100 - pct_used:.1f}% free)\n"
-                f"Quotes: {num_quotes}  |  "
-                f"Flash used: {pct_used:.1f}%"
-            )
+        # Get quote count
+        if key in self._OCTOPUS_CONFIGS:
+            quotes_list = self._OCTOPUS_CONFIGS[key][0]
+            num_quotes = len(quotes_list)
+        else:
+            num_quotes = 0
 
-            self.desc_label.config(text=info["desc"] + size_info)
-            # Show a static preview frame
-            self._show_static_preview(key)
+        size_info = (
+            f"\n\n"
+            f"Firmware: ~{est_kb} KB  |  "
+            f"Pico flash: {self.PICO_FLASH_KB} KB  |  "
+            f"Free after deploy: {free_kb} KB ({100 - pct_used:.1f}% free)\n"
+            f"Quotes: {num_quotes}  |  "
+            f"Flash used: {pct_used:.1f}%"
+        )
+
+        self.desc_label.config(text=info["desc"] + size_info)
+        # Show a static preview frame
+        self._show_static_preview(key)
 
     # Maps octopus program keys to their (quotes_list, tagline)
     # Maps program keys to (quotes_list, tagline, default_mood)

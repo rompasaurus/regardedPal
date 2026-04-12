@@ -887,4 +887,64 @@ This is part of the transparency experiment — showing AI-assisted development 
 
 - **Input Tokens (est):** ~50
 - **Output Tokens (est):** ~60,000
-- **Files:** `docs/programs-guide.md` (created — comprehensive guide with TOC, all 19 programs, serial input reference), `website/docs/docs/software/project-structure.md` (updated directory tree), `PromptProgression.md` (#105–111), `website/docs/prompts/index.md` (#102–107)
+- **Files:** `docs/programs-guide.md` (created — comprehensive guide with TOC, all 19 programs, serial input reference), `website/docs/docs/software/project-structure.md` (updated directory tree), `PromptProgression.md` (#105–111), `website/docs/prompts/index.md` (#102–107), `.gitignore` (mood-selector excludes)
+
+---
+
+## Prompt #108 — 2026-04-12
+
+**Prompt:** "How do I input via the computer connected to the mood selector app? The keys aren't working right now."
+
+- **Input Tokens (est):** ~20
+- **Output Tokens (est):** ~500
+- **Files:** No files — troubleshooting: Pico found at `/dev/ttyACM0`, instructed to connect with `screen`, `picocom`, or `minicom` at 115200 baud
+
+---
+
+## Prompt #109 — 2026-04-12
+
+**Prompt:** "The firmware started with the program though."
+
+- **Input Tokens (est):** ~10
+- **Output Tokens (est):** ~300
+- **Files:** No files — confirmed device present, issue was no serial terminal connected to relay keystrokes
+
+---
+
+## Prompt #110 — 2026-04-12
+
+**Prompt:** "We need to organize the programs — they are getting too complex. Let's make a tree structure that expands and collapses, max 3 deep."
+
+- **Input Tokens (est):** ~35
+- **Output Tokens (est):** ~15,000
+- **Files:** `DevTool/devtool.py` (replaced flat `tk.Listbox` with collapsible `ttk.Treeview`; added `PROGRAM_TREE` hierarchy, `_TOOL_PROGRAMS` dict, `_tree_id_to_key` mapping; styled with dark theme)
+
+---
+
+## Prompt #111 — 2026-04-12
+
+**Prompt:** (Runtime error: `unknown option "-width"` on `ttk.Treeview`)
+
+- **Input Tokens (est):** ~15
+- **Output Tokens (est):** ~500
+- **Files:** `DevTool/devtool.py` (replaced `width=28` with `.column("#0", width=220)`)
+
+---
+
+## Prompt #112 — 2026-04-12
+
+**Prompt:** "I think we need to add a level for 'Octopus' to contain all the things below Tools."
+
+- **Input Tokens (est):** ~20
+- **Output Tokens (est):** ~2,000
+- **Files:** `DevTool/devtool.py` (merged "Emotional States" and "Interactive" under single "Octopus" top-level node)
+
+---
+
+## Prompt #113 — 2026-04-12
+
+**Prompt:** "OK run through all the session prompts for this project again and update the prompt document. Fix grammar while you're at it."
+
+- **Input Tokens (est):** ~25
+- **Output Tokens (est):** ~20,000
+- **Files:** `PromptProgression.md` (#112–117), `website/docs/prompts/index.md` (#108–113)

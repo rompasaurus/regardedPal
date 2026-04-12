@@ -1407,5 +1407,78 @@ Spelling and grammar are lightly cleaned for readability while preserving the or
   - `docs/programs-guide.md` (created — comprehensive guide to all 19 programs with TOC, display layout diagram, animation cycle docs, building/flashing instructions, per-program sections with preview images and feature tables, mood selector serial input reference with connection instructions, and comparison table)
   - `website/docs/docs/software/project-structure.md` (modified — updated directory tree to include all 16 octopus programs, mood-selector, keyboard-to-pico-input.md, and programs-guide.md)
   - `PromptProgression.md` (modified — added Prompts #105–111)
-  - `website/docs/prompts/index.md` (modified — added Prompts #105–111)
+  - `website/docs/prompts/index.md` (modified — added Prompts #102–107)
+  - `.gitignore` (modified — added mood-selector build/lib/cmake excludes)
   - All changes committed and pushed
+
+---
+
+## Prompt #112
+- **Date/Time:** 2026-04-12
+- **Prompt:** "How do I input via the computer connected to the mood selector app? The keys aren't working right now."
+- **Input Tokens (est):** ~20
+- **Output Tokens (est):** ~500
+- **Files Created/Modified:**
+  - No files modified — troubleshooting: Pico found at `/dev/serial/by-id/usb-Raspberry_Pi_Pico_*` (`/dev/ttyACM0`), instructed to connect with `screen /dev/ttyACM0 115200`, `picocom`, or `minicom`; noted that only one program can hold the serial port at a time
+
+---
+
+## Prompt #113
+- **Date/Time:** 2026-04-12
+- **Prompt:** "The firmware started with the program though." (Clarifying that the Pico was running but serial input wasn't reaching it)
+- **Input Tokens (est):** ~10
+- **Output Tokens (est):** ~300
+- **Files Created/Modified:**
+  - No files modified — confirmed device present at `/dev/ttyACM0` via `/dev/serial/by-id/`; issue was that no serial terminal was connected to send keystrokes to the firmware
+
+---
+
+## Prompt #114
+- **Date/Time:** 2026-04-12
+- **Prompt:** "We need to organize the programs — they are getting too complex. Let's make a tree structure for it that expands and collapses. Use your best judgment, don't make it more than 3 deep."
+- **Input Tokens (est):** ~35
+- **Output Tokens (est):** ~15,000
+- **Files Created/Modified:**
+  - `DevTool/devtool.py` (modified — replaced flat `tk.Listbox` program selector with collapsible `ttk.Treeview`; added `PROGRAM_TREE` data structure defining 3-level hierarchy; added `_TOOL_PROGRAMS` dict for utility program metadata; added `_tree_id_to_key` mapping; updated `_build_ui()` to populate tree with categories and subcategories; updated `_get_selected_key()` to use Treeview selection; updated `_on_select()` to look up programs in both `PROGRAMS` and `_TOOL_PROGRAMS` dicts; styled with `Prog.Treeview` theme matching dark UI)
+
+---
+
+## Prompt #115
+- **Date/Time:** 2026-04-12
+- **Prompt:** (Runtime error: `_tkinter.TclError: unknown option "-width"` — `ttk.Treeview` does not accept a `width` constructor argument)
+- **Input Tokens (est):** ~15
+- **Output Tokens (est):** ~500
+- **Files Created/Modified:**
+  - `DevTool/devtool.py` (modified — replaced `width=28` constructor kwarg with `self.prog_tree.column("#0", width=220, minwidth=180)` which is the correct Treeview API for setting column width)
+
+---
+
+## Prompt #116
+- **Date/Time:** 2026-04-12
+- **Prompt:** "I think we need to add a level for 'Octopus' to contain all the things below Tools."
+- **Input Tokens (est):** ~20
+- **Output Tokens (est):** ~2,000
+- **Files Created/Modified:**
+  - `DevTool/devtool.py` (modified — restructured `PROGRAM_TREE`: merged "Emotional States" and "Interactive" under a single "Octopus" top-level category; tree is now Tools > [programs] and Octopus > Classic/Intense/Melancholy/Playful/Relaxed/Interactive > [programs]; maintains 3-level max depth)
+
+---
+
+## Prompt #117
+- **Date/Time:** 2026-04-12
+- **Prompt:** "OK run through all the session prompts for this project again and update the prompt document. Fix grammar while you're at it."
+- **Input Tokens (est):** ~25
+- **Output Tokens (est):** ~20,000
+- **Files Created/Modified:**
+  - `PromptProgression.md` (modified — added Prompts #112–117, corrected website prompt index reference in #111)
+  - `website/docs/prompts/index.md` (modified — added Prompts #108–113)
+
+---
+
+## Prompt #118
+- **Date/Time:** 2026-04-12
+- **Prompt:** "OK run through all the session prompts for this project again and update the prompt document. Fix grammar while you're at it." (Duplicate of #117 — prompted commit of uncommitted changes)
+- **Input Tokens (est):** ~25
+- **Output Tokens (est):** ~2,000
+- **Files Created/Modified:**
+  - `PromptProgression.md` (modified — added Prompt #118)
+  - `DevTool/devtool.py`, `PromptProgression.md`, `website/docs/prompts/index.md` — all committed and pushed
