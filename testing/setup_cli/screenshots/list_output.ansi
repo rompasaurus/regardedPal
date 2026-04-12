@@ -1,0 +1,53 @@
+
+DILDER — Pico W & Display First-Time Setup
+
+
+┌────────────────────────────────────────────────────────────┐
+│                        Setup Steps                         │
+└────────────────────────────────────────────────────────────┘
+
+  Step  1  Check Prerequisites
+           Verify your system has the basics: git, cmake, Python
+
+  Step  2  Install ARM Toolchain
+           Install the cross-compiler, CMake, and Ninja for Pico W builds
+
+  Step  3  Clone Pico SDK
+           Download the official Raspberry Pi Pico C/C++ SDK
+
+  Step  4  Set PICO_SDK_PATH
+           Configure your shell to find the Pico SDK
+
+  Step  5  Serial Port Permissions
+           Grant your user access to /dev/ttyACM0
+
+  Step  6  Install VSCode Extensions
+           Set up VSCode with C/C++, CMake, Serial Monitor, and debug tools
+
+  Step  7  Build Hello World (Serial)
+           Compile the serial-only test — no display wiring needed
+
+  Step  8  Flash Hello World (Serial)
+           Put the Pico W in BOOTSEL mode and flash the firmware
+
+  Step  9  Verify Serial Output
+           Open a serial monitor and confirm the Pico W is alive
+
+  Step 10  Connect the Display
+           Slide the Waveshare HAT onto the Pico W headers
+
+  Step 11  Get Waveshare Library
+           Download the C display driver and drawing library
+
+  Step 12  Build Hello World (Display)
+           Compile the e-ink display test program
+
+  Step 13  Flash Hello World (Display)
+           Flash the display firmware to the Pico W
+
+  Step 14  Verify Display Output
+           Confirm text appears on the e-ink display
+
+  Step 15  Docker Build Toolchain
+           Install Docker and pre-build the ARM cross-compilation container
+

@@ -1,0 +1,17 @@
+[1;34musage: [0m[1;35msetup.py[0m [[32m-h[0m] [[36m--status[0m] [[36m--step [33mN[0m] [[36m--list[0m] [[36m--test-setup[0m]
+
+Dilder — Pico W & Display First-Time Setup CLI
+
+[1;34moptions:[0m
+  [1;32m-h[0m, [1;36m--help[0m    show this help message and exit
+  [1;36m--status[0m      Show current setup state
+  [1;36m--step[0m [1;33mN[0m      Jump to step N
+  [1;36m--list[0m        List all setup steps
+  [1;36m--test-setup[0m  Install testing dependencies (tk, pytest, Playwright, MkDocs)
+
+examples:
+  python3 setup.py              # full interactive walkthrough
+  python3 setup.py --status     # check what's installed
+  python3 setup.py --step 7     # jump to step 7 (build serial hello world)
+  python3 setup.py --list       # show all steps
+  python3 setup.py --test-setup # install testing dependencies (tk, pytest, Playwright)

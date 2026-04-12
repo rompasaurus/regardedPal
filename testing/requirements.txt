@@ -1,0 +1,10 @@
+# Dilder Testing Dependencies
+pytest>=7.0
+pytest-playwright>=0.4
+playwright>=1.40
+Pillow>=10.0
+pyserial>=3.5
+pexpect>=4.8
+ansi2html>=1.8
+pytest-html>=4.0
+pytest-timeout>=2.2

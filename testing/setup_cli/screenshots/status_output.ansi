@@ -1,0 +1,56 @@
+
+DILDER — Pico W & Display First-Time Setup
+
+
+┌────────────────────────────────────────────────────────────┐
+│                    Dilder Setup Status                     │
+└────────────────────────────────────────────────────────────┘
+
+  Toolchain
+  ──────────────────────────────────────────────────
+  ✓ ARM GCC: arm-none-eabi-gcc (Arch Repository) 14.2.0
+  ✓ CMake: installed
+  ✓ Ninja: installed
+
+  Pico SDK
+  ──────────────────────────────────────────────────
+  ⚠ PICO_SDK_PATH: not set in environment
+  ✓ SDK directory: /home/rompasaurus/pico/pico-sdk
+
+  Permissions
+  ──────────────────────────────────────────────────
+  ✓ User in 'uucp' group
+
+  VSCode
+  ──────────────────────────────────────────────────
+  ✓ VSCode: installed
+  ✓   C/C++ IntelliSense
+  ✓   CMake Tools
+  ✓   Cortex-Debug
+
+  Builds
+  ──────────────────────────────────────────────────
+  ✓ hello_serial.uf2: 542 KB
+  ✓ hello_dilder.uf2: 104 KB
+
+  Docker Toolchain
+  ──────────────────────────────────────────────────
+  ✓ Docker: Docker version 29.4.0, build 9d7ad9ff18
+  ✓ Docker daemon: running
+  ✓ docker compose: Docker Compose version 5.1.1
+  ✓ Build image: cached
+  ✓ docker-compose.yml: present
+  ✓ Dockerfile: present
+
+  Hardware
+  ──────────────────────────────────────────────────
+  ✓ Pico W detected on /dev/ttyACM0
+
+  Testing
+  ──────────────────────────────────────────────────
+  ✓ Tkinter: available
+  ✓ testing/.venv: ready
+  ✓ Playwright: available
+  ✓ MkDocs: available
+  ✓ Test suite: 167 tests discovered
+
