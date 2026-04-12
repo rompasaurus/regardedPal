@@ -668,3 +668,23 @@ This is part of the transparency experiment — showing AI-assisted development 
 - **Input Tokens (est):** ~30
 - **Output Tokens (est):** ~10,000
 - **Files:** `website/docs/javascripts/octopus-banner.js` (created — canvas pixel art octopus with typewriter quote cycling), `website/docs/stylesheets/extra.css` (banner styles), `website/docs/index.md` (banner div), `website/mkdocs.yml` (added JS)
+
+---
+
+## Prompt #73 — 2026-04-12
+
+**Prompt:** "Look at the SASSY_QUOTES and SUPPORTIVE_QUOTES blocks of strings. I want you to double the amount of quotes in each one and get weird with it — go off the rails, get unhinged, conspiratorial, and fun. Silly but match the theme for each block. Don't be afraid to swear or use spicy language."
+
+- **Input Tokens (est):** ~80
+- **Output Tokens (est):** ~18,000
+- **Files:** `DevTool/devtool.py` (doubled sassy 124→252, supportive 80→160), `website/docs/javascripts/octopus-banner.js` (updated JS arrays to match)
+
+---
+
+## Prompt #74 — 2026-04-12
+
+**Prompt:** "I want to ensure the programs on the Pi will also contain these quotes."
+
+- **Input Tokens (est):** ~15
+- **Output Tokens (est):** ~20,000
+- **Files:** `dev-setup/sassy-octopus/main.c` (rewritten — runtime rendering replaces pre-baked frames, ~200x smaller), `dev-setup/supportive-octopus/main.c` (same), both `CMakeLists.txt` (updated deps), `DevTool/devtool.py` (`_generate_quotes_header` replaces `_generate_frames_header`), `.gitignore` (frames.h→quotes.h)
