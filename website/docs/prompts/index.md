@@ -688,3 +688,53 @@ This is part of the transparency experiment — showing AI-assisted development 
 - **Input Tokens (est):** ~15
 - **Output Tokens (est):** ~20,000
 - **Files:** `dev-setup/sassy-octopus/main.c` (rewritten — runtime rendering replaces pre-baked frames, ~200x smaller), `dev-setup/supportive-octopus/main.c` (same), both `CMakeLists.txt` (updated deps), `DevTool/devtool.py` (`_generate_quotes_header` replaces `_generate_frames_header`), `.gitignore` (frames.h→quotes.h)
+
+---
+
+## Prompt #88 — 2026-04-12
+
+**Prompt:** "Let's add a hungry and tired and slap happy octopus as well."
+
+- **Input Tokens (est):** ~40
+- **Output Tokens (est):** ~40,000
+- **Files:** `DevTool/devtool.py`, 3 new firmware dirs, `docker-compose.yml`, website JS/CSS (added Hungry, Tired, Slap Happy programs with unique eyes/mouths/quotes)
+
+---
+
+## Prompt #89 — 2026-04-12
+
+**Prompt:** "Let's add a lazy octopus and a fat octopus and chill octopus and horny octopus. Excited as well and nostalgic. Homesick too."
+
+- **Input Tokens (est):** ~30
+- **Output Tokens (est):** ~80,000
+- **Files:** `DevTool/devtool.py`, 7 new firmware dirs, `docker-compose.yml`, website JS/CSS (added Lazy, Fat, Chill, Horny, Excited, Nostalgic, Homesick — total 16 programs)
+
+---
+
+## Prompt #90 — 2026-04-12
+
+**Prompt:** "The emotion state doc shouldn't have checkboxes. Also produce images of each state."
+
+- **Input Tokens (est):** ~30
+- **Output Tokens (est):** ~15,000
+- **Files:** `assets/octopus-emotion-states.md` (rewritten without checkboxes), `assets/emotion-previews/*.png` (17 rendered previews)
+
+---
+
+## Prompt #91 — 2026-04-12
+
+**Prompt:** "Let's make body movement animations and head deformations to match with the emotional states."
+
+- **Input Tokens (est):** ~25
+- **Output Tokens (est):** ~50,000
+- **Files:** `DevTool/devtool.py` (body transform system), all 16 firmware `main.c` (C body transforms), `assets/emotion-previews/*-anim.png` (17 animation strips), `assets/octopus-emotion-states.md` (updated with strips)
+
+---
+
+## Prompt #92 — 2026-04-12
+
+**Prompt:** "Update all the webpages with the new documents and documentation. Fix spelling and grammar."
+
+- **Input Tokens (est):** ~30
+- **Output Tokens (est):** ~30,000
+- **Files:** `PromptProgression.md`, `website/docs/prompts/index.md`, `website/docs/docs/tools/devtool.md` (all updated)

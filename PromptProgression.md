@@ -1118,6 +1118,103 @@ Spelling and grammar are lightly cleaned for readability while preserving the or
 - **Prompt:** "Update the prompts with the latest ones not added and fix grammar and push."
 - **Input Tokens (est):** ~15
 - **Output Tokens (est):** ~8,000
-- **Commit:** *(see below)*
+- **Commit:** `59921bf` — Add Prompts #83–87 covering new octopus programs, expression fixes, and website banner
 - **Files Created/Modified:**
   - `PromptProgression.md` (modified — added Prompts #83–87, backfilled commit hash for Prompt #82)
+
+---
+
+## Prompt #88
+- **Date/Time:** 2026-04-12
+- **Prompt:** "Let's add a hungry and tired and slap happy octopus as well. Implement this on the webpage, on the DevTool preview, and in the C program. Come up with a really good set of quotes for each state."
+- **Input Tokens (est):** ~40
+- **Output Tokens (est):** ~40,000
+- **Commit:** `b8bdf54` — Add Hungry, Tired, and Slap Happy octopus programs
+- **Files Created/Modified:**
+  - `DevTool/devtool.py` (modified — added MOUTH_HUNGRY/TIRED/SLAPHAPPY expressions, hungry upward-staring eyes, tired half-closed eyelids, slap happy one-squint-one-manic eyes, drooling mouth, yawn mouth, wobbly grin, HUNGRY_QUOTES 30, TIRED_QUOTES 30, SLAPHAPPY_QUOTES 30, 3 new programs registered)
+  - `dev-setup/hungry-octopus/`, `dev-setup/tired-octopus/`, `dev-setup/slaphappy-octopus/` (created — main.c + CMakeLists.txt)
+  - All 9 octopus firmware main.c files updated with new expressions
+  - `dev-setup/docker-compose.yml` (modified — 3 new build services)
+  - `.gitignore` (modified — new build/lib entries)
+  - `website/docs/javascripts/octopus-banner.js` (modified — 3 new quote arrays, labels, sources)
+  - `website/docs/stylesheets/extra.css` (modified — hungry pink, tired gray, slap happy teal)
+
+---
+
+## Prompt #89
+- **Date/Time:** 2026-04-12
+- **Prompt:** "Let's add a lazy octopus and a fat octopus and chill octopus and horny octopus."
+- **Input Tokens (est):** ~20
+- **Output Tokens (est):** ~80,000
+- **Commit:** `d053296` — Add Lazy, Fat, Chill, Horny, Excited, Nostalgic, and Homesick octopus programs
+- **Files Created/Modified:**
+  - `DevTool/devtool.py` (modified — added 7 new expression types: lazy nearly-shut eyes + flat mouth, fat wide pupils + cheek puffs, chill side-glancing + half-smile, horny heart-shaped pupils + tongue, excited sparkle crosses + wide grin, nostalgic up-right looking + wistful smile, homesick teary eyes + wobbly line; 7 quote lists of 30 each; 7 programs registered)
+  - 7 new firmware directories created (lazy/fat/chill/horny/excited/nostalgic/homesick-octopus)
+  - All 16 firmware main.c files updated
+  - Docker, gitignore, website JS + CSS all updated
+
+---
+
+## Prompt #90
+- **Date/Time:** 2026-04-12
+- **Prompt:** "Excited as well and nostalgic."
+- **Input Tokens (est):** ~5
+- **Output Tokens (est):** ~500
+- **Files Created/Modified:** (included in Prompt #89 commit — both were added in the same batch)
+
+---
+
+## Prompt #91
+- **Date/Time:** 2026-04-12
+- **Prompt:** "Homesick too."
+- **Input Tokens (est):** ~5
+- **Output Tokens (est):** ~500
+- **Files Created/Modified:** (included in Prompt #89 commit)
+
+---
+
+## Prompt #92
+- **Date/Time:** 2026-04-12
+- **Prompt:** "The emotion state doc shouldn't have checkboxes. Also you didn't produce any images of the state or animation for me to view — you only explained it."
+- **Input Tokens (est):** ~30
+- **Output Tokens (est):** ~15,000
+- **Commit:** `efcb22b` — Replace emotion states doc with rendered previews, remove checkboxes
+- **Files Created/Modified:**
+  - `assets/octopus-emotion-states.md` (rewritten — removed all checkboxes and tracker tables, replaced with clean visual gallery showing each octopus face)
+  - `assets/emotion-previews/*.png` (17 files created — rendered at 2x scale from the DevTool engine, one per emotion state)
+
+---
+
+## Prompt #93
+- **Date/Time:** 2026-04-12
+- **Prompt:** "Let's make some body movement animations and head deformations to match with the emotional states in various ways as well."
+- **Input Tokens (est):** ~25
+- **Output Tokens (est):** ~50,000
+- **Commit:** `b5a3b2f` — Add body movement animations and head deformations per emotional state
+- **Files Created/Modified:**
+  - `DevTool/devtool.py` (modified — added `_body_transform(mood, frame_count)` returning dx/dy/x_expand/row_wobble per mood, modified `_generate_octopus_frame` to accept `frame_count` and apply transforms to body spans and pixel offsets)
+  - All 16 firmware main.c files updated with matching C `setup_body_transform()` function, `draw_body_transformed()`, per-row wobble globals, and `render_frame` now takes `frame_idx` parameter
+  - `assets/emotion-previews/*-anim.png` (17 animation strip PNGs created — 4-frame strips showing body movement per mood)
+  - `assets/octopus-emotion-states.md` (updated — added animation strips and body animation descriptions to every emotion state)
+
+---
+
+## Prompt #94
+- **Date/Time:** 2026-04-12
+- **Prompt:** "Also I want images of just the octopus in the MD document, focusing on the animations and clearly annotated and described in each picture. Make a robust set, then apply it."
+- **Input Tokens (est):** ~30
+- **Output Tokens (est):** ~5,000
+- **Files Created/Modified:** (included in Prompt #93 commit — animation strips were generated in that batch)
+
+---
+
+## Prompt #95
+- **Date/Time:** 2026-04-12
+- **Prompt:** "OK let's look through the session prompts and add them to the prompt document, then update all the webpages with the new documents and documentation. Fix spelling and grammar too."
+- **Input Tokens (est):** ~30
+- **Output Tokens (est):** ~30,000
+- **Commit:** *(see below)*
+- **Files Created/Modified:**
+  - `PromptProgression.md` (modified — added Prompts #88–95, backfilled commit hash for Prompt #87)
+  - `website/docs/prompts/index.md` (modified — added Prompts #88–95)
+  - `website/docs/docs/tools/devtool.md` (modified — updated Programs tab section for 16 programs, added body animation documentation)

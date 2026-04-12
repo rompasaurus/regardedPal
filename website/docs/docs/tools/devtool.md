@@ -279,7 +279,7 @@ Select a file and click **Delete** to remove it. A confirmation dialog appears f
 
 ## Tab 5 — Programs
 
-Preview, stream, or permanently deploy animated programs to the Pico W display.
+Preview, stream, or permanently deploy any of 16 animated programs to the Pico W display.
 
 ![Programs tab — Sassy Octopus selected](../../assets/images/devtool/devtool_tab_programs.png)
 
@@ -312,14 +312,30 @@ After flashing, the Pico runs independently — no PC needed.
 
 ![Programs — deploy buttons](../../assets/images/devtool/devtool_programs_deploy_buttons.png)
 
-### Sassy Octopus
+### Available Programs
 
-Built-in program featuring:
+The DevTool ships with 16 octopus programs, each with unique facial expressions, body animations, and themed quote lists:
 
-- Pixel-art octopus with 3 mouth expressions (smirk, open mouth, big smile)
-- 30 random quotes in a speech bubble (conspiracies, jokes, meme statements)
-- Built-in 5x7 bitmap font with word wrapping
-- Cycles: smirk -> open (new quote) -> smile -> open (new quote)
+| Program | Eyes | Mouth | Body Animation | Quotes |
+|---------|------|-------|---------------|--------|
+| Sassy | Normal | Smirk/smile | Gentle breathing | 196 |
+| Supportive | Normal | Smirk/smile | Gentle breathing | 160 |
+| Angry | V-brows, glaring | Frown | Puffed up, tremble | 45 |
+| Conspiratorial | Misaligned | Wobbly sine | Lean + wave | 47 |
+| Sad | Droopy brows | Gentle frown | Drooped, deflated | 35 |
+| Chaotic | Spiral rings | Zigzag | Wild distortion | 40 |
+| Hungry | Looking up | Drooling oval | Lean upward | 30 |
+| Tired | Half-closed lids | Yawn | Sagging, melting | 30 |
+| Slap Happy | One squint, one manic | Wobbly grin | Sway side to side | 30 |
+| Lazy | Nearly shut | Flat line | Melted flat | 30 |
+| Fat | Wide happy | Smile + cheek puffs | Wider, jiggle | 30 |
+| Chill | Side-glancing | Half-smile | Subtle lean | 30 |
+| Horny | Heart-shaped | Tongue out | Rhythmic pulse | 30 |
+| Excited | Sparkle crosses | Wide grin | Bouncing | 30 |
+| Nostalgic | Looking up-right | Wistful smile | Gentle sway | 30 |
+| Homesick | Teary | Wobbly line | Curled inward | 30 |
+
+Each program can be previewed in the emulator, streamed to the Pico via USB, or deployed as standalone firmware.
 
 ---
 
