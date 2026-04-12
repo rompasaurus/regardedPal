@@ -20,11 +20,12 @@ If you've ever wanted to follow a project from "I have an idea" to "here's a wor
 
 ## Current Phase
 
-!!! info "Phase 1 — Hardware Assembly & Dev Tooling (Pico W)"
-    The Pico W and Waveshare 2.13" V3 e-ink display are wired up and running C firmware via the SDK. The development environment is fully operational with an automated setup CLI, a Tkinter DevTool GUI for display emulation and serial debugging, and Hello World programs verified on hardware.
+!!! info "Phase 2 — Firmware Foundation (C on Pico W)"
+    Phase 1 (hardware + tooling) is complete. The octopus now has 16 emotional states with unique faces, body animations, and custom body shapes — all rendered mathematically at runtime in ~100KB of firmware. 17 standalone programs are ready to flash, with 823 total quotes across all personalities. Next up: user input (serial commands and GPIO buttons) and the pet state machine.
 
     [Setup Guide :material-arrow-right:](docs/setup/first-time-setup.md){ .md-button }
     [DevTool :material-arrow-right:](docs/tools/devtool.md){ .md-button }
+    [Emotion States :material-arrow-right:](../assets/octopus-emotion-states.md){ .md-button }
 
 ---
 

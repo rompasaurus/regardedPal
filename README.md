@@ -41,43 +41,52 @@ The goal isn't just to build a thing — it's to show *how* the thing gets built
 
 Each phase maps to a section of the blog/YouTube series and can be followed independently.
 
-### Phase 0 — Project Planning & Documentation
+### Phase 0 — Project Planning & Documentation ✓
 
 - [x] Create repository and project structure
 - [x] Define project intent and scope
 - [x] Begin prompt progression log ([PromptProgression.md](PromptProgression.md))
 - [x] Outline full phase roadmap
-- [ ] Define the "pet" — personality, stats, behaviors (deferred to Phase 3)
-- [ ] Create initial wireframes / pixel art concepts for e-ink display
+- [x] Create pixel art concepts for e-ink display (octopus character with 16 emotional states)
+- [x] Define enclosure concept and prototype dimensions
 
-### Phase 1 — Hardware Selection & Setup (Pico W)
-> *You are here*
+### Phase 1 — Hardware Selection & Setup (Pico W) ✓
 
 - [x] Finalize component list with links/part numbers ([hardware-research.md](docs/hardware-research.md))
 - [x] Set up Docker-based C SDK cross-compilation toolchain
 - [x] Wire e-ink display to Pico W via jumper wires (SPI)
 - [x] Flash and run "Hello, Dilder!" on the e-ink display — proof of life
 - [x] Build DevTool GUI — display emulator, serial monitor, firmware flash, asset manager, GPIO reference, connection utility, documentation ([DevTool/](DevTool/))
-- [x] Add Programs tab with Sassy Octopus animation (3 expressions, 30 quotes, chat bubble)
+- [x] Add Programs tab with animated octopus preview, firmware size estimation, and deploy
 - [x] Build IMG-receiver firmware — stream images from PC to Pico display via USB serial ([dev-setup/img-receiver/](dev-setup/img-receiver/))
-- [x] Build standalone deploy — bake animation frames into firmware, runs without PC ([dev-setup/sassy-octopus/](dev-setup/sassy-octopus/))
+- [x] Build standalone deploy — runtime-rendered animation, runs without PC
 - [ ] Wire and test button inputs (GPIO)
 - [ ] Battery power prototype
 
-### Phase 2 — Software Foundation (MicroPython)
+### Phase 2 — Firmware Foundation (C on Pico W)
+> *You are here*
 
-- [ ] Build display driver abstraction — render frames to e-ink
-- [ ] Create game loop (low-power, event-driven for e-ink refresh rates)
-- [ ] Implement basic input handling from GPIO buttons
-- [ ] Display a static pet sprite on screen as proof of life
+- [x] Runtime rendering engine — draw octopus mathematically (no pre-baked frames)
+- [x] Animation system — 4-frame mouth cycle with per-mood expression sequences
+- [x] Body transform system — dx/dy offset, x_expand, per-row sine wobble
+- [x] Custom body shapes for Fat (wider dome, thick tentacles) and Lazy (tentacles draped right)
+- [x] 16 emotional states with unique eyes, pupils, eyebrows, eyelids, mouths, and body animations
+- [x] 17 standalone firmware programs (16 emotions + mood selector with all 823 quotes)
+- [x] Date/time clock header from RTC
+- [x] C-faithful preview renderer for verifying firmware matches DevTool
+- [x] Keyboard-to-Pico input mapping plan ([docs/keyboard-to-pico-input.md](docs/keyboard-to-pico-input.md))
+- [ ] Implement serial command input for interactive mood control
+- [ ] Wire and test GPIO button inputs
+- [ ] Build game loop with state machine (idle, interact, sleep)
 
 ### Phase 3 — Pet Logic & Gameplay
 
 - [ ] Define pet stats (hunger, happiness, energy, health, etc.)
 - [ ] Implement stat decay over time
 - [ ] Build interaction system — feed, play, sleep, clean
-- [ ] Add pet mood / expressions based on stat levels
-- [ ] Implement basic animation frames for e-ink (idle, happy, sad, sleeping)
+- [x] Pet mood / expressions based on emotional states (16 implemented)
+- [x] Animation frames for e-ink (idle expressions, body movement per mood)
+- [ ] Emotional state transitions triggered by interactions and stats
 - [ ] Add death/game-over state and reset/new-pet flow
 
 ### Phase 4 — UI & Menus
@@ -119,9 +128,11 @@ Each phase maps to a section of the blog/YouTube series and can be followed inde
 
 | Resource | Description |
 |----------|-------------|
-| [PromptProgression.md](PromptProgression.md) | Every AI prompt used in development, timestamped with token counts and file changes |
+| [PromptProgression.md](PromptProgression.md) | Every AI prompt used in development (104+), timestamped with token counts and file changes |
 | [docs/hardware-research.md](docs/hardware-research.md) | Component research, materials list, GPIO pinout, and enclosure concepts |
-| Blog (TBD) | Written companion posts for each phase |
+| [assets/octopus-emotion-states.md](assets/octopus-emotion-states.md) | All 16 emotional states with rendered previews and animation strips |
+| [docs/keyboard-to-pico-input.md](docs/keyboard-to-pico-input.md) | Input mapping plan for interactive octopus control |
+| [Blog](https://dilder.dev/blog/) | Build journal — 8 posts covering planning through body animations |
 | YouTube (TBD) | Video walkthroughs for each phase |
 
 ---
