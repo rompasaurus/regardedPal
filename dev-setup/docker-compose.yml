@@ -158,3 +158,12 @@ services:
       - ./homesick-octopus:/project
       - ./hello-world/lib:/project/lib
     working_dir: /project
+
+  build-mood-selector:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    volumes:
+      - ./mood-selector:/project
+      - ./hello-world/lib:/project/lib
+    working_dir: /project

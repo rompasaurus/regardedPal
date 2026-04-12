@@ -20,14 +20,27 @@ dilder/
 ├── dev-setup/                   # Hardware setup resources
 │   ├── pico-and-display-first-time-setup.md  # Step-by-step hardware guide
 │   ├── hello-world/             # C project — e-ink display Hello World
-│   │   ├── main.c
-│   │   ├── CMakeLists.txt
-│   │   └── lib/                 # Waveshare driver files (cloned at setup)
 │   ├── hello-world-serial/      # C project — serial-only Hello World
-│   │   ├── main.c
-│   │   └── CMakeLists.txt
+│   ├── img-receiver/            # C project — receive images over serial
+│   ├── sassy-octopus/           # Sassy personality (196 quotes)
+│   ├── supportive-octopus/      # Supportive personality (160 quotes)
+│   ├── angry-octopus/           # Angry personality (45 quotes)
+│   ├── conspiratorial-octopus/  # Conspiratorial/weird personality (47 quotes)
+│   ├── sad-octopus/             # Sad personality (35 quotes)
+│   ├── chaotic-octopus/         # Chaotic personality (40 quotes)
+│   ├── hungry-octopus/          # Hungry personality (30 quotes)
+│   ├── tired-octopus/           # Tired personality (30 quotes)
+│   ├── slaphappy-octopus/       # Slap happy personality (30 quotes)
+│   ├── lazy-octopus/            # Lazy personality (30 quotes, custom body)
+│   ├── fat-octopus/             # Fat personality (30 quotes, custom body)
+│   ├── chill-octopus/           # Chill personality (30 quotes)
+│   ├── horny-octopus/           # Horny personality (30 quotes)
+│   ├── excited-octopus/         # Excited personality (30 quotes)
+│   ├── nostalgic-octopus/       # Nostalgic personality (30 quotes)
+│   ├── homesick-octopus/        # Homesick personality (30 quotes)
+│   ├── mood-selector/           # Interactive: all 16 moods, serial input
 │   ├── Dockerfile               # Reproducible ARM cross-compile container
-│   └── docker-compose.yml
+│   └── docker-compose.yml       # Build services for all programs
 │
 ├── hardware-design/             # Enclosure and component planning
 │   └── hardware-planning.md     # Dimensions, button options, CAD plan, print costs
@@ -35,6 +48,8 @@ dilder/
 ├── docs/                        # Raw research and reference docs
 │   ├── hardware-research.md     # Component specs and GPIO budget
 │   ├── setup-guide.md           # Original setup walkthrough
+│   ├── keyboard-to-pico-input.md # Serial/GPIO input mapping guide
+│   ├── programs-guide.md        # Comprehensive guide to all 19 programs
 │   └── concepts/
 │       ├── prototype-v1.svg     # Enclosure concept render v1
 │       └── prototype-v2.svg     # Dimension-accurate concept render v2

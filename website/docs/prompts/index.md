@@ -828,3 +828,63 @@ This is part of the transparency experiment — showing AI-assisted development 
 - **Input Tokens (est):** ~30
 - **Output Tokens (est):** ~40,000
 - **Files:** `PromptProgression.md` (#96–104), `website/docs/prompts/index.md` (#93–101), `assets/octopus-emotion-states.md` (updated Fat/Lazy body descriptions)
+
+---
+
+## Prompt #102 — 2026-04-12
+
+**Prompt:** "OK let's implement a new project that combines all the emotional states of the octopus and put the state below and allow keyboard input to go left and right to select a new state and show the quotes for the states. Show < on the left and > on the right to indicate the selection and put the state bottom middle."
+
+- **Input Tokens (est):** ~75
+- **Output Tokens (est):** ~80,000
+- **Files:** `dev-setup/mood-selector/main.c` (1,305-line interactive firmware with all 16 moods, serial input, `< MOOD >` status bar), `dev-setup/mood-selector/quotes.h` (823 quotes, 51.6 KB), `dev-setup/mood-selector/generate_quotes.py`, `dev-setup/mood-selector/CMakeLists.txt`, `DevTool/devtool.py` (added mood_selector to all configs)
+
+---
+
+## Prompt #103 — 2026-04-12
+
+**Prompt:** "Also provide input options on the program main page that maps to the Pico."
+
+- **Input Tokens (est):** ~20
+- **Output Tokens (est):** ~5,000
+- **Files:** `dev-setup/mood-selector/main.c` (added `print_help()` with full key mapping table, printed on startup and `?` key)
+
+---
+
+## Prompt #104 — 2026-04-12
+
+**Prompt:** "Move the mood selector more to the bottom and put the actual emotion state in the text field not mood selector with < char and > char instead of ~."
+
+- **Input Tokens (est):** ~30
+- **Output Tokens (est):** ~3,000
+- **Files:** `dev-setup/mood-selector/main.c` (moved status bar flush-bottom, replaced `~ MOOD SELECTOR ~` with dynamic `< MOOD_NAME >`, restored 70px bubble)
+
+---
+
+## Prompt #105 — 2026-04-12
+
+**Prompt:** "Also when deploying to the Pi give a clear indication of the [] buttons and whether they were pressed and what mood is showing on the Pico."
+
+- **Input Tokens (est):** ~25
+- **Output Tokens (est):** ~5,000
+- **Files:** `dev-setup/mood-selector/main.c` (enhanced serial logging: key pressed, direction, previous/new mood, position counter, separator lines)
+
+---
+
+## Prompt #106 — 2026-04-12
+
+**Prompt:** (Build failure: `no such service: build-mood-selector`)
+
+- **Input Tokens (est):** ~15
+- **Output Tokens (est):** ~2,000
+- **Files:** `dev-setup/docker-compose.yml` (added `build-mood-selector` service)
+
+---
+
+## Prompt #107 — 2026-04-12
+
+**Prompt:** "OK update the documentation and give an in-depth breakdown of every program and its uses and how to use it fully and provide screenshots. Make a new MD with a TOC for all of the options, then update the prompt, fix spelling, pull latest prompts, and all that. Commit and push."
+
+- **Input Tokens (est):** ~50
+- **Output Tokens (est):** ~60,000
+- **Files:** `docs/programs-guide.md` (created — comprehensive guide with TOC, all 19 programs, serial input reference), `website/docs/docs/software/project-structure.md` (updated directory tree), `PromptProgression.md` (#105–111), `website/docs/prompts/index.md` (#102–107)

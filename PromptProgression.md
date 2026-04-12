@@ -1328,3 +1328,84 @@ Spelling and grammar are lightly cleaned for readability while preserving the or
   - `website/docs/prompts/index.md` (modified — added Prompts #93–104)
   - `assets/octopus-emotion-states.md` (modified — updated Fat and Lazy body descriptions)
   - All changes committed and pushed
+
+---
+
+## Prompt #105
+- **Date/Time:** 2026-04-12
+- **Prompt:** "OK let's implement a new project that combines all the emotional states of the octopus and put the state below and allow keyboard input to go left and right to select a new state and show the quotes for the states. Show < on the left and > on the right to indicate the selection and put the state bottom middle."
+- **Input Tokens (est):** ~75
+- **Output Tokens (est):** ~80,000
+- **Files Created/Modified:**
+  - `dev-setup/mood-selector/main.c` (created — 1,305-line C firmware combining all 16 emotional states into one interactive program; includes all pupil/mouth/brow/lid/tear drawing functions, body transforms, expression cycles, quote filtering by mood, serial input polling with `[`/`]` navigation, and `< MOOD_NAME >` status bar at screen bottom)
+  - `dev-setup/mood-selector/quotes.h` (created — auto-generated, 823 quotes from all 16 moods, 51.6 KB)
+  - `dev-setup/mood-selector/generate_quotes.py` (created — Python script that extracts all quote lists from `devtool.py` and generates the combined `quotes.h`)
+  - `dev-setup/mood-selector/CMakeLists.txt` (created — Pico SDK build config with display variant selection)
+  - `dev-setup/mood-selector/pico_sdk_import.cmake` (copied from sassy-octopus)
+  - `dev-setup/mood-selector/lib/` (copied — Waveshare display drivers)
+  - `DevTool/devtool.py` (modified — added `mood_selector` to `PROGRAMS`, `_OCTOPUS_CONFIGS` with all quotes concatenated, and `_FIRMWARE_DIRS`)
+  - Font extended with `<` and `>` glyph bitmaps (indices 49, 50) in `font5x7[]` array
+
+---
+
+## Prompt #106
+- **Date/Time:** 2026-04-12
+- **Prompt:** "Also provide input options on the program main page that maps to the Pico."
+- **Input Tokens (est):** ~20
+- **Output Tokens (est):** ~5,000
+- **Files Created/Modified:**
+  - `dev-setup/mood-selector/main.c` (modified — added `print_help()` function that prints full key mapping table to serial on startup and on `?` keypress; includes mood navigation `[`/`]`, direct selection letters `n/w/u/a/s/c/h/t/p/l/f/k/y/e/o/m`, quote refresh `q`, and random mood `r`)
+
+---
+
+## Prompt #107
+- **Date/Time:** 2026-04-12
+- **Prompt:** "Move the mood selector more to the bottom and put the actual emotion state in the text field not mood selector with < char and > char instead of ~."
+- **Input Tokens (est):** ~30
+- **Output Tokens (est):** ~3,000
+- **Files Created/Modified:**
+  - `dev-setup/mood-selector/main.c` (modified — moved status bar to `IMG_H - 8` for flush-bottom positioning; replaced `~ MOOD SELECTOR ~` tagline with dynamic `< MOOD_NAME >` using `<` and `>` characters; restored bubble to full 70px height)
+
+---
+
+## Prompt #108
+- **Date/Time:** 2026-04-12
+- **Prompt:** "Also when deploying to the Pi give a clear indication of the [] buttons and whether they were pressed and what mood is showing on the Pico."
+- **Input Tokens (est):** ~25
+- **Output Tokens (est):** ~5,000
+- **Files Created/Modified:**
+  - `dev-setup/mood-selector/main.c` (modified — enhanced serial output: each keypress now logs `KEY 'x' pressed | >> RIGHT | SASSY --> WEIRD` with direction indicator `<< LEFT`/`>> RIGHT`/`?? RAND`/`== JUMP`, previous and new mood names, position counter `(N/16)`, and separator lines; frame log updated to show `Frame N | < MOOD > (N/16) | "QUOTE"`)
+
+---
+
+## Prompt #109
+- **Date/Time:** 2026-04-12
+- **Prompt:** "The firmware started with the program though." (Regarding serial input not working — Pico detected at `/dev/ttyACM0` via `/dev/serial/by-id/`)
+- **Input Tokens (est):** ~10
+- **Output Tokens (est):** ~500
+- **Files Created/Modified:**
+  - No files modified — troubleshooting session: confirmed Pico serial device at `/dev/serial/by-id/usb-Raspberry_Pi_Pico_*`, instructed to connect with `screen /dev/ttyACM0 115200` or `picocom`
+
+---
+
+## Prompt #110
+- **Date/Time:** 2026-04-12
+- **Prompt:** (Build failure: `no such service: build-mood-selector` — Docker compose missing the mood-selector service)
+- **Input Tokens (est):** ~15
+- **Output Tokens (est):** ~2,000
+- **Files Created/Modified:**
+  - `dev-setup/docker-compose.yml` (modified — added `build-mood-selector` service with volumes mapping `./mood-selector:/project` and `./hello-world/lib:/project/lib`)
+
+---
+
+## Prompt #111
+- **Date/Time:** 2026-04-12
+- **Prompt:** "OK update the documentation and give an in-depth breakdown of every program and its uses and how to use it fully and provide screenshots. Make a new MD with a TOC for all of the options, then update the prompt, fix spelling, pull latest prompts, and all that. Commit and push."
+- **Input Tokens (est):** ~50
+- **Output Tokens (est):** ~60,000
+- **Files Created/Modified:**
+  - `docs/programs-guide.md` (created — comprehensive guide to all 19 programs with TOC, display layout diagram, animation cycle docs, building/flashing instructions, per-program sections with preview images and feature tables, mood selector serial input reference with connection instructions, and comparison table)
+  - `website/docs/docs/software/project-structure.md` (modified — updated directory tree to include all 16 octopus programs, mood-selector, keyboard-to-pico-input.md, and programs-guide.md)
+  - `PromptProgression.md` (modified — added Prompts #105–111)
+  - `website/docs/prompts/index.md` (modified — added Prompts #105–111)
+  - All changes committed and pushed
