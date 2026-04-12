@@ -53,6 +53,9 @@ python3 -c "import tkinter; import serial; print('OK')"
 
 If this prints `OK`, you're ready to go.
 
+!!! tip "Automatic dependency gate"
+    When you run `python3 DevTool/devtool.py` directly, the DevTool automatically detects missing dependencies and offers to install them for your distro. You don't need to install manually if you prefer.
+
 ---
 
 ## Launching the DevTool
@@ -67,7 +70,7 @@ The application opens with eight tabs across the top:
 
 | Tab | Purpose |
 |-----|---------|
-| **Display Emulator** | Draw and design 250×122 e-ink images |
+| **Display Emulator** | Draw and design 250x122 e-ink images |
 | **Serial Monitor** | View live printf output from the Pico W |
 | **Flash Firmware** | Flash .uf2 files to the Pico W |
 | **Assets** | Browse and manage saved display images |
@@ -76,13 +79,15 @@ The application opens with eight tabs across the top:
 | **Connect** | Step-by-step USB serial and Wi-Fi connection walkthrough |
 | **Docs** | Searchable built-in documentation for the entire application |
 
-A log bar at the bottom shows status messages and timestamps.
+A log bar at the bottom shows status messages and timestamps. At startup, the DevTool runs a Docker health check in the background and reports the status of the build toolchain.
 
 ---
 
 ## Tab 1 — Display Emulator
 
-The display emulator is a 250×122 pixel canvas (scaled 3× for visibility) that exactly matches the Waveshare 2.13" V3 e-ink display. Everything you draw here is a 1-bit monochrome image — black or white only, just like the real display.
+The display emulator is a 250x122 pixel canvas (scaled 3x for visibility) that exactly matches the Waveshare 2.13" V3 e-ink display. Everything you draw here is a 1-bit monochrome image — black or white only, just like the real display.
+
+![Display Emulator — blank canvas](../../assets/images/devtool/devtool_tab_display_emulator.png)
 
 ### Drawing Tools
 
@@ -103,6 +108,36 @@ The toolbar at the top provides six tools:
 
 **Invert** flips every pixel (black becomes white, white becomes black). Useful for creating white-on-black designs.
 
+#### Pencil Tool
+![Pencil tool selected](../../assets/images/devtool/devtool_display_tool_pencil.png)
+
+#### Eraser Tool
+![Eraser tool selected](../../assets/images/devtool/devtool_display_tool_eraser.png)
+
+#### Line Tool
+![Line tool selected](../../assets/images/devtool/devtool_display_tool_line.png)
+
+#### Rectangle Tool
+![Rectangle tool selected](../../assets/images/devtool/devtool_display_tool_rectangle.png)
+
+#### Filled Rectangle Tool
+![Filled rectangle tool selected](../../assets/images/devtool/devtool_display_tool_filled_rect.png)
+
+#### Text Tool
+![Text tool selected](../../assets/images/devtool/devtool_display_tool_text.png)
+
+### Drawing Demo
+
+Here's an example using the line, rectangle, and filled rectangle tools together:
+
+![Drawing tools in action](../../assets/images/devtool/devtool_display_drawing_tools.png)
+
+### Invert Function
+
+The invert function flips all pixels — useful for creating white-on-black designs:
+
+![Inverted canvas](../../assets/images/devtool/devtool_display_inverted.png)
+
 ### Text Tool
 
 1. Select **Text** from the toolbar.
@@ -122,6 +157,8 @@ Click **Save** in the toolbar. Enter a name (no extension). Three files are crea
 | `name.pbm` | PBM binary (P4) | Standard 1-bit image format, viewable in any image viewer |
 | `name.bin` | Raw packed bytes | Direct upload format for the Pico W display buffer |
 | `name.png` | PNG (if Pillow installed) | Easy to view and share |
+
+![Save workflow — image ready to export](../../assets/images/devtool/devtool_display_save_workflow.png)
 
 **PBM** is the primary format — it's a standard image format that needs no dependencies to read or write.
 
@@ -144,6 +181,8 @@ Click **Send to Pico** to transmit the current canvas image to the Pico W over U
 
 A full-featured serial terminal for communicating with the Pico W over USB.
 
+![Serial Monitor — disconnected](../../assets/images/devtool/devtool_tab_serial_monitor.png)
+
 ### Connecting
 
 1. The **Port** dropdown auto-detects available serial devices. The Pico W typically appears as `/dev/ttyACM0`.
@@ -153,12 +192,16 @@ A full-featured serial terminal for communicating with the Pico W over USB.
 
 If no ports appear, click **Refresh**. Make sure the Pico W is plugged in and running firmware (not in BOOTSEL mode).
 
+![Serial Monitor — connected](../../assets/images/devtool/devtool_serial_connected.png)
+
 ### Viewing Output
 
 Serial data from the Pico W appears in the output area in real time. This is where you see `printf()` output from your C programs.
 
 - **Auto-scroll** keeps the view at the bottom as new lines arrive. Uncheck to freeze the view for reading.
 - **Clear** empties the output area.
+
+![Serial Monitor — with output](../../assets/images/devtool/devtool_serial_with_output.png)
 
 ### Sending Commands
 
@@ -179,6 +222,8 @@ Click **Save Log** to save the entire output history to a text file with a times
 
 A visual interface for flashing `.uf2` firmware files to the Pico W.
 
+![Flash Firmware tab](../../assets/images/devtool/devtool_tab_flash_firmware.png)
+
 ### Selecting a UF2 File
 
 - **Browse** — open a file picker to select any `.uf2` file.
@@ -192,6 +237,8 @@ A visual interface for flashing `.uf2` firmware files to the Pico W.
 2. Click **Detect RPI-RP2** — the tool searches for the mounted USB drive.
 3. Click **Flash** — the `.uf2` file is copied to the drive.
 4. The Pico W reboots automatically.
+
+![Flash Firmware — BOOTSEL mount detected](../../assets/images/devtool/devtool_flash_mount_detected.png)
 
 ### Building from Source
 
@@ -208,15 +255,19 @@ Build output appears in the log bar at the bottom. The buttons handle copying `p
 
 Browse and manage the 1-bit display images saved in the `assets/` directory.
 
+![Asset Manager — file list](../../assets/images/devtool/devtool_tab_asset_manager.png)
+
 ### Browsing Assets
 
 The file list on the left shows all `.pbm`, `.bin`, and `.png` files in `assets/`. Click **Refresh** to reload the list.
 
 ### Previewing
 
-Click any file to see a 2× scaled preview on the right. The preview shows the image as it would appear on the e-ink display.
+Click any file to see a 2x scaled preview on the right. The preview shows the image as it would appear on the e-ink display.
 
 File info (name, size, dimensions) is shown below the preview.
+
+![Asset Manager — preview with checkerboard pattern](../../assets/images/devtool/devtool_asset_manager_preview.png)
 
 ### Deleting
 
@@ -230,13 +281,19 @@ Select a file and click **Delete** to remove it. A confirmation dialog appears f
 
 Preview, stream, or permanently deploy animated programs to the Pico W display.
 
+![Programs tab — Sassy Octopus selected](../../assets/images/devtool/devtool_tab_programs.png)
+
 ### Program List
 
 Select a program from the list on the left. The preview canvas on the right shows a static frame.
 
+![Programs — list with description](../../assets/images/devtool/devtool_programs_list.png)
+
 ### Previewing
 
 Click **Preview** to run the animation in the emulator. Click **Stop** to halt.
+
+![Programs — preview canvas](../../assets/images/devtool/devtool_programs_preview_area.png)
 
 ### Deploy to Pico (Streaming)
 
@@ -253,6 +310,8 @@ Click **Deploy Standalone** to bake the animation into standalone firmware:
 
 After flashing, the Pico runs independently — no PC needed.
 
+![Programs — deploy buttons](../../assets/images/devtool/devtool_programs_deploy_buttons.png)
+
 ### Sassy Octopus
 
 Built-in program featuring:
@@ -260,7 +319,7 @@ Built-in program featuring:
 - Pixel-art octopus with 3 mouth expressions (smirk, open mouth, big smile)
 - 30 random quotes in a speech bubble (conspiracies, jokes, meme statements)
 - Built-in 5x7 bitmap font with word wrapping
-- Cycles: smirk → open (new quote) → smile → open (new quote)
+- Cycles: smirk -> open (new quote) -> smile -> open (new quote)
 
 ---
 
@@ -268,10 +327,14 @@ Built-in program featuring:
 
 A read-only visual reference showing the Pico W's 40-pin header with all Dilder project assignments highlighted:
 
+![GPIO Pin Viewer](../../assets/images/devtool/devtool_tab_gpio_pins.png)
+
 - **Display pins** (SPI1): GP8–GP13
 - **Button pins**: GP2–GP6
 - **Power**: 3V3(OUT), GND
 - **SPI configuration**: Mode 0, 4 MHz, MSB first
+
+![Pin diagram detail](../../assets/images/devtool/devtool_gpio_pin_diagram.png)
 
 This tab is a quick reference so you don't need to switch to the documentation while developing.
 
@@ -282,6 +345,8 @@ This tab is a quick reference so you don't need to switch to the documentation w
 A guided walkthrough for connecting the Pico W to your computer. Switch between USB Serial and Wi-Fi modes using the radio buttons at the top.
 
 ### USB Serial Walkthrough
+
+![Connection Utility — USB mode](../../assets/images/devtool/devtool_tab_connection_utility.png)
 
 Four steps, each with a live **Check** button that verifies the current state:
 
@@ -294,9 +359,13 @@ Four steps, each with a live **Check** button that verifies the current state:
 
 Each check button gives a green checkmark, yellow warning, or red error with a specific explanation.
 
+![USB connection walkthrough — all steps](../../assets/images/devtool/devtool_connection_usb_walkthrough.png)
+
 The **"Fix: Add me to serial group"** button auto-detects the correct group, tries `pkexec` for a graphical sudo prompt first, falls back to opening a terminal emulator with the command, and shows a confirmation dialog before running.
 
 ### Wi-Fi Walkthrough
+
+![Connection Utility — Wi-Fi mode](../../assets/images/devtool/devtool_connection_wifi_mode.png)
 
 Guides you through adding Wi-Fi support to your Pico W firmware:
 
@@ -315,11 +384,15 @@ Guides you through adding Wi-Fi support to your Pico W firmware:
 
 Built-in searchable documentation for the entire DevTool application.
 
+![Documentation tab](../../assets/images/devtool/devtool_tab_documentation.png)
+
 **Layout:**
 
 - **Left sidebar** — Table of contents. Click any section to jump to it.
 - **Right panel** — Full documentation text with syntax-highlighted headings and code blocks.
 - **Search bar** — Type a keyword and press Find. All matches are highlighted in yellow. Click Clear to reset.
+
+![Documentation — search in action](../../assets/images/devtool/devtool_documentation_search.png)
 
 **Sections covered:**
 
@@ -356,7 +429,7 @@ Each byte holds 8 pixels, MSB = leftmost pixel. `1` = black, `0` = white.
 No header — just the raw packed bytes in the same format the Waveshare display driver uses.
 
 - Byte width: `ceil(250/8)` = 32 bytes per row
-- Total: 32 × 122 = 3,904 bytes
+- Total: 32 x 122 = 3,904 bytes
 - Bit order: MSB first within each byte
 - `1` = black pixel, `0` = white pixel
 
@@ -370,7 +443,7 @@ EPD_2in13_V3_Display(image_data);
 
 ### PNG (Portable Network Graphics)
 
-Standard PNG format, 250×122 pixels, 1-bit depth. Requires Pillow to export. Can be opened in any image viewer or editor.
+Standard PNG format, 250x122 pixels, 1-bit depth. Requires Pillow to export. Can be opened in any image viewer or editor.
 
 ---
 
@@ -378,7 +451,7 @@ Standard PNG format, 250×122 pixels, 1-bit depth. Requires Pillow to export. Ca
 
 ```
 DevTool/
-    devtool.py          # Single-file application (~2800 lines)
+    devtool.py          # Single-file application (~3400 lines)
     requirements.txt    # Python dependencies
     README.md           # Full documentation
 
@@ -392,21 +465,36 @@ assets/                 # Saved display images (created automatically)
 
 | Class | Parent | Purpose |
 |-------|--------|---------|
-| `DilderDevTool` | `tk.Tk` | Main application window, notebook tabs, log bar |
+| `DilderDevTool` | `tk.Tk` | Main application window, notebook tabs, log bar, Docker health check |
 | `DisplayEmulator` | `ttk.Frame` | E-ink canvas, drawing tools, save/load/send |
 | `SerialMonitor` | `ttk.Frame` | Serial connection, read thread, output display |
 | `FlashUtility` | `ttk.Frame` | UF2 selection, BOOTSEL detection, flash copy |
 | `AssetManager` | `ttk.Frame` | File list, preview canvas, delete/open |
+| `ProgramsTab` | `ttk.Frame` | Animated programs, Docker builds, deploy buttons |
 | `PinViewer` | `ttk.Frame` | Static GPIO reference text |
 | `ConnectionUtility` | `ttk.Frame` | USB/Wi-Fi setup walkthrough with live checks |
 | `DocumentationTab` | `ttk.Frame` | Searchable built-in documentation with TOC sidebar |
-| `ProgramsTab` | `ttk.Frame` | Animated programs and quick deploy buttons |
+
+### Startup Behavior
+
+At launch, the DevTool:
+
+1. Checks for missing dependencies (Tkinter, pyserial) and offers to install them
+2. Creates the 8-tab UI with a resizable log bar
+3. Runs a background Docker health check (500ms after UI ready) that verifies:
+    - Docker binary exists
+    - Docker daemon is running
+    - docker-compose is available
+    - Build files exist (docker-compose.yml, Dockerfile)
+    - Shared display library directory exists
+
+Results appear in the log bar as `[startup] Docker toolchain ready.` or with specific issues listed.
 
 ### Threading
 
 The serial monitor runs a background daemon thread (`_read_loop`) that continuously reads from the serial port. All UI updates from the thread go through `winfo_toplevel().after(0, callback)` to stay on the Tkinter main thread.
 
-Build operations in the flash utility and serial send also run in background threads.
+Build operations in the flash utility, Docker image builds, and serial send also run in background threads. All build output is now logged directly without keyword filtering — every line from Docker and Ninja appears in the log bar for full transparency.
 
 ---
 
@@ -421,5 +509,6 @@ Build operations in the flash utility and serial send also run in background thr
 | No serial ports in dropdown | Click Refresh. If still empty, the Pico W may be in BOOTSEL mode or not connected. |
 | Flash button says "not detected" | Put the Pico W in BOOTSEL mode: unplug, hold BOOTSEL, plug in, release. Then click Detect. |
 | Build buttons fail | Verify `PICO_SDK_PATH` is set and `arm-none-eabi-gcc` is installed. Run `python3 setup.py --status` to check. |
-| Canvas drawing is slow | The canvas uses individual rectangles per pixel at 3× scale. For large fills, there may be brief lag — this is a Tkinter limitation, not a bug. |
+| Docker builds fail | Check `[startup]` messages in the log bar. Run `python3 setup.py --step 15` to set up Docker. |
+| Canvas drawing is slow | The canvas uses individual rectangles per pixel at 3x scale. For large fills, there may be brief lag — this is a Tkinter limitation, not a bug. |
 | PNG save/load not working | Install Pillow: `pip install Pillow`. PBM and BIN formats work without it. |

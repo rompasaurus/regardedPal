@@ -806,3 +806,56 @@ Spelling and grammar are lightly cleaned for readability while preserving the or
   - `website/docs/docs/hardware/materials-list.md` (modified — updated battery section with specific recommendations, added no-boost-converter tip)
   - `website/docs/prompts/index.md` (modified — added Prompts #54–63)
   - `PromptProgression.md` (modified — added Prompts #60–63)
+
+---
+
+## Prompt #64
+- **Date/Time:** 2026-04-12
+- **Prompt:** "Ok the testing pulled screenshot for the website. I also need the devtool and the setup to have screenshots walkthrough as well and detailed documentation. Also scan code changes and ensure the tests are up to date."
+- **Input Tokens (est):** ~50
+- **Output Tokens (est):** ~120,000
+- **Commit:** *(included in multi-commit push)*
+- **Files Created/Modified:**
+  - `testing/devtool/test_dependency_gate.py` (created — tests for `_check_and_install_deps()` distro detection, `_check_docker_toolchain()` startup health check, and simplified output logging)
+  - `testing/setup_cli/test_docker_step.py` (created — tests for Step 15 Docker install/daemon/compose detection and build file verification)
+  - `testing/setup_cli/test_test_setup.py` (created — tests for `setup_testing()` function, `--test-setup` CLI flag, Docker/Testing status sections)
+  - `testing/setup_cli/test_cli_screenshots.py` (created — ANSI-to-PNG rendering pipeline for CLI screenshots via Playwright)
+  - `testing/setup_cli/test_prerequisites.py` (modified — added `TestTkinterPrereqCheck` and `TestPyserialPrereqCheck` classes with realistic mock run_cmd responses)
+  - `testing/setup_cli/test_vscode_extensions.py` (modified — added `TestCodeOSSDetection` class covering pacman detection, codium path resolution, and proprietary VSCode fallback)
+  - `testing/setup_cli/test_cli_navigation.py` (modified — updated step count from 14 to 15, added `TestTestSetupFlag` class and `--test-setup` help mention test)
+  - `testing/utils/guide_generator.py` (modified — added setup_cli screenshot descriptions for help, list, status, and test-setup renders)
+  - DevTool screenshots generated: 35 PNGs covering all 8 tabs (display emulator with all 6 tools, serial monitor states, flash firmware, asset manager, programs, GPIO pins, connection utility USB/WiFi modes, documentation with search)
+  - Setup CLI screenshots generated: 4 PNGs for global flags (help, list, status, test-setup rendered as styled terminal HTML)
+  - Test suite: 147 tests passing (90 devtool + 57 setup_cli), 0 failures
+  - User guides generated: `testing/guides/devtool_guide.md` (35 screenshots), `testing/guides/setup_cli_guide.md` (4 screenshots), `testing/guides/website_guide.md` (23 screenshots)
+
+---
+
+## Prompt #65
+- **Date/Time:** 2026-04-12
+- **Prompt:** "Get a few more screenshots for the setup.py util. I want every step captured and put into documentation. Also we need to attach all the screenshots to the associated documentation and update the website to show it."
+- **Input Tokens (est):** ~50
+- **Output Tokens (est):** ~150,000
+- **Commit:** *(included in multi-commit push)*
+- **Files Created/Modified:**
+  - `testing/setup_cli/test_cli_screenshots.py` (rewritten — added `TestStepScreenshots` class with parametrized tests for all 15 steps, `_capture_step_output()` helper that pipes Enter+quit to capture step headers/explanations, `TestCLIGlobalScreenshots` class for --help/--list/--status/--test-setup)
+  - `testing/utils/guide_generator.py` (modified — added 15 step-by-step screenshot descriptions: `setup_cli_step_01` through `setup_cli_step_15`)
+  - `website/docs/assets/images/setup-cli/` (created — 19 PNGs: 4 global flag renders + 15 individual step screenshots)
+  - `website/docs/assets/images/devtool/` (created — 35 PNGs copied from testing screenshots)
+  - `website/docs/docs/tools/setup-cli.md` (rewritten — added 19 embedded screenshots: help output, step list, full step-by-step walkthrough with a screenshot for each of all 15 steps, status dashboard, testing setup; updated step count to 15, added Checkpoint 3, added Code OSS detection and `--test-setup` documentation)
+  - `website/docs/docs/tools/devtool.md` (rewritten — added 28 embedded screenshots: every tab overview, all 6 drawing tools individually, drawing demo, inverted canvas, save workflow, serial monitor 3 states, flash firmware with BOOTSEL detection, asset manager list and preview, programs list/preview/deploy, GPIO pin diagram, connection utility USB/WiFi modes, documentation with search; updated architecture for dependency gate, Docker health check, line count ~3400)
+  - `website/docs/docs/setup/first-time-setup.md` (modified — added 7 embedded screenshots at toolchain install, Docker setup, checkpoint 1, display connection, and checkpoint 2 sections; updated step count from 14 to 15, added Step 15 Docker row, added status dashboard screenshot)
+  - Test suite: 162 tests passing (90 devtool + 72 setup_cli), 0 failures
+  - MkDocs site builds successfully with all 54 images resolving across 3 documentation pages
+
+---
+
+## Prompt #66
+- **Date/Time:** 2026-04-12
+- **Prompt:** "Looks good, let's update the prompts. Look through the entire list of relevant session history in Claude and ensure the entire prompts with error messages are put into the prompt history. Clean up grammar and spelling and account for any prompts that haven't been listed yet. Update while running the commits on all the staged code changes. Be descriptive and push it."
+- **Input Tokens (est):** ~60
+- **Output Tokens (est):** ~80,000
+- **Commit:** *(see commits below)*
+- **Files Created/Modified:**
+  - `PromptProgression.md` (modified — added Prompts #64–66 covering testing framework creation, step screenshot capture, documentation updates with embedded images, and prompt history update)
+  - `website/docs/prompts/index.md` (modified — added Prompts #64–66)

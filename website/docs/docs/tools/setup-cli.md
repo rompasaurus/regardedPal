@@ -17,15 +17,26 @@ python3 setup.py              # interactive step-by-step walkthrough
 python3 setup.py --status     # show current setup state
 python3 setup.py --step N     # jump to step N
 python3 setup.py --list       # list all steps
+python3 setup.py --test-setup # install testing dependencies (tk, pytest, Playwright)
 ```
 
 No external dependencies required — runs on Python 3.9+ with only the standard library.
+
+### Help Output
+
+![Setup CLI help output](../../assets/images/setup-cli/setup_cli_help_rendered.png)
+
+### Step List
+
+Use `--list` to see all 15 steps and their completion status:
+
+![Setup CLI step list](../../assets/images/setup-cli/setup_cli_list_rendered.png)
 
 ---
 
 ## What Each Step Does
 
-The script walks through 14 steps, split into two checkpoints.
+The script walks through 15 steps, split into three checkpoints.
 
 ### Checkpoint 1 — Serial Hello World (Steps 1–9)
 
@@ -33,7 +44,7 @@ Verifies your toolchain works end-to-end without any display wiring.
 
 | Step | Name | Automated? | Description |
 |------|------|-----------|-------------|
-| 1 | Check Prerequisites | Yes | Detects your Linux distro, verifies git, cmake, Python are installed |
+| 1 | Check Prerequisites | Yes | Detects your Linux distro, verifies git, cmake, Python, Tkinter, pyserial |
 | 2 | Install ARM Toolchain | Yes | Runs the correct `pacman`/`apt`/`dnf` command for your distro to install `arm-none-eabi-gcc`, cmake, ninja |
 | 3 | Clone Pico SDK | Yes | Clones the official `pico-sdk` with submodules to `~/pico/pico-sdk` |
 | 4 | Set PICO_SDK_PATH | Yes | Appends `export PICO_SDK_PATH=...` to your `.zshrc` or `.bashrc` |
@@ -55,6 +66,127 @@ Connects the Waveshare display and gets pixels on screen.
 | 13 | Flash Hello Display | Semi | Same BOOTSEL flow, auto-detects mount, copies `hello_dilder.uf2` |
 | 14 | Verify Display Output | Manual | Shows expected display text, confirms Checkpoint 2, prints completion banner |
 
+### Checkpoint 3 — Docker Toolchain (Step 15)
+
+Sets up Docker for building standalone firmware from the DevTool.
+
+| Step | Name | Automated? | Description |
+|------|------|-----------|-------------|
+| 15 | Docker Build Toolchain | Yes | Installs Docker, verifies daemon + compose, pre-builds the ARM cross-compilation container |
+
+---
+
+## Step-by-Step Walkthrough
+
+### Step 1 — Check Prerequisites
+
+Detects your Linux distribution and verifies that all required tools are installed: git, cmake, Python, Tkinter (for DevTool), and pyserial (for serial communication).
+
+![Step 1 — Check Prerequisites](../../assets/images/setup-cli/setup_cli_step_01.png)
+
+### Step 2 — Install ARM Toolchain
+
+Installs the ARM cross-compiler (`arm-none-eabi-gcc`), CMake, and Ninja build system using your distro's package manager.
+
+![Step 2 — Install ARM Toolchain](../../assets/images/setup-cli/setup_cli_step_02.png)
+
+### Step 3 — Clone Pico SDK
+
+Downloads the official Raspberry Pi Pico C/C++ SDK with all submodules to `~/pico/pico-sdk`.
+
+![Step 3 — Clone Pico SDK](../../assets/images/setup-cli/setup_cli_step_03.png)
+
+### Step 4 — Set PICO_SDK_PATH
+
+Configures your shell to find the Pico SDK by appending `export PICO_SDK_PATH=...` to your `.zshrc` or `.bashrc`.
+
+![Step 4 — Set PICO_SDK_PATH](../../assets/images/setup-cli/setup_cli_step_04.png)
+
+### Step 5 — Serial Port Permissions
+
+Adds your user to the correct serial group (`uucp` on Arch/CachyOS, `dialout` on Debian/Ubuntu) so you can access `/dev/ttyACM0` without sudo.
+
+![Step 5 — Serial Port Permissions](../../assets/images/setup-cli/setup_cli_step_05.png)
+
+### Step 6 — Install VSCode Extensions
+
+Installs development extensions for VSCode. Automatically detects Code OSS (Open VSX marketplace) vs proprietary VSCode (Microsoft marketplace) and installs the appropriate extensions.
+
+![Step 6 — Install VSCode Extensions](../../assets/images/setup-cli/setup_cli_step_06.png)
+
+### Step 7 — Build Hello World (Serial)
+
+Compiles the serial-only test firmware. No display wiring needed — this verifies your toolchain end-to-end.
+
+![Step 7 — Build Hello World Serial](../../assets/images/setup-cli/setup_cli_step_07.png)
+
+### Step 8 — Flash Hello World (Serial)
+
+Guides you through putting the Pico W in BOOTSEL mode, auto-detects the RPI-RP2 mount point, and copies the `.uf2` firmware file.
+
+![Step 8 — Flash Hello World Serial](../../assets/images/setup-cli/setup_cli_step_08.png)
+
+### Step 9 — Verify Serial Output
+
+Opens a serial monitor and shows you what to expect. Confirms Checkpoint 1 is complete.
+
+![Step 9 — Verify Serial Output](../../assets/images/setup-cli/setup_cli_step_09.png)
+
+---
+
+!!! success "Checkpoint 1 — Serial Hello World"
+    At this point your toolchain, build system, flash workflow, and serial communication are all verified. The Pico W is running your firmware and talking back over USB.
+
+---
+
+### Step 10 — Connect the Display
+
+Step-by-step instructions with ASCII diagrams for sliding the Waveshare e-Paper HAT onto the Pico W headers. Includes alignment guides and pin verification.
+
+![Step 10 — Connect the Display](../../assets/images/setup-cli/setup_cli_step_10.png)
+
+### Step 11 — Get Waveshare Library
+
+Downloads the Waveshare C display driver and font files, copies them into the project's shared library directory.
+
+![Step 11 — Get Waveshare Library](../../assets/images/setup-cli/setup_cli_step_11.png)
+
+### Step 12 — Build Hello World (Display)
+
+Compiles the display test firmware using CMake + Ninja with the Waveshare library linked in.
+
+![Step 12 — Build Hello World Display](../../assets/images/setup-cli/setup_cli_step_12.png)
+
+### Step 13 — Flash Hello World (Display)
+
+Same BOOTSEL flow as Step 8, but flashes the display firmware (`hello_dilder.uf2`).
+
+![Step 13 — Flash Hello World Display](../../assets/images/setup-cli/setup_cli_step_13.png)
+
+### Step 14 — Verify Display Output
+
+Confirms text appears on the e-ink display. Shows the expected output and prints the Checkpoint 2 completion banner.
+
+![Step 14 — Verify Display Output](../../assets/images/setup-cli/setup_cli_step_14.png)
+
+---
+
+!!! success "Checkpoint 2 — Display Working"
+    Your Pico W C development environment is fully working. Toolchain, build system, flash, serial, and display are all verified.
+
+---
+
+### Step 15 — Docker Build Toolchain
+
+Installs Docker, verifies the daemon and docker-compose are available, checks for project build files, and pre-builds the ARM cross-compilation container image.
+
+![Step 15 — Docker Build Toolchain](../../assets/images/setup-cli/setup_cli_step_15.png)
+
+---
+
+!!! success "Checkpoint 3 — Setup Finished"
+    Docker toolchain is ready. The DevTool can now build and flash standalone firmware to the Pico W. Launch it with `python3 DevTool/devtool.py`.
+
 ---
 
 ## Features
@@ -64,47 +196,33 @@ Connects the Waveshare display and gets pixels on screen.
 - **BOOTSEL detection** — scans for the `RPI-RP2` mount point using `findmnt`/`lsblk` with retry for automount delays
 - **Build error reporting** — captures both stdout and stderr from CMake/Ninja for clear error output
 - **ANSI terminal UI** — colored output with spinners, boxed explanations, and step-by-step progress indicators
+- **Code OSS detection** — detects Code OSS (Open VSX) vs proprietary VSCode and installs the correct extensions
+- **Testing setup** — `--test-setup` installs the full test suite dependencies (Tkinter, pytest, Playwright, MkDocs)
 
 ---
 
 ## Status Dashboard
 
-Run `python3 setup.py --status` to see a snapshot of your environment:
+Run `python3 setup.py --status` to see a snapshot of your entire environment — toolchain, SDK, permissions, VSCode, builds, Docker, and testing framework:
 
-```
-  Toolchain
-  ──────────────────────────────────────────────────
-  ✓ ARM GCC: arm-none-eabi-gcc (GCC) 15.2.1
-  ✓ CMake: installed
-  ✓ Ninja: installed
-
-  Pico SDK
-  ──────────────────────────────────────────────────
-  ✓ PICO_SDK_PATH: /home/user/pico/pico-sdk
-  ✓ SDK directory: /home/user/pico/pico-sdk
-
-  Permissions
-  ──────────────────────────────────────────────────
-  ✓ User in 'uucp' group
-
-  VSCode
-  ──────────────────────────────────────────────────
-  ✓ VSCode: installed
-  ✓   C/C++
-  ✓   CMake Tools
-  ✓   Serial Monitor
-
-  Builds
-  ──────────────────────────────────────────────────
-  ✓ hello_serial.uf2: 554 KB
-  ✓ hello_dilder.uf2: 106 KB
-
-  Hardware
-  ──────────────────────────────────────────────────
-  ✓ Pico W detected on /dev/ttyACM0
-```
+![Setup CLI status dashboard](../../assets/images/setup-cli/setup_cli_status_rendered.png)
 
 If any step fails, the script explains the issue and lets you retry or skip. You can quit at any time with `q` or `Ctrl+C` and resume later with `--step N`.
+
+---
+
+## Testing Setup
+
+Run `python3 setup.py --test-setup` to install everything needed for the test suite:
+
+![Testing framework setup](../../assets/images/setup-cli/setup_cli_test_setup_rendered.png)
+
+This installs:
+
+- **Tkinter** (system package) — for DevTool GUI tests
+- **Python venv** with test dependencies — pytest, Playwright, Pillow, pyserial
+- **Playwright Chromium** — for website screenshot tests
+- **MkDocs Material** — for the documentation site dev server
 
 ---
 
@@ -129,7 +247,8 @@ If any step fails, the script explains the issue and lets you retry or skip. You
 | `arm-none-eabi-gcc` | ARM cross-compiler for the RP2040 |
 | `cmake` + `ninja` | Build system used by the Pico SDK |
 | `pico-sdk` | Official Raspberry Pi Pico C/C++ SDK |
-| VSCode extensions | C/C++, CMake Tools, Serial Monitor, Cortex-Debug |
+| VSCode extensions | C/C++ (or clangd for Code OSS), CMake Tools, Cortex-Debug |
+| Docker + compose | Container-based ARM cross-compilation for standalone firmware |
 
 ---
 

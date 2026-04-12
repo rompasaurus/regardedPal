@@ -578,3 +578,33 @@ This is part of the transparency experiment — showing AI-assisted development 
 - **Input Tokens (est):** ~40
 - **Output Tokens (est):** ~10,000
 - **Files:** `docs/hardware-research.md` (added Battery & Power section with board power consumption, LiPo options, battery life estimates, charging solutions, wiring diagrams, AAA alternative), `website/docs/docs/hardware/materials-list.md` (updated battery section), `website/docs/prompts/index.md` (added Prompts #54–63), `PromptProgression.md` (added Prompts #60–63)
+
+---
+
+## Prompt #64 — 2026-04-12
+
+**Prompt:** "Ok the testing pulled screenshot for the website. I also need the devtool and the setup to have screenshots walkthrough as well and detailed documentation. Also scan code changes and ensure the tests are up to date."
+
+- **Input Tokens (est):** ~50
+- **Output Tokens (est):** ~120,000
+- **Files:** Created complete test framework in `testing/`: `test_dependency_gate.py` (DevTool dependency gate + Docker health check tests), `test_docker_step.py` (Step 15 Docker tests), `test_test_setup.py` (`--test-setup` flag tests), `test_cli_screenshots.py` (ANSI-to-PNG rendering via Playwright). Updated `test_prerequisites.py` (Tkinter/pyserial checks), `test_vscode_extensions.py` (Code OSS detection), `test_cli_navigation.py` (step count + `--test-setup`), `guide_generator.py` (setup_cli descriptions). Generated 35 DevTool + 4 Setup CLI screenshots. 147 tests passing.
+
+---
+
+## Prompt #65 — 2026-04-12
+
+**Prompt:** "Get a few more screenshots for the setup.py util. I want every step captured and put into documentation. Also attach all the screenshots to the associated documentation and update the website to show it."
+
+- **Input Tokens (est):** ~50
+- **Output Tokens (est):** ~150,000
+- **Files:** Rewrote `test_cli_screenshots.py` with parametrized tests for all 15 steps. Generated 19 Setup CLI PNGs (4 global + 15 steps). Copied 54 screenshots into `website/docs/assets/images/`. Rewrote `setup-cli.md` (19 embedded screenshots, full step walkthrough), `devtool.md` (28 embedded screenshots, every tab), updated `first-time-setup.md` (7 screenshots at key sections). 162 tests passing. MkDocs builds with all images resolving.
+
+---
+
+## Prompt #66 — 2026-04-12
+
+**Prompt:** "Looks good, let's update the prompts. Look through the entire list of relevant session history in Claude and ensure the entire prompts with error messages are put into the prompt history. Clean up grammar and spelling and account for any prompts that haven't been listed yet. Update while running the commits on all the staged code changes. Be descriptive and push it."
+
+- **Input Tokens (est):** ~60
+- **Output Tokens (est):** ~80,000
+- **Files:** `PromptProgression.md` (added Prompts #64–66), `website/docs/prompts/index.md` (added Prompts #64–66)

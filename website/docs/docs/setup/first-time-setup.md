@@ -19,20 +19,23 @@ A complete, step-by-step walkthrough for setting up the Raspberry Pi Pico W deve
 ```bash
 python3 setup.py              # full interactive walkthrough
 python3 setup.py --status     # see what's installed and what's missing
-python3 setup.py --list       # list all 14 steps
+python3 setup.py --list       # list all 15 steps
 python3 setup.py --step 7     # jump to a specific step
+python3 setup.py --test-setup # install testing dependencies
 ```
 
-The script handles 14 steps:
+![Setup CLI step list](../../assets/images/setup-cli/setup_cli_list_rendered.png)
+
+The script handles 15 steps across three checkpoints:
 
 | Step | Name | Description |
 |------|------|-------------|
-| 1 | Check Prerequisites | Detects distro, verifies git/cmake/Python |
+| 1 | Check Prerequisites | Detects distro, verifies git/cmake/Python/Tkinter/pyserial |
 | 2 | Install ARM Toolchain | Runs the correct package manager command |
 | 3 | Clone Pico SDK | Clones `pico-sdk` with submodules |
 | 4 | Set PICO_SDK_PATH | Adds export to your shell profile |
 | 5 | Serial Port Permissions | Adds user to `uucp` (Arch) or `dialout` (Debian) |
-| 6 | Install VSCode Extensions | Installs C/C++, CMake Tools, Serial Monitor |
+| 6 | Install VSCode Extensions | Installs C/C++ (or clangd for Code OSS), CMake Tools, Cortex-Debug |
 | 7 | Build Hello Serial | CMake + Ninja build of serial-only test |
 | 8 | Flash Hello Serial | Guides BOOTSEL, auto-detects mount, copies UF2 |
 | 9 | Verify Serial Output | Confirms serial and LED work (Checkpoint 1) |
@@ -41,6 +44,11 @@ The script handles 14 steps:
 | 12 | Build Hello Display | Builds the e-ink display test |
 | 13 | Flash Hello Display | Flash display firmware |
 | 14 | Verify Display Output | Confirms text on display (Checkpoint 2) |
+| 15 | Docker Build Toolchain | Installs Docker and pre-builds the ARM container (Checkpoint 3) |
+
+Use `--status` to check your current environment at a glance:
+
+![Setup CLI status dashboard](../../assets/images/setup-cli/setup_cli_status_rendered.png)
 
 ---
 
@@ -131,6 +139,11 @@ For a real-time pet with animations, input handling, and tight display refresh t
 ---
 
 ## 3. Install the Pico C/C++ SDK Toolchain
+
+!!! tip "The setup script automates all of this"
+    Steps 1-6 of `python3 setup.py` handle the entire toolchain installation automatically with distro detection. Here's what the prerequisite check looks like:
+
+    ![Step 1 — Prerequisites check](../../assets/images/setup-cli/setup_cli_step_01.png)
 
 ### Step 3.1 — Install System Dependencies
 
@@ -275,6 +288,11 @@ groups | grep dialout
 
 ## 4. Set Up the Docker Build Environment (Optional)
 
+!!! tip "The setup script automates Docker installation"
+    Step 15 of `python3 setup.py` handles Docker install, daemon setup, group permissions, and image pre-build:
+
+    ![Step 15 — Docker Build Toolchain](../../assets/images/setup-cli/setup_cli_step_15.png)
+
 If you prefer a containerized build environment for reproducibility, use the provided Docker setup in `dev-setup/`.
 
 === "Arch / CachyOS"
@@ -399,6 +417,11 @@ Select the build kit: `Ctrl+Shift+P` > **"CMake: Select a Kit"** > **"Pico W ARM
 
 **Goal:** Verify the entire toolchain before touching the display. Just the Pico W plugged into USB.
 
+!!! tip "The setup script handles build + flash + verify"
+    Steps 7-9 of `python3 setup.py` automate the build, flash (with BOOTSEL detection), and serial verification:
+
+    ![Step 7 — Build Hello Serial](../../assets/images/setup-cli/setup_cli_step_07.png)
+
 ### Build
 
 ```bash
@@ -437,6 +460,11 @@ The onboard LED should blink every second. If this works, your entire toolchain 
 ---
 
 ## 7. Connect the Display to the Pico W
+
+!!! tip "The setup script shows detailed connection instructions"
+    Step 10 of `python3 setup.py` provides a guided walkthrough with ASCII diagrams:
+
+    ![Step 10 — Connect the Display](../../assets/images/setup-cli/setup_cli_step_10.png)
 
 !!! danger "Power off before connecting"
     Disconnect the Pico W from USB before attaching the display. Voltage spikes can damage the e-ink panel.
@@ -489,6 +517,11 @@ These are the same pins used in the Waveshare Pico examples. The HAT routes them
 ## 8. Checkpoint 2 — Hello World e-Ink Display
 
 **Goal:** Draw text on the e-ink display using the Waveshare C library.
+
+!!! tip "The setup script automates the library download, build, and flash"
+    Steps 11-14 of `python3 setup.py` handle everything:
+
+    ![Step 12 — Build Hello Display](../../assets/images/setup-cli/setup_cli_step_12.png)
 
 ### Get the Waveshare C Library
 
