@@ -273,13 +273,15 @@ Simple 6x6mm through-hole momentary switches, optionally with colored snap-on ca
 | 10k resistor assortment | ~$2-3 | External pull-ups if needed |
 | Multimeter | ~$10-20 | Debugging wiring |
 
-### For Battery Power (Later Phase)
+### For Battery Power (Phase 6)
+
+See the [Battery & Power](#battery--power) section below for full analysis.
 
 | Item | Est. Cost | Notes |
 |------|-----------|-------|
-| 3.7V LiPo battery (1200mAh) | ~$8-12 | JST connector |
-| Adafruit PowerBoost 500C | ~$18 | LiPo charger + 5V boost, load-sharing |
-| Budget alt: TP4056 + boost converter | ~$2-3 | Cheaper but more wiring |
+| 3.7V LiPo battery (1000mAh, recommended) | ~$7 | JST PH 2.0mm connector. Wires directly to VSYS on Pico W — no boost converter needed. |
+| TP4056 charging module | ~$1.50 | Budget USB charging with over-discharge protection. |
+| Adafruit PowerBoost 500C (upgrade) | ~$16 | LiPo charger + 5V boost + load sharing (use device while charging). |
 
 ---
 
@@ -293,6 +295,137 @@ Simple 6x6mm through-hole momentary switches, optionally with colored snap-on ca
 | **Total** | **12** | | **14+ GPIO remaining** |
 
 Note: Button GPIOs are chosen to avoid SPI1 pins and leave SPI0 free for future use. The specific pins can be changed — the above are suggestions for clean wiring.
+
+---
+
+## Battery & Power
+
+### Board Power Consumption
+
+| Board | Active (WiFi off) | Active (WiFi on) | Deep Sleep | VSYS/BAT Input | Boost Needed? |
+|---|---|---|---|---|---|
+| **Pico W** (current) | ~28mA | ~80mA | ~1.0mA | VSYS: 1.8–5.5V | No |
+| **Pico 2 W** (recommended) | ~32mA | ~85mA | ~0.7mA | VSYS: 1.8–5.5V | No |
+| **XIAO ESP32S3+** | ~35mA | ~100mA (350mA TX peaks) | ~8µA | BAT pads (built-in charger) | No |
+| **XIAO nRF52840** | ~8mA | N/A (BLE only: ~12mA) | ~3µA | BAT pads (built-in charger) | No |
+| **XIAO RP2350** | ~30mA | N/A (no wireless) | ~0.5mA | BAT pads (built-in charger) | No |
+| **Pi Zero W** (Phase 5) | ~90mA @ 5V | ~140mA @ 5V | ~35mA (halt only) | 5V GPIO pin | **Yes** (3.7→5V) |
+
+The Waveshare e-ink display adds negligible average current: ~0.013mA at 3-minute partial refresh intervals (~8mA active for 0.3s every 180s).
+
+### Battery Monitoring (Built-in)
+
+- **Pico W / Pico 2 W:** GPIO29 (ADC3) reads VSYS through an onboard 3:1 voltage divider. GPIO24 detects USB connection (HIGH = plugged in). No external components needed.
+- **XIAO nRF52840:** Onboard voltage divider to P0.31 (AIN7) for battery voltage. No external components needed.
+- **XIAO ESP32S3+:** May need an external voltage divider (2× 100k resistors) from BAT+ to an ADC GPIO, depending on board revision.
+- **Pi Zero W:** No onboard ADC — requires an external ADC module (ADS1015 or INA219 over I2C, ~$3–5).
+
+### LiPo Battery Options
+
+All batteries are 3.7V nominal (4.2V full charge, 3.0V cutoff), single-cell lithium polymer with JST PH 2.0mm 2-pin connector.
+
+**Important:** Always verify connector polarity before connecting. Chinese LiPo cells often have reversed polarity compared to Adafruit convention.
+
+| Size | Capacity | Typical Dimensions | Weight | Price | Notes |
+|---|---|---|---|---|---|
+| **Small** | 400–500mAh | 35×20×5mm | ~10–12g | ~$3–7 | Thin, fits easily in any enclosure. Good for testing. |
+| **Medium** (recommended) | 800–1000mAh | 50×34×5mm | ~18–22g | ~$5–10 | Best balance of capacity, size, and cost for Dilder. |
+| **Large** | 1200–1500mAh | 59×37×5mm | ~25–30g | ~$7–12 | Good runtime, still fits 80×40mm enclosure footprint. |
+| **XL** | 2000mAh | 60×40×7mm | ~35g | ~$8–15 | Near-maximum for the planned enclosure. 7mm thick — verify clearance with PCB + display. |
+| **XXL** | 3000mAh | 70×50×8mm | ~50g | ~$10–18 | Likely too large for the current enclosure design (80×40×15mm). Would require a thicker or wider case. Overkill for most use cases. |
+
+### Battery Life Estimates
+
+Calculated in "Tamagotchi mode": active 10 minutes per hour (CPU running, polling buttons, occasional display refresh, WiFi off), deep sleep for the remaining 50 minutes. Battery capacity derated to 90% for real-world performance.
+
+| Board | 500mAh | 1000mAh | 2000mAh | 3000mAh |
+|---|---|---|---|---|
+| **Pico W** | 3.4 days | **6.8 days** | 13.6 days | 20.5 days |
+| **Pico 2 W** | 3.2 days | **6.4 days** | 12.7 days | 19.1 days |
+| **XIAO ESP32S3+** | 3.2 days | 6.4 days | 12.8 days | 19.3 days |
+| **XIAO nRF52840** | 14 days | **28 days** | 56 days | 84 days |
+| **XIAO RP2350** | 3.5 days | 7.0 days | 13.9 days | 20.9 days |
+| **Pi Zero W** | 0.3 days | 0.5 days | 1.0 day | 1.6 days |
+
+The XIAO nRF52840 is the standout for battery life due to its ~8mA active draw and ~3µA deep sleep, but it has no WiFi. The Pi Zero W is unsuitable for battery-powered handheld use — even 3000mAh barely lasts 1.5 days.
+
+### Charging Solutions
+
+| Solution | Input | Charge Rate | Output | Load Sharing | Price | Best For |
+|---|---|---|---|---|---|---|
+| **TP4056 module** | USB 5V | 1A | Battery voltage (3.7V) | Partial | ~$1.50 | Budget Pico W builds — output wires to VSYS |
+| **Adafruit PowerBoost 500C** | USB 5V | 500mA | 5.2V boosted | **Yes** | ~$16 | Pico W / Pico 2 W with clean USB charging |
+| **Adafruit PowerBoost 1000C** | USB 5V | 1A | 5.2V boosted | **Yes** | ~$22 | Pi Zero W (needs 5V and higher current) |
+| **MCP73831 breakout** | USB 5V | 100–500mA | Battery voltage | No | ~$2 | Custom PCB with minimal charging |
+| **XIAO built-in** | USB-C | ~50–100mA | 3.3V regulated | **Yes** | **$0** | All XIAO boards — no external board needed |
+
+XIAO boards have built-in LiPo charging, making them the simplest option (just solder battery wires to BAT pads). The trade-off is slow charging: ~50–100mA means a 1000mAh battery takes 10–20 hours to fully charge.
+
+### Wiring — Pico W / Pico 2 W
+
+No boost converter needed — VSYS accepts 3.7V LiPo directly (rated 1.8–5.5V).
+
+**Recommended setup (TP4056 — budget):**
+
+```
+USB 5V ──► TP4056 IN+          LiPo(+) ◄── TP4056 BAT+
+GND ──────► TP4056 IN-          LiPo(-) ◄── TP4056 BAT-
+                                TP4056 OUT+ ──► VSYS (pin 39)
+                                TP4056 OUT- ──► GND  (pin 38)
+```
+
+**Upgrade setup (PowerBoost 500C — load sharing):**
+
+```
+USB 5V ──► PowerBoost VIN      LiPo(+) ◄── PowerBoost BAT+
+GND ──────► PowerBoost GND      LiPo(-) ◄── PowerBoost BAT-
+                                PowerBoost 5V OUT ──► VBUS (pin 40)
+                                PowerBoost GND    ──► GND  (pin 38)
+                                PowerBoost LBO    ──► GP15 (low-battery alert)
+```
+
+### Wiring — XIAO Boards (ESP32S3+, nRF52840, RP2350)
+
+```
+LiPo(+) ──► BAT+ pad (bottom of board)
+LiPo(-) ──► BAT- pad (bottom of board)
+
+That's it. USB-C charges automatically.
+```
+
+### Wiring — Pi Zero W (Boost Required)
+
+```
+USB 5V ──► PowerBoost 1000C VIN    LiPo(+) ◄── PowerBoost BAT+
+GND ──────► PowerBoost GND          LiPo(-) ◄── PowerBoost BAT-
+                                    PowerBoost 5V OUT ──► GPIO pin 2 (5V)
+                                    PowerBoost GND    ──► GPIO pin 6 (GND)
+                                    PowerBoost LBO    ──► GPIO17 (low-battery)
+```
+
+Requires an external ADC module (ADS1015 or INA219 on I2C) for battery level monitoring.
+
+### Alternative: 3× AAA NiMH (Rechargeable)
+
+3 AAA NiMH cells in series produce 3.6V nominal (3.0–4.2V range) — compatible with Pico W VSYS. No boost converter needed.
+
+| Spec | 3× AAA NiMH (Eneloop) | LiPo 1000mAh |
+|---|---|---|
+| **Voltage** | 3.6V (3× 1.2V series) | 3.7V |
+| **Capacity** | ~800mAh usable | 1000mAh |
+| **Dimensions** | ~45×32×11mm (in holder) | 50×34×5mm |
+| **Swappable** | Yes — pop in fresh cells | No — USB charge only |
+| **Cycle life** | ~2100 cycles | ~300–500 cycles |
+| **Tamagotchi life (Pico W)** | ~5.4 days | ~6.8 days |
+| **Cost** | ~$10 (cells + holder + external charger) | ~$8.50 (cell + TP4056) |
+
+The main trade-off is form factor: the 3-cell holder is 11mm thick vs 5mm for a flat LiPo pouch. A single AAA (1.2V) does not work — it falls below VSYS minimum (1.8V) and a boost converter adds cost, complexity, and ~15–20% efficiency loss.
+
+### Battery Recommendation
+
+**For Dilder:** A **1000mAh LiPo** (503450 form factor, 50×34×5mm) paired with a **TP4056 module** is the best starting point at ~$8.50 total. This provides ~6.8 days in Tamagotchi mode on the Pico W. Upgrade to the PowerBoost 500C later if load sharing (use while charging) is needed.
+
+For maximum runtime without changing the enclosure, a **2000mAh** cell (60×40×7mm) doubles battery life to ~13.6 days. A 3000mAh cell would require a larger enclosure.
 
 ---
 

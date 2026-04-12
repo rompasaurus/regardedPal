@@ -41,15 +41,19 @@ Not required to get started, but helpful.
 
 ---
 
-## Battery Power (Later Phase)
+## Battery Power (Phase 6)
 
-Order these when you're ready to move off USB power.
+Order these when you're ready to move off USB power. See [Hardware Research](https://github.com/rompasaurus/dilder/blob/main/docs/hardware-research.md#battery--power) for the full analysis including battery life estimates and wiring diagrams.
 
 | Item | Est. Cost | Notes |
 |------|-----------|-------|
-| 3.7V LiPo battery (1200mAh) | ~€10 | JST connector. Can power the Pico W via VSYS pin. |
-| Adafruit PowerBoost 500C | ~€18 | LiPo charger + 5V boost regulator with load sharing. |
-| Budget alternative: TP4056 + boost converter | ~€2–3 | More wiring, more tuning, lower cost. |
+| 3.7V LiPo battery (1000mAh, recommended) | ~€7 | JST PH 2.0mm connector, 50×34×5mm. Wires directly to VSYS — no boost converter needed. Provides ~6.8 days in Tamagotchi mode. |
+| 3.7V LiPo battery (2000mAh, max runtime) | ~€10 | 60×40×7mm. ~13.6 days in Tamagotchi mode. Verify enclosure clearance (7mm thick). |
+| TP4056 charging module (budget) | ~€1.50 | USB charging with over-discharge protection. Output wires to VSYS pin. |
+| Adafruit PowerBoost 500C (upgrade) | ~€16 | LiPo charger + 5V boost + load sharing (use device while charging). Has low-battery output pin. |
+
+!!! tip "No boost converter needed"
+    The Pico W's VSYS pin accepts 1.8–5.5V. A 3.7V LiPo sits right in range — just wire LiPo(+) to VSYS and LiPo(-) to GND. Battery voltage monitoring is built in via GPIO29 (ADC3).
 
 ---
 
@@ -68,7 +72,7 @@ Order these when you're ready to move off USB power.
 | USB | Micro-USB 1.1 (power + data) |
 | ADC | 3 external channels (12-bit) |
 | Dimensions | 51 × 21 × 3.9mm |
-| Firmware | MicroPython (recommended) |
+| Firmware | C/C++ via Pico SDK |
 
 Full reference: [Pico W Reference](../reference/pico-w.md)
 

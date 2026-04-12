@@ -762,3 +762,47 @@ Spelling and grammar are lightly cleaned for readability while preserving the or
 - **Files Created/Modified:**
   - `docs/hardware-research.md` (modified — added Board Comparison table with 9 boards, Display Comparison section with 4 e-paper displays and 7 LCD/TFT alternatives, trade-off analysis, firmware impact assessments, and recommendations; updated firmware language from MicroPython to C/C++)
   - `PromptProgression.md` (modified — added Prompts #54–59, grammar and spelling cleanup)
+
+---
+
+## Prompt #60
+- **Date/Time:** 2026-04-12
+- **Prompt:** "Ok let's research LiPo batteries that I could wire up to these boards easily and run me through estimated cost and battery life on each board and wiring setup process as well."
+- **Input Tokens (est):** ~40
+- **Output Tokens (est):** ~10,000
+- **Commit:** n/a — analysis only, no files changed
+- **Files Created/Modified:** none
+
+---
+
+## Prompt #61
+- **Date/Time:** 2026-04-12
+- **Prompt:** "Could a rechargeable AAA battery work for this?"
+- **Input Tokens (est):** ~15
+- **Output Tokens (est):** ~3,000
+- **Commit:** n/a — analysis only, no files changed
+- **Files Created/Modified:** none
+
+---
+
+## Prompt #62
+- **Date/Time:** 2026-04-12
+- **Prompt:** "What about just 1 battery?"
+- **Input Tokens (est):** ~10
+- **Output Tokens (est):** ~2,000
+- **Commit:** n/a — analysis only, no files changed
+- **Files Created/Modified:** none
+
+---
+
+## Prompt #63
+- **Date/Time:** 2026-04-12
+- **Prompt:** "Update the hardware research — add a section for batteries and expected battery life. Include 2000mAh and 3000mAh options and viable options for that and expected price. Update prompts and website documentation with everything as well. Commit and push."
+- **Input Tokens (est):** ~40
+- **Output Tokens (est):** ~10,000
+- **Commit:** `pending`
+- **Files Created/Modified:**
+  - `docs/hardware-research.md` (modified — added Battery & Power section with board power consumption, LiPo options up to 3000mAh, battery life estimates, charging solutions, wiring diagrams for Pico/XIAO/Pi Zero, AAA NiMH alternative, and recommendation)
+  - `website/docs/docs/hardware/materials-list.md` (modified — updated battery section with specific recommendations, added no-boost-converter tip)
+  - `website/docs/prompts/index.md` (modified — added Prompts #54–63)
+  - `PromptProgression.md` (modified — added Prompts #60–63)
