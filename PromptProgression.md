@@ -944,7 +944,7 @@ Spelling and grammar are lightly cleaned for readability while preserving the or
 - **Prompt:** "Look at the SASSY_QUOTES and SUPPORTIVE_QUOTES blocks of strings. I want you to double the amount of quotes in each one and get weird with it — go off the rails, get unhinged, conspiratorial, and fun. Silly but match the theme for each block. Don't be afraid to swear or use spicy language."
 - **Input Tokens (est):** ~80
 - **Output Tokens (est):** ~18,000
-- **Commit:** `TBD`
+- **Commit:** `23e7fd7`
 - **Files Created/Modified:**
   - `DevTool/devtool.py` (modified — doubled `SASSY_QUOTES` from 124 to 252, doubled `SUPPORTIVE_QUOTES` from 80 to 160, each section expanded with theme-matched new entries)
   - `website/docs/javascripts/octopus-banner.js` (modified — updated JS quote arrays to match the expanded Python lists)
@@ -956,7 +956,7 @@ Spelling and grammar are lightly cleaned for readability while preserving the or
 - **Prompt:** "I want to ensure the programs on the Pi will also contain these quotes."
 - **Input Tokens (est):** ~15
 - **Output Tokens (est):** ~20,000
-- **Commit:** `TBD`
+- **Commit:** `6b42bde`
 - **Files Created/Modified:**
   - `dev-setup/sassy-octopus/main.c` (rewritten — runtime rendering engine replaces pre-baked frames; embeds body RLE, 5×7 bitmap font, all 5 mouth expressions, word-wrap text renderer, ADC-seeded PRNG; renders each frame on-the-fly)
   - `dev-setup/supportive-octopus/main.c` (rewritten — identical runtime renderer)
