@@ -580,7 +580,7 @@ Spelling and grammar are lightly cleaned for readability while preserving the or
 - **Prompt:** "Also the software on the site needs the READMEs for the GUI app and a guide on the CLI setup."
 - **Input Tokens (est):** ~25
 - **Output Tokens (est):** ~40,000
-- **Commit:** *(see below)*
+- **Commit:** `8401317` — Expand DevTool and Setup CLI pages with full README content
 - **Files Created/Modified:**
   - `website/docs/docs/tools/devtool.md` (rewritten — expanded from summary to full documentation matching DevTool/README.md: all 7 tabs with detailed usage instructions, drawing tools, serial monitor, flash firmware, asset manager, GPIO reference, connection utility with USB/Wi-Fi walkthroughs, documentation tab, file format specifications with byte layouts, class architecture, threading model, troubleshooting table)
   - `website/docs/docs/tools/setup-cli.md` (rewritten — expanded from summary to comprehensive guide matching dev-setup/pico-and-display-first-time-setup.md: 14-step walkthrough table, hardware requirements, software installed, Pico W and Waveshare specs, C vs MicroPython rationale, display connection with side-view diagram and pin mapping, troubleshooting tables for build/flash/serial/display issues, quick reference card)
@@ -590,10 +590,10 @@ Spelling and grammar are lightly cleaned for readability while preserving the or
 
 ## Prompt #44
 - **Date/Time:** 2026-04-11
-- **Prompt:** "Ok you made a dev tool where I can create asset via display emulator. First of all the pencil and line don't draw on the window at all, text and rectangle do. Also I want an ability to preview the asset on the Pico display if it's connected — add a button to deploy to Pico. Then we want to create another tab in the dev tool to deploy from a list of programs. For the first program I want you to create a sassy octopus that smiles and alternates between that expression and open-mouth expression with a text chat bubble where it blurts out from a random list of unhinged hilarious conspiracies and jokes and meme statements, alternating between facial expressions. The octopus should be on the left side of the display and the chat bubble to the right of its mouth."
+- **Prompt:** "Ok you made a dev tool where I can create assets via the display emulator. First of all, the pencil and line don't draw on the window at all — text and rectangle do. Also I want the ability to preview the asset on the Pico display if it's connected — add a button to deploy to Pico. Then we want to create another tab in the dev tool to deploy from a list of programs. For the first program I want you to create a sassy octopus that smiles and alternates between that expression and an open-mouth expression with a text chat bubble where it blurts out from a random list of unhinged hilarious conspiracies and jokes and meme statements, alternating between facial expressions. The octopus should be on the left side of the display and the chat bubble to the right of its mouth."
 - **Input Tokens (est):** ~200
 - **Output Tokens (est):** ~80,000
-- **Commit:** *(see below)*
+- **Commit:** `63e696b`
 - **Files Created/Modified:**
   - `DevTool/devtool.py` (modified — fixed `_draw_brush` range bug that broke pencil/line tools; added Programs tab with preview/deploy; added Sassy Octopus program with pixel art, 3 mouth expressions, 30 quotes, tiny bitmap font, chat bubble rendering; made Send to Pico non-blocking with write timeout)
 
@@ -692,7 +692,7 @@ Spelling and grammar are lightly cleaned for readability while preserving the or
 - **Prompt:** "Divide, describe, and commit. Update the prompts, fix spelling, and add documentation on the new features of the tool. Update existing docs and the website and prompts file, and commit and push."
 - **Input Tokens (est):** ~40
 - **Output Tokens (est):** ~50,000
-- **Commit:** *(see below)*
+- **Commit:** `63e696b` — Add Programs tab, Sassy Octopus, IMG-receiver and standalone firmware, fix drawing tools
 - **Files Created/Modified:**
   - `PromptProgression.md` (modified — added Prompts #44–53)
   - `README.md` (modified — updated Phase 1 checklist, added DevTool and firmware projects)
@@ -700,3 +700,65 @@ Spelling and grammar are lightly cleaned for readability while preserving the or
   - `website/docs/docs/tools/devtool.md` (modified — added Programs tab and standalone deploy documentation)
   - `website/docs/prompts/index.md` (modified — added Prompts #41–53)
   - `dev-setup/img-receiver/main.c`, `dev-setup/sassy-octopus/main.c` (spelling fixes)
+
+---
+
+## Prompt #54
+- **Date/Time:** 2026-04-12
+- **Prompt:** "Could the XIAO nRF52840, BT5.0 do the same thing as the Pi Pico in this project?"
+- **Input Tokens (est):** ~25
+- **Output Tokens (est):** ~4,000
+- **Commit:** n/a — analysis only, no files changed
+- **Files Created/Modified:** none
+
+---
+
+## Prompt #55
+- **Date/Time:** 2026-04-12
+- **Prompt:** "Give me a comparison chart for Raspberry Pi Pico, RP2040, Cortex-M0+, microUSB..." *(pasted full shopping cart with 9 boards: Pi Pico, Pi Pico H, Pi Pico 2 W, Pi Pico 2 WH, XIAO SAMD21, XIAO nRF52840+, XIAO MG24 Sense, XIAO ESP32S3+, XIAO RP2350)*
+- **Input Tokens (est):** ~400
+- **Output Tokens (est):** ~5,000
+- **Commit:** n/a — analysis only, no files changed
+- **Files Created/Modified:** none
+
+---
+
+## Prompt #56
+- **Date/Time:** 2026-04-12
+- **Prompt:** *(Pasted wrong shopping cart with microscopes, USB mouse, stool, and other non-display items — corrected in next prompt)*
+- **Input Tokens (est):** ~350
+- **Output Tokens (est):** ~1,500
+- **Commit:** n/a — clarification, no files changed
+- **Files Created/Modified:** none
+
+---
+
+## Prompt #57
+- **Date/Time:** 2026-04-12
+- **Prompt:** *(Pasted correct shopping cart with 18 items: boards, e-paper displays, LCD/TFT displays, and Pi Zeros — asked for display comparison with board compatibility, power consumption, refresh rates, and pros/cons)*
+- **Input Tokens (est):** ~600
+- **Output Tokens (est):** ~8,000
+- **Commit:** n/a — analysis only, no files changed
+- **Files Created/Modified:** none
+
+---
+
+## Prompt #58
+- **Date/Time:** 2026-04-12
+- **Prompt:** "Go in depth with the difference in the e-ink displays — what would be the improvement or detriments to each."
+- **Input Tokens (est):** ~20
+- **Output Tokens (est):** ~6,000
+- **Commit:** n/a — analysis only, no files changed
+- **Files Created/Modified:** none
+
+---
+
+## Prompt #59
+- **Date/Time:** 2026-04-12
+- **Prompt:** "Ok update the hardware research with all the details from this research and prompt session. Also update the prompts file and clean grammar and spelling. Commit and push."
+- **Input Tokens (est):** ~30
+- **Output Tokens (est):** ~8,000
+- **Commit:** `pending`
+- **Files Created/Modified:**
+  - `docs/hardware-research.md` (modified — added Board Comparison table with 9 boards, Display Comparison section with 4 e-paper displays and 7 LCD/TFT alternatives, trade-off analysis, firmware impact assessments, and recommendations; updated firmware language from MicroPython to C/C++)
+  - `PromptProgression.md` (modified — added Prompts #54–59, grammar and spelling cleanup)
