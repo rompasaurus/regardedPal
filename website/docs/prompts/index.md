@@ -628,3 +628,43 @@ This is part of the transparency experiment — showing AI-assisted development 
 - **Input Tokens (est):** ~25
 - **Output Tokens (est):** ~8,000
 - **Files:** `PromptProgression.md` (added #67–68), `website/docs/prompts/index.md` (added #67–68), `website/docs/docs/hardware/3d-printing-pipeline.md` (created), `website/docs/docs/hardware/enclosure-design.md` (added pipeline summary), `website/mkdocs.yml` (added nav entry)
+
+---
+
+## Prompt #69 — 2026-04-12
+
+**Prompt:** "Alright we have a sassy octopus, let's make a sassy supportive octopus — same functionality but just the text should be more oriented to humorous but supportive statements, littered with unhinged but weirdly loving statements, sprinkle in some spicy language, and make a huge list of cycled text for this and add it to the programs to be deployable to the Pico."
+
+- **Input Tokens (est):** ~80
+- **Output Tokens (est):** ~12,000
+- **Files:** `DevTool/devtool.py` (added Supportive Octopus program with 80 quotes, parameterized rendering functions, refactored handlers), `dev-setup/supportive-octopus/` (created firmware directory), `dev-setup/docker-compose.yml` (added build service), `.gitignore` (added build artifacts)
+
+---
+
+## Prompt #70 — 2026-04-12
+
+**Prompt:** "OK the sassy quotes are looking sparse compared to the supportive ones, let's expand on this — more unhinged, more weird, more conspiratorial, and more chaotic. Sprinkle in plenty of spicy language and swear words too. Get tin-foiled with some of them, get stupid with the others. Pull from modern memetic conspiracies. And if the quotes are especially weird give the octopus a weird expression, and especially unhinged make an unhinged expression."
+
+- **Input Tokens (est):** ~100
+- **Output Tokens (est):** ~15,000
+- **Files:** `DevTool/devtool.py` (expanded sassy quotes 30 to 124 with mood tags, added weird/unhinged mouth expressions and eye variants, mood-based expression cycling)
+
+---
+
+## Prompt #71 — 2026-04-12
+
+**Prompt:** "OK the DevTool program tab is a bit wonky — when I select a display model it deselects the program. Also the display mode is hard to read once selected, the background lightness ruins the text."
+
+- **Input Tokens (est):** ~40
+- **Output Tokens (est):** ~3,000
+- **Files:** `DevTool/devtool.py` (fixed Listbox deselection with `exportselection=False`, added TCombobox dark theme styling)
+
+---
+
+## Prompt #72 — 2026-04-12
+
+**Prompt:** "Let's embed the sassy and supportive octopus on the website too, as a banner with all the quotes made. Have it cycle through them at the top."
+
+- **Input Tokens (est):** ~30
+- **Output Tokens (est):** ~10,000
+- **Files:** `website/docs/javascripts/octopus-banner.js` (created — canvas pixel art octopus with typewriter quote cycling), `website/docs/stylesheets/extra.css` (banner styles), `website/docs/index.md` (banner div), `website/mkdocs.yml` (added JS)
