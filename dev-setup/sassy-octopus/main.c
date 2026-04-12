@@ -27,11 +27,52 @@
 #include <string.h>
 #include "pico/stdlib.h"
 #include "DEV_Config.h"
-#include "EPD_2in13_V3.h"
 
-/* Display dimensions (native orientation) */
-#define DISP_W   EPD_2in13_V3_WIDTH    /* 122 */
-#define DISP_H   EPD_2in13_V3_HEIGHT   /* 250 */
+/*
+ * Display variant selection — set via -DDISPLAY_VARIANT=X at build time.
+ * Supported: V2, V3 (default), V3a, V4
+ */
+#if defined(DISPLAY_V2)
+  #include "EPD_2in13_V2.h"
+  #define DISP_W          EPD_2in13_V2_WIDTH
+  #define DISP_H          EPD_2in13_V2_HEIGHT
+  #define EPD_Init()      EPD_2in13_V2_Init()
+  #define EPD_Clear()     EPD_2in13_V2_Clear()
+  #define EPD_Display(b)  EPD_2in13_V2_Display(b)
+  #define EPD_Partial(b)  EPD_2in13_V2_Display_Partial(b)
+  #define EPD_Sleep()     EPD_2in13_V2_Sleep()
+  #define DISPLAY_NAME    "V2"
+#elif defined(DISPLAY_V3A)
+  #include "EPD_2in13_V3a.h"
+  #define DISP_W          EPD_2in13_V3a_WIDTH
+  #define DISP_H          EPD_2in13_V3a_HEIGHT
+  #define EPD_Init()      EPD_2in13_V3a_Init()
+  #define EPD_Clear()     EPD_2in13_V3a_Clear()
+  #define EPD_Display(b)  EPD_2in13_V3a_Display(b)
+  #define EPD_Partial(b)  EPD_2in13_V3a_Display_Partial(b)
+  #define EPD_Sleep()     EPD_2in13_V3a_Sleep()
+  #define DISPLAY_NAME    "V3a"
+#elif defined(DISPLAY_V4)
+  #include "EPD_2in13_V4.h"
+  #define DISP_W          EPD_2in13_V4_WIDTH
+  #define DISP_H          EPD_2in13_V4_HEIGHT
+  #define EPD_Init()      EPD_2in13_V4_Init()
+  #define EPD_Clear()     EPD_2in13_V4_Clear()
+  #define EPD_Display(b)  EPD_2in13_V4_Display(b)
+  #define EPD_Partial(b)  EPD_2in13_V4_Display_Partial(b)
+  #define EPD_Sleep()     EPD_2in13_V4_Sleep()
+  #define DISPLAY_NAME    "V4"
+#else
+  #include "EPD_2in13_V3.h"
+  #define DISP_W          EPD_2in13_V3_WIDTH
+  #define DISP_H          EPD_2in13_V3_HEIGHT
+  #define EPD_Init()      EPD_2in13_V3_Init()
+  #define EPD_Clear()     EPD_2in13_V3_Clear()
+  #define EPD_Display(b)  EPD_2in13_V3_Display(b)
+  #define EPD_Partial(b)  EPD_2in13_V3_Display_Partial(b)
+  #define EPD_Sleep()     EPD_2in13_V3_Sleep()
+  #define DISPLAY_NAME    "V3"
+#endif
 
 /* Landscape dimensions (what DevTool renders) */
 #define IMG_W    250
@@ -79,7 +120,7 @@ int main(void) {
     stdio_init_all();
     sleep_ms(1000);
 
-    printf("Sassy Octopus starting...\n");
+    printf("Sassy Octopus starting (display: %s)...\n", DISPLAY_NAME);
 
     /* Initialize hardware */
     if (DEV_Module_Init() != 0) {
@@ -88,8 +129,8 @@ int main(void) {
     }
 
     /* Initialize display */
-    EPD_2in13_V3_Init();
-    EPD_2in13_V3_Clear();
+    EPD_Init();
+    EPD_Clear();
     printf("Display ready. %d frames loaded.\n", FRAME_COUNT);
 
     /* Animation loop — runs forever */
@@ -105,10 +146,10 @@ int main(void) {
         /* Display the frame */
         if (frame_idx == 0) {
             /* First frame: full refresh (clean baseline) */
-            EPD_2in13_V3_Display(display_buf);
+            EPD_Display(display_buf);
         } else {
             /* Subsequent: partial refresh (much faster, ~0.3s) */
-            EPD_2in13_V3_Display_Partial(display_buf);
+            EPD_Partial(display_buf);
         }
 
         printf("Frame %lu/%d displayed.\n",

@@ -21,4 +21,5 @@ services:
       dockerfile: Dockerfile
     volumes:
       - ./sassy-octopus:/project
+      - ./hello-world/lib:/project/lib
     working_dir: /project

@@ -11,12 +11,37 @@ set(CMAKE_CXX_STANDARD 17)
 # Initialize the Pico SDK
 pico_sdk_init()
 
+# ---------- Display variant ----------
+# Pass -DDISPLAY_VARIANT=V2|V3|V3a|V4 to cmake. Default: V3.
+
+if(NOT DEFINED DISPLAY_VARIANT)
+    set(DISPLAY_VARIANT "V3")
+endif()
+
+if(DISPLAY_VARIANT STREQUAL "V2")
+    set(EPD_SOURCE lib/e-Paper/EPD_2in13_V2.c)
+    set(EPD_DEFINE DISPLAY_V2)
+    message(STATUS "Display variant: V2 (SSD1675B)")
+elseif(DISPLAY_VARIANT STREQUAL "V3a")
+    set(EPD_SOURCE lib/e-Paper/EPD_2in13_V3a.c)
+    set(EPD_DEFINE DISPLAY_V3A)
+    message(STATUS "Display variant: V3a (revision A)")
+elseif(DISPLAY_VARIANT STREQUAL "V4")
+    set(EPD_SOURCE lib/e-Paper/EPD_2in13_V4.c)
+    set(EPD_DEFINE DISPLAY_V4)
+    message(STATUS "Display variant: V4 (internal LUT)")
+else()
+    set(EPD_SOURCE lib/e-Paper/EPD_2in13_V3.c)
+    set(EPD_DEFINE "")
+    message(STATUS "Display variant: V3 (standard)")
+endif()
+
 # ---------- Source files ----------
 
 add_executable(hello_dilder
     main.c
     lib/Config/DEV_Config.c
-    lib/e-Paper/EPD_2in13_V3.c
+    ${EPD_SOURCE}
     lib/GUI/GUI_Paint.c
     lib/Fonts/font8.c
     lib/Fonts/font12.c
@@ -24,6 +49,10 @@ add_executable(hello_dilder
     lib/Fonts/font20.c
     lib/Fonts/font24.c
 )
+
+if(EPD_DEFINE)
+    target_compile_definitions(hello_dilder PRIVATE ${EPD_DEFINE}=1)
+endif()
 
 # ---------- Include paths ----------
 
