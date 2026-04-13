@@ -1657,3 +1657,18 @@ Spelling and grammar are lightly cleaned for readability while preserving the or
   - `PromptProgression.md` (modified — added Prompts #133–134)
   - `website/docs/prompts/index.md` (modified — added Prompt #134)
   - All changes committed and pushed
+
+---
+
+## Prompt #135
+- **Date/Time:** 2026-04-13
+- **Prompt:** "OK let's get the user engagement plan committed and up on the site as well. Update prompts in this process too, and commit and push."
+- **Input Tokens (est):** ~30
+- **Output Tokens (est):** ~5,000
+- **Files Created/Modified:**
+  - `website/docs/docs/design/user-engagement-plan.md` (created — copied from `docs/user-engagement-plan.md` to website; comprehensive game design document with 21 sections covering gameplay loops, stat system, emotional state engine, sensor interactions, life stages, progression, dialogue, treasure hunts, step rewards, hardware requirements, virtual pet research, and phased rollout plan)
+  - `website/mkdocs.yml` (modified — added Design section with User Engagement Plan entry)
+  - `PromptProgression.md` (modified — added Prompt #135)
+  - `website/docs/prompts/index.md` (modified — added Prompt #135)
+  - `docs/user-engagement-plan.md` (committed — was previously untracked)
+  - All changes committed and pushed

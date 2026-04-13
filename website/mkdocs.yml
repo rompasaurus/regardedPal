@@ -121,6 +121,8 @@ nav:
           - Pico W Setup: docs/setup/pi-zero-setup.md
           - Display Setup: docs/setup/display-setup.md
           - Dev Environment: docs/setup/dev-environment.md
+      - Design:
+          - User Engagement Plan: docs/design/user-engagement-plan.md
       - Software:
           - Project Structure: docs/software/project-structure.md
           - Emotion States: docs/software/emotion-states.md

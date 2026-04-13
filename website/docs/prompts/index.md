@@ -1158,3 +1158,13 @@ This is part of the transparency experiment — showing AI-assisted development 
 - **Input Tokens (est):** ~100
 - **Output Tokens (est):** ~25,000
 - **Files:** `website/docs/docs/hardware/battery-wiring.md` (created — full LiPo wiring guide with TOC, 3 wiring options, step-by-step for direct and TP4056, safety guide, voltage monitoring code, battery life estimates, charging behavior, troubleshooting), `website/mkdocs.yml` (added Battery Wiring nav entry), `website/docs/docs/hardware/materials-list.md` (updated with InnCraft battery product link), `website/docs/docs/hardware/wiring-pinout.md` (added battery power entry and cross-reference), `PromptProgression.md` (#134), `website/docs/prompts/index.md` (#134)
+
+---
+
+## Prompt #135 — 2026-04-13
+
+**Prompt:** "OK let's get the user engagement plan committed and up on the site as well. Update prompts in this process too, and commit and push."
+
+- **Input Tokens (est):** ~30
+- **Output Tokens (est):** ~5,000
+- **Files:** `website/docs/docs/design/user-engagement-plan.md` (added to website — comprehensive game design document with 21 sections covering gameplay loops, stat system, emotional state engine, sensor interactions, life stages, progression, dialogue, treasure hunts, step rewards, hardware requirements, virtual pet research, and phased rollout plan), `website/mkdocs.yml` (added Design section with User Engagement Plan), `PromptProgression.md` (#135), `website/docs/prompts/index.md` (#135)
