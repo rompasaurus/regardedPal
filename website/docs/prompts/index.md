@@ -1178,3 +1178,13 @@ This is part of the transparency experiment — showing AI-assisted development 
 - **Input Tokens (est):** ~200
 - **Output Tokens (est):** ~50,000
 - **Files:** `docs/custom-pcb-design-research.md` (created — 14-section research document: PicoTop reverse-engineering with full component inventory; Dilder board target spec with block diagrams; PCB tool comparison; RP2040 minimal circuit with LCSC BOM; schematic-to-board workflow; fab service comparison; sourcing strategy; I2C bus and power tree diagrams; 15-week learning path; curated resources; cost estimate ~$21/board; risk assessment; milestone implementation plan), `PromptProgression.md` (#136), `website/docs/prompts/index.md` (#136)
+
+---
+
+## Prompt #137 — 2026-04-14
+
+**Prompt:** "Let's update the website as well with this research and a blog post for this and add some other blog posts for the latest changes implemented as well that would make sense to add."
+
+- **Input Tokens (est):** ~30
+- **Output Tokens (est):** ~15,000
+- **Files:** `website/docs/docs/design/custom-pcb-design-research.md` (added to website), `website/mkdocs.yml` (added PCB research nav entry), `website/docs/blog/posts/custom-pcb-research.md` (blog post: PicoTop case study, Dilder board spec, learning path), `website/docs/blog/posts/hardware-arrives.md` (blog post: joystick module and LiPo battery wiring), `website/docs/blog/posts/engagement-plan.md` (blog post: user engagement plan overview with stats, sensors, evolution, treasure hunts), `website/docs/blog/posts/peer-discovery.md` (blog post: BLE peer discovery and mating system with genetic traits), `PromptProgression.md` (#137), `website/docs/prompts/index.md` (#137)

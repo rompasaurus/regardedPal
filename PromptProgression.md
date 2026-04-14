@@ -1685,3 +1685,21 @@ Spelling and grammar are lightly cleaned for readability while preserving the or
   - `PromptProgression.md` (modified — added Prompt #136)
   - `website/docs/prompts/index.md` (modified — added Prompt #136)
   - All changes committed and pushed
+
+---
+
+## Prompt #137
+- **Date/Time:** 2026-04-14
+- **Prompt:** "Let's update the website as well with this research and a blog post for this and add some other blog posts for the latest changes implemented as well that would make sense to add."
+- **Input Tokens (est):** ~30
+- **Output Tokens (est):** ~15,000
+- **Files Created/Modified:**
+  - `website/docs/docs/design/custom-pcb-design-research.md` (created — PCB research added to website Design section)
+  - `website/mkdocs.yml` (modified — added Custom PCB Design Research nav entry)
+  - `website/docs/blog/posts/custom-pcb-research.md` (created — blog post on PicoTop case study, Dilder board spec, KiCad learning path)
+  - `website/docs/blog/posts/hardware-arrives.md` (created — blog post on joystick module and LiPo battery arrival and wiring)
+  - `website/docs/blog/posts/engagement-plan.md` (created — blog post on user engagement plan: stats, sensors, evolution, treasure hunts, step targets)
+  - `website/docs/blog/posts/peer-discovery.md` (created — blog post on BLE peer discovery, mating system, 17-bit genome, offspring lifecycle)
+  - `PromptProgression.md` (modified — added Prompt #137)
+  - `website/docs/prompts/index.md` (modified — added Prompt #137)
+  - All changes committed and pushed

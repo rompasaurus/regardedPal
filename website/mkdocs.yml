@@ -123,6 +123,7 @@ nav:
           - Dev Environment: docs/setup/dev-environment.md
       - Design:
           - User Engagement Plan: docs/design/user-engagement-plan.md
+          - Custom PCB Design Research: docs/design/custom-pcb-design-research.md
       - Software:
           - Project Structure: docs/software/project-structure.md
           - Emotion States: docs/software/emotion-states.md
