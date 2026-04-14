@@ -1721,7 +1721,7 @@ Spelling and grammar are lightly cleaned for readability while preserving the or
   - `website/docs/about/index.md` (modified — added "The Origin Story" section with full lore, updated rompasaurus tagline)
   - `PromptProgression.md` (modified — added Prompt #138)
   - `website/docs/prompts/index.md` (modified — added Prompt #138)
-  - All changes committed and pushed
+  - All changes committed and pushed as `d8ff202`
 
 ---
 
@@ -1734,7 +1734,7 @@ Spelling and grammar are lightly cleaned for readability while preserving the or
   - `website/docs/index.md` (modified — removed grid div wrapper from origin story so image and text flow as single column instead of side-by-side)
   - `PromptProgression.md` (modified — added Prompt #139)
   - `website/docs/prompts/index.md` (modified — added Prompt #139)
-  - All changes committed and pushed
+  - All changes committed and pushed as `edb669d`
 
 ---
 
@@ -1747,7 +1747,7 @@ Spelling and grammar are lightly cleaned for readability while preserving the or
   - `docs/breadboard-wiring-guide.md` (created — full breadboard wiring guide: complete pin assignment table for all 5 peripherals on 16 GPIO; master ASCII wiring diagram; annotated Pico WH pin map; component-by-component wiring for e-Paper SPI1, joystick GPIO with pull-ups, GPS UART0 with TX/RX crossover, HC-SR04 with 5V→3.3V voltage divider circuit, and speaker with PWM and NPN transistor amplifier option; breadboard zone layout for full-size board; power budget analysis showing ~130mA total on 300mA 3V3 rail; voltage level warnings; test code for GPS NMEA reading, ultrasonic distance measurement, speaker tone generation, and all-peripherals diagnostic; troubleshooting table)
   - `PromptProgression.md` (modified — added Prompt #140)
   - `website/docs/prompts/index.md` (modified — added Prompt #140)
-  - All changes committed and pushed
+  - All changes committed and pushed as `69ad9a9`
 
 ---
 
@@ -1768,4 +1768,27 @@ Spelling and grammar are lightly cleaned for readability while preserving the or
   - `docs/hardware-research.md` (modified — corrected product name and connection notes)
   - `PromptProgression.md` (modified — added Prompt #141)
   - `website/docs/prompts/index.md` (modified — added Prompt #141)
+  - All changes committed and pushed as `98bbf74`
+
+---
+
+## Prompt #142
+- **Date/Time:** 2026-04-14
+- **Prompt:** "OK I have the joystick wired in — let's add an interactive program that builds on the mood selector and wires the left and right actions to the change of moods selector at the bottom. Then we also want to print on the screen to the right of the mood display the input that was pressed last and update each time an input is received. Add this program to the interactive list in the DevTool."
+- **Input Tokens (est):** ~100
+- **Output Tokens (est):** ~30,000
+- **Files Created/Modified:**
+  - `dev-setup/joystick-mood-selector/main.c` (created — 1400-line C firmware: builds on mood-selector with 5-way GPIO joystick input; LEFT/RIGHT cycle moods, UP = random mood, DOWN = new quote, CENTER = reset to SASSY; last input indicator drawn on right side of status bar; 200ms debounce; serial input still works as fallback)
+  - `dev-setup/joystick-mood-selector/CMakeLists.txt` (created — build config with display variant support V2/V3/V3a/V4)
+  - `dev-setup/docker-compose.yml` (modified — added `build-joystick-mood-selector` service)
+  - `DevTool/devtool.py` (modified — registered joystick_mood_selector in PROGRAMS dict, PROGRAM_TREE under Interactive, _OCTOPUS_CONFIGS with all 823 quotes, and _FIRMWARE_DIRS mapping)
+  - `.gitignore` (modified — added build/, lib/, pico_sdk_import.cmake entries for joystick-mood-selector)
+  - `PromptProgression.md` (modified — added Prompt #142)
+  - `website/docs/prompts/index.md` (modified — added Prompt #142)
+- **Build errors encountered:**
+  - Docker compose: `no such service: build-joystick-mood-selector` — fixed by adding the service entry to `dev-setup/docker-compose.yml`
+  - Build artifacts (489 files including `build/` directory) accidentally committed — fixed by adding `.gitignore` entries and `git rm --cached`
+- **Hardware troubleshooting:**
+  - CENTER button not registering — traced to wiring error: joystick CENTER wire was in GND (pin 8) instead of GP6 (pin 9). Adjacent pins on breadboard. Fixed by moving wire to correct pin. Code was correct.
+- **Commits:** `9e8e49c` (firmware + DevTool), `5d70554` (gitignore fix + build artifact cleanup)
   - All changes committed and pushed
