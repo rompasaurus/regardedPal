@@ -5,511 +5,454 @@
   (uuid "a1b2c3d4-e5f6-7890-abcd-ef1234567890")
   (paper "A3")
   (title_block
-    (title "Dilder Breadboard Test Bench")
+    (title "Dilder Breadboard Test Bench — Full Wiring Reference")
     (date "2026-04-14")
     (rev "1.0")
     (company "Dilder Project — github.com/rompasaurus/dilder")
     (comment 1 "All peripherals wired to Raspberry Pi Pico WH")
-    (comment 2 "e-Paper (SPI1) + Joystick (GPIO) + GPS (UART0) + HC-SR04 + Speaker (PWM)")
+    (comment 2 "e-Paper SPI1 | Joystick GPIO | GPS UART0 | HC-SR04 | Speaker PWM")
   )
 
   (lib_symbols
   )
 
-  ;; ========================================
-  ;; PICO WH — CENTER OF SCHEMATIC
-  ;; ========================================
-
-  (text "RASPBERRY PI PICO WH"
+  (text "RASPBERRY PI PICO WH — PIN ASSIGNMENTS"
     (exclude_from_sim no)
-    (at 127 50 0)
+    (at 130 38 0)
     (effects
-      (font (size 3 3) (bold yes))
+      (font (size 4 4) (bold yes))
       (justify left)
     )
     (uuid "10000001-0000-0000-0000-000000000001")
   )
 
-  ;; Pico WH Pin Labels — Left Side
-  (text "GP0  [1]  — UART0 TX → GPS RX"
+  (text "LEFT SIDE"
     (exclude_from_sim no)
-    (at 95 60 0)
-    (effects (font (size 1.5 1.5)) (justify left))
+    (at 95 48 0)
+    (effects (font (size 2.5 2.5) (bold yes)) (justify left))
+    (uuid "10000001-0000-0000-0000-000000000010")
+  )
+
+  (text "GP0  [Pin 1]  — UART0 TX  -->  GPS RX"
+    (exclude_from_sim no)
+    (at 95 55 0)
+    (effects (font (size 1.8 1.8)) (justify left))
     (uuid "10000002-0000-0000-0000-000000000001")
   )
-  (text "GP1  [2]  — UART0 RX ← GPS TX"
+  (text "GP1  [Pin 2]  — UART0 RX  <--  GPS TX"
     (exclude_from_sim no)
-    (at 95 64 0)
-    (effects (font (size 1.5 1.5)) (justify left))
+    (at 95 60 0)
+    (effects (font (size 1.8 1.8)) (justify left))
     (uuid "10000003-0000-0000-0000-000000000001")
   )
-  (text "GND  [3]  — GPS GND"
+  (text "GND  [Pin 3]  — GPS GND"
     (exclude_from_sim no)
-    (at 95 68 0)
-    (effects (font (size 1.5 1.5)) (justify left))
+    (at 95 65 0)
+    (effects (font (size 1.8 1.8)) (justify left))
     (uuid "10000004-0000-0000-0000-000000000001")
   )
-  (text "GP2  [4]  — Joystick UP (pull-up, active LOW)"
+  (text "GP2  [Pin 4]  — Joystick UP (pull-up, active LOW)"
     (exclude_from_sim no)
-    (at 95 72 0)
-    (effects (font (size 1.5 1.5)) (justify left))
+    (at 95 70 0)
+    (effects (font (size 1.8 1.8)) (justify left))
     (uuid "10000005-0000-0000-0000-000000000001")
   )
-  (text "GP3  [5]  — Joystick DOWN"
+  (text "GP3  [Pin 5]  — Joystick DOWN"
     (exclude_from_sim no)
-    (at 95 76 0)
-    (effects (font (size 1.5 1.5)) (justify left))
+    (at 95 75 0)
+    (effects (font (size 1.8 1.8)) (justify left))
     (uuid "10000006-0000-0000-0000-000000000001")
   )
-  (text "GP4  [6]  — Joystick LEFT"
+  (text "GP4  [Pin 6]  — Joystick LEFT"
     (exclude_from_sim no)
     (at 95 80 0)
-    (effects (font (size 1.5 1.5)) (justify left))
+    (effects (font (size 1.8 1.8)) (justify left))
     (uuid "10000007-0000-0000-0000-000000000001")
   )
-  (text "GP5  [7]  — Joystick RIGHT"
+  (text "GP5  [Pin 7]  — Joystick RIGHT"
     (exclude_from_sim no)
-    (at 95 84 0)
-    (effects (font (size 1.5 1.5)) (justify left))
+    (at 95 85 0)
+    (effects (font (size 1.8 1.8)) (justify left))
     (uuid "10000008-0000-0000-0000-000000000001")
   )
-  (text "GND  [8]  — Joystick COM/GND"
+  (text "GND  [Pin 8]  — Joystick COM / GND"
     (exclude_from_sim no)
-    (at 95 88 0)
-    (effects (font (size 1.5 1.5)) (justify left))
+    (at 95 90 0)
+    (effects (font (size 1.8 1.8)) (justify left))
     (uuid "10000009-0000-0000-0000-000000000001")
   )
-  (text "GP6  [9]  — Joystick CENTER/SELECT"
+  (text "GP6  [Pin 9]  — Joystick CENTER / SELECT"
     (exclude_from_sim no)
-    (at 95 92 0)
-    (effects (font (size 1.5 1.5)) (justify left))
+    (at 95 95 0)
+    (effects (font (size 1.8 1.8)) (justify left))
     (uuid "1000000a-0000-0000-0000-000000000001")
   )
-  (text "GP7  [10] — FREE"
-    (exclude_from_sim no)
-    (at 95 96 0)
-    (effects (font (size 1.5 1.5)) (justify left))
-    (uuid "1000000b-0000-0000-0000-000000000001")
-  )
-  (text "GP8  [11] — e-Paper DC"
+  (text "GP7  [Pin 10] — FREE"
     (exclude_from_sim no)
     (at 95 100 0)
-    (effects (font (size 1.5 1.5)) (justify left))
+    (effects (font (size 1.8 1.8)) (justify left))
+    (uuid "1000000b-0000-0000-0000-000000000001")
+  )
+  (text "GP8  [Pin 11] — e-Paper DC"
+    (exclude_from_sim no)
+    (at 95 105 0)
+    (effects (font (size 1.8 1.8)) (justify left))
     (uuid "1000000c-0000-0000-0000-000000000001")
   )
-  (text "GP9  [12] — e-Paper CS (SPI1 CSn)"
+  (text "GP9  [Pin 12] — e-Paper CS (SPI1 CSn)"
     (exclude_from_sim no)
-    (at 95 104 0)
-    (effects (font (size 1.5 1.5)) (justify left))
+    (at 95 110 0)
+    (effects (font (size 1.8 1.8)) (justify left))
     (uuid "1000000d-0000-0000-0000-000000000001")
   )
-  (text "GND  [13]"
+  (text "GND  [Pin 13]"
     (exclude_from_sim no)
-    (at 95 108 0)
-    (effects (font (size 1.5 1.5)) (justify left))
+    (at 95 115 0)
+    (effects (font (size 1.8 1.8)) (justify left))
     (uuid "1000000e-0000-0000-0000-000000000001")
   )
-  (text "GP10 [14] — e-Paper CLK (SPI1 SCK)"
-    (exclude_from_sim no)
-    (at 95 112 0)
-    (effects (font (size 1.5 1.5)) (justify left))
-    (uuid "1000000f-0000-0000-0000-000000000001")
-  )
-  (text "GP11 [15] — e-Paper DIN (SPI1 TX)"
-    (exclude_from_sim no)
-    (at 95 116 0)
-    (effects (font (size 1.5 1.5)) (justify left))
-    (uuid "10000010-0000-0000-0000-000000000001")
-  )
-  (text "GP12 [16] — e-Paper RST"
+  (text "GP10 [Pin 14] — e-Paper CLK (SPI1 SCK)"
     (exclude_from_sim no)
     (at 95 120 0)
-    (effects (font (size 1.5 1.5)) (justify left))
+    (effects (font (size 1.8 1.8)) (justify left))
+    (uuid "1000000f-0000-0000-0000-000000000001")
+  )
+  (text "GP11 [Pin 15] — e-Paper DIN (SPI1 TX / MOSI)"
+    (exclude_from_sim no)
+    (at 95 125 0)
+    (effects (font (size 1.8 1.8)) (justify left))
+    (uuid "10000010-0000-0000-0000-000000000001")
+  )
+  (text "GP12 [Pin 16] — e-Paper RST"
+    (exclude_from_sim no)
+    (at 95 130 0)
+    (effects (font (size 1.8 1.8)) (justify left))
     (uuid "10000011-0000-0000-0000-000000000001")
   )
-  (text "GP13 [17] — e-Paper BUSY"
+  (text "GP13 [Pin 17] — e-Paper BUSY"
     (exclude_from_sim no)
-    (at 95 124 0)
-    (effects (font (size 1.5 1.5)) (justify left))
+    (at 95 135 0)
+    (effects (font (size 1.8 1.8)) (justify left))
     (uuid "10000012-0000-0000-0000-000000000001")
   )
-  (text "GND  [18]"
+  (text "GND  [Pin 18]"
     (exclude_from_sim no)
-    (at 95 128 0)
-    (effects (font (size 1.5 1.5)) (justify left))
+    (at 95 140 0)
+    (effects (font (size 1.8 1.8)) (justify left))
     (uuid "10000013-0000-0000-0000-000000000001")
   )
-  (text "GP14 [19] — HC-SR04 TRIG"
+  (text "GP14 [Pin 19] — HC-SR04 TRIG (output)"
     (exclude_from_sim no)
-    (at 95 132 0)
-    (effects (font (size 1.5 1.5)) (justify left))
+    (at 95 145 0)
+    (effects (font (size 1.8 1.8)) (justify left))
     (uuid "10000014-0000-0000-0000-000000000001")
   )
-  (text "GP15 [20] — Speaker PWM"
+  (text "GP15 [Pin 20] — Speaker PWM (output)"
     (exclude_from_sim no)
-    (at 95 136 0)
-    (effects (font (size 1.5 1.5)) (justify left))
+    (at 95 150 0)
+    (effects (font (size 1.8 1.8)) (justify left))
     (uuid "10000015-0000-0000-0000-000000000001")
   )
 
-  ;; Pico WH Pin Labels — Right Side
-  (text "VBUS [40] — HC-SR04 VCC (5V)"
+  (text "RIGHT SIDE"
     (exclude_from_sim no)
-    (at 200 60 0)
-    (effects (font (size 1.5 1.5)) (justify left))
+    (at 240 48 0)
+    (effects (font (size 2.5 2.5) (bold yes)) (justify left))
+    (uuid "10000015-0000-0000-0000-000000000020")
+  )
+
+  (text "VBUS [Pin 40] — HC-SR04 VCC (5V)"
+    (exclude_from_sim no)
+    (at 240 55 0)
+    (effects (font (size 1.8 1.8)) (justify left))
     (uuid "10000016-0000-0000-0000-000000000001")
   )
-  (text "VSYS [39] — (Battery future)"
+  (text "VSYS [Pin 39] — (Battery future)"
     (exclude_from_sim no)
-    (at 200 64 0)
-    (effects (font (size 1.5 1.5)) (justify left))
+    (at 240 60 0)
+    (effects (font (size 1.8 1.8)) (justify left))
     (uuid "10000017-0000-0000-0000-000000000001")
   )
-  (text "GND  [38] — e-Paper GND"
+  (text "GND  [Pin 38] — e-Paper GND"
     (exclude_from_sim no)
-    (at 200 68 0)
-    (effects (font (size 1.5 1.5)) (justify left))
+    (at 240 65 0)
+    (effects (font (size 1.8 1.8)) (justify left))
     (uuid "10000018-0000-0000-0000-000000000001")
   )
-  (text "3V3  [36] — e-Paper VCC + GPS VCC"
+  (text "3V3  [Pin 36] — e-Paper VCC + GPS VCC (3.3V power)"
     (exclude_from_sim no)
-    (at 200 76 0)
-    (effects (font (size 1.5 1.5)) (justify left))
+    (at 240 75 0)
+    (effects (font (size 1.8 1.8)) (justify left))
     (uuid "10000019-0000-0000-0000-000000000001")
   )
-  (text "GP16 [21] — HC-SR04 ECHO (via 1K+2K divider)"
+  (text "GND  [Pin 28]"
     (exclude_from_sim no)
-    (at 200 136 0)
-    (effects (font (size 1.5 1.5)) (justify left))
-    (uuid "1000001a-0000-0000-0000-000000000001")
+    (at 240 115 0)
+    (effects (font (size 1.8 1.8)) (justify left))
+    (uuid "1000001c-0000-0000-0000-000000000001")
   )
-  (text "GND  [23] — HC-SR04 GND + Speaker GND"
+  (text "GND  [Pin 23] — HC-SR04 GND + Speaker GND"
     (exclude_from_sim no)
-    (at 200 128 0)
-    (effects (font (size 1.5 1.5)) (justify left))
+    (at 240 140 0)
+    (effects (font (size 1.8 1.8)) (justify left))
     (uuid "1000001b-0000-0000-0000-000000000001")
   )
-
-  ;; ========================================
-  ;; HC-SR04 VOLTAGE DIVIDER DETAIL
-  ;; ========================================
-
-  (text "HC-SR04 ECHO VOLTAGE DIVIDER (5V → 3.3V)"
+  (text "GP16 [Pin 21] — HC-SR04 ECHO (via voltage divider)"
     (exclude_from_sim no)
-    (at 200 150 0)
-    (effects (font (size 2 2) (bold yes)) (justify left))
+    (at 240 150 0)
+    (effects (font (size 1.8 1.8)) (justify left))
+    (uuid "1000001a-0000-0000-0000-000000000001")
+  )
+
+  (text "HC-SR04 ECHO VOLTAGE DIVIDER (5V to 3.3V) — REQUIRED"
+    (exclude_from_sim no)
+    (at 40 175 0)
+    (effects (font (size 3 3) (bold yes)) (justify left))
     (uuid "10000020-0000-0000-0000-000000000001")
   )
-  (text "HC-SR04 ECHO ──[1KΩ R1]──┬──→ GP16 (Pin 21)"
+  (text "HC-SR04 ECHO pin ---[ 1K ohm R1 ]---+--- GP16 (Pin 21)"
     (exclude_from_sim no)
-    (at 200 156 0)
-    (effects (font (size 1.5 1.5)) (justify left))
+    (at 40 183 0)
+    (effects (font (size 2 2)) (justify left))
     (uuid "10000021-0000-0000-0000-000000000001")
   )
-  (text "                          │"
+  (text "                                     |"
     (exclude_from_sim no)
-    (at 200 160 0)
-    (effects (font (size 1.5 1.5)) (justify left))
+    (at 40 188 0)
+    (effects (font (size 2 2)) (justify left))
     (uuid "10000022-0000-0000-0000-000000000001")
   )
-  (text "                       [2KΩ R2]"
+  (text "                                  [ 2K ohm R2 ]"
     (exclude_from_sim no)
-    (at 200 164 0)
-    (effects (font (size 1.5 1.5)) (justify left))
+    (at 40 193 0)
+    (effects (font (size 2 2)) (justify left))
     (uuid "10000023-0000-0000-0000-000000000001")
   )
-  (text "                          │"
+  (text "                                     |"
     (exclude_from_sim no)
-    (at 200 168 0)
-    (effects (font (size 1.5 1.5)) (justify left))
+    (at 40 198 0)
+    (effects (font (size 2 2)) (justify left))
     (uuid "10000024-0000-0000-0000-000000000001")
   )
-  (text "                         GND"
+  (text "                                    GND"
     (exclude_from_sim no)
-    (at 200 172 0)
-    (effects (font (size 1.5 1.5)) (justify left))
+    (at 40 203 0)
+    (effects (font (size 2 2)) (justify left))
     (uuid "10000025-0000-0000-0000-000000000001")
   )
-  (text "Vout = 5V × 2K/(1K+2K) = 3.33V ✓"
+  (text "Vout = 5V x 2K / (1K + 2K) = 3.33V  -- Safe for Pico 3.3V GPIO"
     (exclude_from_sim no)
-    (at 200 178 0)
-    (effects (font (size 1.5 1.5) (italic yes)) (justify left))
+    (at 40 210 0)
+    (effects (font (size 1.8 1.8) (italic yes)) (justify left))
     (uuid "10000026-0000-0000-0000-000000000001")
   )
 
-  ;; ========================================
-  ;; SPEAKER CIRCUIT DETAIL
-  ;; ========================================
-
-  (text "SPEAKER CIRCUIT (PWM + NPN Transistor)"
+  (text "SPEAKER CIRCUIT (GP15 PWM)"
     (exclude_from_sim no)
-    (at 200 190 0)
-    (effects (font (size 2 2) (bold yes)) (justify left))
+    (at 240 175 0)
+    (effects (font (size 3 3) (bold yes)) (justify left))
     (uuid "10000030-0000-0000-0000-000000000001")
   )
-  (text "GP15 ──[1KΩ R3]──→ Base (B)"
+  (text "Option A (simple):  GP15 ----> Piezo(+)    Piezo(-) ----> GND"
     (exclude_from_sim no)
-    (at 200 196 0)
-    (effects (font (size 1.5 1.5)) (justify left))
+    (at 240 183 0)
+    (effects (font (size 2 2)) (justify left))
     (uuid "10000031-0000-0000-0000-000000000001")
   )
-  (text "3V3 ──→ Speaker(+) ──→ Speaker(-) ──→ Collector (C)"
+  (text "Option B (louder):  GP15 --[ 1K R3 ]--> NPN Base"
     (exclude_from_sim no)
-    (at 200 200 0)
-    (effects (font (size 1.5 1.5)) (justify left))
+    (at 240 191 0)
+    (effects (font (size 2 2)) (justify left))
     (uuid "10000032-0000-0000-0000-000000000001")
   )
-  (text "GND ──→ Emitter (E)"
+  (text "  3V3 --> Speaker(+) --> Speaker(-) --> NPN Collector"
     (exclude_from_sim no)
-    (at 200 204 0)
-    (effects (font (size 1.5 1.5)) (justify left))
+    (at 240 197 0)
+    (effects (font (size 2 2)) (justify left))
     (uuid "10000033-0000-0000-0000-000000000001")
   )
-  (text "Transistor: 2N2222, BC547, or BC817 (NPN)"
+  (text "  GND --> NPN Emitter"
     (exclude_from_sim no)
-    (at 200 210 0)
-    (effects (font (size 1.5 1.5) (italic yes)) (justify left))
+    (at 240 203 0)
+    (effects (font (size 2 2)) (justify left))
     (uuid "10000034-0000-0000-0000-000000000001")
   )
-  (text "Simple option: GP15 ──→ Piezo(+), GND ──→ Piezo(-)"
+  (text "NPN transistor: 2N2222, BC547, or BC817"
     (exclude_from_sim no)
-    (at 200 216 0)
-    (effects (font (size 1.5 1.5) (italic yes)) (justify left))
+    (at 240 210 0)
+    (effects (font (size 1.8 1.8) (italic yes)) (justify left))
     (uuid "10000035-0000-0000-0000-000000000001")
   )
 
-  ;; ========================================
-  ;; GPS UART CONNECTION DETAIL
-  ;; ========================================
-
-  (text "GY-NEO6MV2 GPS MODULE (UART0, 9600 baud)"
+  (text "GPS MODULE — GY-NEO6MV2 (UART0, 9600 baud)"
     (exclude_from_sim no)
-    (at 30 60 0)
-    (effects (font (size 2 2) (bold yes)) (justify left))
+    (at 40 225 0)
+    (effects (font (size 3 3) (bold yes)) (justify left))
     (uuid "10000040-0000-0000-0000-000000000001")
   )
-  (text "GPS VCC ──→ 3V3(OUT) [Pin 36]"
+  (text "GPS VCC ----> 3V3(OUT) [Pin 36]"
     (exclude_from_sim no)
-    (at 30 66 0)
-    (effects (font (size 1.5 1.5)) (justify left))
+    (at 40 233 0)
+    (effects (font (size 2 2)) (justify left))
     (uuid "10000041-0000-0000-0000-000000000001")
   )
-  (text "GPS GND ──→ GND [Pin 3]"
+  (text "GPS GND ----> GND [Pin 3]"
     (exclude_from_sim no)
-    (at 30 70 0)
-    (effects (font (size 1.5 1.5)) (justify left))
+    (at 40 239 0)
+    (effects (font (size 2 2)) (justify left))
     (uuid "10000042-0000-0000-0000-000000000001")
   )
-  (text "GPS TX  ──→ GP1 (UART0 RX) [Pin 2]  ← CROSSOVER"
+  (text "GPS TX  ----> Pico GP1 (UART0 RX) [Pin 2]   << TX-RX CROSSOVER"
     (exclude_from_sim no)
-    (at 30 74 0)
-    (effects (font (size 1.5 1.5)) (justify left))
+    (at 40 245 0)
+    (effects (font (size 2 2)) (justify left))
     (uuid "10000043-0000-0000-0000-000000000001")
   )
-  (text "GPS RX  ←── GP0 (UART0 TX) [Pin 1]  ← CROSSOVER"
+  (text "GPS RX  <---- Pico GP0 (UART0 TX) [Pin 1]   << TX-RX CROSSOVER"
     (exclude_from_sim no)
-    (at 30 78 0)
-    (effects (font (size 1.5 1.5)) (justify left))
+    (at 40 251 0)
+    (effects (font (size 2 2)) (justify left))
     (uuid "10000044-0000-0000-0000-000000000001")
   )
 
-  ;; ========================================
-  ;; E-PAPER DISPLAY CONNECTION
-  ;; ========================================
-
-  (text "WAVESHARE 2.13\" e-PAPER V3 (SPI1, 4MHz)"
+  (text "JOYSTICK — DollaTek 5-Way (Active LOW, Internal Pull-ups)"
     (exclude_from_sim no)
-    (at 30 95 0)
-    (effects (font (size 2 2) (bold yes)) (justify left))
-    (uuid "10000050-0000-0000-0000-000000000001")
-  )
-  (text "VCC  ──→ 3V3(OUT) [Pin 36]"
-    (exclude_from_sim no)
-    (at 30 101 0)
-    (effects (font (size 1.5 1.5)) (justify left))
-    (uuid "10000051-0000-0000-0000-000000000001")
-  )
-  (text "GND  ──→ GND [Pin 38]"
-    (exclude_from_sim no)
-    (at 30 105 0)
-    (effects (font (size 1.5 1.5)) (justify left))
-    (uuid "10000052-0000-0000-0000-000000000001")
-  )
-  (text "DIN  ──→ GP11 (SPI1 TX) [Pin 15]"
-    (exclude_from_sim no)
-    (at 30 109 0)
-    (effects (font (size 1.5 1.5)) (justify left))
-    (uuid "10000053-0000-0000-0000-000000000001")
-  )
-  (text "CLK  ──→ GP10 (SPI1 SCK) [Pin 14]"
-    (exclude_from_sim no)
-    (at 30 113 0)
-    (effects (font (size 1.5 1.5)) (justify left))
-    (uuid "10000054-0000-0000-0000-000000000001")
-  )
-  (text "CS   ──→ GP9 (SPI1 CSn) [Pin 12]"
-    (exclude_from_sim no)
-    (at 30 117 0)
-    (effects (font (size 1.5 1.5)) (justify left))
-    (uuid "10000055-0000-0000-0000-000000000001")
-  )
-  (text "DC   ──→ GP8 [Pin 11]"
-    (exclude_from_sim no)
-    (at 30 121 0)
-    (effects (font (size 1.5 1.5)) (justify left))
-    (uuid "10000056-0000-0000-0000-000000000001")
-  )
-  (text "RST  ──→ GP12 [Pin 16]"
-    (exclude_from_sim no)
-    (at 30 125 0)
-    (effects (font (size 1.5 1.5)) (justify left))
-    (uuid "10000057-0000-0000-0000-000000000001")
-  )
-  (text "BUSY ──→ GP13 [Pin 17]"
-    (exclude_from_sim no)
-    (at 30 129 0)
-    (effects (font (size 1.5 1.5)) (justify left))
-    (uuid "10000058-0000-0000-0000-000000000001")
-  )
-
-  ;; ========================================
-  ;; JOYSTICK CONNECTION
-  ;; ========================================
-
-  (text "DOLLATEK 5-WAY JOYSTICK (GPIO, Active LOW)"
-    (exclude_from_sim no)
-    (at 30 140 0)
-    (effects (font (size 2 2) (bold yes)) (justify left))
+    (at 240 225 0)
+    (effects (font (size 3 3) (bold yes)) (justify left))
     (uuid "10000060-0000-0000-0000-000000000001")
   )
-  (text "COM/GND    ──→ GND [Pin 8]"
+  (text "COM/GND ----> GND [Pin 8]"
     (exclude_from_sim no)
-    (at 30 146 0)
-    (effects (font (size 1.5 1.5)) (justify left))
+    (at 240 233 0)
+    (effects (font (size 2 2)) (justify left))
     (uuid "10000061-0000-0000-0000-000000000001")
   )
-  (text "UP         ──→ GP2 [Pin 4]   (internal pull-up)"
+  (text "UP      ----> GP2 [Pin 4]"
     (exclude_from_sim no)
-    (at 30 150 0)
-    (effects (font (size 1.5 1.5)) (justify left))
+    (at 240 239 0)
+    (effects (font (size 2 2)) (justify left))
     (uuid "10000062-0000-0000-0000-000000000001")
   )
-  (text "DOWN       ──→ GP3 [Pin 5]   (internal pull-up)"
+  (text "DOWN    ----> GP3 [Pin 5]"
     (exclude_from_sim no)
-    (at 30 154 0)
-    (effects (font (size 1.5 1.5)) (justify left))
+    (at 240 245 0)
+    (effects (font (size 2 2)) (justify left))
     (uuid "10000063-0000-0000-0000-000000000001")
   )
-  (text "LEFT       ──→ GP4 [Pin 6]   (internal pull-up)"
+  (text "LEFT    ----> GP4 [Pin 6]"
     (exclude_from_sim no)
-    (at 30 158 0)
-    (effects (font (size 1.5 1.5)) (justify left))
+    (at 240 251 0)
+    (effects (font (size 2 2)) (justify left))
     (uuid "10000064-0000-0000-0000-000000000001")
   )
-  (text "RIGHT      ──→ GP5 [Pin 7]   (internal pull-up)"
+  (text "RIGHT   ----> GP5 [Pin 7]"
     (exclude_from_sim no)
-    (at 30 162 0)
-    (effects (font (size 1.5 1.5)) (justify left))
+    (at 240 257 0)
+    (effects (font (size 2 2)) (justify left))
     (uuid "10000065-0000-0000-0000-000000000001")
   )
-  (text "CENTER/SET ──→ GP6 [Pin 9]   (internal pull-up)"
+  (text "CENTER  ----> GP6 [Pin 9]"
     (exclude_from_sim no)
-    (at 30 166 0)
-    (effects (font (size 1.5 1.5)) (justify left))
+    (at 240 263 0)
+    (effects (font (size 2 2)) (justify left))
     (uuid "10000066-0000-0000-0000-000000000001")
   )
 
-  ;; ========================================
-  ;; HC-SR04 CONNECTION
-  ;; ========================================
-
-  (text "HC-SR04 ULTRASONIC SENSOR (5V, voltage divider on ECHO)"
+  (text "E-PAPER DISPLAY — Waveshare 2.13 inch V3 (SPI1, 4MHz)"
     (exclude_from_sim no)
-    (at 30 178 0)
-    (effects (font (size 2 2) (bold yes)) (justify left))
-    (uuid "10000070-0000-0000-0000-000000000001")
+    (at 40 268 0)
+    (effects (font (size 3 3) (bold yes)) (justify left))
+    (uuid "10000050-0000-0000-0000-000000000001")
   )
-  (text "VCC  ──→ VBUS (5V) [Pin 40]   ⚠ MUST BE 5V"
+  (text "VCC  ----> 3V3(OUT) [Pin 36]"
     (exclude_from_sim no)
-    (at 30 184 0)
-    (effects (font (size 1.5 1.5)) (justify left))
-    (uuid "10000071-0000-0000-0000-000000000001")
+    (at 40 276 0)
+    (effects (font (size 2 2)) (justify left))
+    (uuid "10000051-0000-0000-0000-000000000001")
   )
-  (text "TRIG ──→ GP14 [Pin 19]  (3.3V output is sufficient)"
+  (text "GND  ----> GND [Pin 38]"
     (exclude_from_sim no)
-    (at 30 188 0)
-    (effects (font (size 1.5 1.5)) (justify left))
-    (uuid "10000072-0000-0000-0000-000000000001")
+    (at 40 282 0)
+    (effects (font (size 2 2)) (justify left))
+    (uuid "10000052-0000-0000-0000-000000000001")
   )
-  (text "ECHO ──→ [1KΩ]──┬──→ GP16 [Pin 21]   ⚠ DIVIDER REQUIRED"
+  (text "DIN  ----> GP11 SPI1 TX  [Pin 15]"
     (exclude_from_sim no)
-    (at 30 192 0)
-    (effects (font (size 1.5 1.5)) (justify left))
-    (uuid "10000073-0000-0000-0000-000000000001")
+    (at 40 288 0)
+    (effects (font (size 2 2)) (justify left))
+    (uuid "10000053-0000-0000-0000-000000000001")
   )
-  (text "              [2KΩ]──→ GND"
+  (text "CLK  ----> GP10 SPI1 SCK [Pin 14]"
     (exclude_from_sim no)
-    (at 30 196 0)
-    (effects (font (size 1.5 1.5)) (justify left))
-    (uuid "10000074-0000-0000-0000-000000000001")
+    (at 40 294 0)
+    (effects (font (size 2 2)) (justify left))
+    (uuid "10000054-0000-0000-0000-000000000001")
   )
-  (text "GND  ──→ GND [Pin 23]"
+  (text "CS   ----> GP9  SPI1 CSn [Pin 12]"
     (exclude_from_sim no)
-    (at 30 200 0)
-    (effects (font (size 1.5 1.5)) (justify left))
-    (uuid "10000075-0000-0000-0000-000000000001")
+    (at 40 300 0)
+    (effects (font (size 2 2)) (justify left))
+    (uuid "10000055-0000-0000-0000-000000000001")
   )
-
-  ;; ========================================
-  ;; NOTES
-  ;; ========================================
+  (text "DC   ----> GP8  [Pin 11]"
+    (exclude_from_sim no)
+    (at 40 306 0)
+    (effects (font (size 2 2)) (justify left))
+    (uuid "10000056-0000-0000-0000-000000000001")
+  )
+  (text "RST  ----> GP12 [Pin 16]"
+    (exclude_from_sim no)
+    (at 40 312 0)
+    (effects (font (size 2 2)) (justify left))
+    (uuid "10000057-0000-0000-0000-000000000001")
+  )
+  (text "BUSY ----> GP13 [Pin 17]"
+    (exclude_from_sim no)
+    (at 40 318 0)
+    (effects (font (size 2 2)) (justify left))
+    (uuid "10000058-0000-0000-0000-000000000001")
+  )
 
   (text "NOTES"
     (exclude_from_sim no)
-    (at 30 215 0)
-    (effects (font (size 2.5 2.5) (bold yes)) (justify left))
+    (at 240 278 0)
+    (effects (font (size 3 3) (bold yes)) (justify left))
     (uuid "10000080-0000-0000-0000-000000000001")
   )
-  (text "1. HC-SR04 ECHO is 5V — MUST use voltage divider (1KΩ + 2KΩ) or damage Pico"
+  (text "1. HC-SR04 ECHO is 5V output — MUST use voltage divider or damage Pico"
     (exclude_from_sim no)
-    (at 30 221 0)
-    (effects (font (size 1.5 1.5)) (justify left))
+    (at 240 286 0)
+    (effects (font (size 1.8 1.8)) (justify left))
     (uuid "10000081-0000-0000-0000-000000000001")
   )
-  (text "2. GPS TX→RX crossover: GPS TX connects to Pico RX (GP1), GPS RX to Pico TX (GP0)"
+  (text "2. GPS TX/RX crossover: GPS TX goes to Pico RX, GPS RX to Pico TX"
     (exclude_from_sim no)
-    (at 30 225 0)
-    (effects (font (size 1.5 1.5)) (justify left))
+    (at 240 292 0)
+    (effects (font (size 1.8 1.8)) (justify left))
     (uuid "10000082-0000-0000-0000-000000000001")
   )
-  (text "3. All joystick directions use Pico internal pull-ups — no external resistors needed"
+  (text "3. Joystick uses Pico internal pull-ups — no external resistors"
     (exclude_from_sim no)
-    (at 30 229 0)
-    (effects (font (size 1.5 1.5)) (justify left))
+    (at 240 298 0)
+    (effects (font (size 1.8 1.8)) (justify left))
     (uuid "10000083-0000-0000-0000-000000000001")
   )
-  (text "4. Speaker: simple = piezo direct to GP15+GND. Louder = NPN transistor amplifier"
+  (text "4. Speaker: piezo direct to GP15+GND, or NPN transistor for volume"
     (exclude_from_sim no)
-    (at 30 233 0)
-    (effects (font (size 1.5 1.5)) (justify left))
+    (at 240 304 0)
+    (effects (font (size 1.8 1.8)) (justify left))
     (uuid "10000084-0000-0000-0000-000000000001")
   )
-  (text "5. Total GPIO used: 16 of 26. Free: GP7, GP17-22, GP26-28 (10 pins)"
+  (text "5. Total GPIO used: 16 of 26 — 10 pins free for future sensors"
     (exclude_from_sim no)
-    (at 30 237 0)
-    (effects (font (size 1.5 1.5)) (justify left))
+    (at 240 310 0)
+    (effects (font (size 1.8 1.8)) (justify left))
     (uuid "10000085-0000-0000-0000-000000000001")
   )
-  (text "6. 3V3(OUT) max 300mA — total draw ~120mA with all peripherals active"
+  (text "6. 3V3 rail max 300mA — all peripherals draw about 120mA total"
     (exclude_from_sim no)
-    (at 30 241 0)
-    (effects (font (size 1.5 1.5)) (justify left))
+    (at 240 316 0)
+    (effects (font (size 1.8 1.8)) (justify left))
     (uuid "10000086-0000-0000-0000-000000000001")
-  )
-  (text "7. GPS needs clear sky view for satellite fix — first fix takes 1-5 minutes"
-    (exclude_from_sim no)
-    (at 30 245 0)
-    (effects (font (size 1.5 1.5)) (justify left))
-    (uuid "10000087-0000-0000-0000-000000000001")
   )
 )
