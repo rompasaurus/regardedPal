@@ -1851,7 +1851,7 @@ Spelling and grammar are lightly cleaned for readability while preserving the or
 - **Prompt:** "Use the research to map out components on the board. Processor at top with antenna off the edge, USB-C at bottom, joystick centered above USB-C. Optimize placement. Then update docs, website, blog, commit, and update prompts."
 - **Input Tokens (est):** ~200
 - **Output Tokens (est):** ~15,000
-- **Commit:** PENDING
+- **Commit:** `9b4f3e8`
 - **Files Created/Modified:**
   - `website/docs/blog/posts/esp32-s3-pcb-design.md` (created — blog post: RP2040 to ESP32-S3 transition, PCB design journey, antenna keep-out, display connector decision, FreeRouting lessons, reference designs, current board status)
   - `README.md` (modified — added ESP32-S3 custom PCB as in-progress milestone, noted MCU transition)
