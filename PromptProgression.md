@@ -1821,7 +1821,7 @@ Spelling and grammar are lightly cleaned for readability while preserving the or
 - **Prompt:** "Create a setup script for KiCad to pull in the JLCPCB tools so that we can begin to model out the schematics and then board design... we basically need to copy out the Pico WH schematic and add a battery connection and charging circuit and a joystick input along with an accelerometer and GPS module... begin with a planning document, pull in the tools, make the schematic, then get the board modelled." (Multi-session — evolved through ~30 follow-up prompts covering PCB design, component selection, autorouting, MCU change from RP2040 to ESP32-S3, display connector research.)
 - **Input Tokens (est):** ~5,000 (across ~30 prompts)
 - **Output Tokens (est):** ~200,000
-- **Commit:** `PENDING`
+- **Commit:** `af57530`
 - **Key Decisions Made:**
   - Switched MCU from RP2040 to **ESP32-S3-WROOM-1-N16R8** (WiFi+BLE, 16MB flash, 8MB PSRAM built in)
   - Eliminated 7 components (external flash, crystal, caps, USB resistors) by using module
