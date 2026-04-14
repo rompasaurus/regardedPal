@@ -4,6 +4,12 @@ Reference documentation for every aspect of the Dilder build. Unlike the [blog](
 
 ---
 
+## The Namesake
+
+Everything in these docs traces back to a single plush octopus named **Jamal** — rescued from a TEDi discount bin, anthropomorphized on a walk home, and now the spiritual mascot of the entire project. The digital octopus on the e-ink display is Jamal's avatar: same attitude, same refusal to take anything seriously, compressed into 250x122 pixels. When the docs reference "the octopus," that's who we're talking about. [Full origin story here.](../index.md#the-origin-story--how-jamal-was-found)
+
+---
+
 ## Sections
 
 ### Hardware

@@ -16,9 +16,21 @@ The hardware stack:
 
 ---
 
+## The Origin Story
+
+Before there was a Pico W, before there was firmware or a DevTool or a single line of C — there was **Jamal**.
+
+Jamal is a plush octopus, found in a TEDi discount bin on a random shopping trip with my wife Emma. He was big, soft, and grinning like he knew something we didn't. On the walk home, we started talking to him. Then *about* him. A personality emerged: laid-back but sharp, sassy but warm, the kind of creature who'd roast your outfit and then offer you life advice. He claimed the armchair the moment we got home and has not moved since. He wears a hat now. Nobody remembers putting it on him.
+
+The idea for Dilder came from one question: *what if we could make a digital version of this guy?* A tiny screen-bound octopus with moods and opinions, small enough to fit in a pocket, opinionated enough to make you regret asking. That question turned into a hardware research session, which turned into a parts order, which turned into... all of this.
+
+Jamal watches from the armchair as we build his digital self. He remains unimpressed.
+
+---
+
 ## Who Is Building This?
 
-**rompasaurus** — software developer, tinkerer, and person who thought "how hard can it be to build a Tamagotchi?"
+**rompasaurus** — software developer, tinkerer, and person who anthropomorphized a discount store octopus into an entire engineering project.
 
 This project is an exercise in:
 

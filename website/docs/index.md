@@ -8,6 +8,35 @@ Dilder is a Tamagotchi-style device built on a Raspberry Pi Pico W, a Waveshare 
 
 ---
 
+## The Origin Story — How Jamal Was Found
+
+<div class="grid" markdown>
+
+<figure markdown="span">
+  ![Jamal the plush octopus, lounging in a chair like he owns the place](assets/images/jamal-the-original.jpg){ width="420" loading=lazy }
+  <figcaption>Jamal. Chair thief. Hat enthusiast. The one who started it all.</figcaption>
+</figure>
+
+It started with a trip to TEDi — a German dollar store where the shelves are chaos and the deals are questionable. My wife Emma and I were browsing the bins, not looking for anything in particular, when we spotted him: a massive plush octopus, soft as a cloud, grinning up at us from a pile of discount stuffed animals like he'd been waiting.
+
+We bought him. Obviously.
+
+On the walk home, something happened. We started talking *to* him. Then *about* him — as if he had opinions, preferences, a whole inner life. By the time we got back to the apartment, he had a name: **Jamal**. He had a personality: laid-back but opinionated, a little sassy, suspiciously wise for a creature with no skeleton. He claimed the armchair immediately. He looked... comfortable. *Too* comfortable. Like he'd always lived there and we were the guests.
+
+And then the question asked itself:
+
+> *What if we could actually bring him to life?*
+
+Not literally — we're not mad scientists (yet). But what if we could build a tiny digital version of Jamal? A pocket-sized octopus with moods, opinions, and an attitude problem? Something that lives on a screen, reacts to the world, and roasts you when you forget to feed it?
+
+That's how Dilder was born. Not from a grand engineering vision or a product roadmap — from a plush octopus in a discount bin and two people who couldn't stop giving him a backstory on the walk home.
+
+Jamal still sits in the armchair. He still wears the hat. He watches us build his digital self from across the room, and honestly? He looks unimpressed. Which tracks.
+
+</div>
+
+---
+
 ## Meet the Octopus
 
 <div class="grid" markdown>
@@ -174,5 +203,5 @@ This is learn-in-public taken to its logical extreme. No hidden steps, no "just 
 ---
 
 <div style="text-align: center; opacity: 0.6; font-style: italic; margin-top: 2rem;">
-Built with patience, a Pico W, and an unreasonable fondness for virtual pets.
+Built with patience, a Pico W, and an unreasonable fondness for a plush octopus named Jamal.
 </div>

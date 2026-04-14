@@ -6,6 +6,22 @@ The goal isn't just to build a thing — it's to show *how* the thing gets built
 
 ---
 
+## How It Started — Meet Jamal
+
+<p align="center">
+  <img src="website/docs/assets/images/jamal-the-original.jpg" alt="Jamal the plush octopus" width="400" />
+  <br />
+  <em>Jamal. The plush octopus who started it all.</em>
+</p>
+
+This project didn't start with a schematic or a product spec. It started in a TEDi — a German dollar store — where my wife Emma and I found a giant plush octopus grinning up from a discount bin. We bought him on the spot, and on the walk home we started giving him a personality: laid-back, opinionated, a little sassy, suspiciously wise for a boneless creature. By the time we got home, he had a name — **Jamal** — and he'd claimed the armchair like he'd been paying rent.
+
+The question asked itself: *what if we could actually bring him to life?* Not literally — but as a tiny digital companion. A pocket-sized octopus with moods, opinions, and an attitude problem, living on an e-ink screen and judging your life choices in ALL CAPS.
+
+That's how Dilder was born. Not from an engineering roadmap, but from a stuffed animal and two people who couldn't stop anthropomorphizing it on a walk home.
+
+---
+
 ## What This Project Is
 
 - **A virtual pet device** — a pocket-sized, low-power companion with personality, needs, and interactions displayed on an e-ink screen
@@ -149,4 +165,4 @@ TBD
 
 ---
 
-*Built with patience, a Pico W, and an unreasonable fondness for virtual pets.*
+*Built with patience, a Pico W, and an unreasonable fondness for a plush octopus named Jamal.*
