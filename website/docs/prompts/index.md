@@ -1259,3 +1259,13 @@ This is part of the transparency experiment — showing AI-assisted development 
 - **Output Tokens (est):** ~200,000
 - **Key Decisions:** RP2040 → ESP32-S3-WROOM-1-N16R8 (WiFi+BLE, 16MB flash, 8MB PSRAM). 2-layer → 4-layer PCB. 24-pin FPC → 8-pin header for Waveshare display. Board target: ~30x75mm. FreeRouting autorouter installed. JLCPCB for fabrication.
 - **Files:** `docs/esp32-s3-pcb-research.md` (created — module research, antenna keep-out, reference designs, layout strategy). `hardware-design/pcb-design-plan.md` (major update — ESP32-S3 transition). `hardware-design/setup-kicad-jlcpcb.py` (KiCad + JLCPCB plugin installer). `hardware-design/Board Design kicad/` (KiCad project: .kicad_pro, .kicad_sch, .kicad_pcb, build scripts). `website/docs/docs/reference/esp32-s3-wroom1.md` (ESP32-S3 reference page). Website nav + design docs updated. Commit: `af57530`
+
+---
+
+## Prompt #145 — 2026-04-15
+
+**Prompt:** "Use the research to map out components on the board. Processor at top with antenna off the edge, USB-C at bottom, joystick centered above USB-C. Optimize placement. Then update docs, website, blog, commit, and update prompts."
+
+- **Input Tokens (est):** ~200
+- **Output Tokens (est):** ~15,000
+- **Files:** `website/docs/blog/posts/esp32-s3-pcb-design.md` (created — blog post covering RP2040 to ESP32-S3 transition, PCB design journey, antenna keep-out, display connector, FreeRouting lessons, reference designs). `README.md` (added ESP32-S3 PCB milestone). `website/docs/index.md` (added PCB design status). `hardware-design/Board Design kicad/build_esp32s3.py` (v7 placement). `hardware-design/Board Design kicad/dilder.kicad_pcb` (regenerated — 45x80mm, 27 components). `PromptProgression.md` (#145), `website/docs/prompts/index.md` (#145). Commit: PENDING
