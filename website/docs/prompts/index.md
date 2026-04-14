@@ -1168,3 +1168,13 @@ This is part of the transparency experiment — showing AI-assisted development 
 - **Input Tokens (est):** ~30
 - **Output Tokens (est):** ~5,000
 - **Files:** `website/docs/docs/design/user-engagement-plan.md` (added to website — comprehensive game design document with 21 sections covering gameplay loops, stat system, emotional state engine, sensor interactions, life stages, progression, dialogue, treasure hunts, step rewards, hardware requirements, virtual pet research, and phased rollout plan), `website/mkdocs.yml` (added Design section with User Engagement Plan), `PromptProgression.md` (#135), `website/docs/prompts/index.md` (#135)
+
+---
+
+## Prompt #136 — 2026-04-14
+
+**Prompt:** "OK take a look at this project https://github.com/7west/PicoTop/ — this guy designed a purpose-built Pico with the components he wanted to do the things he designed it to do, a simple desktop. But I want to look at this codebase and see how the PicoTop board was designed and implemented. Reverse this process based on the repo and outline this in a research document in the docs folder. Also research what it would take to design a board with all the components I have planned for this project. Outline how they can be designed, what open technologies can be used to create the schematics, and how it can be brought into a physical reality and what services could be used to print out a custom board. Give me a TOC and ample resources that will guide me through this concept to a fleshed-out board and a map of learning and implementation plan to do this."
+
+- **Input Tokens (est):** ~200
+- **Output Tokens (est):** ~50,000
+- **Files:** `docs/custom-pcb-design-research.md` (created — 14-section research document: PicoTop reverse-engineering with full component inventory; Dilder board target spec with block diagrams; PCB tool comparison; RP2040 minimal circuit with LCSC BOM; schematic-to-board workflow; fab service comparison; sourcing strategy; I2C bus and power tree diagrams; 15-week learning path; curated resources; cost estimate ~$21/board; risk assessment; milestone implementation plan), `PromptProgression.md` (#136), `website/docs/prompts/index.md` (#136)
