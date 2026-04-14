@@ -22,6 +22,7 @@ dev-setup/excited-octopus/build/
 dev-setup/nostalgic-octopus/build/
 dev-setup/homesick-octopus/build/
 dev-setup/mood-selector/build/
+dev-setup/joystick-mood-selector/build/
 
 # Generated quote data (DevTool generates at build time)
 dev-setup/*/quotes.h
@@ -66,6 +67,8 @@ dev-setup/homesick-octopus/lib/
 dev-setup/homesick-octopus/pico_sdk_import.cmake
 dev-setup/mood-selector/lib/
 dev-setup/mood-selector/pico_sdk_import.cmake
+dev-setup/joystick-mood-selector/lib/
+dev-setup/joystick-mood-selector/pico_sdk_import.cmake
 
 # Python
 __pycache__/
