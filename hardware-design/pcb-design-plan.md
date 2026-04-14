@@ -54,7 +54,7 @@ The script performs these 5 steps:
    - Libraries appear in KiCad's symbol/footprint browsers prefixed with `JLCPCB_`
 
 5. **Initialize project** — creates `Board Design kicad/dilder.kicad_pro`, `.kicad_sch`, `.kicad_pcb`
-   - 55x35mm board outline preset
+   - 30x75mm board outline preset
    - JLCPCB design rules (0.127mm min trace, 0.3mm min drill, 0.6mm min via)
    - Power net class with wider traces (0.5mm) preconfigured
 
@@ -65,8 +65,8 @@ The script performs these 5 steps:
 kicad 'Board Design kicad/dilder.kicad_pro'
 
 # In KiCad, verify:
-# - Schematic editor opens (Ctrl+E) — all 14 components visible
-# - PCB editor opens (Ctrl+P) — 55x35mm board outline visible
+# - Schematic editor opens (Ctrl+E) — all 11 components visible
+# - PCB editor opens (Ctrl+P) — 30x75mm board outline visible
 # - Tools > External Plugins > JLCPCB Tools — plugin loads
 # - Symbol browser shows JLCPCB_* libraries (20 entries)
 ```
@@ -297,16 +297,16 @@ kicad 'hardware-design/Board Design kicad/dilder.kicad_pro'
 
 8. **Add power symbols** — place VCC/GND power flags on the power nets
 
-11. **Run ERC** (Inspect > Electrical Rules Checker) — fix any errors
+9. **Run ERC** (Inspect > Electrical Rules Checker) — fix any errors
 
 ### Schematic Sheets (optional split)
 
 For a cleaner layout, consider splitting into sub-sheets:
 
-1. **MCU** — RP2040, 12MHz crystal, flash, decoupling, USB
+1. **MCU** — ESP32-S3-WROOM-1, decoupling, USB
 2. **Power** — USB-C input, TP4056, battery protection, LDO, power path
 3. **Input/Output** — 5-way joystick, e-Paper header, status LEDs
-4. **Sensors** — MPU-6050 (I2C), ATGM336H GPS (UART)
+4. **Sensors** — MPU-6050 (I2C)
 
 ---
 
@@ -316,8 +316,8 @@ For a cleaner layout, consider splitting into sub-sheets:
 
 | Parameter | Value |
 |-----------|-------|
-| Target size | 55 x 35mm (fits inside current enclosure spec) |
-| Layers | 2-layer (JLCPCB standard, cheapest) |
+| Target size | 30 x 75mm |
+| Layers | 4-layer (inner layers for GND and power planes) |
 | Copper weight | 1oz |
 | Min trace width | 0.15mm (6mil) |
 | Min via | 0.3mm drill / 0.6mm pad |
@@ -338,41 +338,46 @@ For a cleaner layout, consider splitting into sub-sheets:
 3. **Place components** — follow this layout strategy:
 
    ```
-   ┌──────────────────────────────────────────────┐
-   │  [J3 e-Paper header - top edge]              │
-   │                                              │
-   │ [J1 USB-C]   [U1 RP2040]    [U7 ATGM336H]  │
-   │              [Y1] [U5]       (GPS, at edge)  │
-   │                                              │
-   │ [SW1 Joy]    [U4 LDO]       [U6 MPU-6050]   │
-   │              [U2 TP4056]                     │
-   │              [U3][Q1]        [J2 Battery]    │
-   └──────────────────────────────────────────────┘
+   ┌────────────────────────┐
+   │ [J3 e-Paper header]    │  ← top edge (8-pin 2.54mm)
+   │                        │
+   │ [U1 ESP32-S3-WROOM-1]  │  ← module (18x25.5mm), keep
+   │                        │    antenna area clear at top
+   │                        │
+   │ [U5 MPU-6050]          │
+   │                        │
+   │ [SW1 Joystick]         │
+   │                        │
+   │ [U4 LDO] [U2 TP4056]  │
+   │ [U3][Q1]               │
+   │                        │
+   │ [J1 USB-C] [J2 Batt]  │  ← bottom edge
+   └────────────────────────┘
+        30mm x 75mm
    ```
 
-   - U1 (RP2040) center — flash (U5) and crystal (Y1) within 5mm
-   - J1 (USB-C) left edge — accessible for programming/charging
-   - J2 (battery) right edge — accessible for battery swap
-   - U7 (GPS) right edge — keep ground pour clear under antenna area
-   - SW1 (joystick) lower-left — thumb-accessible in enclosure
-   - Power ICs (U2, U3, Q1, U4) grouped near center-bottom
+   - U1 (ESP32-S3) upper area — keep antenna end at board edge, no copper/ground pour under antenna
+   - J3 (e-Paper header) top edge — 8-pin 2.54mm header
+   - J1 (USB-C) bottom edge — accessible for programming/charging
+   - J2 (battery) bottom edge — accessible for battery swap
+   - SW1 (joystick) center — thumb-accessible in enclosure
+   - Power ICs (U2, U3, Q1, U4) grouped near bottom
 
 4. **Route critical traces first**:
    - USB D+/D- (keep short, matched length, ~0.25mm traces)
-   - QSPI flash (keep short, < 20mm, group together)
-   - Crystal traces (keep short, < 5mm, no vias)
    - Power traces (0.5mm width for VBAT, 3V3, GND)
 
 5. **Route remaining signals**:
-   - SPI1 to e-Paper header (GP8-GP13)
-   - I2C0 to MPU-6050 (GP14-GP15)
-   - UART0 to GPS (GP0-GP1)
-   - Joystick GPIO2-6
+   - SPI to e-Paper header (GPIO3/46/9/10/11/12)
+   - I2C to MPU-6050 (GPIO16/17)
+   - Joystick GPIO4-8
 
 6. **Add copper pours**:
    - F.Cu: GND pour (entire board)
+   - In1.Cu: GND plane (continuous)
+   - In2.Cu: 3V3 power plane
    - B.Cu: GND pour (entire board)
-   - Leave clearance under GPS antenna area (no copper within 3mm)
+   - Leave clearance under ESP32-S3 antenna area (no copper/ground pour under antenna overhang)
 
 7. **Add mounting holes** (optional):
    - 4x M2 mounting holes at corners (2.2mm drill)
@@ -414,7 +419,7 @@ For a cleaner layout, consider splitting into sub-sheets:
 3. **Export Gerber files**:
    - File > Plot (or use JLCPCB Tools "Generate Gerber")
    - Output directory: `gerber/`
-   - Select layers: F.Cu, B.Cu, F.SilkS, B.SilkS, F.Mask, B.Mask, Edge.Cuts
+   - Select layers: F.Cu, In1.Cu, In2.Cu, B.Cu, F.SilkS, B.SilkS, F.Mask, B.Mask, Edge.Cuts
    - Generate drill files: PTH and NPTH
 
 4. **Upload to JLCPCB**:
@@ -428,7 +433,7 @@ For a cleaner layout, consider splitting into sub-sheets:
 
 5. **JLCPCB order settings**:
    - PCB Qty: 5 (minimum order)
-   - Layers: 2
+   - Layers: 4
    - Thickness: 1.6mm
    - Color: green
    - Surface finish: HASL lead-free
@@ -445,14 +450,15 @@ For a cleaner layout, consider splitting into sub-sheets:
 
 ## Key Design Decisions
 
-### Why bare RP2040 instead of Pico W module?
+### Why ESP32-S3-WROOM-1-N16R8 instead of bare RP2040?
 
-- Smaller board footprint
-- Integrated USB-C (Pico uses micro-USB)
-- Direct battery charging circuit integration
-- Lower per-unit cost ($0.70 vs $6.00)
-- WiFi/BLE not needed for portable operation (GPS provides location)
-- If WiFi is needed later, can swap to RP2040-based module with wireless
+- **Integrated module** — flash (16MB), PSRAM (8MB), crystal, and RF frontend all built in. Eliminates W25Q16JV, 12MHz crystal, crystal load caps, and USB series resistors from the BOM.
+- **WiFi + BLE 5.0 built-in** — enables OTA firmware updates, wireless data sync, and WiFi-based location. No separate wireless module needed.
+- **More capable CPU** — dual-core Xtensa LX7 @ 240MHz with 512KB SRAM vs dual-core Cortex-M0+ @ 133MHz with 264KB SRAM. More headroom for future features.
+- **Native USB** — USB-OTG on GPIO19/20, no series resistors required.
+- **Simpler PCB** — fewer external components means fewer traces, fewer potential failure points, and faster assembly.
+- **Cost trade-off** — module costs ~$2.80 vs ~$1.15 for RP2040+flash+crystal, but the ~$1.65 increase buys WiFi/BLE, 8x more flash, PSRAM, and a simpler layout. Total BOM cost stays similar after removing eliminated parts.
+- **JLCPCB available** — in stock on LCSC for SMT assembly.
 
 ### Why TP4056 instead of Adafruit PowerBoost?
 
@@ -462,13 +468,11 @@ For a cleaner layout, consider splitting into sub-sheets:
 - Combined with DW01A provides complete charging + protection
 - No boost converter needed (VSYS accepts 3.7V directly)
 
-### Why ATGM336H instead of NEO-6M?
+### Why no GPS in v1?
 
-- Available on LCSC/JLCPCB ($1.52 vs $8+ for NEO-6M module)
-- SMD solderable (no breakout board needed)
-- Multi-constellation (GPS + BDS + GLONASS) — better fix time
-- Smaller footprint (10.1x9.7mm)
-- Same UART interface, same NMEA protocol
+- ATGM336H-5N31 dropped to simplify the initial board revision
+- WiFi-based location (via ESP32-S3) can serve as a rough alternative
+- GPS can be added in a future revision via spare UART pins
 
 ---
 
@@ -477,5 +481,7 @@ For a cleaner layout, consider splitting into sub-sheets:
 - [Breadboard Wiring Guide](../docs/breadboard-wiring-guide.md) — current prototype pin assignments
 - [Battery Wiring Guide](../website/docs/docs/hardware/battery-wiring.md) — LiPo integration details
 - [Hardware Research](../docs/hardware-research.md) — component evaluation
-- [RP2040 Hardware Design Guide](https://datasheets.raspberrypi.com/rp2040/hardware-design-with-rp2040.pdf) — official reference schematic
+- [ESP32-S3 Datasheet](https://www.espressif.com/sites/default/files/documentation/esp32-s3_datasheet_en.pdf) — SoC pinout, electrical characteristics
+- [ESP32-S3-WROOM-1 Datasheet](https://www.espressif.com/sites/default/files/documentation/esp32-s3-wroom-1_wroom-1u_datasheet_en.pdf) — module dimensions, pin definitions, antenna keepout
+- [ESP32-S3 Hardware Design Guidelines](https://www.espressif.com/sites/default/files/documentation/esp32-s3_hardware_design_guidelines_en.pdf) — reference schematic, layout recommendations
 - [JLCPCB Capabilities](https://jlcpcb.com/capabilities/pcb-capabilities) — manufacturing limits
