@@ -167,3 +167,12 @@ services:
       - ./mood-selector:/project
       - ./hello-world/lib:/project/lib
     working_dir: /project
+
+  build-joystick-mood-selector:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    volumes:
+      - ./joystick-mood-selector:/project
+      - ./hello-world/lib:/project/lib
+    working_dir: /project

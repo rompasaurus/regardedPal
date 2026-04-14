@@ -4631,6 +4631,12 @@ class ProgramsTab(ttk.Frame):
             "desc": "All 16 emotional states in one program! Use serial input\n"
                     "to browse moods with [ ] keys. Shows < MOOD > at bottom.",
         },
+        "joystick_mood_selector": {
+            "name": "Joystick Mood Selector",
+            "desc": "Mood Selector with 5-way joystick input! LEFT/RIGHT cycle\n"
+                    "moods, UP = random, DOWN = new quote, CENTER = reset.\n"
+                    "Last input shown on-screen. Serial input still works.",
+        },
     }
 
     # Tree structure for the program selector (max 3 levels deep).
@@ -4671,6 +4677,7 @@ class ProgramsTab(ttk.Frame):
             ]),
             ("Interactive", [
                 "mood_selector",
+                "joystick_mood_selector",
             ]),
         ]),
     ]
@@ -4930,6 +4937,13 @@ class ProgramsTab(ttk.Frame):
                                    HORNY_QUOTES + EXCITED_QUOTES + NOSTALGIC_QUOTES +
                                    HOMESICK_QUOTES,
                                    "~ MOOD SELECTOR ~", None),
+        "joystick_mood_selector": (SASSY_QUOTES + SUPPORTIVE_QUOTES + ANGRY_QUOTES +
+                                   CONSPIRATORIAL_QUOTES + SAD_QUOTES + CHAOTIC_QUOTES +
+                                   HUNGRY_QUOTES + TIRED_QUOTES + SLAPHAPPY_QUOTES +
+                                   LAZY_QUOTES + FAT_QUOTES + CHILL_QUOTES +
+                                   HORNY_QUOTES + EXCITED_QUOTES + NOSTALGIC_QUOTES +
+                                   HOMESICK_QUOTES,
+                                   "~ JOYSTICK MOOD ~", None),
     }
 
     def _show_static_preview(self, prog_key):
@@ -5281,6 +5295,7 @@ class ProgramsTab(ttk.Frame):
         "nostalgic_octopus":      "nostalgic-octopus",
         "homesick_octopus":       "homesick-octopus",
         "mood_selector":          "mood-selector",
+        "joystick_mood_selector": "joystick-mood-selector",
     }
 
     def _generate_quotes_header(self, prog_key):
