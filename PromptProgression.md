@@ -1735,3 +1735,16 @@ Spelling and grammar are lightly cleaned for readability while preserving the or
   - `PromptProgression.md` (modified — added Prompt #139)
   - `website/docs/prompts/index.md` (modified — added Prompt #139)
   - All changes committed and pushed
+
+---
+
+## Prompt #140
+- **Date/Time:** 2026-04-14
+- **Prompt:** "OK I have the DollaTek 5-way joystick, the GY-NEO6MV2 NEO-6M GPS module, speakers, and HC-SR04. I want to set this up on a breadboard with the Waveshare 2.13 V3 display. Give me a proper wiring diagram for me to set this up proper to the Pico WH board. Add this to a hardware doc in the root of this project as an MD file."
+- **Input Tokens (est):** ~100
+- **Output Tokens (est):** ~20,000
+- **Files Created/Modified:**
+  - `docs/breadboard-wiring-guide.md` (created — full breadboard wiring guide: complete pin assignment table for all 5 peripherals on 16 GPIO; master ASCII wiring diagram; annotated Pico WH pin map; component-by-component wiring for e-Paper SPI1, joystick GPIO with pull-ups, GPS UART0 with TX/RX crossover, HC-SR04 with 5V→3.3V voltage divider circuit, and speaker with PWM and NPN transistor amplifier option; breadboard zone layout for full-size board; power budget analysis showing ~130mA total on 300mA 3V3 rail; voltage level warnings; test code for GPS NMEA reading, ultrasonic distance measurement, speaker tone generation, and all-peripherals diagnostic; troubleshooting table)
+  - `PromptProgression.md` (modified — added Prompt #140)
+  - `website/docs/prompts/index.md` (modified — added Prompt #140)
+  - All changes committed and pushed

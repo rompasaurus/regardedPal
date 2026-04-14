@@ -1208,3 +1208,13 @@ This is part of the transparency experiment — showing AI-assisted development 
 - **Input Tokens (est):** ~50
 - **Output Tokens (est):** ~1,500
 - **Files:** `website/docs/index.md` (removed grid div wrapper from origin story — image and text now flow as single column), `PromptProgression.md` (#139), `website/docs/prompts/index.md` (#139)
+
+---
+
+## Prompt #140 — 2026-04-14
+
+**Prompt:** "OK I have the DollaTek 5-way joystick, the GY-NEO6MV2 NEO-6M GPS module, speakers, and HC-SR04. I want to set this up on a breadboard with the Waveshare 2.13 V3 display. Give me a proper wiring diagram for me to set this up proper to the Pico WH board. Add this to a hardware doc in the root of this project as an MD file."
+
+- **Input Tokens (est):** ~100
+- **Output Tokens (est):** ~20,000
+- **Files:** `docs/breadboard-wiring-guide.md` (created — full breadboard wiring guide: pin assignment table for 5 peripherals on 16 GPIO, master ASCII wiring diagram, component-by-component wiring with HC-SR04 voltage divider and speaker transistor amplifier, breadboard zone layout, power budget, test code for all peripherals, troubleshooting table), `PromptProgression.md` (#140), `website/docs/prompts/index.md` (#140)
