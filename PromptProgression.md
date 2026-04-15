@@ -566,7 +566,7 @@ Spelling and grammar are lightly cleaned for readability while preserving the or
 
 ## Prompt #42
 - **Date/Time:** 2026-04-11
-- **Prompt:** "Divide, describe, and commit. Update the prompts, fix grammar. Check all the latest Claude session for prompts."
+- **Prompt:** "Divide, describe, and commit. Update the prompts, fix grammar. Check all the latest Claude sessions for prompts."
 - **Input Tokens (est):** ~25
 - **Output Tokens (est):** ~2,000
 - **Commit:** `b408ab1` — Update website with Tools docs, blog post, prompt log, and DevTool Programs tab
@@ -590,7 +590,7 @@ Spelling and grammar are lightly cleaned for readability while preserving the or
 
 ## Prompt #44
 - **Date/Time:** 2026-04-11
-- **Prompt:** "Ok you made a dev tool where I can create assets via the display emulator. First of all, the pencil and line don't draw on the window at all — text and rectangle do. Also I want the ability to preview the asset on the Pico display if it's connected — add a button to deploy to Pico. Then we want to create another tab in the dev tool to deploy from a list of programs. For the first program I want you to create a sassy octopus that smiles and alternates between that expression and an open-mouth expression with a text chat bubble where it blurts out from a random list of unhinged hilarious conspiracies and jokes and meme statements, alternating between facial expressions. The octopus should be on the left side of the display and the chat bubble to the right of its mouth."
+- **Prompt:** "OK, you made a dev tool where I can create assets via the display emulator. First of all, the pencil and line don't draw on the window at all — text and rectangle do. Also I want the ability to preview the asset on the Pico display if it's connected — add a button to deploy to Pico. Then we want to create another tab in the dev tool to deploy from a list of programs. For the first program I want you to create a sassy octopus that smiles and alternates between that expression and an open-mouth expression with a text chat bubble where it blurts out from a random list of unhinged hilarious conspiracies and jokes and meme statements, alternating between facial expressions. The octopus should be on the left side of the display and the chat bubble to the right of its mouth."
 - **Input Tokens (est):** ~200
 - **Output Tokens (est):** ~80,000
 - **Commit:** `63e696b`
@@ -745,7 +745,7 @@ Spelling and grammar are lightly cleaned for readability while preserving the or
 
 ## Prompt #58
 - **Date/Time:** 2026-04-12
-- **Prompt:** "Go in depth with the difference in the e-ink displays — what would be the improvement or detriments to each."
+- **Prompt:** "Go in depth with the difference in the e-ink displays — what would be the improvements or detriments to each."
 - **Input Tokens (est):** ~20
 - **Output Tokens (est):** ~6,000
 - **Commit:** n/a — analysis only, no files changed
@@ -755,7 +755,7 @@ Spelling and grammar are lightly cleaned for readability while preserving the or
 
 ## Prompt #59
 - **Date/Time:** 2026-04-12
-- **Prompt:** "Ok update the hardware research with all the details from this research and prompt session. Also update the prompts file and clean grammar and spelling. Commit and push."
+- **Prompt:** "OK, update the hardware research with all the details from this research and prompt session. Also update the prompts file and clean grammar and spelling. Commit and push."
 - **Input Tokens (est):** ~30
 - **Output Tokens (est):** ~8,000
 - **Commit:** `ce2f22b` — Add board and display comparison research to hardware docs
@@ -767,7 +767,7 @@ Spelling and grammar are lightly cleaned for readability while preserving the or
 
 ## Prompt #60
 - **Date/Time:** 2026-04-12
-- **Prompt:** "Ok let's research LiPo batteries that I could wire up to these boards easily and run me through estimated cost and battery life on each board and wiring setup process as well."
+- **Prompt:** "OK, let's research LiPo batteries that I could wire up to these boards easily and run me through estimated cost and battery life on each board and wiring setup process as well."
 - **Input Tokens (est):** ~40
 - **Output Tokens (est):** ~10,000
 - **Commit:** n/a — analysis only, no files changed
@@ -811,7 +811,7 @@ Spelling and grammar are lightly cleaned for readability while preserving the or
 
 ## Prompt #64
 - **Date/Time:** 2026-04-12
-- **Prompt:** "Ok, the testing pulled screenshots for the website. I also need the devtool and the setup to have screenshot walkthroughs as well and detailed documentation. Also scan code changes and ensure the tests are up to date."
+- **Prompt:** "OK, the testing pulled screenshots for the website. I also need the devtool and the setup to have screenshot walkthroughs as well and detailed documentation. Also scan code changes and ensure the tests are up to date."
 - **Input Tokens (est):** ~50
 - **Output Tokens (est):** ~120,000
 - **Commit:** *(included in multi-commit push)*
@@ -875,7 +875,7 @@ Spelling and grammar are lightly cleaned for readability while preserving the or
 
 ## Prompt #68
 - **Date/Time:** 2026-04-12
-- **Prompt:** "Ok update the prompts with this and commit and push this doc and update the website as well."
+- **Prompt:** "OK, update the prompts with this and commit and push this doc and update the website as well."
 - **Input Tokens (est):** ~25
 - **Output Tokens (est):** ~8,000
 - **Commit:** `d61b2ff` — Add 3D printing pipeline to website and update prompts
@@ -905,7 +905,7 @@ Spelling and grammar are lightly cleaned for readability while preserving the or
 
 ## Prompt #70
 - **Date/Time:** 2026-04-12
-- **Prompt:** "OK the sassy quotes are looking sparse compared to the supportive ones, let's expand on this — more unhinged, more weird, more conspiratorial, and more chaotic. Sprinkle in plenty of spicy language and swear words too. Get tin-foiled with some of them, get stupid with the others. Pull from modern memetic conspiracies. And if the quotes are especially weird give the octopus a weird expression, and especially unhinged make an unhinged expression."
+- **Prompt:** "OK the sassy quotes are looking sparse compared to the supportive ones, let's expand on this — more unhinged, more weird, more conspiratorial, and more chaotic. Sprinkle in plenty of spicy language and swear words too. Get tin-foiled with some of them, get stupid with the others. Pull from modern memetic conspiracies. And if the quotes are especially weird, give the octopus a weird expression, and especially unhinged, make an unhinged expression."
 - **Input Tokens (est):** ~100
 - **Output Tokens (est):** ~15,000
 - **Commit:** `da4d979`
@@ -1269,7 +1269,7 @@ Spelling and grammar are lightly cleaned for readability while preserving the or
 
 ## Prompt #100
 - **Date/Time:** 2026-04-12
-- **Prompt:** "Lazy octopus looks weird. Just have him fold sit on his side with his legs draped to the right."
+- **Prompt:** "Lazy octopus looks weird. Just have him sit on his side with his legs draped to the right."
 - **Input Tokens (est):** ~20
 - **Output Tokens (est):** ~15,000
 - **Files Created/Modified:**
@@ -1306,7 +1306,7 @@ Spelling and grammar are lightly cleaned for readability while preserving the or
 
 ## Prompt #103
 - **Date/Time:** 2026-04-12
-- **Prompt:** "The C renders don't have as many as the emotion preview though."
+- **Prompt:** "The C renders don't have as many as the emotion previews though."
 - **Input Tokens (est):** ~15
 - **Output Tokens (est):** ~5,000
 - **Files Created/Modified:**
@@ -1350,7 +1350,7 @@ Spelling and grammar are lightly cleaned for readability while preserving the or
 
 ## Prompt #106
 - **Date/Time:** 2026-04-12
-- **Prompt:** "Also provide input options on the program main page that maps to the Pico."
+- **Prompt:** "Also provide input options on the program main page that map to the Pico."
 - **Input Tokens (est):** ~20
 - **Output Tokens (est):** ~5,000
 - **Files Created/Modified:**
@@ -1360,7 +1360,7 @@ Spelling and grammar are lightly cleaned for readability while preserving the or
 
 ## Prompt #107
 - **Date/Time:** 2026-04-12
-- **Prompt:** "Move the mood selector more to the bottom and put the actual emotion state in the text field not mood selector with < char and > char instead of ~."
+- **Prompt:** "Move the mood selector more to the bottom and put the actual emotion state in the text field, not mood selector, with < char and > char instead of ~."
 - **Input Tokens (est):** ~30
 - **Output Tokens (est):** ~3,000
 - **Files Created/Modified:**
@@ -1753,7 +1753,7 @@ Spelling and grammar are lightly cleaned for readability while preserving the or
 
 ## Prompt #141
 - **Date/Time:** 2026-04-14
-- **Prompt:** "The Waveshare I have has a 40-pin header on the back — update the wiring to reflect that and check the online docs to confirm this. [Follow-up: double check the physical pin mapping for the Waveshare rev 3a with the Pico headers, something doesn't seem right. Follow-up: I don't have VCC on the Waveshare, I have a VSYS though. Follow-up: yes update the README and materials list as well, and update the prompts file with this troubleshooting — all the chats for this project not yet added today.]"
+- **Prompt:** "The Waveshare I have has a 40-pin header on the back — update the wiring to reflect that and check the online docs to confirm this. [Follow-up: double-check the physical pin mapping for the Waveshare rev 3a with the Pico headers, something doesn't seem right. Follow-up: I don't have VCC on the Waveshare, I have a VSYS though. Follow-up: yes update the README and materials list as well, and update the prompts file with this troubleshooting — all the chats for this project not yet added today.]"
 - **Input Tokens (est):** ~300
 - **Output Tokens (est):** ~25,000
 - **Files Created/Modified:**
@@ -1894,7 +1894,7 @@ Spelling and grammar are lightly cleaned for readability while preserving the or
 
 ## Prompt #148
 - **Date/Time:** 2026-04-15
-- **Prompt:** "Is there a KiCad open board design for the Pico and ESP32 dev boards? If so, pull them into the hardware-design folder in individual folders with MD details. Then make another section — do open board design research and provide extensive documentation and pictures and walkthrough each design on the site."
+- **Prompt:** "Is there a KiCad open board design for the Pico and ESP32 dev boards? If so, pull them into the hardware-design folder in individual folders with MD details. Then make another section — do open board design research and provide extensive documentation and pictures and walk through each design on the site."
 - **Input Tokens (est):** ~100
 - **Output Tokens (est):** ~25,000
 - **Files Created/Modified:**
@@ -1985,7 +1985,7 @@ Spelling and grammar are lightly cleaned for readability while preserving the or
 
 ## Prompt #153
 - **Date/Time:** 2026-04-15
-- **Prompt:** "Continue on the parts sheets — ensure every needed part has a matching MD file and a manufacturer spec/datasheet in the datasheets folder. Each MD file needs to be robust and in-depth, well-researched — important background info, what it functions for, how it works, technologies behind it. The more advanced a part the more in-depth you need to be, dumb it down and make TOCs for everyone and provide sources."
+- **Prompt:** "Continue on the parts sheets — ensure every needed part has a matching MD file and a manufacturer spec/datasheet in the datasheets folder. Each MD file needs to be robust and in-depth, well-researched — important background info, what it functions for, how it works, technologies behind it. The more advanced a part, the more in-depth you need to be, dumb it down and make TOCs for everyone and provide sources."
 - **Input Tokens (est):** ~100
 - **Output Tokens (est):** ~40,000
 - **Files Created/Modified:**
@@ -2097,7 +2097,7 @@ Spelling and grammar are lightly cleaned for readability while preserving the or
 
 ## Prompt #159
 - **Date/Time:** 2026-04-15
-- **Prompt:** "Bear in mind we are going to be changing microcontrollers — tell me how that will affect the C implementation when time comes in a document."
+- **Prompt:** "Bear in mind we are going to be changing microcontrollers — tell me how that will affect the C implementation when the time comes in a document."
 - **Input Tokens (est):** ~30
 - **Output Tokens (est):** ~12,000
 - **Files Created/Modified:**
@@ -2125,7 +2125,7 @@ Spelling and grammar are lightly cleaned for readability while preserving the or
 
 ## Prompt #161
 - **Date/Time:** 2026-04-15
-- **Prompt:** "In this same folder for gameplay planning I want you to create a user guide to show off the planned features as if everything has been implemented. Use the existing images of the game to compose this and make an in-depth guide on the game, the story behind it, how to play, and the mechanisms behind it — the environments, the options, and a huge TOC to go along with it. Outline how the stats system works and an achievement system for the player to try to uncover every feature of the game. Let's also separately make an MD document to implement a feature systems and menu to view them as well."
+- **Prompt:** "In this same folder for gameplay planning I want you to create a user guide to show off the planned features as if everything has been implemented. Use the existing images of the game to compose this and make an in-depth guide on the game, the story behind it, how to play, and the mechanisms behind it — the environments, the options, and a huge TOC to go along with it. Outline how the stats system works and an achievement system for the player to try to uncover every feature of the game. Let's also separately make an MD document to implement a feature system and menu to view them as well."
 - **Input Tokens (est):** ~120
 - **Output Tokens (est):** ~40,000
 - **Files Created/Modified:**
@@ -2167,7 +2167,7 @@ Spelling and grammar are lightly cleaned for readability while preserving the or
 
 ## Prompt #164
 - **Date/Time:** 2026-04-15
-- **Prompt:** "This is bad. I need to do this manually obviously. Give me an MD user document instead and explain it to me as if this is my first time using CAD software. I need an extensive how-to document on how to design schematics, best practices, guide me through each component and how to draw it properly and how to account for the wiring of each. Then I will need an in-depth PCB walkthrough, exhaustive as possible with a huge list of steps that I can follow one by one until completion. Expound on the important electronics principles behind it when necessary and provide further resources and learning material at the end, and definitions as well."
+- **Prompt:** "This is bad. I need to do this manually obviously. Give me an MD user document instead and explain it to me as if this is my first time using CAD software. I need an extensive how-to document on how to design schematics, best practices, guide me through each component and how to draw it properly and how to account for the wiring of each. Then I will need an in-depth PCB walkthrough, as exhaustive as possible with a huge list of steps that I can follow one by one until completion. Expound on the important electronics principles behind it when necessary and provide further resources and learning material at the end, and definitions as well."
 - **Input Tokens (est):** ~120
 - **Output Tokens (est):** ~45,000
 - **Files Created/Modified:**
@@ -2178,7 +2178,7 @@ Spelling and grammar are lightly cleaned for readability while preserving the or
 
 ## Prompt #165
 - **Date/Time:** 2026-04-15
-- **Prompt:** "Let's add a light and temp and humidity sensor to the list of hardware requirements. Find the best part or parts to do this as well. Ensure it will work with the controller we have planned to use, then add it to the docs and the planning and pull in the datasheet and create an MD doc for it following the parts sheets that exist format."
+- **Prompt:** "Let's add a light and temp and humidity sensor to the list of hardware requirements. Find the best part or parts to do this as well. Ensure it will work with the controller we have planned to use, then add it to the docs and the planning and pull in the datasheet and create an MD doc for it following the existing parts sheets format."
 - **Input Tokens (est):** ~70
 - **Output Tokens (est):** ~60,000
 - **Files Created/Modified:**
