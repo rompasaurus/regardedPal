@@ -1875,4 +1875,35 @@ Spelling and grammar are lightly cleaned for readability while preserving the or
   - `website/docs/docs/index.md` (modified — added Design section with links to engagement plan, PCB research, and assembly/prototyping docs)
   - `PromptProgression.md` (modified — added Prompt #146)
   - `website/docs/prompts/index.md` (modified — added Prompt #146)
+  - All changes committed and pushed as `e11a78d`
+
+---
+
+## Prompt #147
+- **Date/Time:** 2026-04-15
+- **Prompt:** "On the PCB design and assembly document, can you pull images for all the components suggested and anything with a price next to it — I want to actually see the component image somewhere."
+- **Input Tokens (est):** ~50
+- **Output Tokens (est):** ~5,000
+- **Files Created/Modified:**
+  - 12 component product photos downloaded from LCSC into `website/docs/assets/images/components/` (ESP32-S3-WROOM-1, TP4056, DW01A, FS8205A, AMS1117-3.3, SS34 diode, USB-C connector, JST PH battery connector, Alps joystick, MPU-6050, red/green LEDs)
+  - `docs/pcb-assembly-and-prototyping.md` (modified — added Visual BOM gallery section with component images, LCSC links, and pricing)
+  - `website/docs/docs/design/pcb-assembly-and-prototyping.md` (synced)
+  - All changes committed and pushed as `d12d85f`
+
+---
+
+## Prompt #148
+- **Date/Time:** 2026-04-15
+- **Prompt:** "Is there a KiCad open board design for the Pico and ESP32 dev boards? If so, pull them into the hardware-design folder in individual folders with MD details. Then make another section — do open board design research and provide extensive documentation and pictures and walkthrough each design on the site."
+- **Input Tokens (est):** ~100
+- **Output Tokens (est):** ~25,000
+- **Files Created/Modified:**
+  - `hardware-design/reference-boards/` (created — 7 open-source KiCad projects: rp2040-pico-usbc, rp2040-minimal-jlcpcb, rp2040-designguide, esp32s3-basic-devboard, esp32s3-ducky-epaper, espressif-kicad-libs, opentama-virtual-pet)
+  - `hardware-design/reference-boards/README.md` (created — master index documenting all 7 designs)
+  - 7 reference board images in `website/docs/assets/images/reference-boards/` (3D renders, PCB layouts, schematic screenshots, assembled board photos)
+  - `website/docs/docs/design/open-board-designs.md` (created — comprehensive walkthrough page with images, per-design analysis, component overlap tables, comparison matrix)
+  - `website/mkdocs.yml` (modified — added nav entry)
+  - `website/docs/docs/index.md` (modified — added link in Design section)
+  - `PromptProgression.md` (modified — added Prompts #147-148)
+  - `website/docs/prompts/index.md` (modified — added Prompts #147-148)
   - All changes committed and pushed

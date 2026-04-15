@@ -35,6 +35,7 @@ Custom hardware and game design documents.
 - [User Engagement Plan](design/user-engagement-plan.md) — gameplay loops, stat system, life stages, progression
 - [Custom PCB Design Research](design/custom-pcb-design-research.md) — PicoTop case study, Dilder board spec, KiCad learning path
 - [PCB Assembly & Prototyping](design/pcb-assembly-and-prototyping.md) — provider pricing, cost estimates, open-source reference boards
+- [Open-Source Board Designs](design/open-board-designs.md) — 7 reference designs with images, walkthroughs, and component overlap analysis
 
 ### Software
 

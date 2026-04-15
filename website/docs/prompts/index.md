@@ -1278,4 +1278,24 @@ This is part of the transparency experiment — showing AI-assisted development 
 
 - **Input Tokens (est):** ~100
 - **Output Tokens (est):** ~20,000
-- **Files:** `docs/pcb-assembly-and-prototyping.md` (created — 10-section document: 5 provider comparison, detailed pricing for JLCPCB/PCBWay/OSH Park/Aisler/Seeed Fusion, Dilder cost estimates across all providers, Aisler vs China break-even with 19% DE VAT, 6 open-source reference designs, manufacturing path recommendation, 25+ cited sources). `website/docs/docs/design/pcb-assembly-and-prototyping.md` (website copy). `website/mkdocs.yml` (added nav entry). `website/docs/docs/index.md` (added Design section). `PromptProgression.md` (#146), `website/docs/prompts/index.md` (#146)
+- **Files:** `docs/pcb-assembly-and-prototyping.md` (created — 10-section document: 5 provider comparison, detailed pricing for JLCPCB/PCBWay/OSH Park/Aisler/Seeed Fusion, Dilder cost estimates across all providers, Aisler vs China break-even with 19% DE VAT, 6 open-source reference designs, manufacturing path recommendation, 25+ cited sources). `website/docs/docs/design/pcb-assembly-and-prototyping.md` (website copy). `website/mkdocs.yml` (added nav entry). `website/docs/docs/index.md` (added Design section). `PromptProgression.md` (#146), `website/docs/prompts/index.md` (#146). Commit: `e11a78d`
+
+---
+
+## Prompt #147 — 2026-04-15
+
+**Prompt:** "Pull images for all components with prices in the PCB assembly document — I want to see the component images."
+
+- **Input Tokens (est):** ~50
+- **Output Tokens (est):** ~5,000
+- **Files:** 12 component photos from LCSC in `website/docs/assets/images/components/`. Visual BOM gallery added to `docs/pcb-assembly-and-prototyping.md` and website copy. Commit: `d12d85f`
+
+---
+
+## Prompt #148 — 2026-04-15
+
+**Prompt:** "Is there a KiCad open board design for the Pico and ESP32 dev boards? Pull them into the hardware-design folder with MD details. Make an open board design research section on the site with extensive documentation, pictures, and walkthroughs."
+
+- **Input Tokens (est):** ~100
+- **Output Tokens (est):** ~25,000
+- **Files:** `hardware-design/reference-boards/` (7 KiCad projects cloned: rp2040-pico-usbc, rp2040-minimal-jlcpcb, rp2040-designguide, esp32s3-basic-devboard, esp32s3-ducky-epaper, espressif-kicad-libs, opentama-virtual-pet). `hardware-design/reference-boards/README.md` (master index). 7 images in `website/docs/assets/images/reference-boards/`. `website/docs/docs/design/open-board-designs.md` (created — comprehensive walkthroughs with images, component overlap analysis, comparison matrix). `website/mkdocs.yml` (added nav). `website/docs/docs/index.md` (added link). Commits: `a6df12f` (repos), current commit (docs + images)
