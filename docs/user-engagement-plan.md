@@ -297,7 +297,7 @@ Multiple touch zones on the octopus enclosure:
 | **Sudden bright** | Delta >300 lux in <5s | Startled reaction, forced wake |
 | **Sustained dark + awake** | <10 lux for >5min, energy >50 | Scared/Homesick (too dark, not sleepy) |
 
-### Temperature / Humidity (BME280)
+### Temperature / Humidity (AHT20)
 
 | Condition | Range | Game Effect |
 |-----------|-------|-------------|
@@ -780,7 +780,7 @@ The e-ink display shows a dedicated treasure hunt screen:
 | **LIS3MDL** | ~$3-5 | I2C (0x1C/0x1E) | STMicro. Better accuracy. Adafruit breakout available. |
 | **QMC5883L** | ~$1-2 | I2C (0x0D) | Chinese replacement for HMC5883L. Works fine. Cheapest option. |
 | **MMC5603** | ~$4-6 | I2C (0x30) | Memsic. High accuracy. SparkFun breakout. |
-| **BMM150** | ~$3-5 | I2C (0x10-0x13) | Bosch. Often paired with BME280 on combo boards. |
+| **BMM150** | ~$3-5 | I2C (0x10-0x13) | Bosch. Combo boards available. |
 
 **Recommendation**: QMC5883L for budget (~$1-2) or LIS3MDL for quality (~$4). Both work on I2C with no address conflicts with existing sensors.
 
@@ -951,7 +951,7 @@ Steps don't just give rewards — they continuously affect Dilder's mood:
 | **Capacitive Touch** | MPR121 (12-channel) | I2C (0x5A) | ~$4 | High |
 | **Ambient Light** | BH1750 | I2C (0x23) | ~$2 | High |
 | **Microphone** | MAX9814 (analog) | ADC (GP26) | ~$4 | High |
-| **Temp/Humidity** | BME280 | I2C (0x76) | ~$4 | Medium |
+| **Temp/Humidity** | AHT20 | I2C (0x38) | ~$0.43 | Medium |
 | **Battery** | 1000mAh LiPo pouch | — | ~$5 | High |
 | **Battery Management** | TP4056 with protection | USB-C input | ~$1.50 | High |
 | **GPS (treasure hunt)** | PA1010D | I2C (0x10) | ~$12 | Medium |
@@ -963,7 +963,7 @@ Steps don't just give rewards — they continuously affect Dilder's mood:
 | Tier | Components | Total Cost |
 |------|-----------|-----------|
 | **Essential** | LIS2DH12TR + MPR121 + BH1750 + MAX9814 + Battery + TP4056 | **~$16.96** |
-| **Recommended** | Essential + BME280 | **~$20.96** |
+| **Recommended** | Essential + AHT20 | **~$17.39** |
 | **Explorer** | Recommended + QMC5883L (compass, WiFi/BLE location) | **~$24.96** |
 | **Full** | Explorer + APDS-9960 + LIS3MDL upgrade | **~$33.96** |
 
@@ -978,7 +978,7 @@ Pico W I2C0 (GP4=SDA, GP5=SCL)
   ├── 0x39  APDS-9960 (Gesture)
   ├── 0x5A  MPR121  (Touch)
   ├── 0x6A  LSM6DSO (Accel/Gyro/Pedometer)
-  └── 0x76  BME280  (Temp/Humidity/Pressure)
+  └── 0x38  AHT20   (Temp/Humidity)
 
 ADC (GP26): MAX9814 microphone analog output
 ```
@@ -995,7 +995,7 @@ All sensors on a single I2C bus with no address conflicts. Pico W's I2C1 availab
 | MPR121 | 0.03 | 0.003 |
 | BH1750 | 0.12 | 0.01 |
 | MAX9814 | 3.0 | 0 (power gate) |
-| BME280 | 0.004 | 0.0001 |
+| AHT20 | 0.023 | 0.00025 |
 | **Total** | **~38 mA** | **~0.8 mA** |
 
 **Battery life estimates (1000mAh LiPo)**:
@@ -1278,7 +1278,7 @@ A survey of 449 videogames using voice identified these categories:
 | Integrate BH1750 light sensor → sleep/wake mechanics | BH1750 (~$2) |
 | Integrate MPR121 touch → petting/interaction | MPR121 (~$4) |
 | Integrate MAX9814 mic → volume-based reactions | MAX9814 (~$4) |
-| Integrate BME280 temp/humidity → comfort mechanics | BME280 (~$4) |
+| Integrate AHT20 temp/humidity → comfort mechanics | AHT20 (~$0.43) |
 
 ### Phase 3C: Activity Tracking
 
@@ -1366,7 +1366,7 @@ A survey of 449 videogames using voice identified these categories:
 - MPR121 — https://www.adafruit.com/product/1982
 - BH1750 — https://www.mouser.com/datasheet/2/348/bh1750fvi-e-186247.pdf
 - MAX9814 — https://www.adafruit.com/product/1713
-- BME280 — https://www.bosch-sensortec.com/products/environmental-sensors/humidity-sensors-bme280/
+- AHT20 — https://www.adafruit.com/product/4566
 - PA1010D GPS — https://www.adafruit.com/product/4415
 - APDS-9960 — https://www.adafruit.com/product/3595
 

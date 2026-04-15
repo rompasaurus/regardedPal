@@ -2060,3 +2060,63 @@ Spelling and grammar are lightly cleaned for readability while preserving the or
   - Fixed broken link in breadboard blog post (pointed to `custom-pcb-design-research.md` instead of `breadboard-prototype.md`)
   - `PromptProgression.md` (updated — added Prompts #154, #155, #156)
   - `website/docs/prompts/index.md` (updated — added Prompt #156)
+
+---
+
+## Prompt #157
+- **Date/Time:** 2026-04-15
+- **Prompt:** "Add AHT20 temp/humidity and BH1750FVI light sensors to board design. Both I2C, sharing bus with LIS2DH12. New parts sheets, updated BOM, docs, and KiCad guide. Board now 30 components, ~$5.20/unit."
+- **Input Tokens (est):** ~500
+- **Output Tokens (est):** ~5,000
+- **Files Created/Modified:**
+  - `Gamplay Planning/04-sensor-interfaces.md` (verified — already updated with AHT20 and BH1750 definitions, I2C address map: LIS2DH12=0x18, BH1750=0x23, AHT20=0x38)
+  - `README.md` (modified — updated component count from 27 to 30, added sensor list: LIS2DH12TR, AHT20, BH1750FVI-TR on shared I2C bus)
+  - `PromptProgression.md` (updated — added Prompt #157)
+
+---
+
+## Prompt #158
+- **Date/Time:** 2026-04-15
+- **Prompt:** "I have created a gameplay planning folder. We are going to establish the pseudocode and structure of the gameplay loop for this game in several well-structured MD files. Let's take the Dilder User Engagement Plan and begin to outline a program structure and interfaces to orient this gameplay loop and user interface."
+- **Input Tokens (est):** ~80
+- **Output Tokens (est):** ~50,000
+- **Files Created/Modified:**
+  - `Gamplay Planning/00-architecture-overview.md` (created — module map, data flow diagrams, RAM/flash budgets, file organization)
+  - `Gamplay Planning/01-core-game-loop.md` (created — main loop pseudocode, tick scheduling, game states FSM, sleep/wake, event bus)
+  - `Gamplay Planning/02-stat-system.md` (created — stat structs, fractional decay, care actions, thresholds, modifier stack)
+  - `Gamplay Planning/03-emotion-engine.md` (created — 16 trigger functions, weight resolution, blending, forced overrides)
+  - `Gamplay Planning/04-sensor-interfaces.md` (created — unified sensor context, 7 driver interfaces, polling rates, duty cycles)
+  - `Gamplay Planning/05-input-menu-ui.md` (created — button debounce, menu FSM, screen composition, rendering pipeline)
+  - `Gamplay Planning/06-life-stages-evolution.md` (created — stage FSM, evolution scoring for 6 adult forms, misbehavior, rebirth)
+  - `Gamplay Planning/07-progression-unlocks.md` (created — XP sources, bond levels, 20+ achievements, decor inventory)
+  - `Gamplay Planning/08-dialogue-system.md` (created — quote DB schema, selection algorithm, context triggers, intelligence gating)
+  - `Gamplay Planning/09-persistence-storage.md` (created — 176-byte save struct, LittleFS flash layout, CRC integrity, location DB)
+  - `Gamplay Planning/10-activity-tracker.md` (created — step tracking, daily/weekly/monthly targets, streaks, WiFi geolocation, treasure hunts)
+
+---
+
+## Prompt #159
+- **Date/Time:** 2026-04-15
+- **Prompt:** "Bear in mind we are going to be changing microcontrollers — tell me how that will affect the C implementation when time comes in a document."
+- **Input Tokens (est):** ~30
+- **Output Tokens (est):** ~12,000
+- **Files Created/Modified:**
+  - `Gamplay Planning/11-mcu-migration-impact.md` (created — RP2040 → ESP32-S3 migration guide: SDK translation, per-module impact, GPIO remapping, FreeRTOS implications, portability strategy)
+
+---
+
+## Prompt #160
+- **Date/Time:** 2026-04-15
+- **Prompt:** "OK update all the documentation with this and commit and update the prompts and website, add a blog."
+- **Input Tokens (est):** ~30
+- **Output Tokens (est):** ~15,000
+- **Files Created/Modified:**
+  - `Gamplay Planning/04-sensor-interfaces.md` (modified — BME280 → AHT20: comment headers, I2C address 0x76 → 0x38, removed pressure field)
+  - `Gamplay Planning/00-architecture-overview.md` (modified — BME280 → AHT20 in driver file listing)
+  - `docs/user-engagement-plan.md` (modified — BME280 → AHT20: sensor table, cost tiers, I2C bus map, power budget, phase 3B, references)
+  - `docs/custom-pcb-design-research.md` (modified — BME280 → AHT20 across all references, I2C address updated)
+  - `website/docs/docs/design/user-engagement-plan.md` (modified — same BME280 → AHT20 updates as docs/ copy)
+  - `website/docs/docs/design/custom-pcb-design-research.md` (modified — same BME280 → AHT20 updates as docs/ copy)
+  - `website/docs/blog/posts/custom-pcb-research.md` (modified — BME280 → AHT20 in sensor list)
+  - `website/docs/blog/posts/gameplay-architecture.md` (created — blog post: gameplay loop architecture, stat decay math, emotion resolution, evolution system, MCU migration, AHT20 update)
+  - `PromptProgression.md` (updated — added Prompts #158, #159, #160)

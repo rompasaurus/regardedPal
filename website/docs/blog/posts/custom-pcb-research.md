@@ -44,7 +44,7 @@ Unlike the PicoTop (which outputs to a monitor and takes keyboard input), the Di
 | Display | e-Paper SPI connector (GP8-13) |
 | Input | 5-way joystick pads (GP2-6) |
 | Audio | Piezo buzzer (GP15, PWM) |
-| Sensors (I2C) | LSM6DSO (steps), MPR121 (touch), BH1750 (light), BME280 (temp) |
+| Sensors (I2C) | LSM6DSO (steps), MPR121 (touch), BH1750 (light), AHT20 (temp/humidity) |
 | Microphone | MAX9814 (analog, GP26 ADC) |
 | Power | MCP73831 LiPo charger + USB-C + battery connector |
 | Expansion | 10-pin header: I2C, UART, SWD, GPIO |

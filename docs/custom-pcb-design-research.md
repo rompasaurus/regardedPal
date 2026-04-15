@@ -271,7 +271,7 @@ Everything the Dilder board needs to integrate:
 | Accelerometer | LSM6DSO | 0x6A | Steps, motion, tilt |
 | Touch | MPR121 | 0x5A | 12-channel capacitive touch |
 | Light | BH1750 | 0x23 | Ambient light (lux) |
-| Temp/Humidity | BME280 | 0x76 | Temperature, humidity, pressure |
+| Temp/Humidity | AHT20 | 0x38 | Temperature, humidity |
 | GPS | PA1010D | 0x10 | Location (Phase 4B) |
 | Magnetometer | QMC5883L | 0x0D | Compass heading (Phase 4B) |
 
@@ -315,7 +315,7 @@ Everything the Dilder board needs to integrate:
    GPIO (5 pin) ──┤ 5-Way Joystick│
                    │               │
     I2C0 (2 pin)──┤ Sensor Bus    │──► LSM6DSO, MPR121, BH1750,
-                   │               │    BME280, PA1010D, QMC5883L
+                   │               │    AHT20, PA1010D, QMC5883L
                    │               │
      ADC0 (1 pin)──┤ Microphone    │
                    │               │
@@ -770,7 +770,7 @@ The killer advantage of LCSC: when you order PCBA from JLCPCB, components from t
 | Component Type | Source | Reason |
 |---------------|--------|--------|
 | RP2040, flash, LDO, passives | LCSC (via JLCPCB PCBA) | Cheapest, auto-placed |
-| Sensors (LSM6DSO, BME280, etc.) | LCSC Extended Library | Available for PCBA |
+| Sensors (LSM6DSO, AHT20, etc.) | LCSC Extended Library | Available for PCBA |
 | USB-C connector | LCSC | Standard part |
 | Joystick module | AliExpress/Amazon | Pre-assembled module, hand-solder |
 | e-Paper display | Waveshare direct / Amazon | Pre-assembled module with FPC |
@@ -815,7 +815,7 @@ The killer advantage of LCSC: when you order PCBA from JLCPCB, components from t
 │  │  GP16 (SDA) ──┬──► LSM6DSO (0x6A)             │              │
 │  │  GP17 (SCL) ──┤──► MPR121  (0x5A)             │              │
 │  │    I2C0       ├──► BH1750  (0x23)             │              │
-│  │               ├──► BME280  (0x76)             │              │
+│  │               ├──► AHT20   (0x38)             │              │
 │  │               ├──► PA1010D (0x10) [DNP V1]    │              │
 │  │               └──► QMC5883L(0x0D) [DNP V1]    │              │
 │  │                                                │              │
@@ -848,7 +848,7 @@ All sensors share a single I2C0 bus with 4.7K pull-up resistors:
         ┌────────────┼────────────┐
         │            │            │
    ┌────┴──┐   ┌────┴──┐   ┌────┴──┐
-   │LSM6DSO│   │MPR121 │   │BH1750 │   ... (BME280, PA1010D, QMC5883L)
+   │LSM6DSO│   │MPR121 │   │BH1750 │   ... (AHT20, PA1010D, QMC5883L)
    │ 0x6A  │   │ 0x5A  │   │ 0x23  │
    └───────┘   └───────┘   └───────┘
 
@@ -953,7 +953,7 @@ Based on the Dilder enclosure design (88 x 34 x 19mm):
 
 | Task | Resource | Time |
 |------|----------|------|
-| Add all I2C sensors to schematic (LSM6DSO, MPR121, BH1750, BME280) | Datasheets for each | 8-12 hours |
+| Add all I2C sensors to schematic (LSM6DSO, MPR121, BH1750, AHT20) | Datasheets for each | 8-12 hours |
 | Add MAX9814 microphone circuit | MAX9814 datasheet | 2-3 hours |
 | Add piezo buzzer + PWM driver | — | 1-2 hours |
 | Add GPS + magnetometer footprints (DNP) | PA1010D, QMC5883L datasheets | 3-4 hours |
@@ -1044,7 +1044,7 @@ Based on the Dilder enclosure design (88 x 34 x 19mm):
 | PCBA setup fee | $8 | $1.60 |
 | RP2040 + flash + LDO + passives (LCSC) | ~$15 | ~$3.00 |
 | MCP73831 charger + battery circuit | ~$5 | ~$1.00 |
-| I2C sensors (LSM6DSO, MPR121, BH1750, BME280) | ~$40 | ~$8.00 |
+| I2C sensors (LSM6DSO, MPR121, BH1750, AHT20) | ~$40 | ~$8.00 |
 | MAX9814 microphone | ~$10 | ~$2.00 |
 | Piezo buzzer | ~$3 | ~$0.60 |
 | Connectors (USB-C, JST, headers) | ~$8 | ~$1.60 |
@@ -1117,7 +1117,7 @@ Week 7-8:   DILDER BOARD V1 — SCHEMATIC
             ├── Add battery charging (MCP73831)
             ├── Add e-paper connector (SPI1, 8-pin)
             ├── Add joystick pads (5x GPIO + GND)
-            ├── Add I2C sensor bus (LSM6DSO, MPR121, BH1750, BME280)
+            ├── Add I2C sensor bus (LSM6DSO, MPR121, BH1750, AHT20)
             ├── Add microphone (MAX9814 + ADC)
             ├── Add buzzer (PWM)
             ├── Add expansion header
