@@ -2215,3 +2215,70 @@ Spelling and grammar are lightly cleaned for readability while preserving the or
 - **Output Tokens (est):** ~5,000
 - **Files Created/Modified:**
   - `PromptProgression.md` (modified — spelling/grammar cleanup across all 167 entries, added Prompts #163-167)
+
+---
+
+## Prompt #168
+- **Date/Time:** 2026-04-15
+- **Prompt:** "OK we are going to build out the dev tools to emulate this device, have it actually compile and run the C code that will be running on the device, and allow for joystick input and emulation of the sensor systems — pedometer, temp, light sensor, humidity, etc. So let's do this: let's add a robust Dilder tab to give emulation, to load up this game and run and debug it. So step one is to implement the C code for this. Make an entirely new directory folder to handle all the C development and implementation. Plan out the project structure and architecture, then code this out so that it can be run via the dev tool."
+- **Input Tokens (est):** ~130
+- **Output Tokens (est):** ~120,000
+- **Commit:** `d3388a3` — Add firmware game engine, DevTool Dilder emulator tab, and documentation
+- **Files Created/Modified:**
+  - `firmware/` (created — entire directory: 35 source files)
+  - `firmware/CMakeLists.txt` (created — CMake build producing libdilder.so + dilder_cli)
+  - `firmware/.gitignore` (created — excludes build/)
+  - `firmware/include/dilder.h` (created — public shared library API)
+  - `firmware/include/game/game_state.h` (created — all data types: 808 lines)
+  - `firmware/include/game/event.h` (created — event bus interface)
+  - `firmware/include/game/stat.h` (created — stat system interface)
+  - `firmware/include/game/emotion.h` (created — emotion engine interface)
+  - `firmware/include/game/life.h` (created — life stages interface)
+  - `firmware/include/game/time_mgr.h` (created — time manager interface)
+  - `firmware/include/game/dialog.h` (created — dialogue system interface)
+  - `firmware/include/game/progress.h` (created — progression/bond interface)
+  - `firmware/include/game/game_loop.h` (created — game loop interface)
+  - `firmware/include/sensor/sensor.h` (created — sensor emulation interface)
+  - `firmware/include/ui/input.h` (created — button input queue)
+  - `firmware/include/ui/render.h` (created — framebuffer rendering)
+  - `firmware/include/ui/ui.h` (created — UI state machine)
+  - `firmware/src/game/event.c` (created — event bus with ring buffer)
+  - `firmware/src/game/time_mgr.c` (created — virtual game clock)
+  - `firmware/src/game/stat.c` (created — decay, care actions, thresholds, modifiers: 776 lines)
+  - `firmware/src/game/emotion.c` (created — 16 emotion triggers + resolution algorithm: 664 lines)
+  - `firmware/src/game/life.c` (created — life stage FSM + evolution branching: 533 lines)
+  - `firmware/src/game/dialog.c` (created — quote database, 80+ quotes across 16 moods)
+  - `firmware/src/game/progress.c` (created — bond XP + leveling)
+  - `firmware/src/game/game_loop.c` (created — main orchestrator: 483 lines)
+  - `firmware/src/sensor/sensor.c` (created — emulated sensor values + event classification)
+  - `firmware/src/ui/input.c` (created — circular buffer input queue)
+  - `firmware/src/ui/render.c` (created — bitmap font, drawing primitives, octopus renderer: 1,296 lines)
+  - `firmware/src/ui/ui.c` (created — menu FSM, input dispatch, screen rendering: 520 lines)
+  - `firmware/src/platform/desktop/dilder_api.c` (created — shared library API for Python ctypes)
+  - `firmware/src/platform/desktop/main_desktop.c` (created — standalone CLI test runner)
+  - `DevTool/devtool.py` (modified — added DilderEmulatorTab class with display canvas, joystick, sensor sliders, game state panel, play/pause/step/reset, speed control, rebuild button)
+
+---
+
+## Prompt #169
+- **Date/Time:** 2026-04-15
+- **Prompt:** "OK I need you to make comments through the firmware files as if I don't know C code that well. Explain in depth what every function is doing and any complex line of code, and also the memory management in the code. Be detailed — this is to help in learning. Then we also need an MD doc in the firmware folder to outline the project structure, architecture, and guides to reading the code and debugging. Also update the software documentation and add this to the list of software on the website with the documentation as well."
+- **Input Tokens (est):** ~100
+- **Output Tokens (est):** ~150,000
+- **Commit:** `d3388a3` (same commit — work done in same session)
+- **Files Created/Modified:**
+  - All 14 `.c` source files and 2 key `.h` headers rewritten with comprehensive beginner-friendly comments (every function documented, bitwise ops explained, memory model annotated, C patterns taught inline)
+  - `firmware/FIRMWARE.md` (created — 633-line architecture guide: project structure, 5-level reading order, module deep dives, memory model, framebuffer layout, game tick flow, event system, emotion resolution, DevTool bridge, debugging guide, C patterns glossary)
+  - `website/docs/docs/software/firmware-engine.md` (created — website documentation page with Mermaid architecture diagram, game systems overview, sensor emulation table, API reference)
+  - `website/mkdocs.yml` (modified — added Firmware Game Engine to Software nav)
+  - `website/docs/docs/software/project-structure.md` (modified — updated firmware section from placeholder to actual structure)
+
+---
+
+## Prompt #170
+- **Date/Time:** 2026-04-15
+- **Prompt:** "OK commit all the changes and update the prompts with the commit hash and prompts and such. Fix them word spellings and shit and commit again and push."
+- **Input Tokens (est):** ~30
+- **Output Tokens (est):** ~8,000
+- **Files Created/Modified:**
+  - `PromptProgression.md` (modified — added Prompts #168-170, spelling/grammar cleanup)
