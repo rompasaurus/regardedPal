@@ -12,13 +12,13 @@
         <meta name="author" content="rompasaurus">
       
       
-        <link rel="canonical" href="https://dilder.dev/docs/tools/devtool/">
+        <link rel="canonical" href="https://dilder.dev/docs/design/pcb-assembly-and-prototyping/">
       
       
-        <link rel="prev" href="../../software/emotion-states/">
+        <link rel="prev" href="../custom-pcb-design-research/">
       
       
-        <link rel="next" href="../setup-cli/">
+        <link rel="next" href="../../software/project-structure/">
       
       
         
@@ -29,7 +29,7 @@
     
     
       
-        <title>DevTool (GUI) - Dilder</title>
+        <title>PCB Assembly & Prototyping - Dilder</title>
       
     
     
@@ -92,7 +92,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#devtool-pico-w-development-companion" class="md-skip">
+        <a href="#pcb-assembly-board-prototyping-pricing-providers-and-open-source-reference-designs" class="md-skip">
           Skip to content
         </a>
       
@@ -126,7 +126,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              DevTool (GUI)
+              PCB Assembly & Prototyping
             
           </span>
         </div>
@@ -1399,6 +1399,8 @@
                 
   
   
+    
+  
   
   
     
@@ -1414,11 +1416,11 @@
       
     
     
-    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_4" >
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_4" checked>
         
           
           <label class="md-nav__link" for="__nav_3_4" id="__nav_3_4_label" tabindex="">
@@ -1439,7 +1441,7 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_4_label" aria-expanded="false">
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_4_label" aria-expanded="true">
           <label class="md-nav__title" for="__nav_3_4">
             <span class="md-nav__icon md-icon"></span>
             
@@ -1457,7 +1459,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../design/user-engagement-plan/" class="md-nav__link">
+      <a href="../user-engagement-plan/" class="md-nav__link">
         
   
   
@@ -1485,7 +1487,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../design/custom-pcb-design-research/" class="md-nav__link">
+      <a href="../custom-pcb-design-research/" class="md-nav__link">
         
   
   
@@ -1510,10 +1512,37 @@
                 
   
   
+    
   
   
-    <li class="md-nav__item">
-      <a href="../../design/pcb-assembly-and-prototyping/" class="md-nav__link">
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    PCB Assembly & Prototyping
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
         
   
   
@@ -1529,6 +1558,564 @@
   
 
       </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#table-of-contents" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Table of Contents
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#1-provider-comparison" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. Provider Comparison
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2-jlcpcb-detailed-pricing-breakdown" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. JLCPCB — Detailed Pricing Breakdown
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="2. JLCPCB — Detailed Pricing Breakdown">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#pcb-fabrication" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        PCB Fabrication
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#assembly-fees" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Assembly Fees
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#component-handling-fees" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Component Handling Fees
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#key-notes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Key Notes
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#3-pcbway-detailed-pricing-breakdown" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. PCBWay — Detailed Pricing Breakdown
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="3. PCBWay — Detailed Pricing Breakdown">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#pcb-fabrication_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        PCB Fabrication
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#assembly-fees_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Assembly Fees
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#key-notes_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Key Notes
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#4-osh-park-detailed-pricing-breakdown" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4. OSH Park — Detailed Pricing Breakdown
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="4. OSH Park — Detailed Pricing Breakdown">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#pcb-fabrication-only-no-assembly" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        PCB Fabrication Only (No Assembly)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#cost-for-dilder-board-45x80mm-56-in2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Cost for Dilder Board (45x80mm = ~5.6 in²)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#key-notes_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Key Notes
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#5-aisler-detailed-pricing-breakdown" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5. Aisler — Detailed Pricing Breakdown
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="5. Aisler — Detailed Pricing Breakdown">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#pcb-fabrication_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        PCB Fabrication
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#assembly-fees_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Assembly Fees
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#cost-estimate-for-dilder-10-boards-27-components-5-unique-passive-types-5-ics" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Cost Estimate for Dilder (10 boards, 27 components, ~5 unique passive types + 5 ICs)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#key-notes_3" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Key Notes
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#6-seeed-studio-fusion-detailed-pricing-breakdown" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6. Seeed Studio Fusion — Detailed Pricing Breakdown
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="6. Seeed Studio Fusion — Detailed Pricing Breakdown">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#pcb-fabrication_3" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        PCB Fabrication
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#assembly-fees_3" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Assembly Fees
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#key-notes_4" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Key Notes
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#7-cost-estimates-for-the-dilder-board" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7. Cost Estimates for the Dilder Board
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="7. Cost Estimates for the Dilder Board">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#board-spec-summary" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Board Spec Summary
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#estimated-bom-cost-per-board" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Estimated BOM Cost Per Board
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#total-order-estimates-5-assembled-boards" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Total Order Estimates (5 Assembled Boards)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#break-even-when-does-aisler-beat-china" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Break-Even: When Does Aisler Beat China?
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#8-open-source-reference-designs" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        8. Open-Source Reference Designs
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="8. Open-Source Reference Designs">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#81-ducky-board-esp32-s3-e-paper-battery" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        8.1 Ducky Board (ESP32-S3 + e-Paper + Battery)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#82-opentama-tamagotchi-reference-design" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        8.2 OpenTama (Tamagotchi Reference Design)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#83-tamafi-v2-esp32-s3-virtual-pet" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        8.3 TamaFi V2 (ESP32-S3 Virtual Pet)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#84-pocketmage-pda-esp32-s3-e-ink-handheld" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        8.4 PocketMage PDA (ESP32-S3 + e-Ink Handheld)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#85-aeonlabs-esp32-s3-pcb-template" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        8.5 AeonLabs ESP32-S3 PCB Template
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#86-picotop-rp2040-custom-desktop" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        8.6 PicoTop (RP2040 Custom Desktop)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#9-recommended-manufacturing-path" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        9. Recommended Manufacturing Path
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="9. Recommended Manufacturing Path">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#for-dilder-v1-prototype-5-boards" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        For Dilder v1 Prototype (5 boards)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#ordering-checklist" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Ordering Checklist
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#for-production-20-boards" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        For Production (20+ boards)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#10-sources" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        10. Sources
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="10. Sources">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#provider-pricing" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Provider Pricing
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#comparison-analysis" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Comparison &amp; Analysis
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#open-source-hardware-designs" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Open-Source Hardware Designs
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
     </li>
   
 
@@ -1665,8 +2252,6 @@
                 
   
   
-    
-  
   
   
     
@@ -1682,11 +2267,11 @@
       
     
     
-    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_6" checked>
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_6" >
         
           
           <label class="md-nav__link" for="__nav_3_6" id="__nav_3_6_label" tabindex="">
@@ -1707,7 +2292,7 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_6_label" aria-expanded="true">
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_6_label" aria-expanded="false">
           <label class="md-nav__title" for="__nav_3_6">
             <span class="md-nav__icon md-icon"></span>
             
@@ -1722,37 +2307,10 @@
                 
   
   
-    
   
   
-  
-    <li class="md-nav__item md-nav__item--active">
-      
-      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
-      
-      
-        
-      
-      
-        <label class="md-nav__link md-nav__link--active" for="__toc">
-          
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    DevTool (GUI)
-  
-
-    
-  </span>
-  
-  
-
-          <span class="md-nav__icon md-icon"></span>
-        </label>
-      
-      <a href="./" class="md-nav__link md-nav__link--active">
+    <li class="md-nav__item">
+      <a href="../../tools/devtool/" class="md-nav__link">
         
   
   
@@ -1768,669 +2326,6 @@
   
 
       </a>
-      
-        
-
-<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
-  
-  
-  
-    
-  
-  
-    <label class="md-nav__title" for="__toc">
-      <span class="md-nav__icon md-icon"></span>
-      Table of contents
-    </label>
-    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
-      
-        <li class="md-nav__item">
-  <a href="#requirements" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Requirements
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#installation" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Installation
-      
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="Installation">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#install-system-dependencies" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Install System Dependencies
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#install-python-dependencies" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Install Python Dependencies
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#verify" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Verify
-      
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#launching-the-devtool" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Launching the DevTool
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#tab-1-display-emulator" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Tab 1 — Display Emulator
-      
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="Tab 1 — Display Emulator">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#drawing-tools" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Drawing Tools
-      
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="Drawing Tools">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#pencil-tool" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Pencil Tool
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#eraser-tool" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Eraser Tool
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#line-tool" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Line Tool
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#rectangle-tool" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Rectangle Tool
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#filled-rectangle-tool" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Filled Rectangle Tool
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#text-tool" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Text Tool
-      
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#drawing-demo" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Drawing Demo
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#invert-function" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Invert Function
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#text-tool_1" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Text Tool
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#saving-images" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Saving Images
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#loading-images" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Loading Images
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#send-to-pico" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Send to Pico
-      
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#tab-2-serial-monitor" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Tab 2 — Serial Monitor
-      
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="Tab 2 — Serial Monitor">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#connecting" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Connecting
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#viewing-output" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Viewing Output
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#sending-commands" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Sending Commands
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#saving-logs" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Saving Logs
-      
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#tab-3-flash-firmware" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Tab 3 — Flash Firmware
-      
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="Tab 3 — Flash Firmware">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#selecting-a-uf2-file" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Selecting a UF2 File
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#flashing" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Flashing
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#building-from-source" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Building from Source
-      
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#tab-4-asset-manager" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Tab 4 — Asset Manager
-      
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="Tab 4 — Asset Manager">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#browsing-assets" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Browsing Assets
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#previewing" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Previewing
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#deleting" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Deleting
-      
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#tab-5-programs" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Tab 5 — Programs
-      
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="Tab 5 — Programs">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#program-list" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Program List
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#previewing_1" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Previewing
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#deploy-to-pico-streaming" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Deploy to Pico (Streaming)
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#deploy-standalone" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Deploy Standalone
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#available-programs" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Available Programs
-      
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#tab-6-gpio-pin-reference" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Tab 6 — GPIO Pin Reference
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#tab-7-connection-utility" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Tab 7 — Connection Utility
-      
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="Tab 7 — Connection Utility">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#usb-serial-walkthrough" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        USB Serial Walkthrough
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#wi-fi-walkthrough" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Wi-Fi Walkthrough
-      
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#tab-8-documentation" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Tab 8 — Documentation
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#file-formats" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        File Formats
-      
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="File Formats">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#pbm-portable-bitmap-p4-binary" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        PBM (Portable Bitmap — P4 Binary)
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#bin-raw-display-buffer" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        BIN (Raw Display Buffer)
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#png-portable-network-graphics" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        PNG (Portable Network Graphics)
-      
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#architecture-overview" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Architecture Overview
-      
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="Architecture Overview">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#class-structure" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Class Structure
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#startup-behavior" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Startup Behavior
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#threading" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Threading
-      
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#troubleshooting" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Troubleshooting
-      
-    </span>
-  </a>
-  
-</li>
-      
-    </ul>
-  
-</nav>
-      
     </li>
   
 
@@ -2443,7 +2338,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../setup-cli/" class="md-nav__link">
+      <a href="../../tools/setup-cli/" class="md-nav__link">
         
   
   
@@ -2471,7 +2366,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../website-dev/" class="md-nav__link">
+      <a href="../../tools/website-dev/" class="md-nav__link">
         
   
   
@@ -2994,10 +2889,10 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#requirements" class="md-nav__link">
+  <a href="#table-of-contents" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Requirements
+        Table of Contents
       
     </span>
   </a>
@@ -3005,22 +2900,33 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#installation" class="md-nav__link">
+  <a href="#1-provider-comparison" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Installation
+        1. Provider Comparison
       
     </span>
   </a>
   
-    <nav class="md-nav" aria-label="Installation">
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2-jlcpcb-detailed-pricing-breakdown" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. JLCPCB — Detailed Pricing Breakdown
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="2. JLCPCB — Detailed Pricing Breakdown">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#install-system-dependencies" class="md-nav__link">
+  <a href="#pcb-fabrication" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Install System Dependencies
+        PCB Fabrication
       
     </span>
   </a>
@@ -3028,10 +2934,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#install-python-dependencies" class="md-nav__link">
+  <a href="#assembly-fees" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Install Python Dependencies
+        Assembly Fees
       
     </span>
   </a>
@@ -3039,10 +2945,21 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#verify" class="md-nav__link">
+  <a href="#component-handling-fees" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Verify
+        Component Handling Fees
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#key-notes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Key Notes
       
     </span>
   </a>
@@ -3055,45 +2972,22 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#launching-the-devtool" class="md-nav__link">
+  <a href="#3-pcbway-detailed-pricing-breakdown" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Launching the DevTool
+        3. PCBWay — Detailed Pricing Breakdown
       
     </span>
   </a>
   
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#tab-1-display-emulator" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Tab 1 — Display Emulator
-      
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="Tab 1 — Display Emulator">
+    <nav class="md-nav" aria-label="3. PCBWay — Detailed Pricing Breakdown">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#drawing-tools" class="md-nav__link">
+  <a href="#pcb-fabrication_1" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Drawing Tools
-      
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="Drawing Tools">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#pencil-tool" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Pencil Tool
+        PCB Fabrication
       
     </span>
   </a>
@@ -3101,10 +2995,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#eraser-tool" class="md-nav__link">
+  <a href="#assembly-fees_1" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Eraser Tool
+        Assembly Fees
       
     </span>
   </a>
@@ -3112,114 +3006,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#line-tool" class="md-nav__link">
+  <a href="#key-notes_1" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Line Tool
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#rectangle-tool" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Rectangle Tool
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#filled-rectangle-tool" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Filled Rectangle Tool
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#text-tool" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Text Tool
-      
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#drawing-demo" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Drawing Demo
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#invert-function" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Invert Function
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#text-tool_1" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Text Tool
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#saving-images" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Saving Images
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#loading-images" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Loading Images
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#send-to-pico" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Send to Pico
+        Key Notes
       
     </span>
   </a>
@@ -3232,22 +3022,22 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#tab-2-serial-monitor" class="md-nav__link">
+  <a href="#4-osh-park-detailed-pricing-breakdown" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Tab 2 — Serial Monitor
+        4. OSH Park — Detailed Pricing Breakdown
       
     </span>
   </a>
   
-    <nav class="md-nav" aria-label="Tab 2 — Serial Monitor">
+    <nav class="md-nav" aria-label="4. OSH Park — Detailed Pricing Breakdown">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#connecting" class="md-nav__link">
+  <a href="#pcb-fabrication-only-no-assembly" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Connecting
+        PCB Fabrication Only (No Assembly)
       
     </span>
   </a>
@@ -3255,10 +3045,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#viewing-output" class="md-nav__link">
+  <a href="#cost-for-dilder-board-45x80mm-56-in2" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Viewing Output
+        Cost for Dilder Board (45x80mm = ~5.6 in²)
       
     </span>
   </a>
@@ -3266,21 +3056,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#sending-commands" class="md-nav__link">
+  <a href="#key-notes_2" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Sending Commands
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#saving-logs" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Saving Logs
+        Key Notes
       
     </span>
   </a>
@@ -3293,22 +3072,22 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#tab-3-flash-firmware" class="md-nav__link">
+  <a href="#5-aisler-detailed-pricing-breakdown" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Tab 3 — Flash Firmware
+        5. Aisler — Detailed Pricing Breakdown
       
     </span>
   </a>
   
-    <nav class="md-nav" aria-label="Tab 3 — Flash Firmware">
+    <nav class="md-nav" aria-label="5. Aisler — Detailed Pricing Breakdown">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#selecting-a-uf2-file" class="md-nav__link">
+  <a href="#pcb-fabrication_2" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Selecting a UF2 File
+        PCB Fabrication
       
     </span>
   </a>
@@ -3316,10 +3095,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#flashing" class="md-nav__link">
+  <a href="#assembly-fees_2" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Flashing
+        Assembly Fees
       
     </span>
   </a>
@@ -3327,10 +3106,21 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#building-from-source" class="md-nav__link">
+  <a href="#cost-estimate-for-dilder-10-boards-27-components-5-unique-passive-types-5-ics" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Building from Source
+        Cost Estimate for Dilder (10 boards, 27 components, ~5 unique passive types + 5 ICs)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#key-notes_3" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Key Notes
       
     </span>
   </a>
@@ -3343,22 +3133,22 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#tab-4-asset-manager" class="md-nav__link">
+  <a href="#6-seeed-studio-fusion-detailed-pricing-breakdown" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Tab 4 — Asset Manager
+        6. Seeed Studio Fusion — Detailed Pricing Breakdown
       
     </span>
   </a>
   
-    <nav class="md-nav" aria-label="Tab 4 — Asset Manager">
+    <nav class="md-nav" aria-label="6. Seeed Studio Fusion — Detailed Pricing Breakdown">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#browsing-assets" class="md-nav__link">
+  <a href="#pcb-fabrication_3" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Browsing Assets
+        PCB Fabrication
       
     </span>
   </a>
@@ -3366,10 +3156,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#previewing" class="md-nav__link">
+  <a href="#assembly-fees_3" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Previewing
+        Assembly Fees
       
     </span>
   </a>
@@ -3377,10 +3167,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#deleting" class="md-nav__link">
+  <a href="#key-notes_4" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Deleting
+        Key Notes
       
     </span>
   </a>
@@ -3393,22 +3183,22 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#tab-5-programs" class="md-nav__link">
+  <a href="#7-cost-estimates-for-the-dilder-board" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Tab 5 — Programs
+        7. Cost Estimates for the Dilder Board
       
     </span>
   </a>
   
-    <nav class="md-nav" aria-label="Tab 5 — Programs">
+    <nav class="md-nav" aria-label="7. Cost Estimates for the Dilder Board">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#program-list" class="md-nav__link">
+  <a href="#board-spec-summary" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Program List
+        Board Spec Summary
       
     </span>
   </a>
@@ -3416,10 +3206,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#previewing_1" class="md-nav__link">
+  <a href="#estimated-bom-cost-per-board" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Previewing
+        Estimated BOM Cost Per Board
       
     </span>
   </a>
@@ -3427,10 +3217,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#deploy-to-pico-streaming" class="md-nav__link">
+  <a href="#total-order-estimates-5-assembled-boards" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Deploy to Pico (Streaming)
+        Total Order Estimates (5 Assembled Boards)
       
     </span>
   </a>
@@ -3438,21 +3228,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#deploy-standalone" class="md-nav__link">
+  <a href="#break-even-when-does-aisler-beat-china" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Deploy Standalone
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#available-programs" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Available Programs
+        Break-Even: When Does Aisler Beat China?
       
     </span>
   </a>
@@ -3465,33 +3244,22 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#tab-6-gpio-pin-reference" class="md-nav__link">
+  <a href="#8-open-source-reference-designs" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Tab 6 — GPIO Pin Reference
+        8. Open-Source Reference Designs
       
     </span>
   </a>
   
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#tab-7-connection-utility" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Tab 7 — Connection Utility
-      
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="Tab 7 — Connection Utility">
+    <nav class="md-nav" aria-label="8. Open-Source Reference Designs">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#usb-serial-walkthrough" class="md-nav__link">
+  <a href="#81-ducky-board-esp32-s3-e-paper-battery" class="md-nav__link">
     <span class="md-ellipsis">
       
-        USB Serial Walkthrough
+        8.1 Ducky Board (ESP32-S3 + e-Paper + Battery)
       
     </span>
   </a>
@@ -3499,10 +3267,54 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#wi-fi-walkthrough" class="md-nav__link">
+  <a href="#82-opentama-tamagotchi-reference-design" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Wi-Fi Walkthrough
+        8.2 OpenTama (Tamagotchi Reference Design)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#83-tamafi-v2-esp32-s3-virtual-pet" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        8.3 TamaFi V2 (ESP32-S3 Virtual Pet)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#84-pocketmage-pda-esp32-s3-e-ink-handheld" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        8.4 PocketMage PDA (ESP32-S3 + e-Ink Handheld)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#85-aeonlabs-esp32-s3-pcb-template" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        8.5 AeonLabs ESP32-S3 PCB Template
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#86-picotop-rp2040-custom-desktop" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        8.6 PicoTop (RP2040 Custom Desktop)
       
     </span>
   </a>
@@ -3515,33 +3327,22 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#tab-8-documentation" class="md-nav__link">
+  <a href="#9-recommended-manufacturing-path" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Tab 8 — Documentation
+        9. Recommended Manufacturing Path
       
     </span>
   </a>
   
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#file-formats" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        File Formats
-      
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="File Formats">
+    <nav class="md-nav" aria-label="9. Recommended Manufacturing Path">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#pbm-portable-bitmap-p4-binary" class="md-nav__link">
+  <a href="#for-dilder-v1-prototype-5-boards" class="md-nav__link">
     <span class="md-ellipsis">
       
-        PBM (Portable Bitmap — P4 Binary)
+        For Dilder v1 Prototype (5 boards)
       
     </span>
   </a>
@@ -3549,10 +3350,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#bin-raw-display-buffer" class="md-nav__link">
+  <a href="#ordering-checklist" class="md-nav__link">
     <span class="md-ellipsis">
       
-        BIN (Raw Display Buffer)
+        Ordering Checklist
       
     </span>
   </a>
@@ -3560,10 +3361,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#png-portable-network-graphics" class="md-nav__link">
+  <a href="#for-production-20-boards" class="md-nav__link">
     <span class="md-ellipsis">
       
-        PNG (Portable Network Graphics)
+        For Production (20+ boards)
       
     </span>
   </a>
@@ -3576,22 +3377,22 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#architecture-overview" class="md-nav__link">
+  <a href="#10-sources" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Architecture Overview
+        10. Sources
       
     </span>
   </a>
   
-    <nav class="md-nav" aria-label="Architecture Overview">
+    <nav class="md-nav" aria-label="10. Sources">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#class-structure" class="md-nav__link">
+  <a href="#provider-pricing" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Class Structure
+        Provider Pricing
       
     </span>
   </a>
@@ -3599,10 +3400,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#startup-behavior" class="md-nav__link">
+  <a href="#comparison-analysis" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Startup Behavior
+        Comparison &amp; Analysis
       
     </span>
   </a>
@@ -3610,10 +3411,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#threading" class="md-nav__link">
+  <a href="#open-source-hardware-designs" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Threading
+        Open-Source Hardware Designs
       
     </span>
   </a>
@@ -3622,17 +3423,6 @@
         
       </ul>
     </nav>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#troubleshooting" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Troubleshooting
-      
-    </span>
-  </a>
   
 </li>
       
@@ -3656,725 +3446,951 @@
   
 
 
-<h1 id="devtool-pico-w-development-companion">DevTool — Pico W Development Companion<a class="headerlink" href="#devtool-pico-w-development-companion" title="Permanent link">&para;</a></h1>
-<p>A Tkinter GUI application for developing on the Raspberry Pi Pico W with the Waveshare 2.13" e-ink display. Provides a display emulator, serial monitor, firmware flash utility, asset manager, GPIO reference, USB/Wi-Fi connection walkthrough, and built-in documentation — all in one window.</p>
+<h1 id="pcb-assembly-board-prototyping-pricing-providers-and-open-source-reference-designs">PCB Assembly &amp; Board Prototyping — Pricing, Providers, and Open-Source Reference Designs<a class="headerlink" href="#pcb-assembly-board-prototyping-pricing-providers-and-open-source-reference-designs" title="Permanent link">&para;</a></h1>
+<blockquote>
+<p>Comprehensive research on manufacturing the Dilder custom PCB: provider comparison, assembly pricing breakdown, cost estimates, and open-source hardware designs that can serve as reference or starting points.</p>
+</blockquote>
+<p><strong>Board spec:</strong> ESP32-S3-WROOM-1-N16R8, 4-layer, 45x80mm, ~27 components, SPI e-ink display, 5-way joystick, MPU-6050 IMU, TP4056 LiPo charger, USB-C.</p>
 <hr />
-<h2 id="requirements">Requirements<a class="headerlink" href="#requirements" title="Permanent link">&para;</a></h2>
+<h2 id="table-of-contents">Table of Contents<a class="headerlink" href="#table-of-contents" title="Permanent link">&para;</a></h2>
+<ol>
+<li><a href="#1-provider-comparison">Provider Comparison</a></li>
+<li><a href="#2-jlcpcb--detailed-pricing-breakdown">JLCPCB — Detailed Pricing Breakdown</a></li>
+<li><a href="#3-pcbway--detailed-pricing-breakdown">PCBWay — Detailed Pricing Breakdown</a></li>
+<li><a href="#4-osh-park--detailed-pricing-breakdown">OSH Park — Detailed Pricing Breakdown</a></li>
+<li><a href="#5-aisler--detailed-pricing-breakdown">Aisler — Detailed Pricing Breakdown</a></li>
+<li><a href="#6-seeed-studio-fusion--detailed-pricing-breakdown">Seeed Studio Fusion — Detailed Pricing Breakdown</a></li>
+<li><a href="#7-cost-estimates-for-the-dilder-board">Cost Estimates for the Dilder Board</a></li>
+<li><a href="#8-open-source-reference-designs">Open-Source Reference Designs</a></li>
+<li><a href="#9-recommended-manufacturing-path">Recommended Manufacturing Path</a></li>
+<li><a href="#10-sources">Sources</a></li>
+</ol>
+<hr />
+<h2 id="1-provider-comparison">1. Provider Comparison<a class="headerlink" href="#1-provider-comparison" title="Permanent link">&para;</a></h2>
 <table>
 <thead>
 <tr>
-<th>Requirement</th>
+<th>Provider</th>
+<th>Location</th>
+<th>PCB Lead Time</th>
+<th>Assembly?</th>
+<th>Min Order</th>
+<th>Best For</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>JLCPCB</strong></td>
+<td>Shenzhen, China</td>
+<td>2-5 days</td>
+<td>Yes (SMT)</td>
+<td>5 boards</td>
+<td>Budget prototypes, integrated parts library</td>
+</tr>
+<tr>
+<td><strong>PCBWay</strong></td>
+<td>Shenzhen, China</td>
+<td>3-5 days</td>
+<td>Yes (SMT + THT)</td>
+<td>5 boards</td>
+<td>Higher quality, advanced features</td>
+</tr>
+<tr>
+<td><strong>OSH Park</strong></td>
+<td>Oregon, USA</td>
+<td>9-14 days</td>
+<td>No</td>
+<td>3 boards</td>
+<td>US-based, premium finish, no assembly</td>
+</tr>
+<tr>
+<td><strong>Aisler</strong></td>
+<td>Netherlands, EU</td>
+<td>5-7 days</td>
+<td>Yes (SMT)</td>
+<td>3 boards</td>
+<td>EU-based, no customs/VAT hassle for EU</td>
+</tr>
+<tr>
+<td><strong>Seeed Studio Fusion</strong></td>
+<td>Shenzhen, China</td>
+<td>5-7 days</td>
+<td>Yes (SMT)</td>
+<td>5 boards</td>
+<td>Budget, integrated with Seeed ecosystem</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="2-jlcpcb-detailed-pricing-breakdown">2. JLCPCB — Detailed Pricing Breakdown<a class="headerlink" href="#2-jlcpcb-detailed-pricing-breakdown" title="Permanent link">&para;</a></h2>
+<p><strong>Source:</strong> <a href="https://jlcpcb.com/help/article/pcb-assembly-price">JLCPCB Assembly Pricing</a> | <a href="https://jlcpcb.com/help/article/components-pickup-pricing">Component Pickup Pricing</a> | <a href="https://jlcpcb.com/blog/pcba-cost-breakdown">PCBA Cost Breakdown</a></p>
+<h3 id="pcb-fabrication">PCB Fabrication<a class="headerlink" href="#pcb-fabrication" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Spec</th>
+<th>Price (5 boards)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>2-layer, 100x100mm</td>
+<td>~$2</td>
+</tr>
+<tr>
+<td>4-layer, 100x100mm</td>
+<td>~$8-12</td>
+</tr>
+<tr>
+<td>4-layer, 45x80mm (Dilder size)</td>
+<td>~$8-15</td>
+</tr>
+<tr>
+<td>Surface finish</td>
+<td>HASL (free), ENIG (+$6-8)</td>
+</tr>
+<tr>
+<td>Solder mask</td>
+<td>Green (free), other colors +$2-5</td>
+</tr>
+</tbody>
+</table>
+<h3 id="assembly-fees">Assembly Fees<a class="headerlink" href="#assembly-fees" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Line Item</th>
+<th>Economic PCBA</th>
+<th>Standard PCBA</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Setup fee</strong></td>
+<td>$8.00</td>
+<td>$25 (single-side) / $50 (double-side)</td>
+</tr>
+<tr>
+<td><strong>Stencil</strong></td>
+<td>$1.50</td>
+<td>$7.86 (single-side)</td>
+</tr>
+<tr>
+<td><strong>Per solder joint</strong></td>
+<td>$0.0016</td>
+<td>$0.0016 (1-50k joints)</td>
+</tr>
+<tr>
+<td><strong>Hand-solder labor</strong></td>
+<td>$3.50/order</td>
+<td>$3.50/order</td>
+</tr>
+<tr>
+<td><strong>Panel fee</strong></td>
+<td>$7.81/panel</td>
+<td>$7.81/panel</td>
+</tr>
+</tbody>
+</table>
+<h3 id="component-handling-fees">Component Handling Fees<a class="headerlink" href="#component-handling-fees" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Component Type</th>
+<th>Fee</th>
 <th>Notes</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td>Python 3.9+</td>
-<td>Comes with most Linux distributions</td>
+<td><strong>Basic</strong></td>
+<td><strong>Free</strong></td>
+<td>Common passives (0402/0603 R, C), common ICs — already loaded on pick-and-place machines</td>
 </tr>
 <tr>
-<td>Tkinter</td>
-<td>Usually included with Python. On Arch: <code>sudo pacman -S tk</code></td>
+<td><strong>Extended</strong></td>
+<td><strong>$3.00 per unique part type</strong></td>
+<td>Less common parts that require feeder changes. Charged per part <em>type</em>, not per unit.</td>
 </tr>
 <tr>
-<td>pyserial</td>
-<td>For USB serial communication with the Pico W</td>
-</tr>
-<tr>
-<td>Pillow (optional)</td>
-<td>For PNG export/import and better text rendering</td>
+<td><strong>Component cost</strong></td>
+<td>At-cost from LCSC</td>
+<td>JLCPCB sources from their own warehouse (LCSC); prices shown in their parts library</td>
 </tr>
 </tbody>
 </table>
-<hr />
-<h2 id="installation">Installation<a class="headerlink" href="#installation" title="Permanent link">&para;</a></h2>
-<h3 id="install-system-dependencies">Install System Dependencies<a class="headerlink" href="#install-system-dependencies" title="Permanent link">&para;</a></h3>
-<p>Tkinter is a Python binding to Tcl/Tk. It's usually bundled with Python, but some distros package it separately.</p>
-<div class="tabbed-set tabbed-alternate" data-tabs="1:2"><input checked="checked" id="__tabbed_1_1" name="__tabbed_1" type="radio" /><input id="__tabbed_1_2" name="__tabbed_1" type="radio" /><div class="tabbed-labels"><label for="__tabbed_1_1">Arch / CachyOS</label><label for="__tabbed_1_2">Ubuntu / Debian</label></div>
-<div class="tabbed-content">
-<div class="tabbed-block">
-<div class="language-bash highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>sudo<span class="w"> </span>pacman<span class="w"> </span>-S<span class="w"> </span>tk<span class="w"> </span>python
-</span></code></pre></div>
-</div>
-<div class="tabbed-block">
-<div class="language-bash highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>sudo<span class="w"> </span>apt<span class="w"> </span>install<span class="w"> </span>python3-tk
-</span></code></pre></div>
-</div>
-</div>
-</div>
-<h3 id="install-python-dependencies">Install Python Dependencies<a class="headerlink" href="#install-python-dependencies" title="Permanent link">&para;</a></h3>
-<div class="language-bash highlight"><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="nb">cd</span><span class="w"> </span>DevTool/
-</span><span id="__span-2-2"><a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>pip<span class="w"> </span>install<span class="w"> </span>-r<span class="w"> </span>requirements.txt
-</span></code></pre></div>
-<p>This installs:</p>
+<h3 id="key-notes">Key Notes<a class="headerlink" href="#key-notes" title="Permanent link">&para;</a></h3>
 <ul>
-<li><code>pyserial</code> — required for the serial monitor and image upload</li>
-<li><code>Pillow</code> — optional but recommended for PNG support and better text rendering</li>
+<li>JLCPCB has the largest integrated parts library (~400k parts on LCSC)</li>
+<li>"Economic PCBA" supports single-side SMT only, 1-layer stencil</li>
+<li>Basic parts inventory changes — check current stock before finalizing BOM</li>
+<li>$8 setup + $1.50 stencil = <strong>$9.50 minimum</strong> before any components</li>
 </ul>
-<h3 id="verify">Verify<a class="headerlink" href="#verify" title="Permanent link">&para;</a></h3>
-<div class="language-bash highlight"><pre><span></span><code><span id="__span-3-1"><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>python3<span class="w"> </span>-c<span class="w"> </span><span class="s2">&quot;import tkinter; import serial; print(&#39;OK&#39;)&quot;</span>
-</span></code></pre></div>
-<p>If this prints <code>OK</code>, you're ready to go.</p>
-<div class="admonition tip">
-<p class="admonition-title">Automatic dependency gate</p>
-<p>When you run <code>python3 DevTool/devtool.py</code> directly, the DevTool automatically detects missing dependencies and offers to install them for your distro. You don't need to install manually if you prefer.</p>
-</div>
 <hr />
-<h2 id="launching-the-devtool">Launching the DevTool<a class="headerlink" href="#launching-the-devtool" title="Permanent link">&para;</a></h2>
-<p>From the project root:</p>
-<div class="language-bash highlight"><pre><span></span><code><span id="__span-4-1"><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>python3<span class="w"> </span>DevTool/devtool.py
-</span></code></pre></div>
-<p>The application opens with eight tabs across the top:</p>
+<h2 id="3-pcbway-detailed-pricing-breakdown">3. PCBWay — Detailed Pricing Breakdown<a class="headerlink" href="#3-pcbway-detailed-pricing-breakdown" title="Permanent link">&para;</a></h2>
+<p><strong>Source:</strong> <a href="https://www.pcbway.com/pcb-assembly.html">PCBWay SMT Assembly</a> | <a href="https://www.pcbway.com/helpcenter/pcb_assembly_ordering/Assembly_cost_will_be_showed_after_submit_order_is_components_cost_included_.html">PCBWay Assembly FAQ</a></p>
+<h3 id="pcb-fabrication_1">PCB Fabrication<a class="headerlink" href="#pcb-fabrication_1" title="Permanent link">&para;</a></h3>
 <table>
 <thead>
 <tr>
-<th>Tab</th>
-<th>Purpose</th>
+<th>Spec</th>
+<th>Price (5 boards)</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td><strong>Display Emulator</strong></td>
-<td>Draw and design 250x122 e-ink images</td>
+<td>2-layer, 100x100mm</td>
+<td>~$5</td>
 </tr>
 <tr>
-<td><strong>Serial Monitor</strong></td>
-<td>View live printf output from the Pico W</td>
+<td>4-layer, 100x100mm</td>
+<td>~$20-30</td>
 </tr>
 <tr>
-<td><strong>Flash Firmware</strong></td>
-<td>Flash .uf2 files to the Pico W</td>
+<td>4-layer, 45x80mm (Dilder size)</td>
+<td>~$15-25</td>
 </tr>
 <tr>
-<td><strong>Assets</strong></td>
-<td>Browse and manage saved display images</td>
-</tr>
-<tr>
-<td><strong>Programs</strong></td>
-<td>Preview, stream, or deploy animated programs to the display</td>
-</tr>
-<tr>
-<td><strong>GPIO Pins</strong></td>
-<td>Visual pin assignment reference</td>
-</tr>
-<tr>
-<td><strong>Connect</strong></td>
-<td>Step-by-step USB serial and Wi-Fi connection walkthrough</td>
-</tr>
-<tr>
-<td><strong>Docs</strong></td>
-<td>Searchable built-in documentation for the entire application</td>
+<td>Min order</td>
+<td>5 boards</td>
 </tr>
 </tbody>
 </table>
-<p>A log bar at the bottom shows status messages and timestamps. At startup, the DevTool runs a Docker health check in the background and reports the status of the build toolchain.</p>
-<hr />
-<h2 id="tab-1-display-emulator">Tab 1 — Display Emulator<a class="headerlink" href="#tab-1-display-emulator" title="Permanent link">&para;</a></h2>
-<p>The display emulator is a 250x122 pixel canvas (scaled 3x for visibility) that exactly matches the Waveshare 2.13" V3 e-ink display. Everything you draw here is a 1-bit monochrome image — black or white only, just like the real display.</p>
-<p><img alt="Display Emulator — blank canvas" src="../../../assets/images/devtool/devtool_tab_display_emulator.png" /></p>
-<h3 id="drawing-tools">Drawing Tools<a class="headerlink" href="#drawing-tools" title="Permanent link">&para;</a></h3>
-<p>The toolbar at the top provides six tools:</p>
+<h3 id="assembly-fees_1">Assembly Fees<a class="headerlink" href="#assembly-fees_1" title="Permanent link">&para;</a></h3>
 <table>
 <thead>
 <tr>
-<th>Tool</th>
-<th>Description</th>
-<th>Shortcut</th>
+<th>Line Item</th>
+<th>Cost</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td><strong>Pencil</strong></td>
-<td>Freehand draw in black. Click or drag.</td>
-<td>Default</td>
+<td><strong>Per solder joint</strong></td>
+<td>~$0.002</td>
 </tr>
 <tr>
-<td><strong>Eraser</strong></td>
-<td>Freehand erase to white. Click or drag.</td>
-<td></td>
+<td><strong>Per component</strong></td>
+<td>~$0.05-$0.50 (varies by component type)</td>
 </tr>
 <tr>
-<td><strong>Line</strong></td>
-<td>Click start point, drag to end point, release.</td>
-<td></td>
+<td><strong>Assembly fee (prototype, 5 boards)</strong></td>
+<td>~$29-50 (estimated, BOM-dependent)</td>
 </tr>
 <tr>
-<td><strong>Rect</strong></td>
-<td>Draw a rectangle outline. Click one corner, drag to opposite.</td>
-<td></td>
-</tr>
-<tr>
-<td><strong>Fill Rect</strong></td>
-<td>Draw a filled black rectangle. Same interaction as Rect.</td>
-<td></td>
-</tr>
-<tr>
-<td><strong>Text</strong></td>
-<td>Click a position, type text in the dialog. Renders to pixels.</td>
-<td></td>
+<td><strong>Stencil</strong></td>
+<td>Included in assembly fee</td>
 </tr>
 </tbody>
 </table>
-<p><strong>Size</strong> controls the brush width (pencil/eraser) and line thickness (line/rect).</p>
-<p><strong>Clear</strong> resets the canvas to all white.</p>
-<p><strong>Invert</strong> flips every pixel (black becomes white, white becomes black). Useful for creating white-on-black designs.</p>
-<h4 id="pencil-tool">Pencil Tool<a class="headerlink" href="#pencil-tool" title="Permanent link">&para;</a></h4>
-<p><img alt="Pencil tool selected" src="../../../assets/images/devtool/devtool_display_tool_pencil.png" /></p>
-<h4 id="eraser-tool">Eraser Tool<a class="headerlink" href="#eraser-tool" title="Permanent link">&para;</a></h4>
-<p><img alt="Eraser tool selected" src="../../../assets/images/devtool/devtool_display_tool_eraser.png" /></p>
-<h4 id="line-tool">Line Tool<a class="headerlink" href="#line-tool" title="Permanent link">&para;</a></h4>
-<p><img alt="Line tool selected" src="../../../assets/images/devtool/devtool_display_tool_line.png" /></p>
-<h4 id="rectangle-tool">Rectangle Tool<a class="headerlink" href="#rectangle-tool" title="Permanent link">&para;</a></h4>
-<p><img alt="Rectangle tool selected" src="../../../assets/images/devtool/devtool_display_tool_rectangle.png" /></p>
-<h4 id="filled-rectangle-tool">Filled Rectangle Tool<a class="headerlink" href="#filled-rectangle-tool" title="Permanent link">&para;</a></h4>
-<p><img alt="Filled rectangle tool selected" src="../../../assets/images/devtool/devtool_display_tool_filled_rect.png" /></p>
-<h4 id="text-tool">Text Tool<a class="headerlink" href="#text-tool" title="Permanent link">&para;</a></h4>
-<p><img alt="Text tool selected" src="../../../assets/images/devtool/devtool_display_tool_text.png" /></p>
-<h3 id="drawing-demo">Drawing Demo<a class="headerlink" href="#drawing-demo" title="Permanent link">&para;</a></h3>
-<p>Here's an example using the line, rectangle, and filled rectangle tools together:</p>
-<p><img alt="Drawing tools in action" src="../../../assets/images/devtool/devtool_display_drawing_tools.png" /></p>
-<h3 id="invert-function">Invert Function<a class="headerlink" href="#invert-function" title="Permanent link">&para;</a></h3>
-<p>The invert function flips all pixels — useful for creating white-on-black designs:</p>
-<p><img alt="Inverted canvas" src="../../../assets/images/devtool/devtool_display_inverted.png" /></p>
-<h3 id="text-tool_1">Text Tool<a class="headerlink" href="#text-tool_1" title="Permanent link">&para;</a></h3>
+<h3 id="key-notes_1">Key Notes<a class="headerlink" href="#key-notes_1" title="Permanent link">&para;</a></h3>
+<ul>
+<li>Assembly pricing is quote-based — upload BOM + Gerbers to get exact price</li>
+<li>Components sourced from DigiKey, Mouser, LCSC, or customer-supplied</li>
+<li>Supports SMT + through-hole in the same order (JLCPCB does not)</li>
+<li>Slightly higher quality reputation for complex boards</li>
+<li>Assembly cost shown <em>after</em> order submission, does not include component cost</li>
+</ul>
+<hr />
+<h2 id="4-osh-park-detailed-pricing-breakdown">4. OSH Park — Detailed Pricing Breakdown<a class="headerlink" href="#4-osh-park-detailed-pricing-breakdown" title="Permanent link">&para;</a></h2>
+<p><strong>Source:</strong> <a href="https://oshpark.com/">OSH Park Pricing</a> | <a href="https://docs.oshpark.com/services/four-layer/">4-Layer Service</a></p>
+<h3 id="pcb-fabrication-only-no-assembly">PCB Fabrication Only (No Assembly)<a class="headerlink" href="#pcb-fabrication-only-no-assembly" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Service</th>
+<th>Price</th>
+<th>Lead Time</th>
+<th>Boards Included</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>2-layer prototype</strong></td>
+<td>$5/in²</td>
+<td>9-14 days</td>
+<td>3 copies</td>
+</tr>
+<tr>
+<td><strong>2-layer Super Swift</strong></td>
+<td>$10/in²</td>
+<td>~5 days</td>
+<td>3 copies</td>
+</tr>
+<tr>
+<td><strong>4-layer prototype</strong></td>
+<td>$15/in²</td>
+<td>9-14 days</td>
+<td>3 copies</td>
+</tr>
+<tr>
+<td><strong>4-layer Super Swift</strong></td>
+<td>$20/in²</td>
+<td>5-6 days</td>
+<td>3 copies</td>
+</tr>
+<tr>
+<td><strong>4-layer Medium Run</strong></td>
+<td>$2/in²</td>
+<td>—</td>
+<td>100 in² minimum</td>
+</tr>
+</tbody>
+</table>
+<h3 id="cost-for-dilder-board-45x80mm-56-in2">Cost for Dilder Board (45x80mm = ~5.6 in²)<a class="headerlink" href="#cost-for-dilder-board-45x80mm-56-in2" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Service</th>
+<th>3 boards</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>4-layer prototype</td>
+<td><strong>~$84</strong></td>
+</tr>
+<tr>
+<td>4-layer Super Swift</td>
+<td><strong>~$112</strong></td>
+</tr>
+</tbody>
+</table>
+<h3 id="key-notes_2">Key Notes<a class="headerlink" href="#key-notes_2" title="Permanent link">&para;</a></h3>
+<ul>
+<li><strong>No assembly service</strong> — fabrication only, you solder yourself</li>
+<li>Premium finish: FR408 substrate, purple solder mask, ENIG (gold) finish</li>
+<li>All boards come in sets of 3</li>
+<li>US-based, no customs for US customers</li>
+<li>Significantly more expensive per board than Chinese fabs</li>
+<li>Best for: premium prototypes where quality matters more than cost</li>
+</ul>
+<hr />
+<h2 id="5-aisler-detailed-pricing-breakdown">5. Aisler — Detailed Pricing Breakdown<a class="headerlink" href="#5-aisler-detailed-pricing-breakdown" title="Permanent link">&para;</a></h2>
+<p><strong>Source:</strong> <a href="https://community.aisler.net/t/our-simple-pricing/102">Aisler Pricing</a> | <a href="https://aisler.net/en/products/assembly">Aisler Assembly</a></p>
+<h3 id="pcb-fabrication_2">PCB Fabrication<a class="headerlink" href="#pcb-fabrication_2" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Spec</th>
+<th>Price (3 boards)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>2-layer</td>
+<td>~€5-10</td>
+</tr>
+<tr>
+<td>4-layer</td>
+<td>~€15-25</td>
+</tr>
+<tr>
+<td>6-layer</td>
+<td>Quote-based</td>
+</tr>
+</tbody>
+</table>
+<h3 id="assembly-fees_2">Assembly Fees<a class="headerlink" href="#assembly-fees_2" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Line Item</th>
+<th>Cost</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Setup fee</strong></td>
+<td>€75.00</td>
+</tr>
+<tr>
+<td><strong>Per unique part type</strong></td>
+<td>€4.50</td>
+</tr>
+<tr>
+<td><strong>Per component placed</strong></td>
+<td>€0.05</td>
+</tr>
+<tr>
+<td><strong>Board area handling</strong></td>
+<td>Additional (area-based)</td>
+</tr>
+</tbody>
+</table>
+<h3 id="cost-estimate-for-dilder-10-boards-27-components-5-unique-passive-types-5-ics">Cost Estimate for Dilder (10 boards, 27 components, ~5 unique passive types + 5 ICs)<a class="headerlink" href="#cost-estimate-for-dilder-10-boards-27-components-5-unique-passive-types-5-ics" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Line Item</th>
+<th>Cost</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Setup</td>
+<td>€75.00</td>
+</tr>
+<tr>
+<td>10 unique part types × €4.50</td>
+<td>€45.00</td>
+</tr>
+<tr>
+<td>27 components × 10 boards × €0.05</td>
+<td>€13.50</td>
+</tr>
+<tr>
+<td><strong>Assembly subtotal</strong></td>
+<td><strong>~€133.50</strong></td>
+</tr>
+</tbody>
+</table>
+<h3 id="key-notes_3">Key Notes<a class="headerlink" href="#key-notes_3" title="Permanent link">&para;</a></h3>
+<ul>
+<li><strong>EU-based</strong> (Netherlands) — no customs, no import VAT for EU buyers</li>
+<li>Significantly more expensive assembly than Chinese providers</li>
+<li>Excellent for EU customers who want to avoid customs delays and surprise import fees</li>
+<li>Supports KiCad and LibrePCB project upload directly</li>
+<li>Smaller parts library than JLCPCB</li>
+</ul>
+<hr />
+<h2 id="6-seeed-studio-fusion-detailed-pricing-breakdown">6. Seeed Studio Fusion — Detailed Pricing Breakdown<a class="headerlink" href="#6-seeed-studio-fusion-detailed-pricing-breakdown" title="Permanent link">&para;</a></h2>
+<p><strong>Source:</strong> <a href="https://www.seeedstudio.com/fusion_pcb.html">Seeed Fusion PCB</a> | <a href="https://www.seeedstudio.com/pcb-assembly.html">Seeed Fusion Assembly</a> | <a href="https://www.seeedstudio.com/blog/2018/03/30/seeed-pcba-series-4-pcb-assembly-pricing-explained/">PCBA Pricing Explained</a></p>
+<h3 id="pcb-fabrication_3">PCB Fabrication<a class="headerlink" href="#pcb-fabrication_3" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Spec</th>
+<th>Price (5-10 boards)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>2-layer, 100x100mm, 10 boards</td>
+<td>$4.90</td>
+</tr>
+<tr>
+<td>4-layer, 100x100mm, 5 boards</td>
+<td>~$39.90</td>
+</tr>
+<tr>
+<td>4-layer, 45x80mm (Dilder size)</td>
+<td>~$20-35</td>
+</tr>
+</tbody>
+</table>
+<h3 id="assembly-fees_3">Assembly Fees<a class="headerlink" href="#assembly-fees_3" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Line Item</th>
+<th>Cost</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Setup + stencil</strong></td>
+<td>Included in assembly quote</td>
+</tr>
+<tr>
+<td><strong>Per component</strong></td>
+<td>Quote-based (uses DigiKey/Mouser pricing)</td>
+</tr>
+<tr>
+<td><strong>Assembly labor</strong></td>
+<td>Component-count dependent</td>
+</tr>
+<tr>
+<td><strong>Free assembly promo</strong></td>
+<td>Often offers free assembly for 5 PCBs (check current promos)</td>
+</tr>
+</tbody>
+</table>
+<h3 id="key-notes_4">Key Notes<a class="headerlink" href="#key-notes_4" title="Permanent link">&para;</a></h3>
+<ul>
+<li>Smart quoting system links to DigiKey and Mouser for real-time component pricing</li>
+<li>Frequently runs promotions (free assembly for 5 boards with component purchase)</li>
+<li>Components sourced from major distributors (not a captive warehouse like JLCPCB/LCSC)</li>
+<li>Good middle ground between JLCPCB pricing and PCBWay quality</li>
+<li>Supports Open Parts Library (OPL) with pre-stocked common components</li>
+</ul>
+<hr />
+<h2 id="7-cost-estimates-for-the-dilder-board">7. Cost Estimates for the Dilder Board<a class="headerlink" href="#7-cost-estimates-for-the-dilder-board" title="Permanent link">&para;</a></h2>
+<h3 id="board-spec-summary">Board Spec Summary<a class="headerlink" href="#board-spec-summary" title="Permanent link">&para;</a></h3>
+<ul>
+<li><strong>MCU:</strong> ESP32-S3-WROOM-1-N16R8 (~$2.80 on LCSC)</li>
+<li><strong>Board:</strong> 4-layer, 45x80mm, 1.6mm thick, HASL finish</li>
+<li><strong>Components:</strong> ~27 unique parts (resistors, caps, ICs, connectors, LEDs, joystick)</li>
+<li><strong>Assembly:</strong> Single-side SMT</li>
+<li><strong>Quantity:</strong> 5 boards</li>
+</ul>
+<h3 id="estimated-bom-cost-per-board">Estimated BOM Cost Per Board<a class="headerlink" href="#estimated-bom-cost-per-board" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Category</th>
+<th>Est. Cost</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>ESP32-S3-WROOM-1-N16R8</td>
+<td>$2.80</td>
+</tr>
+<tr>
+<td>Power (TP4056, DW01A, FS8205A, AMS1117-3.3, SS34 diode)</td>
+<td>$0.28</td>
+</tr>
+<tr>
+<td>Input (SKRHABE010 Alps joystick)</td>
+<td>$0.38</td>
+</tr>
+<tr>
+<td>Sensors (MPU-6050)</td>
+<td>$6.88</td>
+</tr>
+<tr>
+<td>Connectors (USB-C, JST PH 2-pin, 8-pin header)</td>
+<td>$0.30</td>
+</tr>
+<tr>
+<td>Passives (10x resistors, 9x caps, 2x LEDs)</td>
+<td>$0.50</td>
+</tr>
+<tr>
+<td><strong>Total BOM per board</strong></td>
+<td><strong>~$11.14</strong></td>
+</tr>
+</tbody>
+</table>
+<h3 id="total-order-estimates-5-assembled-boards">Total Order Estimates (5 Assembled Boards)<a class="headerlink" href="#total-order-estimates-5-assembled-boards" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Provider</th>
+<th>PCB Fab</th>
+<th>Assembly</th>
+<th>Components</th>
+<th>Shipping (DE)</th>
+<th><strong>Total</strong></th>
+<th><strong>Per Board</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>JLCPCB</strong></td>
+<td>~$10</td>
+<td>~$15</td>
+<td>~$56</td>
+<td>~$15-20 (DHL)</td>
+<td><strong>~$96-101</strong></td>
+<td><strong>~$19-20</strong></td>
+</tr>
+<tr>
+<td><strong>PCBWay</strong></td>
+<td>~$20</td>
+<td>~$35</td>
+<td>~$56</td>
+<td>~$15-20</td>
+<td><strong>~$126-131</strong></td>
+<td><strong>~$25-26</strong></td>
+</tr>
+<tr>
+<td><strong>Aisler</strong> (EU)</td>
+<td>~€20</td>
+<td>~€134</td>
+<td>~€50</td>
+<td>~€5-10</td>
+<td><strong>~€209-214</strong></td>
+<td><strong>~€42-43</strong></td>
+</tr>
+<tr>
+<td><strong>Seeed Fusion</strong></td>
+<td>~$30</td>
+<td>~$25</td>
+<td>~$56</td>
+<td>~$15-20</td>
+<td><strong>~$126-131</strong></td>
+<td><strong>~$25-26</strong></td>
+</tr>
+<tr>
+<td><strong>OSH Park</strong> (fab only)</td>
+<td>~$84</td>
+<td>N/A (DIY)</td>
+<td>~$56 (self-source)</td>
+<td>~$10</td>
+<td><strong>~$150</strong></td>
+<td><strong>~$50</strong> (+ your soldering time)</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p><strong>Notes:</strong></p>
+<ul>
+<li>JLCPCB estimate assumes ~5 extended parts ($15 in feeder fees) + $9.50 setup/stencil + ~$0.50 solder joints. The rest is component cost at LCSC prices.</li>
+<li>Aisler's €75 setup fee dominates the cost for small batches. More competitive at 20+ boards.</li>
+<li>OSH Park is fab-only — you'd need to hand-solder or use a separate assembly service.</li>
+<li>All shipping estimates are for Germany (DHL Express from China, ~5-7 days).</li>
+<li>Import VAT (19% DE) applies to China orders. Aisler (EU) has no import VAT.</li>
+<li>Component prices based on LCSC qty-5 pricing as of April 2026.</li>
+</ul>
+</blockquote>
+<h3 id="break-even-when-does-aisler-beat-china">Break-Even: When Does Aisler Beat China?<a class="headerlink" href="#break-even-when-does-aisler-beat-china" title="Permanent link">&para;</a></h3>
+<p>Aisler's €75 setup fee makes it expensive for small batches, but there's no import VAT or customs delay. For a German buyer:</p>
+<table>
+<thead>
+<tr>
+<th>Qty</th>
+<th>JLCPCB (incl. 19% VAT + DHL)</th>
+<th>Aisler (EU, no VAT)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>5</td>
+<td>~€108</td>
+<td>~€214</td>
+</tr>
+<tr>
+<td>10</td>
+<td>~€175</td>
+<td>~€240</td>
+</tr>
+<tr>
+<td>20</td>
+<td>~€310</td>
+<td>~€295</td>
+</tr>
+<tr>
+<td>50</td>
+<td>~€700</td>
+<td>~€565</td>
+</tr>
+</tbody>
+</table>
+<p>Aisler becomes competitive at <strong>~20 boards</strong> when factoring in import VAT and customs risk.</p>
+<hr />
+<h2 id="8-open-source-reference-designs">8. Open-Source Reference Designs<a class="headerlink" href="#8-open-source-reference-designs" title="Permanent link">&para;</a></h2>
+<p>These open-source hardware projects share significant overlap with the Dilder's requirements and can serve as reference designs, component validation, or starting points for schematic/layout work.</p>
+<h3 id="81-ducky-board-esp32-s3-e-paper-battery">8.1 Ducky Board (ESP32-S3 + e-Paper + Battery)<a class="headerlink" href="#81-ducky-board-esp32-s3-e-paper-battery" title="Permanent link">&para;</a></h3>
+<p><strong>The closest match to the Dilder board.</strong></p>
+<table>
+<thead>
+<tr>
+<th>Attribute</th>
+<th>Details</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>MCU</strong></td>
+<td>ESP32-S3</td>
+</tr>
+<tr>
+<td><strong>Display</strong></td>
+<td>GDEM0154Z91 (1.52" e-ink, 3-color, Good Display)</td>
+</tr>
+<tr>
+<td><strong>Battery</strong></td>
+<td>Li-Ion single-cell charger with status LEDs</td>
+</tr>
+<tr>
+<td><strong>USB</strong></td>
+<td>USB-C for power and programming</td>
+</tr>
+<tr>
+<td><strong>Design tool</strong></td>
+<td>KiCad 9</td>
+</tr>
+<tr>
+<td><strong>Files available</strong></td>
+<td>Schematic (.kicad_sch), PCB layout (.kicad_pcb), Gerber files, PDF exports</td>
+</tr>
+<tr>
+<td><strong>License</strong></td>
+<td>GPL-3.0</td>
+</tr>
+<tr>
+<td><strong>GitHub</strong></td>
+<td><a href="https://github.com/MakersFunDuck/Ducky-board-ESP32-S3-with-1.52-inch-e-paper-display">MakersFunDuck/Ducky-board-ESP32-S3-with-1.52-inch-e-paper-display</a></td>
+</tr>
+</tbody>
+</table>
+<p><strong>Relevance to Dilder:</strong> Same MCU family, same display technology, same battery charging architecture. The schematic for the ESP32-S3 power sequencing, USB-C implementation, and LiPo charging circuit can be directly referenced. Component footprints and LCSC part numbers are manufacturing-optimized.</p>
+<h3 id="82-opentama-tamagotchi-reference-design">8.2 OpenTama (Tamagotchi Reference Design)<a class="headerlink" href="#82-opentama-tamagotchi-reference-design" title="Permanent link">&para;</a></h3>
+<p><strong>Purpose-built virtual pet PCB with JLCPCB assembly in mind.</strong></p>
+<table>
+<thead>
+<tr>
+<th>Attribute</th>
+<th>Details</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>MCU</strong></td>
+<td>STM32L072 (ARM Cortex-M0+)</td>
+</tr>
+<tr>
+<td><strong>Display</strong></td>
+<td>SPI SSD1306 OLED or SPI UC1701x LCD</td>
+</tr>
+<tr>
+<td><strong>Battery</strong></td>
+<td>1000mAh Li-Po/Li-Ion (40x30x12mm)</td>
+</tr>
+<tr>
+<td><strong>Input</strong></td>
+<td>3 tactile buttons</td>
+</tr>
+<tr>
+<td><strong>Design tool</strong></td>
+<td>KiCad</td>
+</tr>
+<tr>
+<td><strong>Files available</strong></td>
+<td>Full KiCad project (schematic + PCB), JLCPCB LCSC part numbers included</td>
+</tr>
+<tr>
+<td><strong>License</strong></td>
+<td>CERN-OHL-S v2 (open hardware)</td>
+</tr>
+<tr>
+<td><strong>GitHub</strong></td>
+<td><a href="https://github.com/Sparkr-tech/opentama">Sparkr-tech/opentama</a></td>
+</tr>
+</tbody>
+</table>
+<p><strong>Relevance to Dilder:</strong> Same product category (virtual pet), same target fab (JLCPCB), same battery spec (1000mAh LiPo). All components placed on one side for JLCPCB assembly. LCSC part numbers pre-assigned. Different MCU (STM32 vs ESP32-S3) but the power management, button input, and display interface circuits are directly applicable. The CERN-OHL-S v2 license explicitly permits derivative works.</p>
+<h3 id="83-tamafi-v2-esp32-s3-virtual-pet">8.3 TamaFi V2 (ESP32-S3 Virtual Pet)<a class="headerlink" href="#83-tamafi-v2-esp32-s3-virtual-pet" title="Permanent link">&para;</a></h3>
+<p><strong>A WiFi-enabled virtual pet with custom PCB.</strong></p>
+<table>
+<thead>
+<tr>
+<th>Attribute</th>
+<th>Details</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>MCU</strong></td>
+<td>ESP32-S3 module</td>
+</tr>
+<tr>
+<td><strong>Display</strong></td>
+<td>1.3-1.54" TFT ST7789 (240x240, full color)</td>
+</tr>
+<tr>
+<td><strong>Battery</strong></td>
+<td>TP4056 single-cell LiPo charger, USB-C</td>
+</tr>
+<tr>
+<td><strong>Input</strong></td>
+<td>6 tactile buttons</td>
+</tr>
+<tr>
+<td><strong>Audio</strong></td>
+<td>PWM buzzer</td>
+</tr>
+<tr>
+<td><strong>Lighting</strong></td>
+<td>4x WS2812-2020 addressable RGB LEDs</td>
+</tr>
+<tr>
+<td><strong>Files available</strong></td>
+<td>PCB layouts and schematics in repo (format unspecified)</td>
+</tr>
+<tr>
+<td><strong>License</strong></td>
+<td>MIT</td>
+</tr>
+<tr>
+<td><strong>GitHub</strong></td>
+<td><a href="https://github.com/cifertech/TamaFi">cifertech/TamaFi</a></td>
+</tr>
+</tbody>
+</table>
+<p><strong>Relevance to Dilder:</strong> Same MCU (ESP32-S3), same battery charging (TP4056), same product category (virtual pet). Uses TFT instead of e-ink, but the power management, button debouncing, and WiFi/BLE integration are directly relevant. MIT license allows any use.</p>
+<h3 id="84-pocketmage-pda-esp32-s3-e-ink-handheld">8.4 PocketMage PDA (ESP32-S3 + e-Ink Handheld)<a class="headerlink" href="#84-pocketmage-pda-esp32-s3-e-ink-handheld" title="Permanent link">&para;</a></h3>
+<p><strong>A handheld e-ink PDA with the exact same MCU and similar form factor.</strong></p>
+<table>
+<thead>
+<tr>
+<th>Attribute</th>
+<th>Details</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>MCU</strong></td>
+<td>ESP32-S3-WROOM-1-N16R8 (16MB flash, 8MB PSRAM) — <strong>identical to Dilder</strong></td>
+</tr>
+<tr>
+<td><strong>Display</strong></td>
+<td>3.1" e-ink (GDEQ031T10, 320x240px) + 256x32 OLED secondary</td>
+</tr>
+<tr>
+<td><strong>Battery</strong></td>
+<td>1200mAh LiPo with JST connector</td>
+</tr>
+<tr>
+<td><strong>Storage</strong></td>
+<td>MicroSD (up to 2TB)</td>
+</tr>
+<tr>
+<td><strong>Input</strong></td>
+<td>Keyboard matrix (TCA8418 IC)</td>
+</tr>
+<tr>
+<td><strong>Design tool</strong></td>
+<td>KiCad (planned release)</td>
+</tr>
+<tr>
+<td><strong>Files available</strong></td>
+<td>Firmware only (hardware files planned for future release)</td>
+</tr>
+<tr>
+<td><strong>License</strong></td>
+<td>Apache-2.0</td>
+</tr>
+<tr>
+<td><strong>GitHub</strong></td>
+<td><a href="https://github.com/ashtf8/PocketMage_PDA">ashtf8/PocketMage_PDA</a></td>
+</tr>
+</tbody>
+</table>
+<p><strong>Relevance to Dilder:</strong> Uses the exact same ESP32-S3-WROOM-1-N16R8 module with e-ink display. Firmware demonstrates SPI e-ink driving from ESP32-S3, which will be directly useful when porting from RP2040. Hardware files not yet released but the firmware architecture is a valuable reference for the ESP32-S3 migration.</p>
+<h3 id="85-aeonlabs-esp32-s3-pcb-template">8.5 AeonLabs ESP32-S3 PCB Template<a class="headerlink" href="#85-aeonlabs-esp32-s3-pcb-template" title="Permanent link">&para;</a></h3>
+<p><strong>A bare ESP32-S3 PCB template for KiCad with manufacturing files.</strong></p>
+<table>
+<thead>
+<tr>
+<th>Attribute</th>
+<th>Details</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>MCU</strong></td>
+<td>ESP32-S3</td>
+</tr>
+<tr>
+<td><strong>Purpose</strong></td>
+<td>Minimal reference design / starting template</td>
+</tr>
+<tr>
+<td><strong>Design tool</strong></td>
+<td>KiCad</td>
+</tr>
+<tr>
+<td><strong>Files available</strong></td>
+<td>Schematic, PCB layout, KiCad project</td>
+</tr>
+<tr>
+<td><strong>License</strong></td>
+<td>MIT</td>
+</tr>
+<tr>
+<td><strong>GitHub</strong></td>
+<td><a href="https://github.com/aeonSolutions/AeonLabs-pcb-template-esp32-s3">aeonSolutions/AeonLabs-pcb-template-esp32-s3</a></td>
+</tr>
+</tbody>
+</table>
+<p><strong>Relevance to Dilder:</strong> Minimal ESP32-S3 reference circuit — useful for validating power supply design, crystal selection, and antenna keepout zones without the complexity of a full application board.</p>
+<h3 id="86-picotop-rp2040-custom-desktop">8.6 PicoTop (RP2040 Custom Desktop)<a class="headerlink" href="#86-picotop-rp2040-custom-desktop" title="Permanent link">&para;</a></h3>
+<p><strong>Already analyzed in the Dilder PCB research document.</strong></p>
+<table>
+<thead>
+<tr>
+<th>Attribute</th>
+<th>Details</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>MCU</strong></td>
+<td>RP2040 (custom board, not a Pico module)</td>
+</tr>
+<tr>
+<td><strong>Purpose</strong></td>
+<td>Custom RP2040 desktop computer</td>
+</tr>
+<tr>
+<td><strong>Design tool</strong></td>
+<td>KiCad</td>
+</tr>
+<tr>
+<td><strong>Files available</strong></td>
+<td>Full KiCad project + Gerbers</td>
+</tr>
+<tr>
+<td><strong>GitHub</strong></td>
+<td><a href="https://github.com/7west/PicoTop">7west/PicoTop</a></td>
+</tr>
+</tbody>
+</table>
+<p><strong>Relevance to Dilder:</strong> Previously analyzed as the inspiration for the custom PCB initiative. Demonstrates full RP2040 custom board design from schematic through manufacturing. The manufacturing pipeline documentation (JLCPCB ordering, BOM preparation) was the basis for Dilder's PCB research document.</p>
+<hr />
+<h2 id="9-recommended-manufacturing-path">9. Recommended Manufacturing Path<a class="headerlink" href="#9-recommended-manufacturing-path" title="Permanent link">&para;</a></h2>
+<h3 id="for-dilder-v1-prototype-5-boards">For Dilder v1 Prototype (5 boards)<a class="headerlink" href="#for-dilder-v1-prototype-5-boards" title="Permanent link">&para;</a></h3>
+<p><strong>JLCPCB</strong> is the clear winner for the first prototype run:</p>
 <ol>
-<li>Select <strong>Text</strong> from the toolbar.</li>
-<li>Set the <strong>Font</strong> size (8–48 px).</li>
-<li>Click anywhere on the canvas.</li>
-<li>A dialog appears — type your text and press OK.</li>
-<li>The text is rasterized into the pixel buffer.</li>
+<li><strong>Lowest cost:</strong> ~$96-101 for 5 fully assembled boards ($19-20/board)</li>
+<li><strong>Integrated workflow:</strong> KiCad → JLCPCB Tools plugin → Gerber + BOM/CPL export → upload → order</li>
+<li><strong>Parts availability:</strong> All Dilder BOM components are in-stock on LCSC with assigned part numbers</li>
+<li><strong>Speed:</strong> 2-5 day fab + 3-5 day assembly + 5-7 day DHL to Germany = <strong>~10-17 days total</strong></li>
+<li><strong>Community:</strong> Largest hobbyist user base, most troubleshooting resources available</li>
 </ol>
-<p>If Pillow is installed, text renders using the DejaVu Sans Mono font at the exact pixel size. Without Pillow, text renders as filled blocks (approximate).</p>
-<h3 id="saving-images">Saving Images<a class="headerlink" href="#saving-images" title="Permanent link">&para;</a></h3>
-<p>Click <strong>Save</strong> in the toolbar. Enter a name (no extension). Three files are created in the <code>assets/</code> directory:</p>
-<table>
-<thead>
-<tr>
-<th>File</th>
-<th>Format</th>
-<th>Purpose</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><code>name.pbm</code></td>
-<td>PBM binary (P4)</td>
-<td>Standard 1-bit image format, viewable in any image viewer</td>
-</tr>
-<tr>
-<td><code>name.bin</code></td>
-<td>Raw packed bytes</td>
-<td>Direct upload format for the Pico W display buffer</td>
-</tr>
-<tr>
-<td><code>name.png</code></td>
-<td>PNG (if Pillow installed)</td>
-<td>Easy to view and share</td>
-</tr>
-</tbody>
-</table>
-<p><img alt="Save workflow — image ready to export" src="../../../assets/images/devtool/devtool_display_save_workflow.png" /></p>
-<p><strong>PBM</strong> is the primary format — it's a standard image format that needs no dependencies to read or write.</p>
-<p><strong>BIN</strong> is the raw display buffer in the same byte layout the Waveshare driver uses: each byte holds 8 horizontal pixels, MSB first, row by row. This can be loaded directly into the display framebuffer in C code.</p>
-<h3 id="loading-images">Loading Images<a class="headerlink" href="#loading-images" title="Permanent link">&para;</a></h3>
-<p>Click <strong>Load</strong> to open any <code>.pbm</code>, <code>.bin</code>, or <code>.png</code> file. The image is loaded into the canvas and can be further edited.</p>
-<h3 id="send-to-pico">Send to Pico<a class="headerlink" href="#send-to-pico" title="Permanent link">&para;</a></h3>
-<p>Click <strong>Send to Pico</strong> to transmit the current canvas image to the Pico W over USB serial. This sends a raw byte stream with an <code>IMG:</code> header followed by the width, height, and pixel data.</p>
-<div class="admonition note">
-<p class="admonition-title">Note</p>
-<p>This requires firmware on the Pico W that listens for the <code>IMG:</code> protocol. The hello world examples don't include this — it's for future firmware development.</p>
-</div>
-<hr />
-<h2 id="tab-2-serial-monitor">Tab 2 — Serial Monitor<a class="headerlink" href="#tab-2-serial-monitor" title="Permanent link">&para;</a></h2>
-<p>A full-featured serial terminal for communicating with the Pico W over USB.</p>
-<p><img alt="Serial Monitor — disconnected" src="../../../assets/images/devtool/devtool_tab_serial_monitor.png" /></p>
-<h3 id="connecting">Connecting<a class="headerlink" href="#connecting" title="Permanent link">&para;</a></h3>
+<h3 id="ordering-checklist">Ordering Checklist<a class="headerlink" href="#ordering-checklist" title="Permanent link">&para;</a></h3>
 <ol>
-<li>The <strong>Port</strong> dropdown auto-detects available serial devices. The Pico W typically appears as <code>/dev/ttyACM0</code>.</li>
-<li><strong>Baud rate</strong> defaults to 115200 (matching the Pico W's USB serial configuration).</li>
-<li>Click <strong>Connect</strong> to open the connection.</li>
-<li>The status indicator turns green when connected.</li>
+<li>[ ] Complete interactive routing in KiCad (traces on F.Cu and B.Cu, via stitching for ground plane)</li>
+<li>[ ] Run DRC (Design Rule Check) with JLCPCB constraints (5mil trace/space, 0.3mm via drill)</li>
+<li>[ ] Export Gerbers via JLCPCB Tools plugin</li>
+<li>[ ] Export BOM + CPL (Component Placement List) via JLCPCB Tools plugin</li>
+<li>[ ] Upload to JLCPCB, verify 3D preview</li>
+<li>[ ] Confirm all components show "In Stock" on LCSC</li>
+<li>[ ] Select "Economic PCBA" for single-side SMT</li>
+<li>[ ] Review order, pay, wait ~2 weeks</li>
 </ol>
-<p>If no ports appear, click <strong>Refresh</strong>. Make sure the Pico W is plugged in and running firmware (not in BOOTSEL mode).</p>
-<p><img alt="Serial Monitor — connected" src="../../../assets/images/devtool/devtool_serial_connected.png" /></p>
-<h3 id="viewing-output">Viewing Output<a class="headerlink" href="#viewing-output" title="Permanent link">&para;</a></h3>
-<p>Serial data from the Pico W appears in the output area in real time. This is where you see <code>printf()</code> output from your C programs.</p>
+<h3 id="for-production-20-boards">For Production (20+ boards)<a class="headerlink" href="#for-production-20-boards" title="Permanent link">&para;</a></h3>
+<p>Consider <strong>Aisler</strong> if selling within the EU (no import hassle for customers), or stay with <strong>JLCPCB</strong> for global distribution.</p>
+<hr />
+<h2 id="10-sources">10. Sources<a class="headerlink" href="#10-sources" title="Permanent link">&para;</a></h2>
+<h3 id="provider-pricing">Provider Pricing<a class="headerlink" href="#provider-pricing" title="Permanent link">&para;</a></h3>
 <ul>
-<li><strong>Auto-scroll</strong> keeps the view at the bottom as new lines arrive. Uncheck to freeze the view for reading.</li>
-<li><strong>Clear</strong> empties the output area.</li>
+<li><a href="https://jlcpcb.com/help/article/pcb-assembly-price">JLCPCB Assembly Pricing</a> — setup fees, per-joint costs, stencil charges</li>
+<li><a href="https://jlcpcb.com/help/article/components-pickup-pricing">JLCPCB Component Pickup Pricing</a> — 30% markup formula, $30 minimum</li>
+<li><a href="https://jlcpcb.com/blog/pcba-cost-breakdown">JLCPCB PCBA Cost Breakdown</a> — full cost analysis with examples</li>
+<li><a href="https://jlcpcb.com/help/article/pcb-assembly-faqs">JLCPCB Assembly FAQ</a> — basic vs extended parts, feeder fees</li>
+<li><a href="https://www.pcbway.com/pcb-assembly.html">PCBWay SMT Assembly</a> — service overview and capabilities</li>
+<li><a href="https://www.pcbway.com/helpcenter/pcb_assembly_ordering/Assembly_cost_will_be_showed_after_submit_order_is_components_cost_included_.html">PCBWay Assembly FAQ</a> — pricing structure</li>
+<li><a href="https://docs.oshpark.com/services/four-layer/">OSH Park 4-Layer Service</a> — $15/in² for 3 copies</li>
+<li><a href="https://docs.oshpark.com/services/">OSH Park Fabrication Services</a> — all service tiers</li>
+<li><a href="https://community.aisler.net/t/our-simple-pricing/102">Aisler Pricing</a> — setup fee, per-part, per-placement</li>
+<li><a href="https://aisler.net/en/products/assembly">Aisler Assembly</a> — EU-based assembly service</li>
+<li><a href="https://www.seeedstudio.com/fusion_pcb.html">Seeed Fusion PCB</a> — fabrication pricing</li>
+<li><a href="https://www.seeedstudio.com/pcb-assembly.html">Seeed Fusion Assembly</a> — assembly service</li>
+<li><a href="https://www.seeedstudio.com/blog/2018/03/30/seeed-pcba-series-4-pcb-assembly-pricing-explained/">Seeed PCBA Pricing Explained</a> — cost structure breakdown</li>
 </ul>
-<p><img alt="Serial Monitor — with output" src="../../../assets/images/devtool/devtool_serial_with_output.png" /></p>
-<h3 id="sending-commands">Sending Commands<a class="headerlink" href="#sending-commands" title="Permanent link">&para;</a></h3>
-<p>Type in the input bar at the bottom and press <strong>Enter</strong> or click <strong>Send</strong>. The text is sent to the Pico W followed by <code>\r\n</code>.</p>
-<p>Special buttons:</p>
+<h3 id="comparison-analysis">Comparison &amp; Analysis<a class="headerlink" href="#comparison-analysis" title="Permanent link">&para;</a></h3>
 <ul>
-<li><strong>Ctrl+C</strong> — sends an interrupt signal (useful for stopping running code)</li>
-<li><strong>Reset</strong> — sends a soft-reset signal (Ctrl+D)</li>
+<li><a href="https://www.fr4pcb.tech/blog/detail/jlcpcb-vs-pcbway-which-offers-better-prototype-assembly-services/">JLCPCB vs PCBWay Comparison</a> — detailed feature comparison</li>
+<li><a href="https://hackaday.com/2023/10/13/an-in-depth-comparison-of-hobby-pcb-manufacturers/">Hobby PCB Manufacturer Comparison (Hackaday)</a> — independent testing</li>
+<li><a href="https://www.raypcb.com/what-affect-pcb-assembly-cost/">PCB Assembly Cost Guide 2025 (RayPCB)</a> — industry pricing overview</li>
 </ul>
-<h3 id="saving-logs">Saving Logs<a class="headerlink" href="#saving-logs" title="Permanent link">&para;</a></h3>
-<p>Click <strong>Save Log</strong> to save the entire output history to a text file with a timestamped filename.</p>
-<hr />
-<h2 id="tab-3-flash-firmware">Tab 3 — Flash Firmware<a class="headerlink" href="#tab-3-flash-firmware" title="Permanent link">&para;</a></h2>
-<p>A visual interface for flashing <code>.uf2</code> firmware files to the Pico W.</p>
-<p><img alt="Flash Firmware tab" src="../../../assets/images/devtool/devtool_tab_flash_firmware.png" /></p>
-<h3 id="selecting-a-uf2-file">Selecting a UF2 File<a class="headerlink" href="#selecting-a-uf2-file" title="Permanent link">&para;</a></h3>
+<h3 id="open-source-hardware-designs">Open-Source Hardware Designs<a class="headerlink" href="#open-source-hardware-designs" title="Permanent link">&para;</a></h3>
 <ul>
-<li><strong>Browse</strong> — open a file picker to select any <code>.uf2</code> file.</li>
-<li><strong>Quick Flash</strong> buttons — one-click selection of the pre-built hello world programs (if they've been built):<ul>
-<li><strong>Hello Serial</strong> — <code>dev-setup/hello-world-serial/build/hello_serial.uf2</code></li>
-<li><strong>Hello Display</strong> — <code>dev-setup/hello-world/build/hello_dilder.uf2</code></li>
+<li><a href="https://github.com/MakersFunDuck/Ducky-board-ESP32-S3-with-1.52-inch-e-paper-display">Ducky Board — ESP32-S3 + e-Paper (GPL-3.0)</a></li>
+<li><a href="https://github.com/Sparkr-tech/opentama">OpenTama — Virtual Pet Reference Design (CERN-OHL-S v2)</a></li>
+<li><a href="https://github.com/cifertech/TamaFi">TamaFi V2 — ESP32-S3 Virtual Pet (MIT)</a></li>
+<li><a href="https://github.com/ashtf8/PocketMage_PDA">PocketMage PDA — ESP32-S3 e-Ink Handheld (Apache-2.0)</a></li>
+<li><a href="https://github.com/aeonSolutions/AeonLabs-pcb-template-esp32-s3">AeonLabs ESP32-S3 PCB Template (MIT)</a></li>
+<li><a href="https://github.com/7west/PicoTop">PicoTop — RP2040 Custom Board</a></li>
+<li><a href="http://blog.rona.fr/post/2022/04/21/OpenTama-an-open-source-reference-design-for-MCUGotchi">OpenTama Blog Post (design notes)</a></li>
+<li><a href="https://hackaday.io/project/204612-tamafi-v2-a-virtual-pet-that-evolved-beyond-logic">TamaFi V2 Hackaday.io</a></li>
 </ul>
-</li>
-</ul>
-<h3 id="flashing">Flashing<a class="headerlink" href="#flashing" title="Permanent link">&para;</a></h3>
-<ol>
-<li>Put the Pico W in <strong>BOOTSEL mode</strong> (unplug, hold BOOTSEL, plug in, release).</li>
-<li>Click <strong>Detect RPI-RP2</strong> — the tool searches for the mounted USB drive.</li>
-<li>Click <strong>Flash</strong> — the <code>.uf2</code> file is copied to the drive.</li>
-<li>The Pico W reboots automatically.</li>
-</ol>
-<p><img alt="Flash Firmware — BOOTSEL mount detected" src="../../../assets/images/devtool/devtool_flash_mount_detected.png" /></p>
-<h3 id="building-from-source">Building from Source<a class="headerlink" href="#building-from-source" title="Permanent link">&para;</a></h3>
-<p>The <strong>Build Projects</strong> section has buttons to compile each hello world project directly from the DevTool:</p>
-<ul>
-<li><strong>Build Hello Serial</strong> — runs CMake + Ninja in <code>dev-setup/hello-world-serial/</code></li>
-<li><strong>Build Hello Display</strong> — runs CMake + Ninja in <code>dev-setup/hello-world/</code></li>
-</ul>
-<p>Build output appears in the log bar at the bottom. The buttons handle copying <code>pico_sdk_import.cmake</code> and creating the build directory automatically.</p>
 <hr />
-<h2 id="tab-4-asset-manager">Tab 4 — Asset Manager<a class="headerlink" href="#tab-4-asset-manager" title="Permanent link">&para;</a></h2>
-<p>Browse and manage the 1-bit display images saved in the <code>assets/</code> directory.</p>
-<p><img alt="Asset Manager — file list" src="../../../assets/images/devtool/devtool_tab_asset_manager.png" /></p>
-<h3 id="browsing-assets">Browsing Assets<a class="headerlink" href="#browsing-assets" title="Permanent link">&para;</a></h3>
-<p>The file list on the left shows all <code>.pbm</code>, <code>.bin</code>, and <code>.png</code> files in <code>assets/</code>. Click <strong>Refresh</strong> to reload the list.</p>
-<h3 id="previewing">Previewing<a class="headerlink" href="#previewing" title="Permanent link">&para;</a></h3>
-<p>Click any file to see a 2x scaled preview on the right. The preview shows the image as it would appear on the e-ink display.</p>
-<p>File info (name, size, dimensions) is shown below the preview.</p>
-<p><img alt="Asset Manager — preview with checkerboard pattern" src="../../../assets/images/devtool/devtool_asset_manager_preview.png" /></p>
-<h3 id="deleting">Deleting<a class="headerlink" href="#deleting" title="Permanent link">&para;</a></h3>
-<p>Select a file and click <strong>Delete</strong> to remove it. A confirmation dialog appears first.</p>
-<p><strong>Open Folder</strong> opens the <code>assets/</code> directory in your system file manager.</p>
-<hr />
-<h2 id="tab-5-programs">Tab 5 — Programs<a class="headerlink" href="#tab-5-programs" title="Permanent link">&para;</a></h2>
-<p>Preview, stream, or permanently deploy any of 16 animated programs to the Pico W display.</p>
-<p><img alt="Programs tab — Sassy Octopus selected" src="../../../assets/images/devtool/devtool_tab_programs.png" /></p>
-<h3 id="program-list">Program List<a class="headerlink" href="#program-list" title="Permanent link">&para;</a></h3>
-<p>Select a program from the list on the left. The preview canvas on the right shows a static frame.</p>
-<p><img alt="Programs — list with description" src="../../../assets/images/devtool/devtool_programs_list.png" /></p>
-<h3 id="previewing_1">Previewing<a class="headerlink" href="#previewing_1" title="Permanent link">&para;</a></h3>
-<p>Click <strong>Preview</strong> to run the animation in the emulator. Click <strong>Stop</strong> to halt.</p>
-<p><img alt="Programs — preview canvas" src="../../../assets/images/devtool/devtool_programs_preview_area.png" /></p>
-<h3 id="deploy-to-pico-streaming">Deploy to Pico (Streaming)<a class="headerlink" href="#deploy-to-pico-streaming" title="Permanent link">&para;</a></h3>
-<p>Click <strong>Deploy to Pico</strong> to stream frames over USB serial. Requires IMG-receiver firmware — use <strong>Flash IMG Receiver</strong> to build and flash it via Docker.</p>
-<h3 id="deploy-standalone">Deploy Standalone<a class="headerlink" href="#deploy-standalone" title="Permanent link">&para;</a></h3>
-<p>Click <strong>Deploy Standalone</strong> to bake the animation into standalone firmware:</p>
-<ol>
-<li>Pre-renders all frames in Python</li>
-<li>Writes <code>frames.h</code> C header with pixel data</li>
-<li>Builds firmware via Docker ARM cross-compiler</li>
-<li>Flashes <code>.uf2</code> to Pico BOOTSEL mount</li>
-</ol>
-<p>After flashing, the Pico runs independently — no PC needed.</p>
-<p><img alt="Programs — deploy buttons" src="../../../assets/images/devtool/devtool_programs_deploy_buttons.png" /></p>
-<h3 id="available-programs">Available Programs<a class="headerlink" href="#available-programs" title="Permanent link">&para;</a></h3>
-<p>The DevTool ships with 16 octopus programs, each with unique facial expressions, body animations, and themed quote lists:</p>
-<table>
-<thead>
-<tr>
-<th>Program</th>
-<th>Eyes</th>
-<th>Mouth</th>
-<th>Body Animation</th>
-<th>Quotes</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>Sassy</td>
-<td>Normal</td>
-<td>Smirk/smile</td>
-<td>Gentle breathing</td>
-<td>196</td>
-</tr>
-<tr>
-<td>Supportive</td>
-<td>Normal</td>
-<td>Smirk/smile</td>
-<td>Gentle breathing</td>
-<td>160</td>
-</tr>
-<tr>
-<td>Angry</td>
-<td>V-brows, glaring</td>
-<td>Frown</td>
-<td>Puffed up, tremble</td>
-<td>45</td>
-</tr>
-<tr>
-<td>Conspiratorial</td>
-<td>Misaligned</td>
-<td>Wobbly sine</td>
-<td>Lean + wave</td>
-<td>47</td>
-</tr>
-<tr>
-<td>Sad</td>
-<td>Droopy brows</td>
-<td>Gentle frown</td>
-<td>Drooped, deflated</td>
-<td>35</td>
-</tr>
-<tr>
-<td>Chaotic</td>
-<td>Spiral rings</td>
-<td>Zigzag</td>
-<td>Wild distortion</td>
-<td>40</td>
-</tr>
-<tr>
-<td>Hungry</td>
-<td>Looking up</td>
-<td>Drooling oval</td>
-<td>Lean upward</td>
-<td>30</td>
-</tr>
-<tr>
-<td>Tired</td>
-<td>Half-closed lids</td>
-<td>Yawn</td>
-<td>Sagging, melting</td>
-<td>30</td>
-</tr>
-<tr>
-<td>Slap Happy</td>
-<td>One squint, one manic</td>
-<td>Wobbly grin</td>
-<td>Sway side to side</td>
-<td>30</td>
-</tr>
-<tr>
-<td>Lazy</td>
-<td>Nearly shut</td>
-<td>Flat line</td>
-<td>Custom body: tentacles draped right</td>
-<td>30</td>
-</tr>
-<tr>
-<td>Fat</td>
-<td>Wide happy</td>
-<td>Smile + cheek puffs</td>
-<td>Custom body: wider dome, thicker tentacles</td>
-<td>30</td>
-</tr>
-<tr>
-<td>Chill</td>
-<td>Side-glancing</td>
-<td>Half-smile</td>
-<td>Subtle lean</td>
-<td>30</td>
-</tr>
-<tr>
-<td>Horny</td>
-<td>Heart-shaped</td>
-<td>Tongue out</td>
-<td>Rhythmic pulse</td>
-<td>30</td>
-</tr>
-<tr>
-<td>Excited</td>
-<td>Sparkle crosses</td>
-<td>Wide grin</td>
-<td>Bouncing</td>
-<td>30</td>
-</tr>
-<tr>
-<td>Nostalgic</td>
-<td>Looking up-right</td>
-<td>Wistful smile</td>
-<td>Gentle sway</td>
-<td>30</td>
-</tr>
-<tr>
-<td>Homesick</td>
-<td>Teary</td>
-<td>Wobbly line</td>
-<td>Curled inward</td>
-<td>30</td>
-</tr>
-</tbody>
-</table>
-<p>Each program can be previewed in the emulator, streamed to the Pico via USB, or deployed as standalone firmware.</p>
-<hr />
-<h2 id="tab-6-gpio-pin-reference">Tab 6 — GPIO Pin Reference<a class="headerlink" href="#tab-6-gpio-pin-reference" title="Permanent link">&para;</a></h2>
-<p>A read-only visual reference showing the Pico W's 40-pin header with all Dilder project assignments highlighted:</p>
-<p><img alt="GPIO Pin Viewer" src="../../../assets/images/devtool/devtool_tab_gpio_pins.png" /></p>
-<ul>
-<li><strong>Display pins</strong> (SPI1): GP8–GP13</li>
-<li><strong>Button pins</strong>: GP2–GP6</li>
-<li><strong>Power</strong>: 3V3(OUT), GND</li>
-<li><strong>SPI configuration</strong>: Mode 0, 4 MHz, MSB first</li>
-</ul>
-<p><img alt="Pin diagram detail" src="../../../assets/images/devtool/devtool_gpio_pin_diagram.png" /></p>
-<p>This tab is a quick reference so you don't need to switch to the documentation while developing.</p>
-<hr />
-<h2 id="tab-7-connection-utility">Tab 7 — Connection Utility<a class="headerlink" href="#tab-7-connection-utility" title="Permanent link">&para;</a></h2>
-<p>A guided walkthrough for connecting the Pico W to your computer. Switch between USB Serial and Wi-Fi modes using the radio buttons at the top.</p>
-<h3 id="usb-serial-walkthrough">USB Serial Walkthrough<a class="headerlink" href="#usb-serial-walkthrough" title="Permanent link">&para;</a></h3>
-<p><img alt="Connection Utility — USB mode" src="../../../assets/images/devtool/devtool_tab_connection_utility.png" /></p>
-<p>Four steps, each with a live <strong>Check</strong> button that verifies the current state:</p>
-<table>
-<thead>
-<tr>
-<th>Step</th>
-<th>What it checks</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><strong>Step 1 — Plug in the Pico W</strong></td>
-<td>Runs <code>lsusb</code> to detect the Pico W USB device (vendor ID <code>2e8a</code>). Confirms the cable is a data cable.</td>
-</tr>
-<tr>
-<td><strong>Step 2 — Verify serial port</strong></td>
-<td>Checks if <code>/dev/ttyACM0</code> exists. If not, explains why (BOOTSEL mode, charge-only cable, no firmware).</td>
-</tr>
-<tr>
-<td><strong>Step 3 — Check permissions</strong></td>
-<td>Verifies your user is in the <code>uucp</code> (Arch) or <code>dialout</code> (Debian) group. Shows the fix command if not.</td>
-</tr>
-<tr>
-<td><strong>Step 4 — Open Serial Monitor</strong></td>
-<td>Links directly to the Serial Monitor tab. One click to switch over and connect.</td>
-</tr>
-</tbody>
-</table>
-<p>Each check button gives a green checkmark, yellow warning, or red error with a specific explanation.</p>
-<p><img alt="USB connection walkthrough — all steps" src="../../../assets/images/devtool/devtool_connection_usb_walkthrough.png" /></p>
-<p>The <strong>"Fix: Add me to serial group"</strong> button auto-detects the correct group, tries <code>pkexec</code> for a graphical sudo prompt first, falls back to opening a terminal emulator with the command, and shows a confirmation dialog before running.</p>
-<h3 id="wi-fi-walkthrough">Wi-Fi Walkthrough<a class="headerlink" href="#wi-fi-walkthrough" title="Permanent link">&para;</a></h3>
-<p><img alt="Connection Utility — Wi-Fi mode" src="../../../assets/images/devtool/devtool_connection_wifi_mode.png" /></p>
-<p>Guides you through adding Wi-Fi support to your Pico W firmware:</p>
-<table>
-<thead>
-<tr>
-<th>Step</th>
-<th>What it covers</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><strong>Overview</strong></td>
-<td>Explains the CYW43439 Wi-Fi chip, 802.11n 2.4 GHz capability.</td>
-</tr>
-<tr>
-<td><strong>Step 1 — Add Wi-Fi credentials</strong></td>
-<td>Provides the exact C code to initialise Wi-Fi and connect to a network. Copy-paste ready.</td>
-</tr>
-<tr>
-<td><strong>Step 2 — CMake configuration</strong></td>
-<td>Shows which library to link: <code>pico_cyw43_arch_lwip_threadsafe_background</code>.</td>
-</tr>
-<tr>
-<td><strong>Step 3 — Find Pico on network</strong></td>
-<td>Network scan button that checks the ARP table for reachable devices. Shows how to print the IP from firmware.</td>
-</tr>
-<tr>
-<td><strong>Step 4 — Communication options</strong></td>
-<td>Explains TCP sockets, HTTP server, UDP broadcast, and mDNS discovery.</td>
-</tr>
-<tr>
-<td><strong>Quick Connect</strong></td>
-<td>Enter an IP and port to test a live TCP connection to the Pico W. Shows success, timeout, or connection refused.</td>
-</tr>
-</tbody>
-</table>
-<hr />
-<h2 id="tab-8-documentation">Tab 8 — Documentation<a class="headerlink" href="#tab-8-documentation" title="Permanent link">&para;</a></h2>
-<p>Built-in searchable documentation for the entire DevTool application.</p>
-<p><img alt="Documentation tab" src="../../../assets/images/devtool/devtool_tab_documentation.png" /></p>
-<p><strong>Layout:</strong></p>
-<ul>
-<li><strong>Left sidebar</strong> — Table of contents. Click any section to jump to it.</li>
-<li><strong>Right panel</strong> — Full documentation text with syntax-highlighted headings and code blocks.</li>
-<li><strong>Search bar</strong> — Type a keyword and press Find. All matches are highlighted in yellow. Click Clear to reset.</li>
-</ul>
-<p><img alt="Documentation — search in action" src="../../../assets/images/devtool/devtool_documentation_search.png" /></p>
-<p><strong>Sections covered:</strong></p>
-<ul>
-<li>Display Emulator (all tools, saving, loading, send to Pico)</li>
-<li>Serial Monitor (connecting, sending, special buttons, log saving)</li>
-<li>Flash Firmware (BOOTSEL steps, build buttons)</li>
-<li>Assets (browse, preview, delete)</li>
-<li>GPIO Pins (pin assignments)</li>
-<li>Connection Utility (USB and Wi-Fi)</li>
-<li>Keyboard Shortcuts</li>
-<li>File Formats (PBM, BIN, PNG with byte layout)</li>
-<li>Troubleshooting (common errors and fixes)</li>
-</ul>
-<p>This tab means you never need to leave the DevTool to look up how something works.</p>
-<hr />
-<h2 id="file-formats">File Formats<a class="headerlink" href="#file-formats" title="Permanent link">&para;</a></h2>
-<h3 id="pbm-portable-bitmap-p4-binary">PBM (Portable Bitmap — P4 Binary)<a class="headerlink" href="#pbm-portable-bitmap-p4-binary" title="Permanent link">&para;</a></h3>
-<p>Standard 1-bit image format. Header followed by packed binary data.</p>
-<div class="language-text highlight"><pre><span></span><code><span id="__span-5-1"><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>P4
-</span><span id="__span-5-2"><a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a>250 122
-</span><span id="__span-5-3"><a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a>&lt;binary data: ceil(250/8) * 122 = 3904 bytes&gt;
-</span></code></pre></div>
-<p>Each byte holds 8 pixels, MSB = leftmost pixel. <code>1</code> = black, <code>0</code> = white.</p>
-<h3 id="bin-raw-display-buffer">BIN (Raw Display Buffer)<a class="headerlink" href="#bin-raw-display-buffer" title="Permanent link">&para;</a></h3>
-<p>No header — just the raw packed bytes in the same format the Waveshare display driver uses.</p>
-<ul>
-<li>Byte width: <code>ceil(250/8)</code> = 32 bytes per row</li>
-<li>Total: 32 x 122 = 3,904 bytes</li>
-<li>Bit order: MSB first within each byte</li>
-<li><code>1</code> = black pixel, <code>0</code> = white pixel</li>
-</ul>
-<p>To use in C code on the Pico W:</p>
-<div class="language-c highlight"><pre><span></span><code><span id="__span-6-1"><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a><span class="c1">// Load from filesystem or embed as a const array</span>
-</span><span id="__span-6-2"><a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a><span class="k">const</span><span class="w"> </span><span class="kt">uint8_t</span><span class="w"> </span><span class="n">image_data</span><span class="p">[</span><span class="mi">3904</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="cm">/* bin file contents */</span><span class="w"> </span><span class="p">};</span>
-</span><span id="__span-6-3"><a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a><span class="n">EPD_2in13_V3_Display</span><span class="p">(</span><span class="n">image_data</span><span class="p">);</span>
-</span></code></pre></div>
-<h3 id="png-portable-network-graphics">PNG (Portable Network Graphics)<a class="headerlink" href="#png-portable-network-graphics" title="Permanent link">&para;</a></h3>
-<p>Standard PNG format, 250x122 pixels, 1-bit depth. Requires Pillow to export. Can be opened in any image viewer or editor.</p>
-<hr />
-<h2 id="architecture-overview">Architecture Overview<a class="headerlink" href="#architecture-overview" title="Permanent link">&para;</a></h2>
-<div class="language-text highlight"><pre><span></span><code><span id="__span-7-1"><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a>DevTool/
-</span><span id="__span-7-2"><a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a>    devtool.py          # Single-file application (~3400 lines)
-</span><span id="__span-7-3"><a id="__codelineno-7-3" name="__codelineno-7-3" href="#__codelineno-7-3"></a>    requirements.txt    # Python dependencies
-</span><span id="__span-7-4"><a id="__codelineno-7-4" name="__codelineno-7-4" href="#__codelineno-7-4"></a>    README.md           # Full documentation
-</span><span id="__span-7-5"><a id="__codelineno-7-5" name="__codelineno-7-5" href="#__codelineno-7-5"></a>
-</span><span id="__span-7-6"><a id="__codelineno-7-6" name="__codelineno-7-6" href="#__codelineno-7-6"></a>assets/                 # Saved display images (created automatically)
-</span><span id="__span-7-7"><a id="__codelineno-7-7" name="__codelineno-7-7" href="#__codelineno-7-7"></a>    *.pbm               # PBM binary 1-bit images
-</span><span id="__span-7-8"><a id="__codelineno-7-8" name="__codelineno-7-8" href="#__codelineno-7-8"></a>    *.bin               # Raw display buffer bytes
-</span><span id="__span-7-9"><a id="__codelineno-7-9" name="__codelineno-7-9" href="#__codelineno-7-9"></a>    *.png               # PNG exports (if Pillow available)
-</span></code></pre></div>
-<h3 id="class-structure">Class Structure<a class="headerlink" href="#class-structure" title="Permanent link">&para;</a></h3>
-<table>
-<thead>
-<tr>
-<th>Class</th>
-<th>Parent</th>
-<th>Purpose</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><code>DilderDevTool</code></td>
-<td><code>tk.Tk</code></td>
-<td>Main application window, notebook tabs, log bar, Docker health check</td>
-</tr>
-<tr>
-<td><code>DisplayEmulator</code></td>
-<td><code>ttk.Frame</code></td>
-<td>E-ink canvas, drawing tools, save/load/send</td>
-</tr>
-<tr>
-<td><code>SerialMonitor</code></td>
-<td><code>ttk.Frame</code></td>
-<td>Serial connection, read thread, output display</td>
-</tr>
-<tr>
-<td><code>FlashUtility</code></td>
-<td><code>ttk.Frame</code></td>
-<td>UF2 selection, BOOTSEL detection, flash copy</td>
-</tr>
-<tr>
-<td><code>AssetManager</code></td>
-<td><code>ttk.Frame</code></td>
-<td>File list, preview canvas, delete/open</td>
-</tr>
-<tr>
-<td><code>ProgramsTab</code></td>
-<td><code>ttk.Frame</code></td>
-<td>Animated programs, Docker builds, deploy buttons</td>
-</tr>
-<tr>
-<td><code>PinViewer</code></td>
-<td><code>ttk.Frame</code></td>
-<td>Static GPIO reference text</td>
-</tr>
-<tr>
-<td><code>ConnectionUtility</code></td>
-<td><code>ttk.Frame</code></td>
-<td>USB/Wi-Fi setup walkthrough with live checks</td>
-</tr>
-<tr>
-<td><code>DocumentationTab</code></td>
-<td><code>ttk.Frame</code></td>
-<td>Searchable built-in documentation with TOC sidebar</td>
-</tr>
-</tbody>
-</table>
-<h3 id="startup-behavior">Startup Behavior<a class="headerlink" href="#startup-behavior" title="Permanent link">&para;</a></h3>
-<p>At launch, the DevTool:</p>
-<ol>
-<li>Checks for missing dependencies (Tkinter, pyserial) and offers to install them</li>
-<li>Creates the 8-tab UI with a resizable log bar</li>
-<li>Runs a background Docker health check (500ms after UI ready) that verifies:<ul>
-<li>Docker binary exists</li>
-<li>Docker daemon is running</li>
-<li>docker-compose is available</li>
-<li>Build files exist (docker-compose.yml, Dockerfile)</li>
-<li>Shared display library directory exists</li>
-</ul>
-</li>
-</ol>
-<p>Results appear in the log bar as <code>[startup] Docker toolchain ready.</code> or with specific issues listed.</p>
-<h3 id="threading">Threading<a class="headerlink" href="#threading" title="Permanent link">&para;</a></h3>
-<p>The serial monitor runs a background daemon thread (<code>_read_loop</code>) that continuously reads from the serial port. All UI updates from the thread go through <code>winfo_toplevel().after(0, callback)</code> to stay on the Tkinter main thread.</p>
-<p>Build operations in the flash utility, Docker image builds, and serial send also run in background threads. All build output is now logged directly without keyword filtering — every line from Docker and Ninja appears in the log bar for full transparency.</p>
-<hr />
-<h2 id="troubleshooting">Troubleshooting<a class="headerlink" href="#troubleshooting" title="Permanent link">&para;</a></h2>
-<table>
-<thead>
-<tr>
-<th>Problem</th>
-<th>Solution</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><code>ModuleNotFoundError: No module named 'tkinter'</code></td>
-<td>Install Tk: <code>sudo pacman -S tk</code> (Arch) or <code>sudo apt install python3-tk</code> (Debian)</td>
-</tr>
-<tr>
-<td><code>ModuleNotFoundError: No module named 'serial'</code></td>
-<td><code>pip install pyserial</code> (not <code>serial</code> — that's a different package)</td>
-</tr>
-<tr>
-<td>Text tool renders blocks instead of letters</td>
-<td>Install Pillow: <code>pip install Pillow</code></td>
-</tr>
-<tr>
-<td>Serial monitor can't connect</td>
-<td>Check that the Pico W is plugged in and running firmware. Verify with <code>ls /dev/ttyACM*</code>. Check serial group membership.</td>
-</tr>
-<tr>
-<td>No serial ports in dropdown</td>
-<td>Click Refresh. If still empty, the Pico W may be in BOOTSEL mode or not connected.</td>
-</tr>
-<tr>
-<td>Flash button says "not detected"</td>
-<td>Put the Pico W in BOOTSEL mode: unplug, hold BOOTSEL, plug in, release. Then click Detect.</td>
-</tr>
-<tr>
-<td>Build buttons fail</td>
-<td>Verify <code>PICO_SDK_PATH</code> is set and <code>arm-none-eabi-gcc</code> is installed. Run <code>python3 setup.py --status</code> to check.</td>
-</tr>
-<tr>
-<td>Docker builds fail</td>
-<td>Check <code>[startup]</code> messages in the log bar. Run <code>python3 setup.py --step 15</code> to set up Docker.</td>
-</tr>
-<tr>
-<td>Canvas drawing is slow</td>
-<td>The canvas uses individual rectangles per pixel at 3x scale. For large fills, there may be brief lag — this is a Tkinter limitation, not a bug.</td>
-</tr>
-<tr>
-<td>PNG save/load not working</td>
-<td>Install Pillow: <code>pip install Pillow</code>. PBM and BIN formats work without it.</td>
-</tr>
-</tbody>
-</table>
+<p><em>Document version: 1.0 — 2026-04-15</em></p>
 
 
 
@@ -4414,7 +4430,7 @@
       <nav class="md-footer__inner md-grid" aria-label="Footer" >
         
           
-          <a href="../../software/emotion-states/" class="md-footer__link md-footer__link--prev" aria-label="Previous: Emotion States">
+          <a href="../custom-pcb-design-research/" class="md-footer__link md-footer__link--prev" aria-label="Previous: Custom PCB Design Research">
             <div class="md-footer__button md-icon">
               
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
@@ -4424,20 +4440,20 @@
                 Previous
               </span>
               <div class="md-ellipsis">
-                Emotion States
+                Custom PCB Design Research
               </div>
             </div>
           </a>
         
         
           
-          <a href="../setup-cli/" class="md-footer__link md-footer__link--next" aria-label="Next: Setup CLI">
+          <a href="../../software/project-structure/" class="md-footer__link md-footer__link--next" aria-label="Next: Project Structure">
             <div class="md-footer__title">
               <span class="md-footer__direction">
                 Next
               </span>
               <div class="md-ellipsis">
-                Setup CLI
+                Project Structure
               </div>
             </div>
             <div class="md-footer__button md-icon">
