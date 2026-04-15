@@ -297,8 +297,8 @@ Spelling and grammar are lightly cleaned for readability while preserving the or
 - **Commit:** `61525d6` — Add official hardware reference docs and expand wiring pinout
 - **Files Created/Modified:**
   - `website/docs/docs/reference/pi-zero-wh.md` (created — full 40-pin GPIO table, electrical limits, SPI/I²C/UART/PWM protocol assignments, BCM vs physical numbering guide, official links)
-  - `website/docs/docs/reference/waveshare-eink.md` (created — display specs, HAT pin mapping with signal behaviour table, SPI protocol details, refresh rules, V3 vs V4 comparison, Python setup examples, safety notes, official links)
-  - `website/docs/docs/hardware/wiring-pinout.md` (modified — expanded with full 40-pin header map, signal behaviour table, wiring diagram, SPI config table, links to new reference docs, troubleshooting section)
+  - `website/docs/docs/reference/waveshare-eink.md` (created — display specs, HAT pin mapping with signal behavior table, SPI protocol details, refresh rules, V3 vs V4 comparison, Python setup examples, safety notes, official links)
+  - `website/docs/docs/hardware/wiring-pinout.md` (modified — expanded with full 40-pin header map, signal behavior table, wiring diagram, SPI config table, links to new reference docs, troubleshooting section)
   - `website/mkdocs.yml` (modified — Reference section added to nav)
 
 ---
@@ -1131,7 +1131,7 @@ Spelling and grammar are lightly cleaned for readability while preserving the or
 - **Output Tokens (est):** ~40,000
 - **Commit:** `b8bdf54` — Add Hungry, Tired, and Slap Happy octopus programs
 - **Files Created/Modified:**
-  - `DevTool/devtool.py` (modified — added MOUTH_HUNGRY/TIRED/SLAPHAPPY expressions, hungry upward-staring eyes, tired half-closed eyelids, slap happy one-squint-one-manic eyes, drooling mouth, yawn mouth, wobbly grin, HUNGRY_QUOTES 30, TIRED_QUOTES 30, SLAPHAPPY_QUOTES 30, 3 new programs registered)
+  - `DevTool/devtool.py` (modified — added MOUTH_HUNGRY/TIRED/SLAPHAPPY expressions, hungry upward-staring eyes, tired half-closed eyelids, slap-happy one-squint-one-manic eyes, drooling mouth, yawn mouth, wobbly grin, HUNGRY_QUOTES 30, TIRED_QUOTES 30, SLAPHAPPY_QUOTES 30, 3 new programs registered)
   - `dev-setup/hungry-octopus/`, `dev-setup/tired-octopus/`, `dev-setup/slaphappy-octopus/` (created — main.c + CMakeLists.txt)
   - All 9 octopus firmware main.c files updated with new expressions
   - `dev-setup/docker-compose.yml` (modified — 3 new build services)
@@ -1818,7 +1818,7 @@ Spelling and grammar are lightly cleaned for readability while preserving the or
 
 ## Prompt #144
 - **Date/Time:** 2026-04-14 to 2026-04-15
-- **Prompt:** "Create a setup script for KiCad to pull in the JLCPCB tools so that we can begin to model out the schematics and then board design... we basically need to copy out the Pico WH schematic and add a battery connection and charging circuit and a joystick input along with an accelerometer and GPS module... begin with a planning document, pull in the tools, make the schematic, then get the board modelled." (Multi-session — evolved through ~30 follow-up prompts covering PCB design, component selection, autorouting, MCU change from RP2040 to ESP32-S3, display connector research.)
+- **Prompt:** "Create a setup script for KiCad to pull in the JLCPCB tools so that we can begin to model out the schematics and then board design... we basically need to copy out the Pico WH schematic and add a battery connection and charging circuit and a joystick input along with an accelerometer and GPS module... begin with a planning document, pull in the tools, make the schematic, then get the board modeled." (Multi-session — evolved through ~30 follow-up prompts covering PCB design, component selection, autorouting, MCU change from RP2040 to ESP32-S3, display connector research.)
 - **Input Tokens (est):** ~5,000 (across ~30 prompts)
 - **Output Tokens (est):** ~200,000
 - **Commit:** `af57530`
