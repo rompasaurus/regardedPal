@@ -124,6 +124,7 @@ nav:
       - Design:
           - User Engagement Plan: docs/design/user-engagement-plan.md
           - Custom PCB Design Research: docs/design/custom-pcb-design-research.md
+          - PCB Assembly & Prototyping: docs/design/pcb-assembly-and-prototyping.md
       - Software:
           - Project Structure: docs/software/project-structure.md
           - Emotion States: docs/software/emotion-states.md

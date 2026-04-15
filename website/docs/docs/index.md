@@ -28,6 +28,14 @@ Getting a working development environment.
 - [Display Setup](setup/display-setup.md) — jumper wire connection, Waveshare driver, hello world
 - [Dev Environment](setup/dev-environment.md) — VSCode + MicroPico on Linux
 
+### Design
+
+Custom hardware and game design documents.
+
+- [User Engagement Plan](design/user-engagement-plan.md) — gameplay loops, stat system, life stages, progression
+- [Custom PCB Design Research](design/custom-pcb-design-research.md) — PicoTop case study, Dilder board spec, KiCad learning path
+- [PCB Assembly & Prototyping](design/pcb-assembly-and-prototyping.md) — provider pricing, cost estimates, open-source reference boards
+
 ### Software
 
 Code architecture and reference.
