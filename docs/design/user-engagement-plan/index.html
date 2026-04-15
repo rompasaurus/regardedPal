@@ -15,7 +15,7 @@
         <link rel="canonical" href="https://dilder.dev/docs/design/user-engagement-plan/">
       
       
-        <link rel="prev" href="../../setup/dev-environment/">
+        <link rel="prev" href="../user-guide/">
       
       
         <link rel="next" href="../custom-pcb-design-research/">
@@ -664,6 +664,36 @@
     
   
     Architecture
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../blog/category/art/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Art
   
 
     
@@ -1514,6 +1544,62 @@
                 
   
   
+  
+  
+    <li class="md-nav__item">
+      <a href="../kicad-schematic-pcb-guide/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    KiCad Schematic & PCB Guide
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../user-guide/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    User Guide: How to Play
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
     
   
   
@@ -1866,10 +1952,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#temperature-humidity-bme280" class="md-nav__link">
+  <a href="#temperature-humidity-aht20" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Temperature / Humidity (BME280)
+        Temperature / Humidity (AHT20)
       
     </span>
   </a>
@@ -4140,10 +4226,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#temperature-humidity-bme280" class="md-nav__link">
+  <a href="#temperature-humidity-aht20" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Temperature / Humidity (BME280)
+        Temperature / Humidity (AHT20)
       
     </span>
   </a>
@@ -5807,7 +5893,7 @@
 </tr>
 </tbody>
 </table>
-<h3 id="temperature-humidity-bme280">Temperature / Humidity (BME280)<a class="headerlink" href="#temperature-humidity-bme280" title="Permanent link">&para;</a></h3>
+<h3 id="temperature-humidity-aht20">Temperature / Humidity (AHT20)<a class="headerlink" href="#temperature-humidity-aht20" title="Permanent link">&para;</a></h3>
 <table>
 <thead>
 <tr>
@@ -6832,7 +6918,7 @@
 <td><strong>BMM150</strong></td>
 <td>~$3-5</td>
 <td>I2C (0x10-0x13)</td>
-<td>Bosch. Often paired with BME280 on combo boards.</td>
+<td>Bosch. Combo boards available.</td>
 </tr>
 </tbody>
 </table>
@@ -7184,9 +7270,9 @@
 </tr>
 <tr>
 <td><strong>Temp/Humidity</strong></td>
-<td>BME280</td>
-<td>I2C (0x76)</td>
-<td>~$4</td>
+<td>AHT20</td>
+<td>I2C (0x38)</td>
+<td>~$0.43</td>
 <td>Medium</td>
 </tr>
 <tr>
@@ -7243,8 +7329,8 @@
 </tr>
 <tr>
 <td><strong>Recommended</strong></td>
-<td>Essential + BME280</td>
-<td><strong>~$20.96</strong></td>
+<td>Essential + AHT20</td>
+<td><strong>~$17.39</strong></td>
 </tr>
 <tr>
 <td><strong>Explorer</strong></td>
@@ -7266,7 +7352,7 @@
 </span><span id="__span-15-4"><a id="__codelineno-15-4" name="__codelineno-15-4" href="#__codelineno-15-4"></a>  ├── 0x39  APDS-9960 (Gesture)
 </span><span id="__span-15-5"><a id="__codelineno-15-5" name="__codelineno-15-5" href="#__codelineno-15-5"></a>  ├── 0x5A  MPR121  (Touch)
 </span><span id="__span-15-6"><a id="__codelineno-15-6" name="__codelineno-15-6" href="#__codelineno-15-6"></a>  ├── 0x6A  LSM6DSO (Accel/Gyro/Pedometer)
-</span><span id="__span-15-7"><a id="__codelineno-15-7" name="__codelineno-15-7" href="#__codelineno-15-7"></a>  └── 0x76  BME280  (Temp/Humidity/Pressure)
+</span><span id="__span-15-7"><a id="__codelineno-15-7" name="__codelineno-15-7" href="#__codelineno-15-7"></a>  └── 0x38  AHT20   (Temp/Humidity)
 </span><span id="__span-15-8"><a id="__codelineno-15-8" name="__codelineno-15-8" href="#__codelineno-15-8"></a>
 </span><span id="__span-15-9"><a id="__codelineno-15-9" name="__codelineno-15-9" href="#__codelineno-15-9"></a>ADC (GP26): MAX9814 microphone analog output
 </span></code></pre></div>
@@ -7312,9 +7398,9 @@
 <td>0 (power gate)</td>
 </tr>
 <tr>
-<td>BME280</td>
-<td>0.004</td>
-<td>0.0001</td>
+<td>AHT20</td>
+<td>0.023</td>
+<td>0.00025</td>
 </tr>
 <tr>
 <td><strong>Total</strong></td>
@@ -7735,8 +7821,8 @@
 <td>MAX9814 (~$4)</td>
 </tr>
 <tr>
-<td>Integrate BME280 temp/humidity → comfort mechanics</td>
-<td>BME280 (~$4)</td>
+<td>Integrate AHT20 temp/humidity → comfort mechanics</td>
+<td>AHT20 (~$0.43)</td>
 </tr>
 </tbody>
 </table>
@@ -7926,7 +8012,7 @@
 <li>MPR121 — https://www.adafruit.com/product/1982</li>
 <li>BH1750 — https://www.mouser.com/datasheet/2/348/bh1750fvi-e-186247.pdf</li>
 <li>MAX9814 — https://www.adafruit.com/product/1713</li>
-<li>BME280 — https://www.bosch-sensortec.com/products/environmental-sensors/humidity-sensors-bme280/</li>
+<li>AHT20 — https://www.adafruit.com/product/4566</li>
 <li>PA1010D GPS — https://www.adafruit.com/product/4415</li>
 <li>APDS-9960 — https://www.adafruit.com/product/3595</li>
 </ul>
@@ -7977,7 +8063,7 @@
       <nav class="md-footer__inner md-grid" aria-label="Footer" >
         
           
-          <a href="../../setup/dev-environment/" class="md-footer__link md-footer__link--prev" aria-label="Previous: Dev Environment">
+          <a href="../user-guide/" class="md-footer__link md-footer__link--prev" aria-label="Previous: User Guide: How to Play">
             <div class="md-footer__button md-icon">
               
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
@@ -7987,7 +8073,7 @@
                 Previous
               </span>
               <div class="md-ellipsis">
-                Dev Environment
+                User Guide: How to Play
               </div>
             </div>
           </a>

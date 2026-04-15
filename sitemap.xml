@@ -17,6 +17,10 @@
          <lastmod>2026-04-15</lastmod>
     </url>
     <url>
+         <loc>https://dilder.dev/blog/asset-rendering-system/</loc>
+         <lastmod>2026-04-15</lastmod>
+    </url>
+    <url>
          <loc>https://dilder.dev/blog/body-language-animations/</loc>
          <lastmod>2026-04-15</lastmod>
     </url>
@@ -42,6 +46,10 @@
     </url>
     <url>
          <loc>https://dilder.dev/blog/esp32-schematic-complete/</loc>
+         <lastmod>2026-04-15</lastmod>
+    </url>
+    <url>
+         <loc>https://dilder.dev/blog/gameplay-architecture/</loc>
          <lastmod>2026-04-15</lastmod>
     </url>
     <url>
@@ -125,6 +133,10 @@
          <lastmod>2026-04-15</lastmod>
     </url>
     <url>
+         <loc>https://dilder.dev/docs/design/kicad-schematic-pcb-guide/</loc>
+         <lastmod>2026-04-15</lastmod>
+    </url>
+    <url>
          <loc>https://dilder.dev/docs/design/motion-location-detection/</loc>
          <lastmod>2026-04-15</lastmod>
     </url>
@@ -138,6 +150,10 @@
     </url>
     <url>
          <loc>https://dilder.dev/docs/design/user-engagement-plan/</loc>
+         <lastmod>2026-04-15</lastmod>
+    </url>
+    <url>
+         <loc>https://dilder.dev/docs/design/user-guide/</loc>
          <lastmod>2026-04-15</lastmod>
     </url>
     <url>
@@ -225,6 +241,14 @@
          <lastmod>2026-04-15</lastmod>
     </url>
     <url>
+         <loc>https://dilder.dev/blog/category/software/</loc>
+         <lastmod>2026-04-15</lastmod>
+    </url>
+    <url>
+         <loc>https://dilder.dev/blog/category/art/</loc>
+         <lastmod>2026-04-15</lastmod>
+    </url>
+    <url>
          <loc>https://dilder.dev/blog/category/hardware/</loc>
          <lastmod>2026-04-15</lastmod>
     </url>
@@ -237,6 +261,10 @@
          <lastmod>2026-04-15</lastmod>
     </url>
     <url>
+         <loc>https://dilder.dev/blog/category/planning/</loc>
+         <lastmod>2026-04-15</lastmod>
+    </url>
+    <url>
          <loc>https://dilder.dev/blog/category/design/</loc>
          <lastmod>2026-04-15</lastmod>
     </url>
@@ -245,15 +273,7 @@
          <lastmod>2026-04-15</lastmod>
     </url>
     <url>
-         <loc>https://dilder.dev/blog/category/planning/</loc>
-         <lastmod>2026-04-15</lastmod>
-    </url>
-    <url>
          <loc>https://dilder.dev/blog/category/firmware/</loc>
-         <lastmod>2026-04-15</lastmod>
-    </url>
-    <url>
-         <loc>https://dilder.dev/blog/category/software/</loc>
          <lastmod>2026-04-15</lastmod>
     </url>
     <url>
@@ -269,7 +289,15 @@
          <lastmod>2026-04-15</lastmod>
     </url>
     <url>
+         <loc>https://dilder.dev/blog/page/3/</loc>
+         <lastmod>2026-04-15</lastmod>
+    </url>
+    <url>
          <loc>https://dilder.dev/blog/archive/2026/page/2/</loc>
+         <lastmod>2026-04-15</lastmod>
+    </url>
+    <url>
+         <loc>https://dilder.dev/blog/archive/2026/page/3/</loc>
          <lastmod>2026-04-15</lastmod>
     </url>
     <url>

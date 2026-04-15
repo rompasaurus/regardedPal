@@ -1,0 +1,4629 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="An open-source AI-assisted virtual pet built with a Raspberry Pi Pico W, e-ink display, and 3D-printed case. Follow the build in real time.">
+      
+      
+        <meta name="author" content="rompasaurus">
+      
+      
+        <link rel="canonical" href="https://dilder.dev/docs/design/user-guide/">
+      
+      
+        <link rel="prev" href="../kicad-schematic-pcb-guide/">
+      
+      
+        <link rel="next" href="../user-engagement-plan/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../../assets/images/dilder-icon.svg">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.6">
+    
+    
+      
+        <title>User Guide: How to Play - Dilder</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../../assets/stylesheets/main.484c7ddc.min.css">
+      
+        
+        <link rel="stylesheet" href="../../../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Inter:300,300i,400,400i,700,700i%7CJetBrains+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Inter";--md-code-font:"JetBrains Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../../stylesheets/extra.css">
+    
+    <script>__md_scope=new URL("../../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+  
+
+
+  
+  
+
+<script id="__analytics">function __md_analytics(){function e(){dataLayer.push(arguments)}window.dataLayer=window.dataLayer||[],e("js",new Date),e("config","G-PLACEHOLDER"),document.addEventListener("DOMContentLoaded",(function(){document.forms.search&&document.forms.search.query.addEventListener("blur",(function(){this.value&&e("event","search",{search_term:this.value})}));document$.subscribe((function(){var t=document.forms.feedback;if(void 0!==t)for(var a of t.querySelectorAll("[type=submit]"))a.addEventListener("click",(function(a){a.preventDefault();var n=document.location.pathname,d=this.getAttribute("data-md-value");e("event","feedback",{page:n,data:d}),t.firstElementChild.disabled=!0;var r=t.querySelector(".md-feedback__note [data-md-value='"+d+"']");r&&(r.hidden=!1)})),t.hidden=!1})),location$.subscribe((function(t){e("config","G-PLACEHOLDER",{page_path:t.pathname})}))}));var t=document.createElement("script");t.async=!0,t.src="https://www.googletagmanager.com/gtag/js?id=G-PLACEHOLDER",document.getElementById("__analytics").insertAdjacentElement("afterEnd",t)}</script>
+  
+    <script>"undefined"!=typeof __md_analytics&&__md_analytics()</script>
+  
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="deep-purple" data-md-color-accent="teal">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#dilder-user-guide" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../../.." title="Dilder" class="md-header__button md-logo" aria-label="Dilder" data-md-component="logo">
+      
+  <img src="../../../assets/images/dilder-icon.svg" alt="logo">
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Dilder
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              User Guide: How to Play
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: light)" data-md-color-scheme="default" data-md-color-primary="deep-purple" data-md-color-accent="teal"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: dark)" data-md-color-scheme="slate" data-md-color-primary="deep-purple" data-md-color-accent="teal"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12s-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/rompasaurus/dilder" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M173.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M252.8 8C114.1 8 8 113.3 8 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C436.2 457.8 504 362.9 504 252 504 113.3 391.5 8 252.8 8M105.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"/></svg>
+  </div>
+  <div class="md-source__repository">
+    rompasaurus/dilder
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+            
+<nav class="md-tabs" aria-label="Tabs" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../.." class="md-tabs__link">
+        
+  
+  
+    
+  
+  Home
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../../blog/" class="md-tabs__link">
+          
+  
+  
+  Blog
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+    
+  
+  
+    
+    
+      <li class="md-tabs__item md-tabs__item--active">
+        <a href="../../" class="md-tabs__link">
+          
+  
+  
+  Docs
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../../community/" class="md-tabs__link">
+          
+  
+  
+  Community
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../../about/" class="md-tabs__link">
+          
+  
+  
+  About
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../../prompts/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Prompt Log
+
+      </a>
+    </li>
+  
+
+      
+    </ul>
+  </div>
+</nav>
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../../.." title="Dilder" class="md-nav__button md-logo" aria-label="Dilder" data-md-component="logo">
+      
+  <img src="../../../assets/images/dilder-icon.svg" alt="logo">
+
+    </a>
+    Dilder
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/rompasaurus/dilder" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M173.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M252.8 8C114.1 8 8 113.3 8 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C436.2 457.8 504 362.9 504 252 504 113.3 391.5 8 252.8 8M105.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"/></svg>
+  </div>
+  <div class="md-source__repository">
+    rompasaurus/dilder
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Blog
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Blog
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+    
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../blog/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Build Journal
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2_2" id="__nav_2_2_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Archive
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Archive
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+    
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../blog/archive/2026/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    2026
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_2_3" id="__nav_2_3_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Categories
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Categories
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+    
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../blog/category/architecture/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Architecture
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../blog/category/art/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Art
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../blog/category/build-guide/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Build Guide
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../blog/category/design/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Design
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../blog/category/firmware/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Firmware
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../blog/category/hardware/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Hardware
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../blog/category/manufacturing/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Manufacturing
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../blog/category/pcb-design/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    PCB Design
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../blog/category/planning/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Planning
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../blog/category/software/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Software
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../blog/category/tools/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Tools
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Docs
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Docs
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Overview
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+          
+          
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_3_2" id="__nav_3_2_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Hardware
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Hardware
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../hardware/materials-list/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Materials List
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../hardware/wiring-pinout/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Wiring & Pinout
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../hardware/joystick-wiring/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Joystick Wiring
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../hardware/battery-wiring/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Battery Wiring
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../hardware/enclosure-design/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Enclosure Design
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../hardware/3d-printing-pipeline/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    3D Printing Pipeline
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+          
+          
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3_3" id="__nav_3_3_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Setup
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Setup
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../setup/first-time-setup/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    First-Time Setup (C SDK)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../setup/pi-zero-setup/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Pico W Setup
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../setup/display-setup/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Display Setup
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../setup/dev-environment/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Dev Environment
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+          
+          
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_4" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_3_4" id="__nav_3_4_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Design
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_4_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_3_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Design
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../kicad-schematic-pcb-guide/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    KiCad Schematic & PCB Guide
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    User Guide: How to Play
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    User Guide: How to Play
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#table-of-contents" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Table of Contents
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../user-engagement-plan/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    User Engagement Plan
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../custom-pcb-design-research/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Custom PCB Design Research
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../board-design/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Board Design v0.4
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../pcb-assembly-and-prototyping/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    PCB Assembly & Prototyping
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../open-board-designs/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Open-Source Board Designs
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../breadboard-prototype/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Breadboard Prototype
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../motion-location-detection/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Motion & Location Detection
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+          
+          
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_5" >
+        
+          
+          <label class="md-nav__link" for="__nav_3_5" id="__nav_3_5_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Software
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3_5">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Software
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../software/project-structure/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Project Structure
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../software/emotion-states/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Emotion States
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+          
+          
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_6" >
+        
+          
+          <label class="md-nav__link" for="__nav_3_6" id="__nav_3_6_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Tools
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_6_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3_6">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Tools
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tools/devtool/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    DevTool (GUI)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tools/setup-cli/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Setup CLI
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tools/website-dev/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Website Dev CLI
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+          
+          
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_7" >
+        
+          
+          <label class="md-nav__link" for="__nav_3_7" id="__nav_3_7_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Reference
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_7_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3_7">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Reference
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../reference/pico-w/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Pico W
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../reference/pi-zero-wh/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Pi Zero WH (future)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../reference/waveshare-eink/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Waveshare e-Paper HAT
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../reference/esp32-s3-wroom1/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    ESP32-S3 WROOM-1
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Community
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Community
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../community/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Overview
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../community/discord/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Discord
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../community/support/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Support on Patreon
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" >
+        
+          
+          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    About
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    About
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../about/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    About Dilder
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../about/contact/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Contact
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../prompts/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Prompt Log
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#table-of-contents" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Table of Contents
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+  
+  
+
+
+<h1 id="dilder-user-guide">Dilder User Guide<a class="headerlink" href="#dilder-user-guide" title="Permanent link">&para;</a></h1>
+<blockquote>
+<p>The complete guide to raising, nurturing, and adventuring with your digital octopus companion.</p>
+</blockquote>
+<hr />
+<h2 id="table-of-contents">Table of Contents<a class="headerlink" href="#table-of-contents" title="Permanent link">&para;</a></h2>
+<p><strong>I. Introduction</strong>
+1. <a href="#1-what-is-dilder">What Is Dilder?</a>
+2. <a href="#2-the-origin-story--meet-jamal">The Origin Story — Meet Jamal</a>
+3. <a href="#3-your-first-hatch">Your First Hatch</a></p>
+<p><strong>II. Getting to Know Your Octopus</strong>
+4. <a href="#4-the-16-emotional-states">The 16 Emotional States</a>
+   - 4.1 <a href="#41-normal--sassy">Normal / Sassy</a>
+   - 4.2 <a href="#42-hungry">Hungry</a>
+   - 4.3 <a href="#43-tired">Tired</a>
+   - 4.4 <a href="#44-sad">Sad</a>
+   - 4.5 <a href="#45-angry">Angry</a>
+   - 4.6 <a href="#46-excited">Excited</a>
+   - 4.7 <a href="#47-chill">Chill</a>
+   - 4.8 <a href="#48-lazy">Lazy</a>
+   - 4.9 <a href="#49-fat">Fat</a>
+   - 4.10 <a href="#410-chaotic">Chaotic</a>
+   - 4.11 <a href="#411-weird">Weird</a>
+   - 4.12 <a href="#412-unhinged">Unhinged</a>
+   - 4.13 <a href="#413-slap-happy">Slap Happy</a>
+   - 4.14 <a href="#414-horny">Horny</a>
+   - 4.15 <a href="#415-nostalgic">Nostalgic</a>
+   - 4.16 <a href="#416-homesick">Homesick</a>
+5. <a href="#5-reading-the-display">Reading the Display</a></p>
+<p><strong>III. Caring for Dilder</strong>
+6. <a href="#6-the-stat-system">The Stat System</a>
+   - 6.1 <a href="#61-primary-stats">Primary Stats</a>
+   - 6.2 <a href="#62-secondary-stats">Secondary Stats</a>
+   - 6.3 <a href="#63-hidden-stats">Hidden Stats</a>
+   - 6.4 <a href="#64-stat-decay--modifiers">Stat Decay &amp; Modifiers</a>
+7. <a href="#7-care-actions">Care Actions</a>
+   - 7.1 <a href="#71-feeding">Feeding</a>
+   - 7.2 <a href="#72-cleaning">Cleaning</a>
+   - 7.3 <a href="#73-playing">Playing</a>
+   - 7.4 <a href="#74-petting">Petting</a>
+   - 7.5 <a href="#75-medicine">Medicine</a>
+   - 7.6 <a href="#76-scolding--discipline">Scolding &amp; Discipline</a>
+   - 7.7 <a href="#77-sleep">Sleep</a>
+8. <a href="#8-the-daily-rhythm">The Daily Rhythm</a></p>
+<p><strong>IV. The Physical World</strong>
+9. <a href="#9-sensor-interactions">Sensor Interactions</a>
+   - 9.1 <a href="#91-touch-zones">Touch Zones</a>
+   - 9.2 <a href="#92-voice--sound">Voice &amp; Sound</a>
+   - 9.3 <a href="#93-light--darkness">Light &amp; Darkness</a>
+   - 9.4 <a href="#94-temperature--humidity">Temperature &amp; Humidity</a>
+   - 9.5 <a href="#95-motion--movement">Motion &amp; Movement</a>
+10. <a href="#10-step-tracking--activity">Step Tracking &amp; Activity</a>
+    - 10.1 <a href="#101-daily-step-targets">Daily Step Targets</a>
+    - 10.2 <a href="#102-weekly-targets">Weekly Targets</a>
+    - 10.3 <a href="#103-monthly-targets">Monthly Targets</a>
+    - 10.4 <a href="#104-the-streak-system">The Streak System</a>
+11. <a href="#11-location--exploration">Location &amp; Exploration</a></p>
+<p><strong>V. Growing Up</strong>
+12. <a href="#12-life-stages">Life Stages</a>
+    - 12.1 <a href="#121-egg">Egg</a>
+    - 12.2 <a href="#122-hatchling">Hatchling</a>
+    - 12.3 <a href="#123-juvenile">Juvenile</a>
+    - 12.4 <a href="#124-adolescent">Adolescent</a>
+    - 12.5 <a href="#125-adult">Adult</a>
+    - 12.6 <a href="#126-elder">Elder</a>
+13. <a href="#13-evolution--the-six-adult-forms">Evolution — The Six Adult Forms</a>
+    - 13.1 <a href="#131-deep-sea-scholar">Deep-Sea Scholar</a>
+    - 13.2 <a href="#132-reef-guardian">Reef Guardian</a>
+    - 13.3 <a href="#133-tidal-trickster">Tidal Trickster</a>
+    - 13.4 <a href="#134-abyssal-hermit">Abyssal Hermit</a>
+    - 13.5 <a href="#135-coral-dancer">Coral Dancer</a>
+    - 13.6 <a href="#136-storm-kraken">Storm Kraken</a>
+14. <a href="#14-rebirth--legacy">Rebirth &amp; Legacy</a></p>
+<p><strong>VI. Progression &amp; Collection</strong>
+15. <a href="#15-bond-levels">Bond Levels</a>
+16. <a href="#16-the-dialogue-system">The Dialogue System</a>
+17. <a href="#17-decor--cosmetics">Decor &amp; Cosmetics</a>
+    - 17.1 <a href="#171-hats--headwear">Hats &amp; Headwear</a>
+    - 17.2 <a href="#172-backgrounds--environments">Backgrounds &amp; Environments</a>
+    - 17.3 <a href="#173-accessories">Accessories</a>
+    - 17.4 <a href="#174-animation-styles">Animation Styles</a>
+18. <a href="#18-treasure-hunts">Treasure Hunts</a></p>
+<p><strong>VII. Achievements</strong>
+19. <a href="#19-achievement-system-overview">Achievement System Overview</a>
+20. <a href="#20-care-achievements">Care Achievements</a>
+21. <a href="#21-exploration-achievements">Exploration Achievements</a>
+22. <a href="#22-social-achievements">Social Achievements</a>
+23. <a href="#23-environmental-achievements">Environmental Achievements</a>
+24. <a href="#24-mastery-achievements">Mastery Achievements</a>
+25. <a href="#25-step-achievements">Step Achievements</a>
+26. <a href="#26-secret-achievements">Secret Achievements</a></p>
+<p><strong>VIII. Environments &amp; Scenes</strong>
+27. <a href="#27-the-22-environments">The 22 Environments</a>
+28. <a href="#28-outfits--decor-props">Outfits &amp; Decor Props</a>
+29. <a href="#29-aura--particle-effects">Aura &amp; Particle Effects</a></p>
+<p><strong>IX. Controls &amp; Navigation</strong>
+30. <a href="#30-button-layout">Button Layout</a>
+31. <a href="#31-menu-system">Menu System</a>
+32. <a href="#32-quick-actions">Quick Actions</a></p>
+<p><strong>X. Tips &amp; Secrets</strong>
+33. <a href="#33-beginner-tips">Beginner Tips</a>
+34. <a href="#34-advanced-strategies">Advanced Strategies</a>
+35. <a href="#35-easter-eggs--hidden-features">Easter Eggs &amp; Hidden Features</a></p>
+<hr />
+<h1 id="i-introduction">I. Introduction<a class="headerlink" href="#i-introduction" title="Permanent link">&para;</a></h1>
+<h2 id="1-what-is-dilder">1. What Is Dilder?<a class="headerlink" href="#1-what-is-dilder" title="Permanent link">&para;</a></h2>
+<p>Dilder is a physical digital companion — a pocket-sized octopus that lives on an e-ink screen, reacts to the real world through sensors, and develops a genuine personality based on how you raise it. It's part Tamagotchi, part fitness tracker, part sassy roommate.</p>
+<p>Carry Dilder in your pocket and it counts your steps. Talk to it and it gets smarter. Pet it and it relaxes. Neglect it and it gets sad — visibly, undeniably sad. Feed it too much and it gets fat. Shake it and it gets angry. Walk 10,000 steps and it throws a party.</p>
+<p>Dilder grows through 6 life stages over 30+ real days, evolves into one of 6 adult forms based on how you raised it, and eventually enters an elder stage where it reflects on your journey together. When it's ready, it can lay an egg and start the cycle anew — passing down traits, decor, and a fraction of the bond you built.</p>
+<p>The device runs on a custom PCB with an ESP32-S3 microcontroller, a 2.13" e-ink display (250x122 pixels, black and white), a 1000mAh battery, and sensors for touch, light, sound, temperature, humidity, and motion. Everything renders in real-time — no pre-baked sprites, no stored frames. The octopus is drawn mathematically, line by line, 60 times a minute.</p>
+<p><img alt="All 16 emotions with aura effects" src="../../../assets/images/octopus/all_emotions_with_aura.png" /></p>
+<hr />
+<h2 id="2-the-origin-story-meet-jamal">2. The Origin Story — Meet Jamal<a class="headerlink" href="#2-the-origin-story-meet-jamal" title="Permanent link">&para;</a></h2>
+<p>It started in a TEDi — a German discount store — with a massive plush octopus grinning from the sale bin. Soft as a cloud, impossibly charming, and suspiciously self-aware for a stuffed animal.</p>
+<p>We bought him on impulse. On the walk home, something happened — we started talking <em>to</em> him. Then <em>about</em> him. A fully formed personality emerged between the shop and the front door: laid-back but opinionated, sassy but warm, suspiciously wise for a boneless creature.</p>
+<p>He claimed the armchair the moment we walked in. He hasn't moved since. He later acquired a hat. Nobody remembers putting it there.</p>
+<p>We named him <strong>Jamal</strong>.</p>
+<p><img alt="Jamal, the original octopus" src="../../../assets/images/jamal-the-original.jpg" /></p>
+<p>The logical next question: <em>what if we could bring him to life?</em> Not literally — but as a tiny digital companion on a screen. Something that lives in your pocket, reacts to the world, grows a personality, and judges your life choices.</p>
+<p>Dilder is that answer. Named after... well, that's between us and Jamal.</p>
+<p>Every aspect of Dilder's personality — the sass, the warmth, the unsolicited opinions — comes from Jamal. The 16 emotional states, the 823 quotes, the way it reacts when you yell at it ("...that was loud. Are you okay?") — it's all channeled from a plush octopus sitting in an armchair, wearing a hat, watching the whole project unfold with an expression that says "I could do better."</p>
+<hr />
+<h2 id="3-your-first-hatch">3. Your First Hatch<a class="headerlink" href="#3-your-first-hatch" title="Permanent link">&para;</a></h2>
+<p>When you first power on your Dilder, you'll see an egg on the screen. It wobbles gently, waiting.</p>
+<p><strong>To hatch your octopus:</strong>
+- <strong>Touch the device</strong> — Hold the top of the case (head zone). Each touch adds progress.
+- <strong>Keep it warm</strong> — A comfortable room temperature (18-24C) adds passive hatch progress.
+- <strong>Talk to it</strong> — The microphone detects your voice. Talking to the egg helps it along.</p>
+<p>At 25% progress, a crack appears. At 50%, the crack widens. At 75%, pieces begin to fall away. At 100% — your hatchling emerges.</p>
+<p>Your tiny octopus blinks at the screen. It says its first word:</p>
+<blockquote>
+<p>"mama?"</p>
+</blockquote>
+<p>Congratulations. You're a parent now.</p>
+<hr />
+<h1 id="ii-getting-to-know-your-octopus">II. Getting to Know Your Octopus<a class="headerlink" href="#ii-getting-to-know-your-octopus" title="Permanent link">&para;</a></h1>
+<h2 id="4-the-16-emotional-states">4. The 16 Emotional States<a class="headerlink" href="#4-the-16-emotional-states" title="Permanent link">&para;</a></h2>
+<p>Dilder expresses itself through 16 distinct emotions. Each has unique eyes, mouth animations, body language, and a curated set of quotes. The emotion your octopus displays is determined by its stats, the sensor environment, recent events, and a touch of randomness.</p>
+<h3 id="41-normal-sassy">4.1 Normal / Sassy<a class="headerlink" href="#41-normal-sassy" title="Permanent link">&para;</a></h3>
+<p><img alt="Normal emotion" src="../../../assets/images/octopus/normal.png" /></p>
+<p>The default state when all stats are balanced (40-80 range). Centered pupils with white highlights, a cycling smirk-to-smile mouth, and a gentle 1-pixel breathing bob. This is Dilder at its most... Dilder. Sassy, supportive, full of opinions.</p>
+<blockquote>
+<p>"MATTRESSES ARE BODY SHELVES."</p>
+</blockquote>
+<p><strong>Triggered by:</strong> All stats balanced, no extreme sensor inputs.</p>
+<h3 id="42-hungry">4.2 Hungry<a class="headerlink" href="#42-hungry" title="Permanent link">&para;</a></h3>
+<p><img alt="Hungry emotion" src="../../../assets/images/octopus/hungry.png" /></p>
+<p>Pupils shift upward (staring at imaginary food), mouth drools with a wide oval and drip animation. Body leans up with a bobbing beg. Appears when hunger drops below 20.</p>
+<blockquote>
+<p>"hungwy..." (Hatchling)
+"I can't... eat... another... <em>burp</em>" (when overfed)</p>
+</blockquote>
+<p><strong>Triggered by:</strong> Hunger &lt; 20. Intensity increases as hunger approaches 0.
+<strong>Fix:</strong> Feed → Meal or Snack from the menu.</p>
+<h3 id="43-tired">4.3 Tired<a class="headerlink" href="#43-tired" title="Permanent link">&para;</a></h3>
+<p><img alt="Tired emotion" src="../../../assets/images/octopus/tired.png" /></p>
+<p>Half-closed eyelids cover the top of each eye, tiny pupils sag low, and a tall vertical yawn opens and closes. The body droops 2-3 pixels and narrows slightly, as if deflating.</p>
+<blockquote>
+<p>"Five more minutes? The dark is so... dark."</p>
+</blockquote>
+<p><strong>Triggered by:</strong> Energy &lt; 15, or late hour + low energy.
+<strong>Fix:</strong> Turn off the light or place in a dark environment. Dilder will fall asleep and regenerate energy.</p>
+<h3 id="44-sad">4.4 Sad<a class="headerlink" href="#44-sad" title="Permanent link">&para;</a></h3>
+<p><img alt="Sad emotion" src="../../../assets/images/octopus/sad.png" /></p>
+<p>Downward-looking pupils with droopy inverted-arc brows. A gentle frown that barely moves. The body drops 3 pixels lower than normal and narrows 1 pixel per side — a deflated, withdrawn posture.</p>
+<blockquote>
+<p>"I was starting to think you forgot about me..."</p>
+</blockquote>
+<p><strong>Triggered by:</strong> Happiness &lt; 20, or no interaction for 4+ hours.
+<strong>Fix:</strong> Pet, play, talk, or take a walk. Dilder recovers quickly — "You're back! I knew you'd come back!"</p>
+<h3 id="45-angry">4.5 Angry<a class="headerlink" href="#45-angry" title="Permanent link">&para;</a></h3>
+<p><img alt="Angry emotion" src="../../../assets/images/octopus/angry.png" /></p>
+<p>Pupils shift inward and down in a glare, V-shaped brow arcs angle sharply, and a tight inverted frown sets the jaw. The body puffs 2 pixels wider and trembles — Dilder is making itself look bigger.</p>
+<blockquote>
+<p>"...that was loud. Are you okay?"</p>
+</blockquote>
+<p><strong>Triggered by:</strong> Harsh scolding (incorrect), violent shaking, or extreme hunger + low happiness combo.
+<strong>Fix:</strong> Wait it out (30 seconds minimum dwell), then pet gently. Don't shake.</p>
+<h3 id="46-excited">4.6 Excited<a class="headerlink" href="#46-excited" title="Permanent link">&para;</a></h3>
+<p><img alt="Excited emotion" src="../../../assets/images/octopus/excited.png" /></p>
+<p>Star-shaped cross pupils (plus signs in the eyes), a wide-open grin, and rapid 3-pixel vertical bouncing. Dilder is thrilled.</p>
+<blockquote>
+<p>"We did it! 5,000 steps! My tentacles are BURNING."</p>
+</blockquote>
+<p><strong>Triggered by:</strong> Just fed when very hungry, step milestone reached, achievement unlocked, treasure found.
+<strong>Duration:</strong> Brief — 15 seconds of pure joy before settling.</p>
+<h3 id="47-chill">4.7 Chill<a class="headerlink" href="#47-chill" title="Permanent link">&para;</a></h3>
+<p><img alt="Chill emotion" src="../../../assets/images/octopus/chill.png" /></p>
+<p>A cool side-glance with pupils shifted to one side, relaxed asymmetric half-smile, and a subtle lean-back sway. Dilder is at peace with the universe.</p>
+<blockquote>
+<p>"You know what? Life is good. Really good."</p>
+</blockquote>
+<p><strong>Triggered by:</strong> All stats &gt; 60 in a calm environment (low noise, comfortable temperature).</p>
+<h3 id="48-lazy">4.8 Lazy<a class="headerlink" href="#48-lazy" title="Permanent link">&para;</a></h3>
+<p><img alt="Lazy emotion" src="../../../assets/images/octopus/lazy.png" /></p>
+<p>Nearly shut eyes with barely visible dot pupils, a flat horizontal line mouth, and the entire body tilted to lay on its side with tentacles draped rightward. The quintessential couch potato.</p>
+<blockquote>
+<p>"Whatever."</p>
+</blockquote>
+<p><strong>Triggered by:</strong> Energy 15-30 with no interaction for 2+ hours, or overweight.</p>
+<h3 id="49-fat">4.9 Fat<a class="headerlink" href="#49-fat" title="Permanent link">&para;</a></h3>
+<p><img alt="Fat emotion" src="../../../assets/images/octopus/fat.png" /></p>
+<p>Wide, content pupils, a satisfied smile with puffy cheeks, and a custom body shape — wider dome (+5 pixels per side), no visible waist, thicker tentacles, and a gentle belly jiggle animation.</p>
+<blockquote>
+<p>"I can't... eat... another... <em>burp</em>"</p>
+</blockquote>
+<p><strong>Triggered by:</strong> Weight &gt; 130 (normal is 100). Caused by overfeeding.
+<strong>Fix:</strong> Play mini-games (-1 weight per session) and reduce feeding frequency.</p>
+<h3 id="410-chaotic">4.10 Chaotic<a class="headerlink" href="#410-chaotic" title="Permanent link">&para;</a></h3>
+<p><img alt="Chaotic emotion" src="../../../assets/images/octopus/chaotic.png" /></p>
+<p>Spiral concentric-circle pupils, a zigzag lightning-bolt mouth, and wild 3-pixel sine-wave body distortion with random wobble. Everything is happening at once.</p>
+<blockquote>
+<p>(No coherent quotes — just chaos)</p>
+</blockquote>
+<p><strong>Triggered by:</strong> 5+ events in 30 seconds, or simultaneous shaking + loud noise + touch. Very short dwell (10 seconds).</p>
+<h3 id="411-weird">4.11 Weird<a class="headerlink" href="#411-weird" title="Permanent link">&para;</a></h3>
+<p><img alt="Weird emotion" src="../../../assets/images/octopus/weird.png" /></p>
+<p>Misaligned pupils (left looks up-left, right looks down-right), a wobbly sine-wave mouth, and a body lean with wavy row distortion. Dilder is being... Dilder.</p>
+<blockquote>
+<p>"Do fish know they're wet?"</p>
+</blockquote>
+<p><strong>Triggered by:</strong> 5% random chance per emotion tick when bored (1+ hour idle, moderate stats). One of the rarest regular emotions.</p>
+<h3 id="412-unhinged">4.12 Unhinged<a class="headerlink" href="#412-unhinged" title="Permanent link">&para;</a></h3>
+<p><img alt="Unhinged emotion" src="../../../assets/images/octopus/unhinged.png" /></p>
+<p>Tiny 2x2 pinprick pupils with no highlights, a giant scream-mouth exposing teeth, and rapid 1-2 pixel random jitter. This is Dilder in crisis.</p>
+<blockquote>
+<p>(Distressed vocalizations only)</p>
+</blockquote>
+<p><strong>Triggered by:</strong> Health &lt; 20 AND multiple stats critical simultaneously. This is the warning sign — your octopus needs help NOW.
+<strong>Fix:</strong> Immediate care: feed, clean, administer medicine. Multiple actions in quick succession.</p>
+<h3 id="413-slap-happy">4.13 Slap Happy<a class="headerlink" href="#413-slap-happy" title="Permanent link">&para;</a></h3>
+<p><img alt="Slap Happy emotion" src="../../../assets/images/octopus/slaphappy.png" /></p>
+<p>One eye squinted shut (thin slit), one eye with an oversized manic pupil, a wide wobbly sine-wave grin, and a 3-pixel side-to-side swaying body with wavy row distortion. This is the emotional rebound.</p>
+<blockquote>
+<p>"HAHAHAHA I'M FINE I'M TOTALLY FINE"</p>
+</blockquote>
+<p><strong>Triggered by:</strong> Happiness &gt; 90 after recently being &lt; 30. The relief of recovery expressed as manic joy.</p>
+<h3 id="414-horny">4.14 Horny<a class="headerlink" href="#414-horny" title="Permanent link">&para;</a></h3>
+<p><img alt="Horny emotion" src="../../../assets/images/octopus/horny.png" /></p>
+<p>Heart-shaped diamond pupils, a wide smile with tongue out, and a rhythmic throbbing pulse (body expands and contracts 2 pixels). Dilder is... feeling things.</p>
+<blockquote>
+<p>(Context-appropriate flirtatious quotes)</p>
+</blockquote>
+<p><strong>Triggered by:</strong> Adolescent or Adult stage + happiness &gt; 70 + bond &gt; threshold. Low probability (~2% per emotion tick). Rare and brief.</p>
+<h3 id="415-nostalgic">4.15 Nostalgic<a class="headerlink" href="#415-nostalgic" title="Permanent link">&para;</a></h3>
+<p><img alt="Nostalgic emotion" src="../../../assets/images/octopus/nostalgic.png" /></p>
+<p>Pupils looking up and to the right (remembering), a gentle wistful half-smile, and a slow 2-pixel horizontal + 1-pixel vertical sway. Dilder is thinking about the good old days.</p>
+<blockquote>
+<p>"Remember when I was just a hatchling? You were so attentive back then..."</p>
+</blockquote>
+<p><strong>Triggered by:</strong> Age milestones (every 7 days), or returning to a familiar location (home WiFi detected after being away).</p>
+<h3 id="416-homesick">4.16 Homesick<a class="headerlink" href="#416-homesick" title="Permanent link">&para;</a></h3>
+<p><img alt="Homesick emotion" src="../../../assets/images/octopus/homesick.png" /></p>
+<p>Teary eyes with pixel tear drops falling, a wobbly trying-not-to-cry mouth, and a body that curls 1 pixel down and 2 pixels narrower — shrinking inward.</p>
+<blockquote>
+<p>"I miss the armchair..."</p>
+</blockquote>
+<p><strong>Triggered by:</strong> Away from home WiFi for 4+ hours, or briefly when arriving at a completely new location.
+<strong>Fix:</strong> Go home. Or pet and comfort — the back touch zone reduces Homesick faster.</p>
+<hr />
+<h2 id="5-reading-the-display">5. Reading the Display<a class="headerlink" href="#5-reading-the-display" title="Permanent link">&para;</a></h2>
+<p>The e-ink screen is divided into three zones:</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>┌──────────────────────────────────────────────────┐  
+</span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>│ 12:34 PM          [HUN][HAP][ENE][HYG][HEA]     │  Header (16px)
+</span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>├──────────────────────────────────────────────────┤  
+</span><span id="__span-0-4"><a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>│                                                  │
+</span><span id="__span-0-5"><a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>│              YOUR OCTOPUS                        │  Pet Area (80px)
+</span><span id="__span-0-6"><a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a>│              + equipped decor                    │
+</span><span id="__span-0-7"><a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a>│                                                  │
+</span><span id="__span-0-8"><a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a>├──────────────────────────────────────────────────┤  
+</span><span id="__span-0-9"><a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a>│ &quot;Good morning! I had the strangest dream...&quot;     │  Dialogue (26px)
+</span><span id="__span-0-10"><a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a>└──────────────────────────────────────────────────┘  
+</span></code></pre></div>
+<p><strong>Header Bar:</strong> Current time on the left. Five stat icons on the right — each is a tiny bar that fills/empties proportionally. When a stat drops below 20, its icon inverts (white on black) to demand attention.</p>
+<p><strong>Pet Area:</strong> Your octopus, rendered in real-time with its current emotion, equipped hat, background, and accessories. Animations cycle through 4 frames.</p>
+<p><strong>Dialogue Box:</strong> Context-sensitive quotes appear here. They auto-dismiss after 5-15 seconds (scaling with quote length). Press SELECT to dismiss early.</p>
+<hr />
+<h1 id="iii-caring-for-dilder">III. Caring for Dilder<a class="headerlink" href="#iii-caring-for-dilder" title="Permanent link">&para;</a></h1>
+<h2 id="6-the-stat-system">6. The Stat System<a class="headerlink" href="#6-the-stat-system" title="Permanent link">&para;</a></h2>
+<h3 id="61-primary-stats">6.1 Primary Stats<a class="headerlink" href="#61-primary-stats" title="Permanent link">&para;</a></h3>
+<p>Five stats govern Dilder's wellbeing. All range from 0 to 100 and decay naturally over time:</p>
+<table>
+<thead>
+<tr>
+<th>Stat</th>
+<th>What It Represents</th>
+<th>Decay Rate</th>
+<th>Critical Threshold</th>
+<th>Visual Cue</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Hunger</strong></td>
+<td>Food level</td>
+<td>-1 every 10 min</td>
+<td>&lt; 20</td>
+<td>Hungry emotion</td>
+</tr>
+<tr>
+<td><strong>Happiness</strong></td>
+<td>Emotional wellbeing</td>
+<td>-1 every 15 min</td>
+<td>&lt; 20</td>
+<td>Sad emotion</td>
+</tr>
+<tr>
+<td><strong>Energy</strong></td>
+<td>Wakefulness</td>
+<td>-1 every 12 min (awake)</td>
+<td>&lt; 15</td>
+<td>Tired emotion</td>
+</tr>
+<tr>
+<td><strong>Hygiene</strong></td>
+<td>Cleanliness</td>
+<td>-1 every 30 min</td>
+<td>&lt; 25</td>
+<td>Uncomfortable</td>
+</tr>
+<tr>
+<td><strong>Health</strong></td>
+<td>Overall condition</td>
+<td>Doesn't decay directly</td>
+<td>&lt; 30</td>
+<td>Sick / Unhinged</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Health</strong> is special — it doesn't decay on its own. Instead, it drops when multiple other stats are critical simultaneously. Keep hunger, happiness, energy, and hygiene healthy, and health stays at 100.</p>
+<h3 id="62-secondary-stats">6.2 Secondary Stats<a class="headerlink" href="#62-secondary-stats" title="Permanent link">&para;</a></h3>
+<p>These accumulate over your octopus's lifetime and determine its evolution:</p>
+<table>
+<thead>
+<tr>
+<th>Stat</th>
+<th>How It Grows</th>
+<th>What It Affects</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Bond Level</strong></td>
+<td>Total interactions over lifetime</td>
+<td>Unlocks features, dialogue, decor slots</td>
+</tr>
+<tr>
+<td><strong>Discipline</strong></td>
+<td>Correct scolding during misbehavior</td>
+<td>Evolution path</td>
+</tr>
+<tr>
+<td><strong>Intelligence</strong></td>
+<td>Talking to Dilder, word exposure (mic)</td>
+<td>Dialogue complexity and vocabulary</td>
+</tr>
+<tr>
+<td><strong>Fitness</strong></td>
+<td>Steps walked, distance traveled</td>
+<td>Evolution, abilities, animations</td>
+</tr>
+<tr>
+<td><strong>Exploration</strong></td>
+<td>Unique locations visited (WiFi fingerprints)</td>
+<td>Decor themes, world knowledge</td>
+</tr>
+<tr>
+<td><strong>Age</strong></td>
+<td>Real time since hatch</td>
+<td>Life stage transitions</td>
+</tr>
+<tr>
+<td><strong>Weight</strong></td>
+<td>Feeding frequency (meals +1, snacks +2, play -1)</td>
+<td>Visual change, Fat emotion trigger</td>
+</tr>
+</tbody>
+</table>
+<h3 id="63-hidden-stats">6.3 Hidden Stats<a class="headerlink" href="#63-hidden-stats" title="Permanent link">&para;</a></h3>
+<p>You can't see these directly, but they shape everything:</p>
+<ul>
+<li><strong>Care Mistakes</strong> — Every time a critical stat goes unmet for 15 minutes, a care mistake is logged. Permanent. Affects evolution quality.</li>
+<li><strong>Consecutive Days</strong> — Your streak of daily interaction. Streak bonuses at 3, 7, 14, 30, 60, 90, and 365 days.</li>
+<li><strong>Noise Exposure</strong> — Cumulative loud sound events. Shapes personality traits.</li>
+<li><strong>Night Disturbances</strong> — Times woken during sleep. Affects morning mood.</li>
+</ul>
+<h3 id="64-stat-decay-modifiers">6.4 Stat Decay &amp; Modifiers<a class="headerlink" href="#64-stat-decay-modifiers" title="Permanent link">&para;</a></h3>
+<p>Stat decay isn't constant — it's modified by context:</p>
+<table>
+<thead>
+<tr>
+<th>Modifier</th>
+<th>Effect on Decay</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Hatchling stage</strong></td>
+<td>2x faster (very needy baby)</td>
+</tr>
+<tr>
+<td><strong>Elder stage</strong></td>
+<td>0.6x slower (self-sufficient)</td>
+</tr>
+<tr>
+<td><strong>High bond level</strong></td>
+<td>Happiness decays up to 15% slower</td>
+</tr>
+<tr>
+<td><strong>Good environment</strong></td>
+<td>18-24C, 40-60% humidity → 10% slower hygiene decay</td>
+</tr>
+<tr>
+<td><strong>Bad environment</strong></td>
+<td>&gt;28C or &lt;15C → 30% faster decay</td>
+</tr>
+<tr>
+<td><strong>Active hours</strong> (8am-8pm)</td>
+<td>Hunger decays 20% faster</td>
+</tr>
+<tr>
+<td><strong>Walking</strong></td>
+<td>Energy decays 30% faster, but happiness decays 20% slower</td>
+</tr>
+<tr>
+<td><strong>14+ day streak</strong></td>
+<td>Happiness decay reduced 10%</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="7-care-actions">7. Care Actions<a class="headerlink" href="#7-care-actions" title="Permanent link">&para;</a></h2>
+<h3 id="71-feeding">7.1 Feeding<a class="headerlink" href="#71-feeding" title="Permanent link">&para;</a></h3>
+<p>Open the menu → <strong>Feed</strong>:</p>
+<table>
+<thead>
+<tr>
+<th>Food</th>
+<th>Effect</th>
+<th>Weight</th>
+<th>Cooldown</th>
+<th>Unlock</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Meal</strong></td>
+<td>+30 Hunger</td>
+<td>+1</td>
+<td>30 seconds</td>
+<td>Always available</td>
+</tr>
+<tr>
+<td><strong>Snack</strong></td>
+<td>+10 Hunger, +15 Happiness</td>
+<td>+2</td>
+<td>15 seconds</td>
+<td>Always available</td>
+</tr>
+<tr>
+<td><strong>Treat</strong></td>
+<td>+5 Hunger, +25 Happiness</td>
+<td>+3</td>
+<td>60 seconds</td>
+<td>Bond level 4 (Friend)</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Overfeeding warning:</strong> If weight exceeds 130, the Fat emotion triggers. Balance meals with play (which burns -1 weight per session).</p>
+<h3 id="72-cleaning">7.2 Cleaning<a class="headerlink" href="#72-cleaning" title="Permanent link">&para;</a></h3>
+<p>Open the menu → <strong>Care</strong> → <strong>Clean</strong>:
+- +40 Hygiene
+- 60-second cooldown
+- +5 Bond XP</p>
+<h3 id="73-playing">7.3 Playing<a class="headerlink" href="#73-playing" title="Permanent link">&para;</a></h3>
+<p>Open the menu → <strong>Play</strong>:</p>
+<table>
+<thead>
+<tr>
+<th>Game</th>
+<th>Effect</th>
+<th>Cost</th>
+<th>Cooldown</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Mini-game</strong></td>
+<td>+20 Happiness, -1 Weight</td>
+<td>-10 Energy</td>
+<td>30 seconds</td>
+</tr>
+<tr>
+<td><strong>Tickle</strong></td>
+<td>+5 Happiness (quick)</td>
+<td>None</td>
+<td>3 seconds</td>
+</tr>
+</tbody>
+</table>
+<p>Mini-games are the primary way to manage weight and boost happiness simultaneously.</p>
+<h3 id="74-petting">7.4 Petting<a class="headerlink" href="#74-petting" title="Permanent link">&para;</a></h3>
+<p>Touch any zone on the device case, or press the ACTION button:
+- +10 Happiness per pet
+- +2 Bond XP
+- 5-second cooldown
+- <strong>Sustained hold (5+ seconds):</strong> Maximum comfort. Dilder enters a "purring" happy animation.
+- <strong>Rapid tapping (6+ taps in 2 seconds):</strong> Annoyance → briefly triggers Angry.</p>
+<p><strong>Touch zones react differently:</strong>
+| Zone | Location | Effect |
+|------|----------|--------|
+| Head | Top of device | Petting — +happiness, calming |
+| Left side | Left panel | Tickle — brief Excited/Slap Happy |
+| Right side | Right panel | Tickle — brief Excited/Slap Happy |
+| Back | Rear of device | Comfort — reduces Sad/Homesick faster |</p>
+<h3 id="75-medicine">7.5 Medicine<a class="headerlink" href="#75-medicine" title="Permanent link">&para;</a></h3>
+<p>Open the menu → <strong>Care</strong> → <strong>Medicine</strong>:
+- Only available when Health &lt; 30 (the menu item is hidden otherwise)
+- +20 Health
+- 120-second cooldown
+- Forces brief Sad emotion (medicine is yucky)</p>
+<h3 id="76-scolding-discipline">7.6 Scolding &amp; Discipline<a class="headerlink" href="#76-scolding-discipline" title="Permanent link">&para;</a></h3>
+<p>Dilder sometimes misbehaves — refusing food, making a mess, acting out. A prompt appears: <strong>"Dilder is being defiant!"</strong></p>
+<p>You have 60 seconds to respond:
+- <strong>Long-press ACTION (2 seconds):</strong> Scold → +25 Discipline, brief Angry face, then compliance.
+- <strong>Yell into the mic:</strong> Volume spike during misbehavior counts as scolding.
+- <strong>Ignore it:</strong> Window closes with no penalty, but no discipline gained.</p>
+<p><strong>Warning:</strong> Scolding when Dilder ISN'T misbehaving (no prompt) → -10 Happiness, -5 Bond XP, and a Sad face. The game tracks correct vs. incorrect scolding. Discipline only grows from correct scolding.</p>
+<p>4 discipline windows open per life stage. 100% discipline at a stage transition gives the best evolution path.</p>
+<h3 id="77-sleep">7.7 Sleep<a class="headerlink" href="#77-sleep" title="Permanent link">&para;</a></h3>
+<p>Dilder sleeps when:
+- <strong>Auto-sleep:</strong> Ambient light &lt; 10 lux AND (energy &lt; 20 OR it's after 10pm). Dilder shows a drowsy animation, then falls asleep after 30 seconds.
+- <strong>Manual sleep:</strong> Open the menu → <strong>Care</strong> → <strong>Light</strong> to toggle sleep.</p>
+<p>During sleep:
+- Energy regenerates (+1 every 30 seconds → full in ~50 minutes)
+- Other stats decay at 0.25x normal rate
+- Display shows a sleeping animation (static, no refresh needed)
+- Device enters low-power mode (~0.8mA)</p>
+<p><strong>Wake triggers:</strong> Bright light, touch, loud noise, significant motion (picked up), or energy reaching 95.</p>
+<hr />
+<h2 id="8-the-daily-rhythm">8. The Daily Rhythm<a class="headerlink" href="#8-the-daily-rhythm" title="Permanent link">&para;</a></h2>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>  MORNING (6am-10am)
+</span><span id="__span-1-2"><a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>  ┌──────────────────────────────────────┐
+</span><span id="__span-1-3"><a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>  │ Dilder wakes with the light          │
+</span><span id="__span-1-4"><a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a>  │ Morning greeting based on mood       │
+</span><span id="__span-1-5"><a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a>  │ Feed (hunger decayed overnight)      │
+</span><span id="__span-1-6"><a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a>  │ Pet/interact for happiness boost     │
+</span><span id="__span-1-7"><a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a>  └──────────────────────────────────────┘
+</span><span id="__span-1-8"><a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a>              │
+</span><span id="__span-1-9"><a id="__codelineno-1-9" name="__codelineno-1-9" href="#__codelineno-1-9"></a>              ▼
+</span><span id="__span-1-10"><a id="__codelineno-1-10" name="__codelineno-1-10" href="#__codelineno-1-10"></a>  DAYTIME (10am-6pm)
+</span><span id="__span-1-11"><a id="__codelineno-1-11" name="__codelineno-1-11" href="#__codelineno-1-11"></a>  ┌──────────────────────────────────────┐
+</span><span id="__span-1-12"><a id="__codelineno-1-12" name="__codelineno-1-12" href="#__codelineno-1-12"></a>  │ Carry Dilder — steps tracked         │
+</span><span id="__span-1-13"><a id="__codelineno-1-13" name="__codelineno-1-13" href="#__codelineno-1-13"></a>  │ Locations detected (WiFi)            │
+</span><span id="__span-1-14"><a id="__codelineno-1-14" name="__codelineno-1-14" href="#__codelineno-1-14"></a>  │ Environmental sensing (light, temp)  │
+</span><span id="__span-1-15"><a id="__codelineno-1-15" name="__codelineno-1-15" href="#__codelineno-1-15"></a>  │ Periodic dialogue check-ins          │
+</span><span id="__span-1-16"><a id="__codelineno-1-16" name="__codelineno-1-16" href="#__codelineno-1-16"></a>  │ Random events (10% daily chance)     │
+</span><span id="__span-1-17"><a id="__codelineno-1-17" name="__codelineno-1-17" href="#__codelineno-1-17"></a>  └──────────────────────────────────────┘
+</span><span id="__span-1-18"><a id="__codelineno-1-18" name="__codelineno-1-18" href="#__codelineno-1-18"></a>              │
+</span><span id="__span-1-19"><a id="__codelineno-1-19" name="__codelineno-1-19" href="#__codelineno-1-19"></a>              ▼
+</span><span id="__span-1-20"><a id="__codelineno-1-20" name="__codelineno-1-20" href="#__codelineno-1-20"></a>  EVENING (6pm-10pm)
+</span><span id="__span-1-21"><a id="__codelineno-1-21" name="__codelineno-1-21" href="#__codelineno-1-21"></a>  ┌──────────────────────────────────────┐
+</span><span id="__span-1-22"><a id="__codelineno-1-22" name="__codelineno-1-22" href="#__codelineno-1-22"></a>  │ Feed again (hunger decayed)          │
+</span><span id="__span-1-23"><a id="__codelineno-1-23" name="__codelineno-1-23" href="#__codelineno-1-23"></a>  │ Review daily activity summary        │
+</span><span id="__span-1-24"><a id="__codelineno-1-24" name="__codelineno-1-24" href="#__codelineno-1-24"></a>  │ Play / interact for happiness        │
+</span><span id="__span-1-25"><a id="__codelineno-1-25" name="__codelineno-1-25" href="#__codelineno-1-25"></a>  │ Unlock rewards from step targets     │
+</span><span id="__span-1-26"><a id="__codelineno-1-26" name="__codelineno-1-26" href="#__codelineno-1-26"></a>  └──────────────────────────────────────┘
+</span><span id="__span-1-27"><a id="__codelineno-1-27" name="__codelineno-1-27" href="#__codelineno-1-27"></a>              │
+</span><span id="__span-1-28"><a id="__codelineno-1-28" name="__codelineno-1-28" href="#__codelineno-1-28"></a>              ▼
+</span><span id="__span-1-29"><a id="__codelineno-1-29" name="__codelineno-1-29" href="#__codelineno-1-29"></a>  BEDTIME (10pm-6am)
+</span><span id="__span-1-30"><a id="__codelineno-1-30" name="__codelineno-1-30" href="#__codelineno-1-30"></a>  ┌──────────────────────────────────────┐
+</span><span id="__span-1-31"><a id="__codelineno-1-31" name="__codelineno-1-31" href="#__codelineno-1-31"></a>  │ Lights dim → Dilder gets tired       │
+</span><span id="__span-1-32"><a id="__codelineno-1-32" name="__codelineno-1-32" href="#__codelineno-1-32"></a>  │ Place in dark → auto-sleep           │
+</span><span id="__span-1-33"><a id="__codelineno-1-33" name="__codelineno-1-33" href="#__codelineno-1-33"></a>  │ Low power mode                       │
+</span><span id="__span-1-34"><a id="__codelineno-1-34" name="__codelineno-1-34" href="#__codelineno-1-34"></a>  │ Stats decay slowly overnight         │
+</span><span id="__span-1-35"><a id="__codelineno-1-35" name="__codelineno-1-35" href="#__codelineno-1-35"></a>  │ Energy regenerates                   │
+</span><span id="__span-1-36"><a id="__codelineno-1-36" name="__codelineno-1-36" href="#__codelineno-1-36"></a>  └──────────────────────────────────────┘
+</span></code></pre></div>
+<hr />
+<h1 id="iv-the-physical-world">IV. The Physical World<a class="headerlink" href="#iv-the-physical-world" title="Permanent link">&para;</a></h1>
+<h2 id="9-sensor-interactions">9. Sensor Interactions<a class="headerlink" href="#9-sensor-interactions" title="Permanent link">&para;</a></h2>
+<p>Dilder doesn't just live on a screen — it senses the real world around it.</p>
+<h3 id="91-touch-zones">9.1 Touch Zones<a class="headerlink" href="#91-touch-zones" title="Permanent link">&para;</a></h3>
+<p>The device case has 4 capacitive touch zones (MPR121 sensor):</p>
+<table>
+<thead>
+<tr>
+<th>Zone</th>
+<th>Location</th>
+<th>Short Touch</th>
+<th>Sustained Hold (5s+)</th>
+<th>Rapid Tapping</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Head</strong></td>
+<td>Top</td>
+<td>Pet (+happiness)</td>
+<td>Maximum comfort, "purr" animation</td>
+<td>Annoyance → Angry</td>
+</tr>
+<tr>
+<td><strong>Left</strong></td>
+<td>Left panel</td>
+<td>Tickle → Excited</td>
+<td>Comfort</td>
+<td>Annoyance → Angry</td>
+</tr>
+<tr>
+<td><strong>Right</strong></td>
+<td>Right panel</td>
+<td>Tickle → Excited</td>
+<td>Comfort</td>
+<td>Annoyance → Angry</td>
+</tr>
+<tr>
+<td><strong>Back</strong></td>
+<td>Rear</td>
+<td>Comfort (+reduces Sad)</td>
+<td>Deep comfort</td>
+<td>Annoyance → Angry</td>
+</tr>
+</tbody>
+</table>
+<h3 id="92-voice-sound">9.2 Voice &amp; Sound<a class="headerlink" href="#92-voice-sound" title="Permanent link">&para;</a></h3>
+<p>The microphone (MAX9814) detects volume and patterns — not words (no speech recognition on the microcontroller):</p>
+<table>
+<thead>
+<tr>
+<th>Sound</th>
+<th>Detection</th>
+<th>Effect</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Talking</strong> (3+ seconds, moderate volume)</td>
+<td>Sustained mid-level signal</td>
+<td>+Intelligence, +Happiness</td>
+</tr>
+<tr>
+<td><strong>Yelling</strong></td>
+<td>High volume spike</td>
+<td>Discipline (if misbehaving) or Scare</td>
+</tr>
+<tr>
+<td><strong>Singing</strong></td>
+<td>Rhythmic sustained pattern</td>
+<td>+Happiness, special animation, contributes to Coral Dancer evolution</td>
+</tr>
+<tr>
+<td><strong>Clapping</strong></td>
+<td>Sharp spike then silence</td>
+<td>Attention getter — Dilder looks at you</td>
+</tr>
+<tr>
+<td><strong>Silence</strong> (30+ minutes)</td>
+<td>No signal above noise floor</td>
+<td>Loneliness timer → Sad/Homesick</td>
+</tr>
+<tr>
+<td><strong>Music</strong></td>
+<td>Sustained varied signal</td>
+<td>Chill mood boost</td>
+</tr>
+<tr>
+<td><strong>Whispering</strong></td>
+<td>Just above noise floor</td>
+<td>Secret/intimate interaction, +Bond</td>
+</tr>
+</tbody>
+</table>
+<h3 id="93-light-darkness">9.3 Light &amp; Darkness<a class="headerlink" href="#93-light-darkness" title="Permanent link">&para;</a></h3>
+<p>The BH1750 light sensor reads ambient light:</p>
+<table>
+<thead>
+<tr>
+<th>Light Level</th>
+<th>Lux</th>
+<th>Effect</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Bright daylight</strong></td>
+<td>&gt; 500</td>
+<td>Active mode, energy decay normal</td>
+</tr>
+<tr>
+<td><strong>Indoor</strong></td>
+<td>100-500</td>
+<td>Standard operation</td>
+</tr>
+<tr>
+<td><strong>Dim / Evening</strong></td>
+<td>10-100</td>
+<td>Dilder gets drowsy, starts yawning</td>
+</tr>
+<tr>
+<td><strong>Dark</strong></td>
+<td>&lt; 10</td>
+<td>Sleep mode (if energy low)</td>
+</tr>
+<tr>
+<td><strong>Sudden bright flash</strong></td>
+<td>Delta &gt; 300 in 5s</td>
+<td>Startled reaction</td>
+</tr>
+<tr>
+<td><strong>Dark but awake</strong></td>
+<td>&lt; 10 for 5+ min, energy &gt; 50</td>
+<td>Scared / Homesick</td>
+</tr>
+</tbody>
+</table>
+<h3 id="94-temperature-humidity">9.4 Temperature &amp; Humidity<a class="headerlink" href="#94-temperature-humidity" title="Permanent link">&para;</a></h3>
+<p>The AHT20 sensor reads the environment:</p>
+<table>
+<thead>
+<tr>
+<th>Condition</th>
+<th>Range</th>
+<th>Effect</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Comfortable</strong></td>
+<td>18-24C, 40-60% RH</td>
+<td>Chill mood bonus, 10% slower hygiene decay</td>
+</tr>
+<tr>
+<td><strong>Too hot</strong></td>
+<td>&gt; 28C</td>
+<td>Angry tendency, 30% faster hygiene decay</td>
+</tr>
+<tr>
+<td><strong>Too cold</strong></td>
+<td>&lt; 15C</td>
+<td>Sad tendency, huddle-up animation</td>
+</tr>
+<tr>
+<td><strong>Very humid</strong></td>
+<td>&gt; 70% RH</td>
+<td>Happy! (It's an octopus — it loves moisture)</td>
+</tr>
+<tr>
+<td><strong>Very dry</strong></td>
+<td>&lt; 30% RH</td>
+<td>Uncomfortable, "skin drying out" dialogue</td>
+</tr>
+<tr>
+<td><strong>Temperature swing</strong></td>
+<td>&gt; 5C change in 10 min</td>
+<td>Confused / Chaotic reaction</td>
+</tr>
+</tbody>
+</table>
+<h3 id="95-motion-movement">9.5 Motion &amp; Movement<a class="headerlink" href="#95-motion-movement" title="Permanent link">&para;</a></h3>
+<p>The LIS2DH12TR accelerometer tracks:</p>
+<table>
+<thead>
+<tr>
+<th>Motion</th>
+<th>Detection</th>
+<th>Effect</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Walking</strong></td>
+<td>Hardware pedometer, 1-3 Hz</td>
+<td>+Fitness, +Exploration XP</td>
+</tr>
+<tr>
+<td><strong>Running</strong></td>
+<td>Step frequency &gt; 3 Hz</td>
+<td>+Fitness (2x), Excited mood</td>
+</tr>
+<tr>
+<td><strong>Stationary</strong> (2+ hours)</td>
+<td>No steps detected</td>
+<td>Boredom → Lazy → Weird</td>
+</tr>
+<tr>
+<td><strong>Picked up</strong></td>
+<td>Orientation change</td>
+<td>Alert — Dilder "wakes up"</td>
+</tr>
+<tr>
+<td><strong>Shaking</strong></td>
+<td>High-frequency irregular motion</td>
+<td>Angry / Chaotic</td>
+</tr>
+<tr>
+<td><strong>Dropping</strong></td>
+<td>Free-fall detection</td>
+<td>Scared reaction, health check</td>
+</tr>
+<tr>
+<td><strong>Tilted &gt; 45 degrees</strong></td>
+<td>Sustained angle</td>
+<td>Confused — "I'm sideways!"</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="10-step-tracking-activity">10. Step Tracking &amp; Activity<a class="headerlink" href="#10-step-tracking-activity" title="Permanent link">&para;</a></h2>
+<h3 id="101-daily-step-targets">10.1 Daily Step Targets<a class="headerlink" href="#101-daily-step-targets" title="Permanent link">&para;</a></h3>
+<p>Every step you take with Dilder counts. Progressive daily goals unlock escalating rewards:</p>
+<table>
+<thead>
+<tr>
+<th>Target</th>
+<th>Steps</th>
+<th>Reward</th>
+<th>Dilder Says</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Bronze</strong></td>
+<td>2,000</td>
+<td>+10 XP, +5 happiness</td>
+<td>"Nice walk! My tentacles feel stretchy."</td>
+</tr>
+<tr>
+<td><strong>Silver</strong></td>
+<td>5,000</td>
+<td>+25 XP, +10 happiness, 1 snack</td>
+<td>"Great job! We really covered some ground!"</td>
+</tr>
+<tr>
+<td><strong>Gold</strong></td>
+<td>8,000</td>
+<td>+50 XP, +15 happiness, 20% cosmetic chance</td>
+<td>"Wow! You're a machine!"</td>
+</tr>
+<tr>
+<td><strong>Platinum</strong></td>
+<td>12,000</td>
+<td>+100 XP, +20 happiness, guaranteed cosmetic</td>
+<td>"LEGENDARY! My fitness stat is through the ROOF!"</td>
+</tr>
+<tr>
+<td><strong>Diamond</strong></td>
+<td>20,000</td>
+<td>+200 XP, full stat restore, rare cosmetic</td>
+<td>"I didn't know legs could DO that. Respect."</td>
+</tr>
+</tbody>
+</table>
+<p>The step screen shows your progress:
+<div class="language-text highlight"><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>┌──────────────────────────────────────┐
+</span><span id="__span-2-2"><a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>│  Today&#39;s Steps: 6,247                │
+</span><span id="__span-2-3"><a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a>│  ██████████████░░░░░ 8,000 Gold      │
+</span><span id="__span-2-4"><a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a>│                                      │
+</span><span id="__span-2-5"><a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a>│  [check] Bronze  (2,000)             │
+</span><span id="__span-2-6"><a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a>│  [check] Silver  (5,000)             │
+</span><span id="__span-2-7"><a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a>│  [    ] Gold    (8,000) — 1,753 to go│
+</span><span id="__span-2-8"><a id="__codelineno-2-8" name="__codelineno-2-8" href="#__codelineno-2-8"></a>│  [    ] Platinum (12,000)            │
+</span><span id="__span-2-9"><a id="__codelineno-2-9" name="__codelineno-2-9" href="#__codelineno-2-9"></a>│  [    ] Diamond  (20,000)            │
+</span><span id="__span-2-10"><a id="__codelineno-2-10" name="__codelineno-2-10" href="#__codelineno-2-10"></a>└──────────────────────────────────────┘
+</span></code></pre></div></p>
+<h3 id="102-weekly-targets">10.2 Weekly Targets<a class="headerlink" href="#102-weekly-targets" title="Permanent link">&para;</a></h3>
+<p>Accumulate across the week (Monday–Sunday):</p>
+<table>
+<thead>
+<tr>
+<th>Target</th>
+<th>Steps</th>
+<th>Reward</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Week Walker</strong></td>
+<td>10,000</td>
+<td>+50 XP, 3 snacks</td>
+</tr>
+<tr>
+<td><strong>Week Runner</strong></td>
+<td>25,000</td>
+<td>+150 XP, random cosmetic, special dialogue</td>
+</tr>
+<tr>
+<td><strong>Week Warrior</strong></td>
+<td>50,000</td>
+<td>+400 XP, rare cosmetic, +1 decor slot</td>
+</tr>
+<tr>
+<td><strong>Week Legend</strong></td>
+<td>75,000</td>
+<td>+800 XP, legendary cosmetic, evolution XP bonus</td>
+</tr>
+<tr>
+<td><strong>Week Titan</strong></td>
+<td>100,000+</td>
+<td>+1,500 XP, mythic reward, unique animation</td>
+</tr>
+</tbody>
+</table>
+<h3 id="103-monthly-targets">10.3 Monthly Targets<a class="headerlink" href="#103-monthly-targets" title="Permanent link">&para;</a></h3>
+<p>The "big goals" that drive long-term engagement:</p>
+<table>
+<thead>
+<tr>
+<th>Target</th>
+<th>Steps</th>
+<th>Reward</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Monthly Mover</strong></td>
+<td>50,000</td>
+<td>+200 XP, monthly badge, 10% slower decay next month</td>
+</tr>
+<tr>
+<td><strong>Monthly Marcher</strong></td>
+<td>100,000</td>
+<td>+500 XP, exclusive monthly cosmetic (unique per month!)</td>
+</tr>
+<tr>
+<td><strong>Monthly Marathoner</strong></td>
+<td>200,000</td>
+<td>+1,200 XP, evolution accelerator, rare animation</td>
+</tr>
+<tr>
+<td><strong>Monthly Monster</strong></td>
+<td>300,000</td>
+<td>+2,500 XP, legendary badge, permanent stat bonus</td>
+</tr>
+<tr>
+<td><strong>Monthly Mythic</strong></td>
+<td>500,000+</td>
+<td>+5,000 XP, one-of-a-kind cosmetic, Hall of Fame</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Monthly cosmetics are unique per calendar month.</strong> Miss April's exclusive hat and it's gone forever.</p>
+<h3 id="104-the-streak-system">10.4 The Streak System<a class="headerlink" href="#104-the-streak-system" title="Permanent link">&para;</a></h3>
+<p>Meet the Bronze daily target (2,000 steps) to keep your streak alive:</p>
+<table>
+<thead>
+<tr>
+<th>Streak</th>
+<th>Bonus</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>3 days</strong></td>
+<td>+25 XP, "Getting Started" badge</td>
+</tr>
+<tr>
+<td><strong>7 days</strong></td>
+<td>+100 XP, fire animation on step counter</td>
+</tr>
+<tr>
+<td><strong>14 days</strong></td>
+<td>+250 XP, happiness decay reduced 10%</td>
+</tr>
+<tr>
+<td><strong>30 days</strong></td>
+<td>+750 XP, exclusive cosmetic, bond boost</td>
+</tr>
+<tr>
+<td><strong>60 days</strong></td>
+<td>+2,000 XP, evolution guarantee (best path)</td>
+</tr>
+<tr>
+<td><strong>90 days</strong></td>
+<td>+5,000 XP, "Legendary Companion" title</td>
+</tr>
+<tr>
+<td><strong>365 days</strong></td>
+<td>+25,000 XP, "Eternal Bond" achievement</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Streak protection:</strong>
+- <strong>1 free miss per week</strong> — Missing one day doesn't break the streak.
+- <strong>Streak freeze items</strong> — Earned from treasure hunts. Allows 1 additional miss day.
+- <strong>Half-credit</strong> — Walking 1,000-1,999 steps counts as a "half day." Two halves = one streak day.</p>
+<hr />
+<h2 id="11-location-exploration">11. Location &amp; Exploration<a class="headerlink" href="#11-location-exploration" title="Permanent link">&para;</a></h2>
+<p>Dilder detects your location using WiFi fingerprinting — it recognizes unique access points and builds a map of places you've been.</p>
+<table>
+<thead>
+<tr>
+<th>Feature</th>
+<th>Effect</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Home detection</strong></td>
+<td>Dilder knows it's "home" — comfort bonus, no Homesick</td>
+</tr>
+<tr>
+<td><strong>Away from home</strong></td>
+<td>Adventure mode — +Exploration XP, but Homesick risk after 4 hours</td>
+</tr>
+<tr>
+<td><strong>New location</strong></td>
+<td>Discovery bonus! +25 XP, "Whoa, where are we?" dialogue</td>
+</tr>
+<tr>
+<td><strong>Familiar location</strong></td>
+<td>Nostalgic reaction, comfort</td>
+</tr>
+<tr>
+<td><strong>Unique location count</strong></td>
+<td>5 locations → Explorer hat, 10 → ocean background, 25 → deep-sea animations</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h1 id="v-growing-up">V. Growing Up<a class="headerlink" href="#v-growing-up" title="Permanent link">&para;</a></h1>
+<h2 id="12-life-stages">12. Life Stages<a class="headerlink" href="#12-life-stages" title="Permanent link">&para;</a></h2>
+<p>Your octopus grows through 6 stages over 30+ real days. Each stage changes its needs, available emotions, and personality.</p>
+<h3 id="121-egg">12.1 Egg<a class="headerlink" href="#121-egg" title="Permanent link">&para;</a></h3>
+<p><strong>Duration:</strong> Day 0-1</p>
+<p>A wobbling egg on screen. No stats, no emotions. Just warmth, touch, and patience. Cracks appear at 25%, 50%, 75% progress. Hatches at 100%.</p>
+<h3 id="122-hatchling">12.2 Hatchling<a class="headerlink" href="#122-hatchling" title="Permanent link">&para;</a></h3>
+<p><strong>Duration:</strong> Day 1-3</p>
+<p>A tiny octopus. Very needy — stat decay is <strong>2x normal</strong>. Limited emotions: Normal, Hungry, Tired, Sad, Excited. Cries every 3 minutes if hungry. Simple one-word dialogue: "mama?", "hungwy...", "<em>happy bubbles</em>"</p>
+<p>4 misbehavior windows open during this stage for discipline.</p>
+<h3 id="123-juvenile">12.3 Juvenile<a class="headerlink" href="#123-juvenile" title="Permanent link">&para;</a></h3>
+<p><strong>Duration:</strong> Day 3-7</p>
+<p>Growing and curious. Personality starts forming. Stat decay returns to 1.2x normal. Unlocks basic dialogue and the first decor slot. Adds Chill, Lazy, Angry, and Weird to the emotion set.</p>
+<blockquote>
+<p>"What's out there?" / "Are you my person?"</p>
+</blockquote>
+<h3 id="124-adolescent">12.4 Adolescent<a class="headerlink" href="#124-adolescent" title="Permanent link">&para;</a></h3>
+<p><strong>Duration:</strong> Day 7-14</p>
+<p>Moody, unpredictable, tests boundaries. All 16 emotions now available. Full dialogue unlocked. Mini-games available. Rebellion events increase. Stat decay at normal rate.</p>
+<blockquote>
+<p>"Whatever." / "You don't understand me." / "Leave me alone... wait, don't."</p>
+</blockquote>
+<h3 id="125-adult">12.5 Adult<a class="headerlink" href="#125-adult" title="Permanent link">&para;</a></h3>
+<p><strong>Duration:</strong> Day 14-30</p>
+<p>The big moment — <strong>evolution</strong>. Dilder's accumulated stats determine which of 6 adult forms it becomes. Stable personality, full feature access, all decor available. Stat decay at 0.75x (more self-sufficient).</p>
+<h3 id="126-elder">12.6 Elder<a class="headerlink" href="#126-elder" title="Permanent link">&para;</a></h3>
+<p><strong>Duration:</strong> Day 30+</p>
+<p>Slower stat decay (0.6x), wiser dialogue, nostalgic and reflective personality. Unique elder-only animations and quotes. Eventually: the rebirth option.</p>
+<blockquote>
+<p>"My tentacles may be slower, but my hearts are fuller."</p>
+</blockquote>
+<hr />
+<h2 id="13-evolution-the-six-adult-forms">13. Evolution — The Six Adult Forms<a class="headerlink" href="#13-evolution-the-six-adult-forms" title="Permanent link">&para;</a></h2>
+<p>At day 14, your care pattern across the first two weeks crystallizes into one of 6 adult forms. This is <strong>deterministic</strong> — the same inputs always produce the same result. Your choices have consequences.</p>
+<p><img alt="All outfits grid" src="../../../assets/images/octopus/all_outfits.png" /></p>
+<h3 id="131-deep-sea-scholar">13.1 Deep-Sea Scholar<a class="headerlink" href="#131-deep-sea-scholar" title="Permanent link">&para;</a></h3>
+<p><strong>Requirements:</strong> High intelligence + high bond + moderate discipline</p>
+<p>Glasses, a book, a contemplative pose. Philosophical, verbose quotes. The intellectual octopus.</p>
+<blockquote>
+<p>"The question isn't whether we're alone in the ocean. It's whether we'd recognize company if it arrived."</p>
+</blockquote>
+<p><strong>How to evolve:</strong> Talk to Dilder constantly (mic input), maintain high bond through consistent care, keep discipline moderate through correct scolding.</p>
+<h3 id="132-reef-guardian">13.2 Reef Guardian<a class="headerlink" href="#132-reef-guardian" title="Permanent link">&para;</a></h3>
+<p><strong>Requirements:</strong> High fitness + high exploration + balanced stats</p>
+<p>Muscular tentacles, a coral crown. Adventurous and encouraging.</p>
+<blockquote>
+<p>"Let's see what's over the next hill. And the one after that."</p>
+</blockquote>
+<p><strong>How to evolve:</strong> Walk a LOT (high step counts daily), visit many unique locations, keep all stats balanced without extremes.</p>
+<h3 id="133-tidal-trickster">13.3 Tidal Trickster<a class="headerlink" href="#133-tidal-trickster" title="Permanent link">&para;</a></h3>
+<p><strong>Requirements:</strong> Low discipline + high happiness + chaotic care pattern</p>
+<p>Jester hat, mischievous grin. Chaotic, unpredictable, hilarious.</p>
+<blockquote>
+<p>"Rules are just suggestions written by people with no imagination."</p>
+</blockquote>
+<p><strong>How to evolve:</strong> Keep happiness high, ignore discipline windows, care unpredictably (sometimes neglect, sometimes smother).</p>
+<h3 id="134-abyssal-hermit">13.4 Abyssal Hermit<a class="headerlink" href="#134-abyssal-hermit" title="Permanent link">&para;</a></h3>
+<p><strong>Requirements:</strong> High discipline + low social interaction + self-sufficient</p>
+<p>A cloak, dim eyes, stoic presence. Rare but profound dialogue.</p>
+<blockquote>
+<p>"..."
+(Abyssal Hermit speaks only when it matters.)</p>
+</blockquote>
+<p><strong>How to evolve:</strong> High discipline through correct scolding, but low total interactions. Feed and maintain, but don't overindulge in play or petting.</p>
+<h3 id="135-coral-dancer">13.5 Coral Dancer<a class="headerlink" href="#135-coral-dancer" title="Permanent link">&para;</a></h3>
+<p><strong>Requirements:</strong> High happiness + lots of music/singing exposure + creative</p>
+<p>Flowing ribbons, graceful animations. Artistic and poetic.</p>
+<blockquote>
+<p>"Every ripple in the water is a note in a song only the ocean knows."</p>
+</blockquote>
+<p><strong>How to evolve:</strong> Play music near Dilder often, sing to it (the mic detects rhythmic patterns), keep happiness consistently high.</p>
+<h3 id="136-storm-kraken">13.6 Storm Kraken<a class="headerlink" href="#136-storm-kraken" title="Permanent link">&para;</a></h3>
+<p><strong>Requirements:</strong> Lots of scolding + high anger exposure + survived</p>
+<p>Larger body, intimidating visual, powerful presence. Tough but loyal.</p>
+<blockquote>
+<p>"You think that's a storm? I've BEEN a storm."</p>
+</blockquote>
+<p><strong>How to evolve:</strong> Scold frequently (both correct and incorrect), expose to loud noises and shaking, but keep it alive. The Storm Kraken is forged through adversity.</p>
+<hr />
+<h2 id="14-rebirth-legacy">14. Rebirth &amp; Legacy<a class="headerlink" href="#14-rebirth-legacy" title="Permanent link">&para;</a></h2>
+<p>After day 30 (Elder stage), you can choose:</p>
+<ul>
+<li><strong>Continue:</strong> Dilder lives on as an Elder, slowly accumulating wisdom.</li>
+<li><strong>Rebirth:</strong> Dilder lays an egg. A new life begins.</li>
+</ul>
+<p><strong>The new Dilder inherits:</strong>
+- 10% of parent's Bond XP (a head start)
+- One decor item from the parent
+- A heritage trait that slightly biases evolution toward the parent's form
+- A memorial entry viewable in the Stats menu</p>
+<p>This creates generational lineage: "My 3rd-generation Deep-Sea Scholar, descended from a Storm Kraken."</p>
+<hr />
+<h1 id="vi-progression-collection">VI. Progression &amp; Collection<a class="headerlink" href="#vi-progression-collection" title="Permanent link">&para;</a></h1>
+<h2 id="15-bond-levels">15. Bond Levels<a class="headerlink" href="#15-bond-levels" title="Permanent link">&para;</a></h2>
+<p>Every interaction earns Bond XP. Your bond level determines which features are available:</p>
+<table>
+<thead>
+<tr>
+<th>Level</th>
+<th>Name</th>
+<th>XP</th>
+<th>Unlocks</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td><strong>Stranger</strong></td>
+<td>0</td>
+<td>Basic feeding, minimal dialogue</td>
+</tr>
+<tr>
+<td>2</td>
+<td><strong>Acquaintance</strong></td>
+<td>100</td>
+<td>Petting response, more expressions</td>
+</tr>
+<tr>
+<td>3</td>
+<td><strong>Companion</strong></td>
+<td>500</td>
+<td>Dialogue options, 1st decor slot</td>
+</tr>
+<tr>
+<td>4</td>
+<td><strong>Friend</strong></td>
+<td>1,500</td>
+<td>Mini-games, nickname, treats</td>
+</tr>
+<tr>
+<td>5</td>
+<td><strong>Best Friend</strong></td>
+<td>4,000</td>
+<td>Full dialogue tree, 3 decor slots</td>
+</tr>
+<tr>
+<td>6</td>
+<td><strong>Soulmate</strong></td>
+<td>10,000</td>
+<td>Secret dialogue, all decor, special animations</td>
+</tr>
+<tr>
+<td>7</td>
+<td><strong>Bonded</strong></td>
+<td>25,000</td>
+<td>Dilder initiates conversation, remembers things</td>
+</tr>
+<tr>
+<td>8</td>
+<td><strong>Legendary</strong></td>
+<td>50,000+</td>
+<td>Everything unlocked, elder wisdom mode</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="16-the-dialogue-system">16. The Dialogue System<a class="headerlink" href="#16-the-dialogue-system" title="Permanent link">&para;</a></h2>
+<p>Dilder's vocabulary grows with intelligence and life stage:</p>
+<table>
+<thead>
+<tr>
+<th>Intelligence</th>
+<th>Complexity</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>0-20</td>
+<td>Simple phrases, emotes, sound effects</td>
+</tr>
+<tr>
+<td>20-40</td>
+<td>Full sentences, basic opinions</td>
+</tr>
+<tr>
+<td>40-60</td>
+<td>Multi-sentence responses, asks YOU questions</td>
+</tr>
+<tr>
+<td>60-80</td>
+<td>References past events, humor, preferences</td>
+</tr>
+<tr>
+<td>80-100</td>
+<td>Philosophy, complex emotion, behavioral callbacks</td>
+</tr>
+</tbody>
+</table>
+<p>At Bond level 7 (Bonded), Dilder <strong>initiates conversation</strong> — you don't have to prompt it. It will comment on the weather, recall things you've done together, or just say hello.</p>
+<hr />
+<h2 id="17-decor-cosmetics">17. Decor &amp; Cosmetics<a class="headerlink" href="#17-decor-cosmetics" title="Permanent link">&para;</a></h2>
+<p>4 equip slots for customizing your octopus:</p>
+<h3 id="171-hats-headwear">17.1 Hats &amp; Headwear<a class="headerlink" href="#171-hats-headwear" title="Permanent link">&para;</a></h3>
+<p>Bow, crown, glasses, explorer hat, jester hat, coral crown, birthday hat, moon hat, and more. Unlocked through achievements and bond levels.</p>
+<h3 id="172-backgrounds-environments">17.2 Backgrounds &amp; Environments<a class="headerlink" href="#172-backgrounds-environments" title="Permanent link">&para;</a></h3>
+<p>Ocean floor, coral reef, deep sea, city skyline, cozy room, starry night. Unlocked through exploration milestones.</p>
+<p><img alt="All environments" src="../../../assets/images/octopus/all_environments.png" /></p>
+<h3 id="173-accessories">17.3 Accessories<a class="headerlink" href="#173-accessories" title="Permanent link">&para;</a></h3>
+<p>Scarf (appears in cold weather), sunglasses (bright environments), book (high intelligence). Unlocked through stat thresholds.</p>
+<h3 id="174-animation-styles">17.4 Animation Styles<a class="headerlink" href="#174-animation-styles" title="Permanent link">&para;</a></h3>
+<p>Calm sway, energetic bounce, lazy slouch, regal float. Unlocked through life stage + personality.</p>
+<p><img alt="All decor props" src="../../../assets/images/octopus/all_decor_props.png" /></p>
+<hr />
+<h2 id="18-treasure-hunts">18. Treasure Hunts<a class="headerlink" href="#18-treasure-hunts" title="Permanent link">&para;</a></h2>
+<p>When GPS is active, Dilder generates treasure hunts — virtual gifts placed at real-world coordinates within walking distance.</p>
+<p><strong>How it works:</strong>
+1. A treasure spawns 100m-1km from your current position
+2. The screen switches to compass mode with a bearing arrow and distance readout
+3. Walk toward the target — Dilder gives proximity hints
+4. Within 15 meters — "HERE! Look around!" — press SELECT to collect
+5. Reward revealed with a gift box animation</p>
+<p><strong>Treasure types:</strong></p>
+<table>
+<thead>
+<tr>
+<th>Type</th>
+<th>Rarity</th>
+<th>Reward</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Snack Crate</strong></td>
+<td>Common (60%)</td>
+<td>Food item, +hunger, +happiness</td>
+</tr>
+<tr>
+<td><strong>Cosmetic Shell</strong></td>
+<td>Uncommon (25%)</td>
+<td>Random decor item</td>
+</tr>
+<tr>
+<td><strong>Memory Fragment</strong></td>
+<td>Rare (10%)</td>
+<td>Lore piece, unlocks special dialogue</td>
+</tr>
+<tr>
+<td><strong>Golden Pearl</strong></td>
+<td>Legendary (5%)</td>
+<td>+500 XP or rare evolution modifier</td>
+</tr>
+<tr>
+<td><strong>Elder Relic</strong></td>
+<td>Mythic (&lt;1%)</td>
+<td>Unique one-of-a-kind cosmetic</td>
+</tr>
+</tbody>
+</table>
+<p>Treasures expire after 24 hours if uncollected.</p>
+<hr />
+<h1 id="vii-achievements">VII. Achievements<a class="headerlink" href="#vii-achievements" title="Permanent link">&para;</a></h1>
+<h2 id="19-achievement-system-overview">19. Achievement System Overview<a class="headerlink" href="#19-achievement-system-overview" title="Permanent link">&para;</a></h2>
+<p>Achievements are one-time milestones that reward XP, cosmetics, and bragging rights. They're divided into 6 categories. Some are obvious; others require creative play to discover.</p>
+<p>The achievement screen shows unlocked badges with descriptions. Locked achievements show "???" until you uncover them.</p>
+<hr />
+<h2 id="20-care-achievements">20. Care Achievements<a class="headerlink" href="#20-care-achievements" title="Permanent link">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th>Achievement</th>
+<th>Condition</th>
+<th>Reward</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>First Meal</strong></td>
+<td>Feed Dilder for the first time</td>
+<td>+10 XP, snack item</td>
+</tr>
+<tr>
+<td><strong>Full Course</strong></td>
+<td>Use all 3 food types in one session</td>
+<td>+25 XP</td>
+</tr>
+<tr>
+<td><strong>Perfect Day</strong></td>
+<td>No care mistakes for 24 hours</td>
+<td>+100 XP</td>
+</tr>
+<tr>
+<td><strong>Week of Love</strong></td>
+<td>7-day care streak</td>
+<td>+200 XP, heart animation</td>
+</tr>
+<tr>
+<td><strong>Month of Devotion</strong></td>
+<td>30-day care streak</td>
+<td>+750 XP, rare decor set</td>
+</tr>
+<tr>
+<td><strong>Nurse</strong></td>
+<td>Administer medicine 3 times</td>
+<td>+50 XP</td>
+</tr>
+<tr>
+<td><strong>Master Caretaker</strong></td>
+<td>Maintain all stats &gt;50 for 24 hours straight</td>
+<td>+150 XP</td>
+</tr>
+<tr>
+<td><strong>Overachiever</strong></td>
+<td>Maintain all stats &gt;80 for 8 hours</td>
+<td>+300 XP</td>
+</tr>
+<tr>
+<td><strong>Spotless</strong></td>
+<td>Clean when hygiene is already &gt;90</td>
+<td>+10 XP ("I wasn't even dirty!")</td>
+</tr>
+<tr>
+<td><strong>Helicopter Parent</strong></td>
+<td>Interact 50+ times in one day</td>
+<td>+100 XP</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="21-exploration-achievements">21. Exploration Achievements<a class="headerlink" href="#21-exploration-achievements" title="Permanent link">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th>Achievement</th>
+<th>Condition</th>
+<th>Reward</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>First Steps</strong></td>
+<td>Walk 100 steps with Dilder</td>
+<td>+10 XP, step counter display</td>
+</tr>
+<tr>
+<td><strong>Morning Walk</strong></td>
+<td>Complete Bronze target before 8 AM</td>
+<td>+25 XP</td>
+</tr>
+<tr>
+<td><strong>Neighborhood Explorer</strong></td>
+<td>Visit 5 unique locations</td>
+<td>+50 XP, Explorer hat</td>
+</tr>
+<tr>
+<td><strong>City Mapper</strong></td>
+<td>Visit 25 unique locations</td>
+<td>+200 XP, map background</td>
+</tr>
+<tr>
+<td><strong>Globetrotter</strong></td>
+<td>Visit 50 unique locations</td>
+<td>+500 XP, globe accessory</td>
+</tr>
+<tr>
+<td><strong>Marathon</strong></td>
+<td>42,195 steps in one day</td>
+<td>+500 XP, running animation</td>
+</tr>
+<tr>
+<td><strong>Homecoming</strong></td>
+<td>Return home after 8+ hours away</td>
+<td>+30 XP</td>
+</tr>
+<tr>
+<td><strong>Night Walker</strong></td>
+<td>Walk 1,000+ steps between midnight and 5 AM</td>
+<td>+50 XP</td>
+</tr>
+<tr>
+<td><strong>7-Day Explorer</strong></td>
+<td>Visit a new location every day for 7 days</td>
+<td>+300 XP</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="22-social-achievements">22. Social Achievements<a class="headerlink" href="#22-social-achievements" title="Permanent link">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th>Achievement</th>
+<th>Condition</th>
+<th>Reward</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>First Words</strong></td>
+<td>Talk to Dilder via mic for 10 seconds</td>
+<td>+10 XP, dialogue unlock</td>
+</tr>
+<tr>
+<td><strong>Storyteller</strong></td>
+<td>100 cumulative minutes of mic activity</td>
+<td>+200 XP, complex dialogue</td>
+</tr>
+<tr>
+<td><strong>Loud and Proud</strong></td>
+<td>Yell at Dilder (intentionally)</td>
+<td>+25 XP, angry response set</td>
+</tr>
+<tr>
+<td><strong>Whisper Secret</strong></td>
+<td>Low-volume mic input for 30 seconds</td>
+<td>+50 XP, secret dialogue</td>
+</tr>
+<tr>
+<td><strong>Serenade</strong></td>
+<td>Singing detected for 60 seconds total</td>
+<td>+100 XP, music animation</td>
+</tr>
+<tr>
+<td><strong>DJ Dilder</strong></td>
+<td>Music detected for 30 minutes total</td>
+<td>+150 XP, chill mode cosmetic</td>
+</tr>
+<tr>
+<td><strong>Silence is Golden</strong></td>
+<td>No mic input for 8 hours (during waking)</td>
+<td>+30 XP ("You okay?")</td>
+</tr>
+<tr>
+<td><strong>Motivational Speaker</strong></td>
+<td>Talk for 5 minutes continuously</td>
+<td>+100 XP</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="23-environmental-achievements">23. Environmental Achievements<a class="headerlink" href="#23-environmental-achievements" title="Permanent link">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th>Achievement</th>
+<th>Condition</th>
+<th>Reward</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Night Owl</strong></td>
+<td>Keep Dilder awake past midnight</td>
+<td>+25 XP, unique tired dialogue</td>
+</tr>
+<tr>
+<td><strong>Early Bird</strong></td>
+<td>Interact before 6 AM</td>
+<td>+25 XP, special morning greeting</td>
+</tr>
+<tr>
+<td><strong>Weather Friend</strong></td>
+<td>Experience rain while carrying Dilder (humidity spike)</td>
+<td>+50 XP, happy dance animation</td>
+</tr>
+<tr>
+<td><strong>Cozy Keeper</strong></td>
+<td>Maintain optimal temp/humidity for 8 hours</td>
+<td>+100 XP, comfort decor</td>
+</tr>
+<tr>
+<td><strong>Sauna Mode</strong></td>
+<td>Expose to &gt;30C for 30 minutes</td>
+<td>+30 XP ("I'm MELTING")</td>
+</tr>
+<tr>
+<td><strong>Arctic Explorer</strong></td>
+<td>Expose to &lt;10C for 30 minutes</td>
+<td>+30 XP, shiver animation</td>
+</tr>
+<tr>
+<td><strong>Darkness Dweller</strong></td>
+<td>Keep in darkness for 4 hours while energy is full</td>
+<td>+50 XP</td>
+</tr>
+<tr>
+<td><strong>Flash Bang</strong></td>
+<td>Trigger a sudden bright light startle 5 times</td>
+<td>+25 XP</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="24-mastery-achievements">24. Mastery Achievements<a class="headerlink" href="#24-mastery-achievements" title="Permanent link">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th>Achievement</th>
+<th>Condition</th>
+<th>Reward</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>All Emotions</strong></td>
+<td>Witness all 16 emotional states</td>
+<td>+300 XP, emotion gallery</td>
+</tr>
+<tr>
+<td><strong>Disciplinarian</strong></td>
+<td>Reach 100% discipline in one life stage</td>
+<td>+200 XP, evolution bonus</td>
+</tr>
+<tr>
+<td><strong>Zen Master</strong></td>
+<td>All stats &gt;60 for 72 consecutive hours</td>
+<td>+500 XP, Chill mode</td>
+</tr>
+<tr>
+<td><strong>Chaos Agent</strong></td>
+<td>Trigger Chaotic + Unhinged + Weird in one day</td>
+<td>+200 XP, special quote set</td>
+</tr>
+<tr>
+<td><strong>Full Wardrobe</strong></td>
+<td>Unlock 20 different decor items</td>
+<td>+300 XP</td>
+</tr>
+<tr>
+<td><strong>Polyglot</strong></td>
+<td>Unlock maximum intelligence (100) dialogue</td>
+<td>+400 XP</td>
+</tr>
+<tr>
+<td><strong>All Forms</strong></td>
+<td>Evolve into all 6 adult forms (across generations)</td>
+<td>+1,000 XP, master badge</td>
+</tr>
+<tr>
+<td><strong>Elder Wisdom</strong></td>
+<td>Reach Elder stage</td>
+<td>+500 XP, elder dialogue set</td>
+</tr>
+<tr>
+<td><strong>Generational</strong></td>
+<td>Complete 3 rebirth cycles</td>
+<td>+750 XP, heritage cosmetic</td>
+</tr>
+<tr>
+<td><strong>Completionist</strong></td>
+<td>Unlock 50 achievements</td>
+<td>+2,000 XP, golden frame</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="25-step-achievements">25. Step Achievements<a class="headerlink" href="#25-step-achievements" title="Permanent link">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th>Achievement</th>
+<th>Condition</th>
+<th>Reward</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Bronze Walker</strong></td>
+<td>First Bronze daily target (2,000)</td>
+<td>+10 XP</td>
+</tr>
+<tr>
+<td><strong>Silver Strider</strong></td>
+<td>First Silver daily target (5,000)</td>
+<td>+25 XP</td>
+</tr>
+<tr>
+<td><strong>Gold Crusher</strong></td>
+<td>First Gold daily target (8,000)</td>
+<td>+50 XP</td>
+</tr>
+<tr>
+<td><strong>Platinum Pacer</strong></td>
+<td>First Platinum daily target (12,000)</td>
+<td>+100 XP</td>
+</tr>
+<tr>
+<td><strong>Diamond Destroyer</strong></td>
+<td>First Diamond daily target (20,000)</td>
+<td>+200 XP, rare cosmetic</td>
+</tr>
+<tr>
+<td><strong>Week Titan</strong></td>
+<td>100,000 steps in one week</td>
+<td>+1,500 XP, unique animation</td>
+</tr>
+<tr>
+<td><strong>Monthly Mythic</strong></td>
+<td>500,000 steps in one month</td>
+<td>+5,000 XP, Hall of Fame</td>
+</tr>
+<tr>
+<td><strong>Million Steps</strong></td>
+<td>1,000,000 lifetime steps</td>
+<td>+3,000 XP, legendary badge</td>
+</tr>
+<tr>
+<td><strong>Streak Master</strong></td>
+<td>90-day consecutive streak</td>
+<td>+5,000 XP, "Legendary Companion"</td>
+</tr>
+<tr>
+<td><strong>Eternal Bond</strong></td>
+<td>365-day consecutive streak</td>
+<td>+25,000 XP, ultimate achievement</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="26-secret-achievements">26. Secret Achievements<a class="headerlink" href="#26-secret-achievements" title="Permanent link">&para;</a></h2>
+<p>These are hidden — they only appear after you discover them.</p>
+<table>
+<thead>
+<tr>
+<th>Achievement</th>
+<th>Hint</th>
+<th>Reward</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>???</strong></td>
+<td>Do something at exactly midnight on New Year's</td>
+<td>+500 XP</td>
+</tr>
+<tr>
+<td><strong>???</strong></td>
+<td>Trigger all 16 emotions in a single 24-hour period</td>
+<td>+1,000 XP</td>
+</tr>
+<tr>
+<td><strong>???</strong></td>
+<td>Have Dilder refuse to eat 5 times in a row</td>
+<td>+50 XP</td>
+</tr>
+<tr>
+<td><strong>???</strong></td>
+<td>Reach Bond level 8 without ever scolding</td>
+<td>+500 XP</td>
+</tr>
+<tr>
+<td><strong>???</strong></td>
+<td>Find an Elder Relic treasure</td>
+<td>+2,000 XP</td>
+</tr>
+<tr>
+<td><strong>???</strong></td>
+<td>Keep Dilder at exactly 100 weight for 24 hours</td>
+<td>+100 XP</td>
+</tr>
+<tr>
+<td><strong>???</strong></td>
+<td>Pet the back zone for 60 consecutive seconds</td>
+<td>+75 XP</td>
+</tr>
+<tr>
+<td><strong>???</strong></td>
+<td>Play music for Dilder for 2 hours cumulative</td>
+<td>+200 XP</td>
+</tr>
+</tbody>
+</table>
+<p><em>There are more secrets. Keep exploring.</em></p>
+<hr />
+<h1 id="viii-environments-scenes">VIII. Environments &amp; Scenes<a class="headerlink" href="#viii-environments-scenes" title="Permanent link">&para;</a></h1>
+<h2 id="27-the-22-environments">27. The 22 Environments<a class="headerlink" href="#27-the-22-environments" title="Permanent link">&para;</a></h2>
+<p>Dilder's world extends beyond the octopus itself. Unlockable environments change the background behind your pet:</p>
+<p><img alt="All environments grid" src="../../../assets/images/octopus/all_environments.png" /></p>
+<p><strong>Ocean Environments:</strong> Shallow reef, coral garden, deep sea trench, kelp forest, open ocean, volcanic vent, arctic waters, mangrove lagoon, sunken ship.</p>
+<p><strong>Land-Inspired:</strong> City skyline, cozy room, park, library, mountain peak.</p>
+<p><strong>Atmospheric:</strong> Starry night, sunset, aurora, thunderstorm, fog, moonlit tide.</p>
+<p><strong>Special:</strong> The Armchair (Jamal's home — unlocked at Bond level 8).</p>
+<p>Each environment has unique visual elements rendered in the 250x122 e-ink display using dither patterns for depth.</p>
+<hr />
+<h2 id="28-outfits-decor-props">28. Outfits &amp; Decor Props<a class="headerlink" href="#28-outfits-decor-props" title="Permanent link">&para;</a></h2>
+<p><img alt="All outfits grid" src="../../../assets/images/octopus/all_outfits.png" /></p>
+<p><strong>40 outfits</strong> across headwear, bodywear, eyewear, and accessories. From pirate hats to graduation caps, from scarves to bow ties. Mix and match across 4 equip slots.</p>
+<p><strong>29 decor props</strong> for scene composition — furniture, food items, weather effects, plants, and electronics that appear in the scene with your octopus.</p>
+<p><img alt="All decor props" src="../../../assets/images/octopus/all_decor_props.png" /></p>
+<hr />
+<h2 id="29-aura-particle-effects">29. Aura &amp; Particle Effects<a class="headerlink" href="#29-aura-particle-effects" title="Permanent link">&para;</a></h2>
+<p>Each emotion has a unique aura — particle effects that emanate from the octopus:</p>
+<p><img alt="Emotions with auras" src="../../../assets/images/octopus/all_emotions_with_aura.png" /></p>
+<ul>
+<li><strong>Normal:</strong> Gentle floating dots</li>
+<li><strong>Angry:</strong> Sharp jagged sparks</li>
+<li><strong>Sad:</strong> Falling tear drops</li>
+<li><strong>Excited:</strong> Exploding star bursts</li>
+<li><strong>Chill:</strong> Slow drifting waves</li>
+<li><strong>Chaotic:</strong> Random scattered debris</li>
+<li><strong>Hungry:</strong> Rising food particles</li>
+<li><strong>Horny:</strong> Floating hearts</li>
+<li><strong>Homesick:</strong> Swirling fog wisps</li>
+</ul>
+<hr />
+<h1 id="ix-controls-navigation">IX. Controls &amp; Navigation<a class="headerlink" href="#ix-controls-navigation" title="Permanent link">&para;</a></h1>
+<h2 id="30-button-layout">30. Button Layout<a class="headerlink" href="#30-button-layout" title="Permanent link">&para;</a></h2>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-3-1"><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>    [UP]
+</span><span id="__span-3-2"><a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a>
+</span><span id="__span-3-3"><a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a>[BACK]  [SELECT]  [ACTION]
+</span><span id="__span-3-4"><a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a>
+</span><span id="__span-3-5"><a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a>    [DOWN]
+</span></code></pre></div>
+<table>
+<thead>
+<tr>
+<th>Button</th>
+<th>Short Press</th>
+<th>Long Press (2s)</th>
+<th>Double Press</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>SELECT</strong></td>
+<td>Confirm / dismiss dialogue</td>
+<td>Open menu</td>
+<td>—</td>
+</tr>
+<tr>
+<td><strong>BACK</strong></td>
+<td>Cancel / go back</td>
+<td>Toggle backlight</td>
+<td>—</td>
+</tr>
+<tr>
+<td><strong>UP</strong></td>
+<td>Scroll up</td>
+<td>—</td>
+<td>—</td>
+</tr>
+<tr>
+<td><strong>DOWN</strong></td>
+<td>Scroll down</td>
+<td>—</td>
+<td>—</td>
+</tr>
+<tr>
+<td><strong>ACTION</strong></td>
+<td>Context action (feed/pet)</td>
+<td>Scold</td>
+<td>Quick status view</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="31-menu-system">31. Menu System<a class="headerlink" href="#31-menu-system" title="Permanent link">&para;</a></h2>
+<p>Long-press SELECT to open:</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-4-1"><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>Main Menu
+</span><span id="__span-4-2"><a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a>├── Feed
+</span><span id="__span-4-3"><a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a>│   ├── Meal (+30 hunger, +1 weight)
+</span><span id="__span-4-4"><a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a>│   ├── Snack (+10 hunger, +15 happiness, +2 weight)
+</span><span id="__span-4-5"><a id="__codelineno-4-5" name="__codelineno-4-5" href="#__codelineno-4-5"></a>│   └── Treat (+5 hunger, +25 happiness, +3 weight) [Bond 4+]
+</span><span id="__span-4-6"><a id="__codelineno-4-6" name="__codelineno-4-6" href="#__codelineno-4-6"></a>├── Play
+</span><span id="__span-4-7"><a id="__codelineno-4-7" name="__codelineno-4-7" href="#__codelineno-4-7"></a>│   ├── Mini-game (+20 happiness, -10 energy, -1 weight)
+</span><span id="__span-4-8"><a id="__codelineno-4-8" name="__codelineno-4-8" href="#__codelineno-4-8"></a>│   └── Tickle (+5 happiness, quick)
+</span><span id="__span-4-9"><a id="__codelineno-4-9" name="__codelineno-4-9" href="#__codelineno-4-9"></a>├── Care
+</span><span id="__span-4-10"><a id="__codelineno-4-10" name="__codelineno-4-10" href="#__codelineno-4-10"></a>│   ├── Clean (+40 hygiene)
+</span><span id="__span-4-11"><a id="__codelineno-4-11" name="__codelineno-4-11" href="#__codelineno-4-11"></a>│   ├── Medicine (+20 health) [Only when sick]
+</span><span id="__span-4-12"><a id="__codelineno-4-12" name="__codelineno-4-12" href="#__codelineno-4-12"></a>│   └── Light (sleep toggle)
+</span><span id="__span-4-13"><a id="__codelineno-4-13" name="__codelineno-4-13" href="#__codelineno-4-13"></a>├── Stats
+</span><span id="__span-4-14"><a id="__codelineno-4-14" name="__codelineno-4-14" href="#__codelineno-4-14"></a>│   ├── Health meters (all 5 bars)
+</span><span id="__span-4-15"><a id="__codelineno-4-15" name="__codelineno-4-15" href="#__codelineno-4-15"></a>│   ├── Bond level &amp; XP progress
+</span><span id="__span-4-16"><a id="__codelineno-4-16" name="__codelineno-4-16" href="#__codelineno-4-16"></a>│   ├── Today&#39;s activity (steps, distance)
+</span><span id="__span-4-17"><a id="__codelineno-4-17" name="__codelineno-4-17" href="#__codelineno-4-17"></a>│   ├── Achievements
+</span><span id="__span-4-18"><a id="__codelineno-4-18" name="__codelineno-4-18" href="#__codelineno-4-18"></a>│   └── Memorial (rebirth history)
+</span><span id="__span-4-19"><a id="__codelineno-4-19" name="__codelineno-4-19" href="#__codelineno-4-19"></a>├── Decor [Bond 3+]
+</span><span id="__span-4-20"><a id="__codelineno-4-20" name="__codelineno-4-20" href="#__codelineno-4-20"></a>│   ├── Hats
+</span><span id="__span-4-21"><a id="__codelineno-4-21" name="__codelineno-4-21" href="#__codelineno-4-21"></a>│   ├── Backgrounds
+</span><span id="__span-4-22"><a id="__codelineno-4-22" name="__codelineno-4-22" href="#__codelineno-4-22"></a>│   ├── Accessories
+</span><span id="__span-4-23"><a id="__codelineno-4-23" name="__codelineno-4-23" href="#__codelineno-4-23"></a>│   └── Animation Styles
+</span><span id="__span-4-24"><a id="__codelineno-4-24" name="__codelineno-4-24" href="#__codelineno-4-24"></a>└── Settings
+</span><span id="__span-4-25"><a id="__codelineno-4-25" name="__codelineno-4-25" href="#__codelineno-4-25"></a>    ├── Sound (beeper on/off)
+</span><span id="__span-4-26"><a id="__codelineno-4-26" name="__codelineno-4-26" href="#__codelineno-4-26"></a>    ├── Time display
+</span><span id="__span-4-27"><a id="__codelineno-4-27" name="__codelineno-4-27" href="#__codelineno-4-27"></a>    └── Brightness
+</span></code></pre></div>
+<hr />
+<h2 id="32-quick-actions">32. Quick Actions<a class="headerlink" href="#32-quick-actions" title="Permanent link">&para;</a></h2>
+<p>Without opening the menu:
+- <strong>Short press ACTION:</strong> Context-sensitive care — feeds if hungry, pets otherwise
+- <strong>Double press ACTION:</strong> Quick stats overlay (disappears after 5 seconds)
+- <strong>Touch any zone:</strong> Pet response (no button needed)
+- <strong>Talk to Dilder:</strong> Automatic — mic always listening</p>
+<hr />
+<h1 id="x-tips-secrets">X. Tips &amp; Secrets<a class="headerlink" href="#x-tips-secrets" title="Permanent link">&para;</a></h1>
+<h2 id="33-beginner-tips">33. Beginner Tips<a class="headerlink" href="#33-beginner-tips" title="Permanent link">&para;</a></h2>
+<ol>
+<li><strong>Check in morning and evening.</strong> Stat decay overnight is real — a quick feed and pet in the morning sets up a good day.</li>
+<li><strong>Walk with Dilder.</strong> Steps are the single biggest source of progression. 2,000 per day is the minimum to keep the streak alive.</li>
+<li><strong>Don't overfeed.</strong> Meals fill hunger efficiently. Snacks are for happiness. Treats are rare — save them for bad days.</li>
+<li><strong>Let it sleep.</strong> Place Dilder in a dark spot at night. Energy regenerates fully in under an hour, and sleep decay is 4x slower.</li>
+<li><strong>Talk to it.</strong> Intelligence grows from mic input. Higher intelligence unlocks richer dialogue and contributes to the Deep-Sea Scholar evolution.</li>
+<li><strong>Don't panic at critical stats.</strong> Recovery is fast — 2-3 care actions bring any stat back from the brink. Dilder forgives quickly.</li>
+</ol>
+<h2 id="34-advanced-strategies">34. Advanced Strategies<a class="headerlink" href="#34-advanced-strategies" title="Permanent link">&para;</a></h2>
+<ul>
+<li><strong>Evolution targeting:</strong> If you want a specific adult form, focus on its key stats from day 1. The first 14 days are the evolution window.</li>
+<li><strong>Streak freeze hoarding:</strong> Save freeze items from treasure hunts for vacations or sick days.</li>
+<li><strong>Weight management:</strong> Alternate meals with mini-games. The ideal weight is 90-110.</li>
+<li><strong>Discipline timing:</strong> You get exactly 4 misbehavior windows per life stage. Don't miss them — discipline is hard to raise otherwise.</li>
+<li><strong>Music exposure:</strong> Play music near Dilder regularly if targeting Coral Dancer evolution. The mic detects sustained rhythmic patterns.</li>
+<li><strong>Exploration grinding:</strong> Visit coffee shops, libraries, parks — any unique WiFi access point counts as a new location.</li>
+</ul>
+<h2 id="35-easter-eggs-hidden-features">35. Easter Eggs &amp; Hidden Features<a class="headerlink" href="#35-easter-eggs-hidden-features" title="Permanent link">&para;</a></h2>
+<ul>
+<li>Pet the <strong>back zone</strong> for a full 60 seconds for a special reaction.</li>
+<li>Reach Bond level 7 and Dilder will occasionally start conversations on its own.</li>
+<li>The Weird emotion has a <strong>5% random chance</strong> per tick when Dilder is bored. It's one of the rarest natural states.</li>
+<li>Elder Dilder has a unique dialogue set not available to any other life stage. Some quotes are callbacks to things that happened during your specific playthrough.</li>
+<li>After rebirth, the new Dilder's heritage form slightly biases evolution. A Scholar's child is more likely to become a Scholar — but not guaranteed.</li>
+<li>There are achievements that only appear after you discover them. No hints in the UI. Experiment.</li>
+</ul>
+<hr />
+<p><em>This guide covers all planned features of Dilder. The game is designed to be discovered — not every mechanic is explained here. Pay attention to what Dilder says. It's trying to tell you something.</em></p>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+  <script>var tabs=__md_get("__tabs");if(Array.isArray(tabs))e:for(var set of document.querySelectorAll(".tabbed-set")){var labels=set.querySelector(".tabbed-labels");for(var tab of tabs)for(var label of labels.getElementsByTagName("label"))if(label.innerText.trim()===tab){var input=document.getElementById(label.htmlFor);input.checked=!0;continue e}}</script>
+
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+    
+      
+      <nav class="md-footer__inner md-grid" aria-label="Footer" >
+        
+          
+          <a href="../kicad-schematic-pcb-guide/" class="md-footer__link md-footer__link--prev" aria-label="Previous: KiCad Schematic &amp; PCB Guide">
+            <div class="md-footer__button md-icon">
+              
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+            </div>
+            <div class="md-footer__title">
+              <span class="md-footer__direction">
+                Previous
+              </span>
+              <div class="md-ellipsis">
+                KiCad Schematic & PCB Guide
+              </div>
+            </div>
+          </a>
+        
+        
+          
+          <a href="../user-engagement-plan/" class="md-footer__link md-footer__link--next" aria-label="Next: User Engagement Plan">
+            <div class="md-footer__title">
+              <span class="md-footer__direction">
+                Next
+              </span>
+              <div class="md-ellipsis">
+                User Engagement Plan
+              </div>
+            </div>
+            <div class="md-footer__button md-icon">
+              
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11z"/></svg>
+            </div>
+          </a>
+        
+      </nav>
+    
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+        
+<div class="md-social">
+  
+    
+    
+    
+    
+    <a href="https://github.com/rompasaurus/dilder" target="_blank" rel="noopener" title="GitHub" class="md-social__link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M173.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M252.8 8C114.1 8 8 113.3 8 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C436.2 457.8 504 362.9 504 252 504 113.3 391.5 8 252.8 8M105.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"/></svg>
+    </a>
+  
+    
+    
+    
+    
+    <a href="https://discord.gg/PLACEHOLDER" target="_blank" rel="noopener" title="Discord" class="md-social__link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M492.5 69.8c-.2-.3-.4-.6-.8-.7-38.1-17.5-78.4-30-119.7-37.1-.4-.1-.8 0-1.1.1s-.6.4-.8.8c-5.5 9.9-10.5 20.2-14.9 30.6-44.6-6.8-89.9-6.8-134.4 0-4.5-10.5-9.5-20.7-15.1-30.6-.2-.3-.5-.6-.8-.8s-.7-.2-1.1-.2C162.5 39 122.2 51.5 84.1 69c-.3.1-.6.4-.8.7C7.1 183.5-13.8 294.6-3.6 404.2c0 .3.1.5.2.8s.3.4.5.6c44.4 32.9 94 58 146.8 74.2.4.1.8.1 1.1 0s.7-.4.9-.7c11.3-15.4 21.4-31.8 30-48.8.1-.2.2-.5.2-.8s0-.5-.1-.8-.2-.5-.4-.6-.4-.3-.7-.4c-15.8-6.1-31.2-13.4-45.9-21.9-.3-.2-.5-.4-.7-.6s-.3-.6-.3-.9 0-.6.2-.9.3-.5.6-.7c3.1-2.3 6.2-4.7 9.1-7.1.3-.2.6-.4.9-.4s.7 0 1 .1c96.2 43.9 200.4 43.9 295.5 0 .3-.1.7-.2 1-.2s.7.2.9.4c2.9 2.4 6 4.9 9.1 7.2.2.2.4.4.6.7s.2.6.2.9-.1.6-.3.9-.4.5-.6.6c-14.7 8.6-30 15.9-45.9 21.8-.2.1-.5.2-.7.4s-.3.4-.4.7-.1.5-.1.8.1.5.2.8c8.8 17 18.8 33.3 30 48.8.2.3.6.6.9.7s.8.1 1.1 0c52.9-16.2 102.6-41.3 147.1-74.2.2-.2.4-.4.5-.6s.2-.5.2-.8c12.3-126.8-20.5-236.9-86.9-334.5zm-302 267.7c-29 0-52.8-26.6-52.8-59.2s23.4-59.2 52.8-59.2c29.7 0 53.3 26.8 52.8 59.2 0 32.7-23.4 59.2-52.8 59.2m195.4 0c-29 0-52.8-26.6-52.8-59.2s23.4-59.2 52.8-59.2c29.7 0 53.3 26.8 52.8 59.2 0 32.7-23.2 59.2-52.8 59.2"/></svg>
+    </a>
+  
+    
+    
+    
+    
+    <a href="https://patreon.com/MchenrysDevelopment" target="_blank" rel="noopener" title="Patreon" class="md-social__link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M490 153.8c-.1-65.4-51-119-110.7-138.3-74.2-24-172-20.5-242.9 12.9C50.6 68.9 23.6 157.7 22.6 246.2 21.8 319 29 510.6 137.2 512c80.3 1 92.3-102.5 129.5-152.3 26.4-35.5 60.5-45.5 102.4-55.9 72-17.8 121.1-74.7 121-150z"/></svg>
+    </a>
+  
+    
+    
+    
+    
+    <a href="https://youtube.com/@rompasaurus" target="_blank" rel="noopener" title="YouTube" class="md-social__link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M549.7 124.1c-6.2-23.7-24.8-42.3-48.3-48.6C458.9 64 288.1 64 288.1 64S117.3 64 74.7 75.5c-23.5 6.3-42 24.9-48.3 48.6C15 167 15 256.4 15 256.4s0 89.4 11.4 132.3c6.3 23.6 24.8 41.5 48.3 47.8C117.3 448 288.1 448 288.1 448s170.8 0 213.4-11.5c23.5-6.3 42-24.2 48.3-47.8 11.4-42.9 11.4-132.3 11.4-132.3s0-89.4-11.4-132.3zM232.2 337.6V175.2l142.7 81.2z"/></svg>
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../../..", "features": ["navigation.tabs", "navigation.sections", "navigation.top", "navigation.footer", "search.suggest", "search.highlight", "content.tabs.link", "content.code.annotation", "content.code.copy"], "search": "../../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../../../assets/javascripts/bundle.79ae519e.min.js"></script>
+      
+        <script src="../../../javascripts/octopus-banner.js"></script>
+      
+    
+  </body>
+</html>

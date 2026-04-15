@@ -686,6 +686,36 @@
   
   
     <li class="md-nav__item">
+      <a href="../../../blog/category/art/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Art
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    
+  
+  
+    <li class="md-nav__item">
       <a href="../../../blog/category/build-guide/" class="md-nav__link">
         
   
@@ -1509,6 +1539,62 @@
 
           </label>
           <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../kicad-schematic-pcb-guide/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    KiCad Schematic & PCB Guide
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../user-guide/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    User Guide: How to Play
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
             
               
                 
@@ -2840,7 +2926,7 @@
 
 <h1 id="board-design-v04">Board Design v0.4<a class="headerlink" href="#board-design-v04" title="Permanent link">&para;</a></h1>
 <blockquote>
-<p>Custom PCB design for the Dilder — 30x70mm, 4-layer, ESP32-S3, 28 components, ~$4.26/board BOM cost.</p>
+<p>Custom PCB design for the Dilder — 30x70mm, 4-layer, ESP32-S3, 30 components, ~$5.18/board BOM cost.</p>
 </blockquote>
 <hr />
 <h2 id="board-overview">Board Overview<a class="headerlink" href="#board-overview" title="Permanent link">&para;</a></h2>
@@ -2866,7 +2952,7 @@
 </tr>
 <tr>
 <td>Components</td>
-<td>28 unique (30 placed)</td>
+<td>30 unique (34 placed)</td>
 </tr>
 <tr>
 <td>Nets</td>
@@ -2874,7 +2960,7 @@
 </tr>
 <tr>
 <td>BOM cost</td>
-<td>~$4.26/board</td>
+<td>~$5.18/board</td>
 </tr>
 <tr>
 <td>Target fab</td>
@@ -2894,7 +2980,7 @@
 </span><span id="__span-0-10"><a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a>|  [AMS1117]  [TP4056]        |
 </span><span id="__span-0-11"><a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a>|  [DW01A] [FS8205A] [Batt]   | Zone C
 </span><span id="__span-0-12"><a id="__codelineno-0-12" name="__codelineno-0-12" href="#__codelineno-0-12"></a>|                              |
-</span><span id="__span-0-13"><a id="__codelineno-0-13" name="__codelineno-0-13" href="#__codelineno-0-13"></a>| [Accel]  [ePaper connector]  |
+</span><span id="__span-0-13"><a id="__codelineno-0-13" name="__codelineno-0-13" href="#__codelineno-0-13"></a>| [Accel][Temp][Light][ePaper]  |
 </span><span id="__span-0-14"><a id="__codelineno-0-14" name="__codelineno-0-14" href="#__codelineno-0-14"></a>| [BOOT] [RESET]               | Zone D
 </span><span id="__span-0-15"><a id="__codelineno-0-15" name="__codelineno-0-15" href="#__codelineno-0-15"></a>|                              |
 </span><span id="__span-0-16"><a id="__codelineno-0-16" name="__codelineno-0-16" href="#__codelineno-0-16"></a>|     [5-Way Joystick]         | Zone E
@@ -2941,7 +3027,7 @@
 <h3 id="zone-c-power-y26-42mm">Zone C — Power (y=26-42mm)<a class="headerlink" href="#zone-c-power-y26-42mm" title="Permanent link">&para;</a></h3>
 <p>AMS1117-3.3 LDO, TP4056 charger, DW01A + FS8205A battery protection, JST-PH battery connector, SS34 Schottky diode.</p>
 <h3 id="zone-d-peripherals-y42-54mm">Zone D — Peripherals (y=42-54mm)<a class="headerlink" href="#zone-d-peripherals-y42-54mm" title="Permanent link">&para;</a></h3>
-<p>LIS2DH12TR accelerometer (I2C), 8-pin JST-SH ePaper connector (SPI), BOOT and RESET buttons.</p>
+<p>LIS2DH12TR accelerometer (U5), AHT20 temp/humidity sensor (U6), BH1750FVI light sensor (U7) — all on I2C bus. 8-pin JST-SH ePaper connector (SPI), BOOT and RESET buttons.</p>
 <h3 id="zone-e-joystick-y54-62mm">Zone E — Joystick (y=54-62mm)<a class="headerlink" href="#zone-e-joystick-y54-62mm" title="Permanent link">&para;</a></h3>
 <p>SKRHABE010 5-way joystick centered for thumb access.</p>
 <h3 id="zone-f-usb-c-y62-70mm">Zone F — USB-C (y=62-70mm)<a class="headerlink" href="#zone-f-usb-c-y62-70mm" title="Permanent link">&para;</a></h3>
@@ -2994,12 +3080,12 @@
 </tr>
 <tr>
 <td>GPIO16</td>
-<td>Accelerometer SDA</td>
+<td>I2C SDA (LIS2DH12, AHT20, BH1750)</td>
 <td>I2C</td>
 </tr>
 <tr>
 <td>GPIO17</td>
-<td>Accelerometer SCL</td>
+<td>I2C SCL (LIS2DH12, AHT20, BH1750)</td>
 <td>I2C</td>
 </tr>
 <tr>
@@ -3073,6 +3159,18 @@
 <td>$0.46</td>
 </tr>
 <tr>
+<td>U6</td>
+<td>AHT20 (temp/humidity)</td>
+<td>DFN-6 3x3mm</td>
+<td>$0.43</td>
+</tr>
+<tr>
+<td>U7</td>
+<td>BH1750FVI-TR (light sensor)</td>
+<td>WSOF-6 3x1.6mm</td>
+<td>$0.49</td>
+</tr>
+<tr>
 <td>J1</td>
 <td>USB-C 16-pin</td>
 <td>HRO TYPE-C-31-M-12</td>
@@ -3130,7 +3228,7 @@
 <td><strong>Total</strong></td>
 <td></td>
 <td></td>
-<td><strong>~$4.26</strong></td>
+<td><strong>~$5.18</strong></td>
 </tr>
 </tbody>
 </table>

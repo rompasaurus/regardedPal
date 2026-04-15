@@ -686,6 +686,36 @@
   
   
     <li class="md-nav__item">
+      <a href="../../../blog/category/art/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Art
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    
+  
+  
+    <li class="md-nav__item">
       <a href="../../../blog/category/build-guide/" class="md-nav__link">
         
   
@@ -1243,6 +1273,17 @@
   
 </li>
         
+          <li class="md-nav__item">
+  <a href="#i2c-address-map" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        I2C Address Map
+      
+    </span>
+  </a>
+  
+</li>
+        
       </ul>
     </nav>
   
@@ -1745,6 +1786,62 @@
 
           </label>
           <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../design/kicad-schematic-pcb-guide/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    KiCad Schematic & PCB Guide
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../design/user-guide/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    User Guide: How to Play
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
             
               
                 
@@ -2754,6 +2851,17 @@
   
 </li>
         
+          <li class="md-nav__item">
+  <a href="#i2c-address-map" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        I2C Address Map
+      
+    </span>
+  </a>
+  
+</li>
+        
       </ul>
     </nav>
   
@@ -2996,13 +3104,13 @@
 </tr>
 <tr>
 <td>GPIO16</td>
-<td>LIS2DH12 SDA</td>
+<td>I2C SDA (LIS2DH12, AHT20, BH1750)</td>
 <td>I2C</td>
 <td>Bidirectional</td>
 </tr>
 <tr>
 <td>GPIO17</td>
-<td>LIS2DH12 SCL</td>
+<td>I2C SCL (LIS2DH12, AHT20, BH1750)</td>
 <td>I2C</td>
 <td>Output</td>
 </tr>
@@ -3041,8 +3149,8 @@
 </span><span id="__span-0-6"><a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a>                                    AMS1117-3.3 LDO
 </span><span id="__span-0-7"><a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a>                                         │
 </span><span id="__span-0-8"><a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a>                                      3.3V Rail
-</span><span id="__span-0-9"><a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a>                              ┌──────────┼──────────┐
-</span><span id="__span-0-10"><a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a>                           ESP32-S3   LIS2DH12   e-Paper
+</span><span id="__span-0-9"><a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a>                      ┌───────────┬──────┼──────┬───────────┐
+</span><span id="__span-0-10"><a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a>                   ESP32-S3   LIS2DH12  AHT20  BH1750   e-Paper
 </span></code></pre></div>
 <h3 id="block-diagram">Block Diagram<a class="headerlink" href="#block-diagram" title="Permanent link">&para;</a></h3>
 <div class="language-text highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>                    ┌─────────────────────────────────┐
@@ -3053,18 +3161,50 @@
 </span><span id="__span-1-6"><a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a>  ┌─────────────────┤                                   │
 </span><span id="__span-1-7"><a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a>  │                 │  GPIO4-8         GPIO16,17,18     │
 </span><span id="__span-1-8"><a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a>  │                 │     │                 │           │
-</span><span id="__span-1-9"><a id="__codelineno-1-9" name="__codelineno-1-9" href="#__codelineno-1-9"></a>  │                 │     │            I2C (2 lines)    │
-</span><span id="__span-1-10"><a id="__codelineno-1-10" name="__codelineno-1-10" href="#__codelineno-1-10"></a>  │                 │  GPIO19,20            │           │
-</span><span id="__span-1-11"><a id="__codelineno-1-11" name="__codelineno-1-11" href="#__codelineno-1-11"></a>  │                 └──────┬────────────────┼───────────┘
-</span><span id="__span-1-12"><a id="__codelineno-1-12" name="__codelineno-1-12" href="#__codelineno-1-12"></a>  │                        │                │
-</span><span id="__span-1-13"><a id="__codelineno-1-13" name="__codelineno-1-13" href="#__codelineno-1-13"></a>  ▼                        ▼                ▼
-</span><span id="__span-1-14"><a id="__codelineno-1-14" name="__codelineno-1-14" href="#__codelineno-1-14"></a>e-Paper 2.13&quot;        USB-C (OTG)      LIS2DH12TR
-</span><span id="__span-1-15"><a id="__codelineno-1-15" name="__codelineno-1-15" href="#__codelineno-1-15"></a>(Waveshare)          J1               Accelerometer
-</span><span id="__span-1-16"><a id="__codelineno-1-16" name="__codelineno-1-16" href="#__codelineno-1-16"></a>J3 (JST-SH 8p)                       U5
+</span><span id="__span-1-9"><a id="__codelineno-1-9" name="__codelineno-1-9" href="#__codelineno-1-9"></a>  │                 │     │         I2C bus (2 lines)   │
+</span><span id="__span-1-10"><a id="__codelineno-1-10" name="__codelineno-1-10" href="#__codelineno-1-10"></a>  │                 │  GPIO19,20     ┌──────┼──────┐    │
+</span><span id="__span-1-11"><a id="__codelineno-1-11" name="__codelineno-1-11" href="#__codelineno-1-11"></a>  │                 └──────┬─────────┼──────┼──────┼───┘
+</span><span id="__span-1-12"><a id="__codelineno-1-12" name="__codelineno-1-12" href="#__codelineno-1-12"></a>  │                        │         │      │      │
+</span><span id="__span-1-13"><a id="__codelineno-1-13" name="__codelineno-1-13" href="#__codelineno-1-13"></a>  ▼                        ▼         ▼      ▼      ▼
+</span><span id="__span-1-14"><a id="__codelineno-1-14" name="__codelineno-1-14" href="#__codelineno-1-14"></a>e-Paper 2.13&quot;        USB-C (OTG)  LIS2DH12 AHT20  BH1750
+</span><span id="__span-1-15"><a id="__codelineno-1-15" name="__codelineno-1-15" href="#__codelineno-1-15"></a>(Waveshare)          J1           U5 0x18  U6 0x38 U7 0x23
+</span><span id="__span-1-16"><a id="__codelineno-1-16" name="__codelineno-1-16" href="#__codelineno-1-16"></a>J3 (JST-SH 8p)                   Accel    Temp/Hum Light
 </span><span id="__span-1-17"><a id="__codelineno-1-17" name="__codelineno-1-17" href="#__codelineno-1-17"></a>
 </span><span id="__span-1-18"><a id="__codelineno-1-18" name="__codelineno-1-18" href="#__codelineno-1-18"></a>                    5-Way Joystick
 </span><span id="__span-1-19"><a id="__codelineno-1-19" name="__codelineno-1-19" href="#__codelineno-1-19"></a>                    SW1 (SKRHABE010)
 </span></code></pre></div>
+<h3 id="i2c-address-map">I2C Address Map<a class="headerlink" href="#i2c-address-map" title="Permanent link">&para;</a></h3>
+<p>All three sensors share the I2C bus on GPIO16 (SDA) / GPIO17 (SCL) with 10k pull-up resistors.</p>
+<table>
+<thead>
+<tr>
+<th>Device</th>
+<th>Ref</th>
+<th>I2C Address</th>
+<th>Function</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>LIS2DH12TR</td>
+<td>U5</td>
+<td>0x18</td>
+<td>3-axis accelerometer</td>
+</tr>
+<tr>
+<td>BH1750FVI-TR</td>
+<td>U7</td>
+<td>0x23</td>
+<td>Ambient light sensor</td>
+</tr>
+<tr>
+<td>AHT20</td>
+<td>U6</td>
+<td>0x38</td>
+<td>Temperature / humidity</td>
+</tr>
+</tbody>
+</table>
 <p>For full component details, see the <a href="../../../hardware-design/parts-sheets/README.md">Parts Sheets</a> and <a href="../../../hardware-design/BOM.md">BOM</a>.</p>
 <hr />
 <h2 id="breadboard-prototype-pico-w-legacy">Breadboard Prototype — Pico W (Legacy)<a class="headerlink" href="#breadboard-prototype-pico-w-legacy" title="Permanent link">&para;</a></h2>

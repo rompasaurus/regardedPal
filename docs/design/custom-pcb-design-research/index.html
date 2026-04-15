@@ -686,6 +686,36 @@
   
   
     <li class="md-nav__item">
+      <a href="../../../blog/category/art/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Art
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    
+  
+  
+    <li class="md-nav__item">
       <a href="../../../blog/category/build-guide/" class="md-nav__link">
         
   
@@ -1509,6 +1539,62 @@
 
           </label>
           <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../kicad-schematic-pcb-guide/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    KiCad Schematic & PCB Guide
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../user-guide/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    User Guide: How to Play
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
             
               
                 
@@ -5010,9 +5096,9 @@
 </tr>
 <tr>
 <td>Temp/Humidity</td>
-<td>BME280</td>
-<td>0x76</td>
-<td>Temperature, humidity, pressure</td>
+<td>AHT20</td>
+<td>0x38</td>
+<td>Temperature, humidity</td>
 </tr>
 <tr>
 <td>GPS</td>
@@ -5130,7 +5216,7 @@
 </span><span id="__span-2-7"><a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a>   GPIO (5 pin) ──┤ 5-Way Joystick│
 </span><span id="__span-2-8"><a id="__codelineno-2-8" name="__codelineno-2-8" href="#__codelineno-2-8"></a>                   │               │
 </span><span id="__span-2-9"><a id="__codelineno-2-9" name="__codelineno-2-9" href="#__codelineno-2-9"></a>    I2C0 (2 pin)──┤ Sensor Bus    │──► LSM6DSO, MPR121, BH1750,
-</span><span id="__span-2-10"><a id="__codelineno-2-10" name="__codelineno-2-10" href="#__codelineno-2-10"></a>                   │               │    BME280, PA1010D, QMC5883L
+</span><span id="__span-2-10"><a id="__codelineno-2-10" name="__codelineno-2-10" href="#__codelineno-2-10"></a>                   │               │    AHT20, PA1010D, QMC5883L
 </span><span id="__span-2-11"><a id="__codelineno-2-11" name="__codelineno-2-11" href="#__codelineno-2-11"></a>                   │               │
 </span><span id="__span-2-12"><a id="__codelineno-2-12" name="__codelineno-2-12" href="#__codelineno-2-12"></a>     ADC0 (1 pin)──┤ Microphone    │
 </span><span id="__span-2-13"><a id="__codelineno-2-13" name="__codelineno-2-13" href="#__codelineno-2-13"></a>                   │               │
@@ -6025,7 +6111,7 @@
 <td>Cheapest, auto-placed</td>
 </tr>
 <tr>
-<td>Sensors (LSM6DSO, BME280, etc.)</td>
+<td>Sensors (LSM6DSO, AHT20, etc.)</td>
 <td>LCSC Extended Library</td>
 <td>Available for PCBA</td>
 </tr>
@@ -6090,7 +6176,7 @@
 </span><span id="__span-6-29"><a id="__codelineno-6-29" name="__codelineno-6-29" href="#__codelineno-6-29"></a>│  │  GP16 (SDA) ──┬──► LSM6DSO (0x6A)             │              │
 </span><span id="__span-6-30"><a id="__codelineno-6-30" name="__codelineno-6-30" href="#__codelineno-6-30"></a>│  │  GP17 (SCL) ──┤──► MPR121  (0x5A)             │              │
 </span><span id="__span-6-31"><a id="__codelineno-6-31" name="__codelineno-6-31" href="#__codelineno-6-31"></a>│  │    I2C0       ├──► BH1750  (0x23)             │              │
-</span><span id="__span-6-32"><a id="__codelineno-6-32" name="__codelineno-6-32" href="#__codelineno-6-32"></a>│  │               ├──► BME280  (0x76)             │              │
+</span><span id="__span-6-32"><a id="__codelineno-6-32" name="__codelineno-6-32" href="#__codelineno-6-32"></a>│  │               ├──► AHT20   (0x38)             │              │
 </span><span id="__span-6-33"><a id="__codelineno-6-33" name="__codelineno-6-33" href="#__codelineno-6-33"></a>│  │               ├──► PA1010D (0x10) [DNP V1]    │              │
 </span><span id="__span-6-34"><a id="__codelineno-6-34" name="__codelineno-6-34" href="#__codelineno-6-34"></a>│  │               └──► QMC5883L(0x0D) [DNP V1]    │              │
 </span><span id="__span-6-35"><a id="__codelineno-6-35" name="__codelineno-6-35" href="#__codelineno-6-35"></a>│  │                                                │              │
@@ -6119,7 +6205,7 @@
 </span><span id="__span-7-5"><a id="__codelineno-7-5" name="__codelineno-7-5" href="#__codelineno-7-5"></a>        ┌────────────┼────────────┐
 </span><span id="__span-7-6"><a id="__codelineno-7-6" name="__codelineno-7-6" href="#__codelineno-7-6"></a>        │            │            │
 </span><span id="__span-7-7"><a id="__codelineno-7-7" name="__codelineno-7-7" href="#__codelineno-7-7"></a>   ┌────┴──┐   ┌────┴──┐   ┌────┴──┐
-</span><span id="__span-7-8"><a id="__codelineno-7-8" name="__codelineno-7-8" href="#__codelineno-7-8"></a>   │LSM6DSO│   │MPR121 │   │BH1750 │   ... (BME280, PA1010D, QMC5883L)
+</span><span id="__span-7-8"><a id="__codelineno-7-8" name="__codelineno-7-8" href="#__codelineno-7-8"></a>   │LSM6DSO│   │MPR121 │   │BH1750 │   ... (AHT20, PA1010D, QMC5883L)
 </span><span id="__span-7-9"><a id="__codelineno-7-9" name="__codelineno-7-9" href="#__codelineno-7-9"></a>   │ 0x6A  │   │ 0x5A  │   │ 0x23  │
 </span><span id="__span-7-10"><a id="__codelineno-7-10" name="__codelineno-7-10" href="#__codelineno-7-10"></a>   └───────┘   └───────┘   └───────┘
 </span><span id="__span-7-11"><a id="__codelineno-7-11" name="__codelineno-7-11" href="#__codelineno-7-11"></a>
@@ -6347,7 +6433,7 @@
 </thead>
 <tbody>
 <tr>
-<td>Add all I2C sensors to schematic (LSM6DSO, MPR121, BH1750, BME280)</td>
+<td>Add all I2C sensors to schematic (LSM6DSO, MPR121, BH1750, AHT20)</td>
 <td>Datasheets for each</td>
 <td>8-12 hours</td>
 </tr>
@@ -6668,7 +6754,7 @@
 <td>~$1.00</td>
 </tr>
 <tr>
-<td>I2C sensors (LSM6DSO, MPR121, BH1750, BME280)</td>
+<td>I2C sensors (LSM6DSO, MPR121, BH1750, AHT20)</td>
 <td>~$40</td>
 <td>~$8.00</td>
 </tr>
@@ -6870,7 +6956,7 @@
 </span><span id="__span-9-20"><a id="__codelineno-9-20" name="__codelineno-9-20" href="#__codelineno-9-20"></a>            ├── Add battery charging (MCP73831)
 </span><span id="__span-9-21"><a id="__codelineno-9-21" name="__codelineno-9-21" href="#__codelineno-9-21"></a>            ├── Add e-paper connector (SPI1, 8-pin)
 </span><span id="__span-9-22"><a id="__codelineno-9-22" name="__codelineno-9-22" href="#__codelineno-9-22"></a>            ├── Add joystick pads (5x GPIO + GND)
-</span><span id="__span-9-23"><a id="__codelineno-9-23" name="__codelineno-9-23" href="#__codelineno-9-23"></a>            ├── Add I2C sensor bus (LSM6DSO, MPR121, BH1750, BME280)
+</span><span id="__span-9-23"><a id="__codelineno-9-23" name="__codelineno-9-23" href="#__codelineno-9-23"></a>            ├── Add I2C sensor bus (LSM6DSO, MPR121, BH1750, AHT20)
 </span><span id="__span-9-24"><a id="__codelineno-9-24" name="__codelineno-9-24" href="#__codelineno-9-24"></a>            ├── Add microphone (MAX9814 + ADC)
 </span><span id="__span-9-25"><a id="__codelineno-9-25" name="__codelineno-9-25" href="#__codelineno-9-25"></a>            ├── Add buzzer (PWM)
 </span><span id="__span-9-26"><a id="__codelineno-9-26" name="__codelineno-9-26" href="#__codelineno-9-26"></a>            ├── Add expansion header

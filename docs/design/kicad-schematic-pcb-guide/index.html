@@ -1,0 +1,6274 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="An open-source AI-assisted virtual pet built with a Raspberry Pi Pico W, e-ink display, and 3D-printed case. Follow the build in real time.">
+      
+      
+        <meta name="author" content="rompasaurus">
+      
+      
+        <link rel="canonical" href="https://dilder.dev/docs/design/kicad-schematic-pcb-guide/">
+      
+      
+        <link rel="prev" href="../../setup/dev-environment/">
+      
+      
+        <link rel="next" href="../user-guide/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../../assets/images/dilder-icon.svg">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.6">
+    
+    
+      
+        <title>KiCad Schematic & PCB Guide - Dilder</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../../assets/stylesheets/main.484c7ddc.min.css">
+      
+        
+        <link rel="stylesheet" href="../../../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Inter:300,300i,400,400i,700,700i%7CJetBrains+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Inter";--md-code-font:"JetBrains Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../../stylesheets/extra.css">
+    
+    <script>__md_scope=new URL("../../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+  
+
+
+  
+  
+
+<script id="__analytics">function __md_analytics(){function e(){dataLayer.push(arguments)}window.dataLayer=window.dataLayer||[],e("js",new Date),e("config","G-PLACEHOLDER"),document.addEventListener("DOMContentLoaded",(function(){document.forms.search&&document.forms.search.query.addEventListener("blur",(function(){this.value&&e("event","search",{search_term:this.value})}));document$.subscribe((function(){var t=document.forms.feedback;if(void 0!==t)for(var a of t.querySelectorAll("[type=submit]"))a.addEventListener("click",(function(a){a.preventDefault();var n=document.location.pathname,d=this.getAttribute("data-md-value");e("event","feedback",{page:n,data:d}),t.firstElementChild.disabled=!0;var r=t.querySelector(".md-feedback__note [data-md-value='"+d+"']");r&&(r.hidden=!1)})),t.hidden=!1})),location$.subscribe((function(t){e("config","G-PLACEHOLDER",{page_path:t.pathname})}))}));var t=document.createElement("script");t.async=!0,t.src="https://www.googletagmanager.com/gtag/js?id=G-PLACEHOLDER",document.getElementById("__analytics").insertAdjacentElement("afterEnd",t)}</script>
+  
+    <script>"undefined"!=typeof __md_analytics&&__md_analytics()</script>
+  
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="deep-purple" data-md-color-accent="teal">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#kicad-schematic-pcb-design-guide-dilder-board" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../../.." title="Dilder" class="md-header__button md-logo" aria-label="Dilder" data-md-component="logo">
+      
+  <img src="../../../assets/images/dilder-icon.svg" alt="logo">
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Dilder
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              KiCad Schematic & PCB Guide
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: light)" data-md-color-scheme="default" data-md-color-primary="deep-purple" data-md-color-accent="teal"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: dark)" data-md-color-scheme="slate" data-md-color-primary="deep-purple" data-md-color-accent="teal"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12s-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/rompasaurus/dilder" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M173.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M252.8 8C114.1 8 8 113.3 8 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C436.2 457.8 504 362.9 504 252 504 113.3 391.5 8 252.8 8M105.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"/></svg>
+  </div>
+  <div class="md-source__repository">
+    rompasaurus/dilder
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+            
+<nav class="md-tabs" aria-label="Tabs" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../.." class="md-tabs__link">
+        
+  
+  
+    
+  
+  Home
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../../blog/" class="md-tabs__link">
+          
+  
+  
+  Blog
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+    
+  
+  
+    
+    
+      <li class="md-tabs__item md-tabs__item--active">
+        <a href="../../" class="md-tabs__link">
+          
+  
+  
+  Docs
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../../community/" class="md-tabs__link">
+          
+  
+  
+  Community
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../../about/" class="md-tabs__link">
+          
+  
+  
+  About
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../../prompts/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Prompt Log
+
+      </a>
+    </li>
+  
+
+      
+    </ul>
+  </div>
+</nav>
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../../.." title="Dilder" class="md-nav__button md-logo" aria-label="Dilder" data-md-component="logo">
+      
+  <img src="../../../assets/images/dilder-icon.svg" alt="logo">
+
+    </a>
+    Dilder
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/rompasaurus/dilder" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M173.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M252.8 8C114.1 8 8 113.3 8 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C436.2 457.8 504 362.9 504 252 504 113.3 391.5 8 252.8 8M105.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"/></svg>
+  </div>
+  <div class="md-source__repository">
+    rompasaurus/dilder
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Blog
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Blog
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+    
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../blog/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Build Journal
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2_2" id="__nav_2_2_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Archive
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Archive
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+    
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../blog/archive/2026/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    2026
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_2_3" id="__nav_2_3_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Categories
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Categories
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+    
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../blog/category/architecture/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Architecture
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../blog/category/art/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Art
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../blog/category/build-guide/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Build Guide
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../blog/category/design/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Design
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../blog/category/firmware/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Firmware
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../blog/category/hardware/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Hardware
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../blog/category/manufacturing/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Manufacturing
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../blog/category/pcb-design/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    PCB Design
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../blog/category/planning/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Planning
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../blog/category/software/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Software
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../blog/category/tools/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Tools
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Docs
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Docs
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Overview
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+          
+          
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_3_2" id="__nav_3_2_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Hardware
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Hardware
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../hardware/materials-list/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Materials List
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../hardware/wiring-pinout/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Wiring & Pinout
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../hardware/joystick-wiring/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Joystick Wiring
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../hardware/battery-wiring/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Battery Wiring
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../hardware/enclosure-design/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Enclosure Design
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../hardware/3d-printing-pipeline/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    3D Printing Pipeline
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+          
+          
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3_3" id="__nav_3_3_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Setup
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Setup
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../setup/first-time-setup/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    First-Time Setup (C SDK)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../setup/pi-zero-setup/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Pico W Setup
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../setup/display-setup/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Display Setup
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../setup/dev-environment/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Dev Environment
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+          
+          
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_4" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_3_4" id="__nav_3_4_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Design
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_4_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_3_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Design
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    KiCad Schematic & PCB Guide
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    KiCad Schematic & PCB Guide
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#table-of-contents" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Table of Contents
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#before-you-start" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Before You Start
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Before You Start">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#what-you-need-installed" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What You Need Installed
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#what-you-need-to-understand" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What You Need to Understand
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#part-1-project-setup" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Part 1 — Project Setup
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Part 1 — Project Setup">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#step-1-create-a-new-kicad-project" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 1: Create a New KiCad Project
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#step-2-configure-libraries" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 2: Configure Libraries
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#step-3-set-schematic-page-size" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 3: Set Schematic Page Size
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#part-2-schematic-design" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Part 2 — Schematic Design
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Part 2 — Schematic Design">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#how-the-schematic-editor-works" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        How the Schematic Editor Works
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#general-best-practices" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        General Best Practices
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#21-usb-c-power-input" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.1 USB-C Power Input
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="2.1 USB-C Power Input">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#what-you-are-building" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What You Are Building
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#why-cc-resistors" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Why CC Resistors?
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#steps" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Steps
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#checklist-before-moving-on" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Checklist Before Moving On
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#22-reverse-polarity-protection-d1-ss34" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.2 Reverse Polarity Protection (D1: SS34)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="2.2 Reverse Polarity Protection (D1: SS34)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#steps_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Steps
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#23-lipo-charging-tp4056" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.3 LiPo Charging (TP4056)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="2.3 LiPo Charging (TP4056)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#what-you-are-building_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What You Are Building
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#setting-the-charge-current-with-prog-resistor" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Setting the Charge Current with PROG Resistor
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#steps_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Steps
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#24-battery-protection-dw01a-fs8205a" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.4 Battery Protection (DW01A + FS8205A)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="2.4 Battery Protection (DW01A + FS8205A)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#circuit-topology" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Circuit Topology
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#steps_3" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Steps
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#25-voltage-regulation-ams1117-33" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.5 Voltage Regulation (AMS1117-3.3)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="2.5 Voltage Regulation (AMS1117-3.3)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#steps_4" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Steps
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#26-esp32-s3-wroom-1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.6 ESP32-S3-WROOM-1
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="2.6 ESP32-S3-WROOM-1">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#what-you-are-connecting" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What You Are Connecting
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#steps_5" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Steps
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#27-epaper-spi-interface" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.7 ePaper SPI Interface
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="2.7 ePaper SPI Interface">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#steps_6" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Steps
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#28-lis2dh12tr-accelerometer-i2c" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.8 LIS2DH12TR Accelerometer (I2C)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="2.8 LIS2DH12TR Accelerometer (I2C)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#steps_7" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Steps
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#29-aht20-temperature-humidity-sensor-i2c" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.9 AHT20 Temperature &amp; Humidity Sensor (I2C)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="2.9 AHT20 Temperature &amp; Humidity Sensor (I2C)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#steps_8" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Steps
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#210-bh1750fvi-ambient-light-sensor-i2c" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.10 BH1750FVI Ambient Light Sensor (I2C)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="2.10 BH1750FVI Ambient Light Sensor (I2C)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#steps_9" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Steps
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#211-joystick-buttons-renumbered-from-29" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.11 Joystick &amp; Buttons (renumbered from 2.9)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="2.11 Joystick &amp; Buttons (renumbered from 2.9)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#steps_10" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Steps
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#212-status-leds" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.12 Status LEDs
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="2.12 Status LEDs">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#steps_11" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Steps
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#213-power-symbols-flags" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.13 Power Symbols &amp; Flags
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="2.13 Power Symbols &amp; Flags">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#steps_12" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Steps
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#part-3-electrical-rules-check-erc" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Part 3 — Electrical Rules Check (ERC)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#part-4-pcb-layout" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Part 4 — PCB Layout
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Part 4 — PCB Layout">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#41-board-setup" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.1 Board Setup
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#42-import-netlist" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.2 Import Netlist
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#43-component-placement" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.3 Component Placement
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="4.3 Component Placement">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#placement-strategy" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Placement Strategy
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#placement-rules" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Placement Rules
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#how-to-place" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        How to Place
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#44-routing-power-traces" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.4 Routing — Power Traces
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="4.4 Routing — Power Traces">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#steps_13" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Steps
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#45-routing-signal-traces" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.5 Routing — Signal Traces
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="4.5 Routing — Signal Traces">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#signal-priority-order" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Signal Priority Order
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#routing-technique" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Routing Technique
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#46-zone-pours-planes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.6 Zone Pours &amp; Planes
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="4.6 Zone Pours &amp; Planes">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#steps_14" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Steps
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#47-vias" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.7 Vias
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#48-silkscreen-labels" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.8 Silkscreen &amp; Labels
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#49-design-rules-check-drc" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.9 Design Rules Check (DRC)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#410-gerber-export" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.10 Gerber Export
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#part-5-ordering-from-jlcpcb" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Part 5 — Ordering from JLCPCB
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#electronics-principles-reference" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Electronics Principles Reference
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Electronics Principles Reference">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#ohms-law" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Ohm's Law
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#decoupling-capacitors" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Decoupling Capacitors
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pull-up-and-pull-down-resistors" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Pull-Up and Pull-Down Resistors
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#power-dissipation" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Power Dissipation
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#trace-width-vs-current" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Trace Width vs Current
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#4-layer-pcb-stack" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4-Layer PCB Stack
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#glossary" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Glossary
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#further-resources" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Further Resources
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Further Resources">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#learning-electronics" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Learning Electronics
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#learning-kicad" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Learning KiCad
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#esp32-s3-hardware-design" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ESP32-S3 Hardware Design
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#component-datasheets" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Component Datasheets
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pcb-design-calculators" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        PCB Design Calculators
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#reference-board-designs" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Reference Board Designs
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../user-guide/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    User Guide: How to Play
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../user-engagement-plan/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    User Engagement Plan
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../custom-pcb-design-research/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Custom PCB Design Research
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../board-design/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Board Design v0.4
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../pcb-assembly-and-prototyping/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    PCB Assembly & Prototyping
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../open-board-designs/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Open-Source Board Designs
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../breadboard-prototype/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Breadboard Prototype
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../motion-location-detection/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Motion & Location Detection
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+          
+          
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_5" >
+        
+          
+          <label class="md-nav__link" for="__nav_3_5" id="__nav_3_5_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Software
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3_5">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Software
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../software/project-structure/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Project Structure
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../software/emotion-states/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Emotion States
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+          
+          
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_6" >
+        
+          
+          <label class="md-nav__link" for="__nav_3_6" id="__nav_3_6_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Tools
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_6_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3_6">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Tools
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tools/devtool/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    DevTool (GUI)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tools/setup-cli/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Setup CLI
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tools/website-dev/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Website Dev CLI
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+          
+          
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_7" >
+        
+          
+          <label class="md-nav__link" for="__nav_3_7" id="__nav_3_7_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Reference
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_7_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3_7">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Reference
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../reference/pico-w/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Pico W
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../reference/pi-zero-wh/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Pi Zero WH (future)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../reference/waveshare-eink/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Waveshare e-Paper HAT
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../reference/esp32-s3-wroom1/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    ESP32-S3 WROOM-1
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Community
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Community
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../community/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Overview
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../community/discord/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Discord
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../community/support/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Support on Patreon
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" >
+        
+          
+          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    About
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    About
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../about/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    About Dilder
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../about/contact/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Contact
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../prompts/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Prompt Log
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#table-of-contents" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Table of Contents
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#before-you-start" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Before You Start
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Before You Start">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#what-you-need-installed" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What You Need Installed
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#what-you-need-to-understand" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What You Need to Understand
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#part-1-project-setup" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Part 1 — Project Setup
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Part 1 — Project Setup">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#step-1-create-a-new-kicad-project" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 1: Create a New KiCad Project
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#step-2-configure-libraries" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 2: Configure Libraries
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#step-3-set-schematic-page-size" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 3: Set Schematic Page Size
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#part-2-schematic-design" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Part 2 — Schematic Design
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Part 2 — Schematic Design">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#how-the-schematic-editor-works" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        How the Schematic Editor Works
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#general-best-practices" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        General Best Practices
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#21-usb-c-power-input" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.1 USB-C Power Input
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="2.1 USB-C Power Input">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#what-you-are-building" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What You Are Building
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#why-cc-resistors" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Why CC Resistors?
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#steps" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Steps
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#checklist-before-moving-on" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Checklist Before Moving On
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#22-reverse-polarity-protection-d1-ss34" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.2 Reverse Polarity Protection (D1: SS34)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="2.2 Reverse Polarity Protection (D1: SS34)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#steps_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Steps
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#23-lipo-charging-tp4056" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.3 LiPo Charging (TP4056)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="2.3 LiPo Charging (TP4056)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#what-you-are-building_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What You Are Building
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#setting-the-charge-current-with-prog-resistor" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Setting the Charge Current with PROG Resistor
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#steps_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Steps
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#24-battery-protection-dw01a-fs8205a" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.4 Battery Protection (DW01A + FS8205A)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="2.4 Battery Protection (DW01A + FS8205A)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#circuit-topology" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Circuit Topology
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#steps_3" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Steps
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#25-voltage-regulation-ams1117-33" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.5 Voltage Regulation (AMS1117-3.3)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="2.5 Voltage Regulation (AMS1117-3.3)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#steps_4" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Steps
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#26-esp32-s3-wroom-1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.6 ESP32-S3-WROOM-1
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="2.6 ESP32-S3-WROOM-1">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#what-you-are-connecting" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What You Are Connecting
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#steps_5" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Steps
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#27-epaper-spi-interface" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.7 ePaper SPI Interface
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="2.7 ePaper SPI Interface">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#steps_6" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Steps
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#28-lis2dh12tr-accelerometer-i2c" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.8 LIS2DH12TR Accelerometer (I2C)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="2.8 LIS2DH12TR Accelerometer (I2C)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#steps_7" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Steps
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#29-aht20-temperature-humidity-sensor-i2c" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.9 AHT20 Temperature &amp; Humidity Sensor (I2C)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="2.9 AHT20 Temperature &amp; Humidity Sensor (I2C)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#steps_8" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Steps
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#210-bh1750fvi-ambient-light-sensor-i2c" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.10 BH1750FVI Ambient Light Sensor (I2C)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="2.10 BH1750FVI Ambient Light Sensor (I2C)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#steps_9" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Steps
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#211-joystick-buttons-renumbered-from-29" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.11 Joystick &amp; Buttons (renumbered from 2.9)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="2.11 Joystick &amp; Buttons (renumbered from 2.9)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#steps_10" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Steps
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#212-status-leds" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.12 Status LEDs
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="2.12 Status LEDs">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#steps_11" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Steps
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#213-power-symbols-flags" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.13 Power Symbols &amp; Flags
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="2.13 Power Symbols &amp; Flags">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#steps_12" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Steps
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#part-3-electrical-rules-check-erc" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Part 3 — Electrical Rules Check (ERC)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#part-4-pcb-layout" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Part 4 — PCB Layout
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Part 4 — PCB Layout">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#41-board-setup" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.1 Board Setup
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#42-import-netlist" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.2 Import Netlist
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#43-component-placement" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.3 Component Placement
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="4.3 Component Placement">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#placement-strategy" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Placement Strategy
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#placement-rules" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Placement Rules
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#how-to-place" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        How to Place
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#44-routing-power-traces" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.4 Routing — Power Traces
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="4.4 Routing — Power Traces">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#steps_13" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Steps
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#45-routing-signal-traces" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.5 Routing — Signal Traces
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="4.5 Routing — Signal Traces">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#signal-priority-order" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Signal Priority Order
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#routing-technique" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Routing Technique
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#46-zone-pours-planes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.6 Zone Pours &amp; Planes
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="4.6 Zone Pours &amp; Planes">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#steps_14" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Steps
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#47-vias" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.7 Vias
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#48-silkscreen-labels" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.8 Silkscreen &amp; Labels
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#49-design-rules-check-drc" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.9 Design Rules Check (DRC)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#410-gerber-export" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.10 Gerber Export
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#part-5-ordering-from-jlcpcb" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Part 5 — Ordering from JLCPCB
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#electronics-principles-reference" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Electronics Principles Reference
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Electronics Principles Reference">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#ohms-law" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Ohm's Law
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#decoupling-capacitors" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Decoupling Capacitors
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pull-up-and-pull-down-resistors" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Pull-Up and Pull-Down Resistors
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#power-dissipation" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Power Dissipation
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#trace-width-vs-current" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Trace Width vs Current
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#4-layer-pcb-stack" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4-Layer PCB Stack
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#glossary" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Glossary
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#further-resources" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Further Resources
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Further Resources">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#learning-electronics" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Learning Electronics
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#learning-kicad" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Learning KiCad
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#esp32-s3-hardware-design" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ESP32-S3 Hardware Design
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#component-datasheets" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Component Datasheets
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pcb-design-calculators" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        PCB Design Calculators
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#reference-board-designs" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Reference Board Designs
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+  
+  
+
+
+<h1 id="kicad-schematic-pcb-design-guide-dilder-board">KiCad Schematic &amp; PCB Design Guide — Dilder Board<a class="headerlink" href="#kicad-schematic-pcb-design-guide-dilder-board" title="Permanent link">&para;</a></h1>
+<p>A complete, step-by-step walkthrough for designing the Dilder custom PCB in KiCad 10. Written for someone who has never used CAD software before. Every click is explained, every electronics principle is covered when it matters.</p>
+<p>By the end of this guide you will have a fabrication-ready 4-layer PCB with an ESP32-S3, LiPo charging, USB-C, ePaper display connector, accelerometer, joystick, and status LEDs.</p>
+<hr />
+<h2 id="table-of-contents">Table of Contents<a class="headerlink" href="#table-of-contents" title="Permanent link">&para;</a></h2>
+<ol>
+<li><a href="#before-you-start">Before You Start</a></li>
+<li><a href="#part-1--project-setup">Part 1 — Project Setup</a></li>
+<li><a href="#part-2--schematic-design">Part 2 — Schematic Design</a><ul>
+<li><a href="#21-usb-c-power-input">2.1 USB-C Power Input</a></li>
+<li><a href="#22-reverse-polarity-protection-d1-ss34">2.2 Reverse Polarity Protection</a></li>
+<li><a href="#23-lipo-charging-tp4056">2.3 LiPo Charging (TP4056)</a></li>
+<li><a href="#24-battery-protection-dw01a--fs8205a">2.4 Battery Protection (DW01A + FS8205A)</a></li>
+<li><a href="#25-voltage-regulation-ams1117-33">2.5 Voltage Regulation (AMS1117-3.3)</a></li>
+<li><a href="#26-esp32-s3-wroom-1">2.6 ESP32-S3-WROOM-1</a></li>
+<li><a href="#27-epaper-spi-interface">2.7 ePaper SPI Interface</a></li>
+<li><a href="#28-lis2dh12tr-accelerometer-i2c">2.8 LIS2DH12TR Accelerometer</a></li>
+<li><a href="#29-aht20-temperature--humidity-sensor-i2c">2.9 AHT20 Temperature &amp; Humidity</a></li>
+<li><a href="#210-bh1750fvi-ambient-light-sensor-i2c">2.10 BH1750FVI Light Sensor</a></li>
+<li><a href="#211-joystick--buttons-renumbered-from-29">2.11 Joystick &amp; Buttons</a></li>
+<li><a href="#212-status-leds">2.12 Status LEDs</a></li>
+<li><a href="#213-power-symbols--flags">2.13 Power Symbols &amp; Flags</a></li>
+</ul>
+</li>
+<li><a href="#part-3--electrical-rules-check-erc">Part 3 — Electrical Rules Check (ERC)</a></li>
+<li><a href="#part-4--pcb-layout">Part 4 — PCB Layout</a><ul>
+<li><a href="#41-board-setup">4.1 Board Setup</a></li>
+<li><a href="#42-import-netlist">4.2 Import Netlist</a></li>
+<li><a href="#43-component-placement">4.3 Component Placement</a></li>
+<li><a href="#44-routing--power-traces">4.4 Routing — Power Traces</a></li>
+<li><a href="#45-routing--signal-traces">4.5 Routing — Signal Traces</a></li>
+<li><a href="#46-zone-pours--planes">4.6 Zone Pours &amp; Planes</a></li>
+<li><a href="#47-vias">4.7 Vias</a></li>
+<li><a href="#48-silkscreen--labels">4.8 Silkscreen &amp; Labels</a></li>
+<li><a href="#49-design-rules-check-drc">4.9 Design Rules Check (DRC)</a></li>
+<li><a href="#410-gerber-export">4.10 Gerber Export</a></li>
+</ul>
+</li>
+<li><a href="#part-5--ordering-from-jlcpcb">Part 5 — Ordering from JLCPCB</a></li>
+<li><a href="#electronics-principles-reference">Electronics Principles Reference</a></li>
+<li><a href="#glossary">Glossary</a></li>
+<li><a href="#further-resources">Further Resources</a></li>
+</ol>
+<hr />
+<h2 id="before-you-start">Before You Start<a class="headerlink" href="#before-you-start" title="Permanent link">&para;</a></h2>
+<h3 id="what-you-need-installed">What You Need Installed<a class="headerlink" href="#what-you-need-installed" title="Permanent link">&para;</a></h3>
+<ul>
+<li><strong>KiCad 10.0</strong> — free, open-source PCB design software. Install from <a href="https://www.kicad.org/download/">kicad.org</a></li>
+<li><strong>JLCPCB Tools Plugin</strong> — for BOM/CPL generation. Install via KiCad Plugin Manager (Tools &gt; Plugin and Content Manager) or run <code>setup-kicad-jlcpcb.py</code> in the repo</li>
+<li><strong>Espressif KiCad Libraries</strong> — symbols and footprints for ESP32 modules. Already in the repo at <code>reference-boards/espressif-kicad-libs/</code></li>
+</ul>
+<h3 id="what-you-need-to-understand">What You Need to Understand<a class="headerlink" href="#what-you-need-to-understand" title="Permanent link">&para;</a></h3>
+<p>You do NOT need to understand everything up front. This guide explains each concept when it becomes relevant. But here is the 30-second version of how PCB design works:</p>
+<ol>
+<li><strong>Schematic</strong> — a logical diagram of what connects to what. You draw symbols (rectangles with pins) and connect them with wires or labels. This does NOT care about physical size or position.</li>
+<li><strong>Netlist</strong> — automatically generated from the schematic. It is a list that says "pin 3 of U1 connects to pin 1 of R4" etc.</li>
+<li><strong>PCB Layout</strong> — a physical drawing of copper traces on a board. You place real-sized footprints (the physical pads where components solder down) and draw copper traces between them following the netlist.</li>
+<li><strong>Gerber files</strong> — the final output. These are the "print files" that a factory like JLCPCB uses to manufacture the board.</li>
+</ol>
+<p>The workflow is always: <strong>Schematic → Netlist → PCB → Gerbers → Factory</strong>.</p>
+<hr />
+<h2 id="part-1-project-setup">Part 1 — Project Setup<a class="headerlink" href="#part-1-project-setup" title="Permanent link">&para;</a></h2>
+<h3 id="step-1-create-a-new-kicad-project">Step 1: Create a New KiCad Project<a class="headerlink" href="#step-1-create-a-new-kicad-project" title="Permanent link">&para;</a></h3>
+<ol>
+<li>Open KiCad</li>
+<li><strong>File &gt; New Project</strong></li>
+<li>Name it <code>dilder</code> and save it in your working directory</li>
+<li>KiCad creates two files: <code>dilder.kicad_pro</code> (project settings) and <code>dilder.kicad_sch</code> (schematic)</li>
+</ol>
+<h3 id="step-2-configure-libraries">Step 2: Configure Libraries<a class="headerlink" href="#step-2-configure-libraries" title="Permanent link">&para;</a></h3>
+<p>You need the Espressif library for the ESP32-S3 symbol and footprint.</p>
+<ol>
+<li>In KiCad's main window, go to <strong>Preferences &gt; Manage Symbol Libraries</strong></li>
+<li>Click the <strong>Project Libraries</strong> tab</li>
+<li>Click the <strong>+</strong> button (Add existing library to table)</li>
+<li>Navigate to <code>reference-boards/espressif-kicad-libs/symbols/Espressif.kicad_sym</code></li>
+<li>The library name will auto-fill as "Espressif". Click OK.</li>
+</ol>
+<p>Repeat for the footprint library:</p>
+<ol>
+<li><strong>Preferences &gt; Manage Footprint Libraries</strong></li>
+<li><strong>Project Libraries</strong> tab</li>
+<li><strong>+</strong> button</li>
+<li>Navigate to <code>reference-boards/espressif-kicad-libs/footprints/Espressif.pretty</code></li>
+<li>Click OK.</li>
+</ol>
+<h3 id="step-3-set-schematic-page-size">Step 3: Set Schematic Page Size<a class="headerlink" href="#step-3-set-schematic-page-size" title="Permanent link">&para;</a></h3>
+<ol>
+<li>Double-click <code>dilder.kicad_sch</code> to open the Schematic Editor</li>
+<li><strong>File &gt; Page Settings</strong></li>
+<li>Set paper size to <strong>A3</strong> (landscape). This gives you plenty of room.</li>
+<li>Fill in: Title = "Dilder Custom PCB", Revision = "0.5", Date = today's date</li>
+</ol>
+<p>You now have a blank A3 schematic sheet ready to draw on.</p>
+<hr />
+<h2 id="part-2-schematic-design">Part 2 — Schematic Design<a class="headerlink" href="#part-2-schematic-design" title="Permanent link">&para;</a></h2>
+<h3 id="how-the-schematic-editor-works">How the Schematic Editor Works<a class="headerlink" href="#how-the-schematic-editor-works" title="Permanent link">&para;</a></h3>
+<p><strong>Key concepts:</strong></p>
+<ul>
+<li><strong>Symbols</strong> are the rectangular/triangular shapes representing components (resistors, ICs, connectors). They have <strong>pins</strong> — the connection points.</li>
+<li><strong>Wires</strong> are the green lines connecting pins together. When two pins are connected by a wire, they form a <strong>net</strong>.</li>
+<li><strong>Net labels</strong> are text tags you attach to wires. Two wires with the same label name are electrically connected, even if they are on opposite sides of the sheet. This avoids spaghetti wiring across the page.</li>
+<li><strong>Power symbols</strong> (GND, +3V3) are special labels that represent power rails.</li>
+</ul>
+<p><strong>Key shortcuts (memorize these):</strong></p>
+<table>
+<thead>
+<tr>
+<th>Key</th>
+<th>Action</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>A</code></td>
+<td>Add symbol (opens library browser)</td>
+</tr>
+<tr>
+<td><code>P</code></td>
+<td>Add power symbol</td>
+</tr>
+<tr>
+<td><code>W</code></td>
+<td>Draw wire</td>
+</tr>
+<tr>
+<td><code>L</code></td>
+<td>Add net label</td>
+</tr>
+<tr>
+<td><code>M</code></td>
+<td>Move component</td>
+</tr>
+<tr>
+<td><code>R</code></td>
+<td>Rotate component (before placing)</td>
+</tr>
+<tr>
+<td><code>X</code></td>
+<td>Mirror component horizontally</td>
+</tr>
+<tr>
+<td><code>Esc</code></td>
+<td>Cancel current action</td>
+</tr>
+<tr>
+<td><code>Ctrl+Z</code></td>
+<td>Undo</td>
+</tr>
+<tr>
+<td>Mouse wheel</td>
+<td>Zoom in/out</td>
+</tr>
+<tr>
+<td>Middle-click drag</td>
+<td>Pan</td>
+</tr>
+</tbody>
+</table>
+<h3 id="general-best-practices">General Best Practices<a class="headerlink" href="#general-best-practices" title="Permanent link">&para;</a></h3>
+<ol>
+<li><strong>Work left to right, top to bottom.</strong> Power input on the left, microcontroller in the center, peripherals on the right.</li>
+<li><strong>Power flows top to bottom.</strong> VCC at the top of symbols, GND at the bottom. This is a universal convention that makes schematics readable.</li>
+<li><strong>Use net labels instead of long wires.</strong> If a signal needs to cross the sheet, place a label on each end rather than drawing a wire across everything.</li>
+<li><strong>Place decoupling capacitors next to every IC.</strong> This is not optional — every IC needs at least one 100nF capacitor between its VCC and GND pins, placed as close as possible. (Why? See <a href="#decoupling-capacitors">Decoupling Capacitors</a> in the principles section.)</li>
+<li><strong>Name your nets.</strong> Instead of leaving wires unnamed, add labels like <code>I2C_SDA</code>, <code>EPD_CLK</code>, etc. This makes debugging much easier later.</li>
+<li><strong>One subcircuit at a time.</strong> Don't try to draw everything at once. Draw one block, wire it, verify it, then move to the next.</li>
+</ol>
+<hr />
+<h3 id="21-usb-c-power-input">2.1 USB-C Power Input<a class="headerlink" href="#21-usb-c-power-input" title="Permanent link">&para;</a></h3>
+<p>This is the entry point for power into the board. USB-C provides 5V (called VBUS) and data lines (D+, D-).</p>
+<h4 id="what-you-are-building">What You Are Building<a class="headerlink" href="#what-you-are-building" title="Permanent link">&para;</a></h4>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>USB-C Connector (J1)
+</span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>  ├── VBUS (5V power) ──→ to charging circuit
+</span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>  ├── GND ──→ ground rail
+</span><span id="__span-0-4"><a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>  ├── D+ ──→ to ESP32 GPIO20
+</span><span id="__span-0-5"><a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>  ├── D- ──→ to ESP32 GPIO19
+</span><span id="__span-0-6"><a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a>  ├── CC1 ──→ 5.1k resistor to GND
+</span><span id="__span-0-7"><a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a>  └── CC2 ──→ 5.1k resistor to GND
+</span></code></pre></div>
+<h4 id="why-cc-resistors">Why CC Resistors?<a class="headerlink" href="#why-cc-resistors" title="Permanent link">&para;</a></h4>
+<p>USB-C requires two 5.1k resistors on the CC1 and CC2 pins, pulled down to GND. These tell the USB host (your computer or charger) that this device is a <strong>sink</strong> (it wants power, not providing power). Without these resistors, many USB-C chargers will refuse to provide any power at all.</p>
+<blockquote>
+<p><strong>Electronics principle: Pull-down resistors.</strong> A pull-down resistor connects a pin to GND through a resistor. This ensures the pin has a known voltage (0V / LOW) when nothing else is driving it. The 5.1k value is specified by the USB-C standard.</p>
+</blockquote>
+<h4 id="steps">Steps<a class="headerlink" href="#steps" title="Permanent link">&para;</a></h4>
+<ol>
+<li>Press <code>A</code> to add a symbol</li>
+<li>In the search box, type <code>USB_C_Receptacle</code></li>
+<li>Select <code>Connector:USB_C_Receptacle</code> and click OK</li>
+<li>Click to place it on the left side of your sheet. Press <code>R</code> to rotate if needed.</li>
+<li>Set the Reference to <code>J1</code> and Value to <code>USB-C</code> (double-click the text to edit)</li>
+</ol>
+<p>Now add the CC pull-down resistors:</p>
+<ol>
+<li>Press <code>A</code>, search for <code>R</code>, select <code>Device:R</code></li>
+<li>Place it near the CC1 pin. Set Reference = <code>R8</code>, Value = <code>5.1k</code></li>
+<li>Press <code>A</code> again, place another resistor near CC2. Reference = <code>R9</code>, Value = <code>5.1k</code></li>
+<li>Wire CC1 from J1 to pin 1 of R8 (press <code>W</code> to start a wire, click pin to pin)</li>
+<li>Wire pin 2 of R8 to a GND symbol (press <code>P</code>, search for <code>GND</code>, place it below R8, wire it)</li>
+<li>Repeat for R9 on CC2</li>
+</ol>
+<p>Now add net labels for the outputs:</p>
+<ol>
+<li>Press <code>L</code>, type <code>VBUS</code>, place it on the VBUS pin of J1</li>
+<li>Press <code>L</code>, type <code>USB_DP</code>, place it on the D+ pin</li>
+<li>Press <code>L</code>, type <code>USB_DM</code>, place it on the D- pin</li>
+<li>Add a <code>GND</code> power symbol to the GND pins of J1</li>
+</ol>
+<p><strong>Assign footprint:</strong> Double-click J1 to open properties. In the Footprint field, click the book icon and search for <code>USB_C_Receptacle_HRO_TYPE-C-31-M-12</code>. This is the exact physical connector we are using (LCSC part C2765186).</p>
+<p>For R8 and R9, assign footprint <code>Resistor_SMD:R_0402_1005Metric</code>.</p>
+<h4 id="checklist-before-moving-on">Checklist Before Moving On<a class="headerlink" href="#checklist-before-moving-on" title="Permanent link">&para;</a></h4>
+<ul>
+<li>[ ] J1 placed with VBUS, GND, D+, D-, CC1, CC2 labeled</li>
+<li>[ ] R8 (5.1k) connects CC1 to GND</li>
+<li>[ ] R9 (5.1k) connects CC2 to GND</li>
+<li>[ ] Footprints assigned to J1, R8, R9</li>
+<li>[ ] LCSC part numbers added (Properties &gt; add field "LCSC" with value)</li>
+</ul>
+<hr />
+<h3 id="22-reverse-polarity-protection-d1-ss34">2.2 Reverse Polarity Protection (D1: SS34)<a class="headerlink" href="#22-reverse-polarity-protection-d1-ss34" title="Permanent link">&para;</a></h3>
+<p>A Schottky diode between VBUS and the charging circuit prevents damage if power is applied backwards (e.g., from a faulty cable or if you accidentally reverse battery wires during testing).</p>
+<blockquote>
+<p><strong>Electronics principle: Schottky diodes.</strong> A Schottky diode allows current to flow in one direction only, with a very low voltage drop (~0.3V compared to ~0.7V for a regular diode). The SS34 can handle 3 amps — more than enough for USB charging.</p>
+</blockquote>
+<h4 id="steps_1">Steps<a class="headerlink" href="#steps_1" title="Permanent link">&para;</a></h4>
+<ol>
+<li>Press <code>A</code>, search for <code>SS34</code>, select <code>Diode:SS34</code></li>
+<li>Place it to the right of J1's VBUS output</li>
+<li>Wire the <strong>Anode</strong> (triangle side) to the <code>VBUS</code> label</li>
+<li>Add a label <code>VBUS_CHG</code> on the <strong>Cathode</strong> (bar side) — this is the protected 5V going to the charger</li>
+<li>Assign footprint: <code>Diode_SMD:D_SMA</code> (LCSC: C8678)</li>
+</ol>
+<hr />
+<h3 id="23-lipo-charging-tp4056">2.3 LiPo Charging (TP4056)<a class="headerlink" href="#23-lipo-charging-tp4056" title="Permanent link">&para;</a></h3>
+<p>The TP4056 is a complete single-cell lithium-ion/polymer charger IC. It takes 5V in (VBUS_CHG) and outputs a regulated charging voltage to the battery (VBAT).</p>
+<h4 id="what-you-are-building_1">What You Are Building<a class="headerlink" href="#what-you-are-building_1" title="Permanent link">&para;</a></h4>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>VBUS_CHG (5V) ──→ VCC (pin 4)
+</span><span id="__span-1-2"><a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>                   TP4056
+</span><span id="__span-1-3"><a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>CE (pin 8) ←── VBUS_CHG (always enabled)
+</span><span id="__span-1-4"><a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a>TEMP (pin 1) ──→ GND (disable temp monitoring)
+</span><span id="__span-1-5"><a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a>PROG (pin 2) ──→ 1.2k resistor to GND (sets charge current)
+</span><span id="__span-1-6"><a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a>BAT (pin 5) ──→ VBAT (to battery + LDO)
+</span><span id="__span-1-7"><a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a>CHRG (pin 7) ──→ charge LED (via resistor)
+</span><span id="__span-1-8"><a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a>STDBY (pin 6) ──→ standby LED (via resistor)
+</span><span id="__span-1-9"><a id="__codelineno-1-9" name="__codelineno-1-9" href="#__codelineno-1-9"></a>GND (pin 3) ──→ GND
+</span><span id="__span-1-10"><a id="__codelineno-1-10" name="__codelineno-1-10" href="#__codelineno-1-10"></a>EPAD (pin 9) ──→ GND (exposed thermal pad)
+</span></code></pre></div>
+<h4 id="setting-the-charge-current-with-prog-resistor">Setting the Charge Current with PROG Resistor<a class="headerlink" href="#setting-the-charge-current-with-prog-resistor" title="Permanent link">&para;</a></h4>
+<p>The TP4056 datasheet specifies: <strong>charge current = 1200 / R_PROG</strong>. With a 1.2k resistor: 1200 / 1200 = <strong>1A charge current</strong>. This is the maximum rate for most small LiPo cells (500-2000mAh).</p>
+<blockquote>
+<p><strong>Electronics principle: Current-setting resistors.</strong> Many ICs use a resistor on a specific pin to set an internal parameter. The IC sources a known voltage on that pin, and the resistor determines how much current flows, which the IC measures to set its behavior. Always check the datasheet for the formula.</p>
+</blockquote>
+<h4 id="steps_2">Steps<a class="headerlink" href="#steps_2" title="Permanent link">&para;</a></h4>
+<ol>
+<li>Press <code>A</code>, search for <code>TP4056</code>. Select <code>Battery_Management:TP4056-42-ESOP8</code></li>
+<li>Place it to the right of D1</li>
+<li>
+<p>Wire each pin:</p>
+<ul>
+<li><code>VCC</code> (pin 4) → label <code>VBUS_CHG</code></li>
+<li><code>CE</code> (pin 8) → label <code>VBUS_CHG</code> (charge enable — always on)</li>
+<li><code>TEMP</code> (pin 1) → <code>GND</code> symbol (disables temperature monitoring; for production, connect to a 10k NTC thermistor on the battery)</li>
+<li><code>GND</code> (pin 3) → <code>GND</code> symbol</li>
+<li><code>EPAD</code> (pin 9) → <code>GND</code> symbol (thermal pad must connect to ground for heat dissipation)</li>
+<li><code>BAT</code> (pin 5) → label <code>VBAT</code></li>
+<li><code>CHRG</code> (pin 7) → label <code>CHRG_OUT</code></li>
+<li><code>STDBY</code> (pin 6) → label <code>STDBY_OUT</code></li>
+</ul>
+</li>
+<li>
+<p>Add the PROG resistor:</p>
+<ul>
+<li>Place <code>Device:R</code> near pin 2. R1 = 1.2k.</li>
+<li>Wire pin 2 (PROG) → R1 pin 1</li>
+<li>Wire R1 pin 2 → GND</li>
+</ul>
+</li>
+<li>
+<p>Assign footprint: <code>Package_SO:SOIC-8-1EP_3.9x4.9mm_P1.27mm_EP2.41x3.3mm_ThermalVias</code> (LCSC: C382139)</p>
+</li>
+</ol>
+<p><strong>Important:</strong> The SOIC-8-1EP footprint has thermal vias under the exposed pad. These transfer heat from the IC through the PCB to the ground plane — critical for a charging IC that dissipates heat.</p>
+<hr />
+<h3 id="24-battery-protection-dw01a-fs8205a">2.4 Battery Protection (DW01A + FS8205A)<a class="headerlink" href="#24-battery-protection-dw01a-fs8205a" title="Permanent link">&para;</a></h3>
+<p>These two chips work together to protect the LiPo battery from:</p>
+<ul>
+<li><strong>Over-discharge</strong> — cuts off power if battery voltage drops below ~2.5V (prevents permanent damage)</li>
+<li><strong>Over-charge</strong> — cuts off charging above ~4.25V</li>
+<li><strong>Over-current / short circuit</strong> — cuts off if current exceeds safe limits</li>
+</ul>
+<p>The DW01A is the "brain" (monitors voltage and current). The FS8205A is the "muscle" (two N-channel MOSFETs that physically switch the battery connection on/off).</p>
+<blockquote>
+<p><strong>Electronics principle: N-channel MOSFETs as switches.</strong> A MOSFET is like an electronically controlled switch. Apply voltage to the Gate, and current flows between Drain and Source. The FS8205A has TWO MOSFETs in one package — one for discharge control (OD) and one for charge control (OC). The DW01A drives their gates.</p>
+</blockquote>
+<h4 id="circuit-topology">Circuit Topology<a class="headerlink" href="#circuit-topology" title="Permanent link">&para;</a></h4>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>VBAT ──→ DW01A VCC (pin 5)
+</span><span id="__span-2-2"><a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>         DW01A CS (pin 2) ──→ &quot;CS_DRAIN&quot; node (between the two MOSFETs)
+</span><span id="__span-2-3"><a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a>         DW01A OD (pin 1) ──→ FS8205A G1 (pin 2) — over-discharge gate
+</span><span id="__span-2-4"><a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a>         DW01A OC (pin 3) ──→ FS8205A G2 (pin 5) — over-charge gate
+</span><span id="__span-2-5"><a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a>         DW01A GND (pin 6) ──→ CS_DRAIN node
+</span><span id="__span-2-6"><a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a>         DW01A TD (pin 4) ──→ VBAT (no delay)
+</span><span id="__span-2-7"><a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a>
+</span><span id="__span-2-8"><a id="__codelineno-2-8" name="__codelineno-2-8" href="#__codelineno-2-8"></a>FS8205A:
+</span><span id="__span-2-9"><a id="__codelineno-2-9" name="__codelineno-2-9" href="#__codelineno-2-9"></a>  S1 (pin 1) ──→ BAT_MINUS (battery negative terminal)
+</span><span id="__span-2-10"><a id="__codelineno-2-10" name="__codelineno-2-10" href="#__codelineno-2-10"></a>  G1 (pin 2) ──→ OD from DW01A
+</span><span id="__span-2-11"><a id="__codelineno-2-11" name="__codelineno-2-11" href="#__codelineno-2-11"></a>  D (pins 3,4) ──→ CS_DRAIN (shared drain, connects to DW01A CS and GND)
+</span><span id="__span-2-12"><a id="__codelineno-2-12" name="__codelineno-2-12" href="#__codelineno-2-12"></a>  G2 (pin 5) ──→ OC from DW01A
+</span><span id="__span-2-13"><a id="__codelineno-2-13" name="__codelineno-2-13" href="#__codelineno-2-13"></a>  S2 (pin 6) ──→ circuit GND
+</span></code></pre></div>
+<p>The two MOSFETs sit in series between the battery's negative terminal and the circuit's ground. When both are ON, current flows normally. When the DW01A detects a fault, it turns off one or both MOSFETs, disconnecting the battery.</p>
+<h4 id="steps_3">Steps<a class="headerlink" href="#steps_3" title="Permanent link">&para;</a></h4>
+<ol>
+<li>Place <code>Battery_Management:DW01A</code> (U3). Footprint: <code>Package_TO_SOT_SMD:SOT-23-6</code></li>
+<li>Place <code>Transistor_FET:Q_Dual_NMOS_S1G1D2S2G2D1</code> (Q1) OR use a custom FS8205A symbol. Footprint: <code>Package_TO_SOT_SMD:SOT-23-6</code></li>
+<li>If using a custom symbol: 6 pins — S1(1), G1(2), D(3), D(4), G2(5), S2(6)</li>
+<li>Wire as shown in the topology above. Use net labels <code>OD</code>, <code>OC</code>, <code>CS_DRAIN</code>, <code>BAT_MINUS</code>.</li>
+<li>Place <code>Connector_Generic:Conn_01x02</code> for the battery connector (J2). Footprint: <code>Connector_JST:JST_PH_B2B-PH-SM4-TB_1x02-1MP_P2.00mm_Vertical</code></li>
+<li>Wire J2 pin 1 → <code>VBAT</code>, J2 pin 2 → <code>BAT_MINUS</code></li>
+</ol>
+<hr />
+<h3 id="25-voltage-regulation-ams1117-33">2.5 Voltage Regulation (AMS1117-3.3)<a class="headerlink" href="#25-voltage-regulation-ams1117-33" title="Permanent link">&para;</a></h3>
+<p>The battery provides 3.0-4.2V (varying with charge level). The ESP32-S3 needs a stable 3.3V. The AMS1117-3.3 is a Low-Dropout Regulator (LDO) that converts the variable battery voltage to a steady 3.3V.</p>
+<blockquote>
+<p><strong>Electronics principle: LDO regulators.</strong> An LDO takes a higher input voltage and outputs a lower, stable voltage. "Low dropout" means the input only needs to be slightly higher than the output — the AMS1117 needs just ~1V headroom, so it works down to 4.3V input. Below that, the output starts to sag (this is called "dropout"). With a 3.0V battery, the output will be ~2.9V. For our application this is acceptable since the ESP32-S3 works down to 2.8V.</p>
+</blockquote>
+<h4 id="steps_4">Steps<a class="headerlink" href="#steps_4" title="Permanent link">&para;</a></h4>
+<ol>
+<li>Place <code>Regulator_Linear:AMS1117-3.3</code> (U4). Footprint: <code>Package_TO_SOT_SMD:SOT-223-3_TabPin2</code></li>
+<li>Wire: pin 3 (VI) → label <code>VBAT</code>, pin 2 (VO) → label <code>3V3</code>, pin 1 (GND/ADJ) → <code>GND</code></li>
+<li>Place a <code>+3V3</code> power symbol on the output (press <code>P</code>, search <code>+3V3</code>)</li>
+</ol>
+<p><strong>Decoupling capacitors — critical:</strong></p>
+<ol>
+<li>Place C5 = 10uF between <code>VBAT</code> and <code>GND</code> (near U4 input). This stabilizes the input.</li>
+<li>Place C6 = 10uF between <code>3V3</code> and <code>GND</code> (near U4 output). This stabilizes the output.</li>
+</ol>
+<p>Both capacitors: footprint <code>Capacitor_SMD:C_0402_1005Metric</code>.</p>
+<blockquote>
+<p><strong>Why 10uF and not 100nF?</strong> Voltage regulators need BULK capacitance (10uF+) to remain stable. The regulator's internal feedback loop can oscillate without sufficient capacitance. 100nF is for high-frequency noise filtering on IC power pins. Here we need both — 10uF for stability, and each IC that uses 3V3 also gets its own 100nF near its power pins.</p>
+</blockquote>
+<hr />
+<h3 id="26-esp32-s3-wroom-1">2.6 ESP32-S3-WROOM-1<a class="headerlink" href="#26-esp32-s3-wroom-1" title="Permanent link">&para;</a></h3>
+<p>The microcontroller module. This is the heart of the board.</p>
+<h4 id="what-you-are-connecting">What You Are Connecting<a class="headerlink" href="#what-you-are-connecting" title="Permanent link">&para;</a></h4>
+<p>The ESP32-S3-WROOM-1 module has the MCU, flash, PSRAM, crystal, and antenna all integrated. You just need to connect:</p>
+<ul>
+<li><strong>Power</strong>: 3V3 and GND</li>
+<li><strong>EN (Enable)</strong>: pull-up to 3V3 via 10k resistor + reset button to GND + 100nF debounce cap</li>
+<li><strong>GPIO0 (Boot)</strong>: pull-up to 3V3 via 10k resistor + boot button to GND</li>
+<li><strong>GPIO pins</strong>: connect to peripherals via net labels</li>
+</ul>
+<blockquote>
+<p><strong>Electronics principle: Pull-up resistors and boot modes.</strong> The ESP32-S3 checks GPIO0 at boot time. If GPIO0 is HIGH (pulled up to 3V3), it boots normally from flash. If GPIO0 is LOW (held to GND by pressing the BOOT button), it enters download mode for firmware flashing. The 10k pull-up ensures normal boot by default. The button overrides it to GND when pressed.</p>
+<p><strong>Electronics principle: RC debounce on EN.</strong> The EN pin resets the chip when pulled LOW. Mechanical buttons "bounce" — they rapidly switch on/off for a few milliseconds when pressed. The 100nF capacitor on EN smooths this out, preventing accidental double-resets. The RC time constant is: 10k x 100nF = 1ms, which is enough to filter bounce.</p>
+</blockquote>
+<h4 id="steps_5">Steps<a class="headerlink" href="#steps_5" title="Permanent link">&para;</a></h4>
+<ol>
+<li>Press <code>A</code>, search for <code>ESP32-S3-WROOM-1</code>. Select from the Espressif library.</li>
+<li>Place it in the CENTER of your schematic — it is the main component, and everything connects to it.</li>
+<li>The symbol is large with many pins. Don't panic — most pins are unused.</li>
+</ol>
+<p><strong>Power connections:</strong></p>
+<ol>
+<li>Connect the <code>3V3</code> pin to a <code>+3V3</code> power symbol</li>
+<li>Connect <code>GND</code> pin(s) to <code>GND</code> power symbols (the module has multiple GND pins — connect all of them)</li>
+</ol>
+<p><strong>Decoupling capacitors:</strong></p>
+<ol>
+<li>Place C3 = 100nF between 3V3 and GND (near the module)</li>
+<li>Place C4 = 10uF between 3V3 and GND (bulk cap for the module)</li>
+</ol>
+<blockquote>
+<p><strong>Why two caps?</strong> The 100nF filters high-frequency noise (MHz range) and the 10uF provides energy storage for current spikes when the WiFi transmitter turns on. The ESP32 can draw 500mA peak — the 10uF cap provides this instantly while the LDO catches up.</p>
+</blockquote>
+<p><strong>EN (chip enable):</strong></p>
+<ol>
+<li>Place R10 = 10k, wire one end to 3V3, other end to <code>EN</code> label</li>
+<li>Place SW3 (Switch:SW_Push), wire one pin to <code>EN</code> label, other to <code>GND</code> — this is the RESET button</li>
+<li>Place C8 = 100nF between <code>EN</code> and <code>GND</code> (debounce)</li>
+</ol>
+<p><strong>GPIO0 (boot select):</strong></p>
+<ol>
+<li>Place R11 = 10k, wire one end to 3V3, other end to <code>BOOT</code> label</li>
+<li>Place SW2 (Switch:SW_Push), wire one pin to <code>BOOT</code> label, other to <code>GND</code> — this is the BOOT button</li>
+<li>Add label <code>BOOT</code> on GPIO0 of the ESP32</li>
+</ol>
+<p><strong>GPIO assignments — add net labels to these pins:</strong></p>
+<table>
+<thead>
+<tr>
+<th>ESP32 Pin</th>
+<th>Net Label</th>
+<th>Goes To</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>GPIO0</td>
+<td>BOOT</td>
+<td>Boot button</td>
+</tr>
+<tr>
+<td>GPIO3</td>
+<td>EPD_DC</td>
+<td>ePaper data/command</td>
+</tr>
+<tr>
+<td>GPIO4</td>
+<td>JOY_UP</td>
+<td>Joystick up</td>
+</tr>
+<tr>
+<td>GPIO5</td>
+<td>JOY_DOWN</td>
+<td>Joystick down</td>
+</tr>
+<tr>
+<td>GPIO6</td>
+<td>JOY_LEFT</td>
+<td>Joystick left</td>
+</tr>
+<tr>
+<td>GPIO7</td>
+<td>JOY_RIGHT</td>
+<td>Joystick right</td>
+</tr>
+<tr>
+<td>GPIO8</td>
+<td>JOY_CENTER</td>
+<td>Joystick center press</td>
+</tr>
+<tr>
+<td>GPIO9</td>
+<td>EPD_CLK</td>
+<td>ePaper SPI clock</td>
+</tr>
+<tr>
+<td>GPIO10</td>
+<td>EPD_MOSI</td>
+<td>ePaper SPI data</td>
+</tr>
+<tr>
+<td>GPIO11</td>
+<td>EPD_RST</td>
+<td>ePaper reset</td>
+</tr>
+<tr>
+<td>GPIO12</td>
+<td>EPD_BUSY</td>
+<td>ePaper busy signal</td>
+</tr>
+<tr>
+<td>GPIO16</td>
+<td>I2C_SDA</td>
+<td>Accelerometer data</td>
+</tr>
+<tr>
+<td>GPIO17</td>
+<td>I2C_SCL</td>
+<td>Accelerometer clock</td>
+</tr>
+<tr>
+<td>GPIO18</td>
+<td>ACCEL_INT1</td>
+<td>Accelerometer interrupt</td>
+</tr>
+<tr>
+<td>GPIO19</td>
+<td>USB_DM</td>
+<td>USB D-</td>
+</tr>
+<tr>
+<td>GPIO20</td>
+<td>USB_DP</td>
+<td>USB D+</td>
+</tr>
+<tr>
+<td>GPIO46</td>
+<td>EPD_CS</td>
+<td>ePaper chip select</td>
+</tr>
+<tr>
+<td>EN</td>
+<td>EN</td>
+<td>Reset circuit</td>
+</tr>
+</tbody>
+</table>
+<ol>
+<li>For every pin in the table above, add a net label with the exact name shown. Pins you are NOT using can be left unconnected — add a "no connect" flag (press <code>Q</code> or use Place &gt; No Connect Flag) on unused pins to tell ERC they are intentionally disconnected.</li>
+</ol>
+<hr />
+<h3 id="27-epaper-spi-interface">2.7 ePaper SPI Interface<a class="headerlink" href="#27-epaper-spi-interface" title="Permanent link">&para;</a></h3>
+<p>The ePaper display connects via an 8-pin JST-SH header. It uses the SPI protocol (4 wires) plus a few control signals.</p>
+<blockquote>
+<p><strong>Electronics principle: SPI (Serial Peripheral Interface).</strong> SPI uses 4 wires:</p>
+<ul>
+<li><strong>SCK (Clock)</strong> — the master (ESP32) toggles this to synchronize data transfer</li>
+<li><strong>MOSI (Master Out, Slave In)</strong> — data FROM the ESP32 TO the display</li>
+<li><strong>CS (Chip Select)</strong> — pulled LOW to select this specific device (you can have multiple SPI devices sharing SCK and MOSI, each with its own CS)</li>
+<li><strong>MISO (Master In, Slave Out)</strong> — data FROM the device TO the ESP32 (not used for ePaper — it is write-only)</li>
+</ul>
+<p>Additional signals for ePaper: DC (Data/Command — tells display if the bytes are commands or pixel data), RST (hardware reset), BUSY (display pulls this LOW while it is refreshing).</p>
+</blockquote>
+<h4 id="steps_6">Steps<a class="headerlink" href="#steps_6" title="Permanent link">&para;</a></h4>
+<ol>
+<li>Place <code>Connector_Generic:Conn_01x08</code> (J3). Footprint: <code>Connector_JST:JST_SH_SM08B-SRSS-TB_1x08-1MP_P1.00mm_Horizontal</code></li>
+<li>
+<p>Define the pinout (this matches common ePaper breakout boards):</p>
+<table>
+<thead>
+<tr>
+<th>Pin</th>
+<th>Net Label</th>
+<th>Function</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>3V3</td>
+<td>Power</td>
+</tr>
+<tr>
+<td>2</td>
+<td>GND</td>
+<td>Ground</td>
+</tr>
+<tr>
+<td>3</td>
+<td>EPD_MOSI</td>
+<td>SPI data</td>
+</tr>
+<tr>
+<td>4</td>
+<td>EPD_CLK</td>
+<td>SPI clock</td>
+</tr>
+<tr>
+<td>5</td>
+<td>EPD_CS</td>
+<td>Chip select</td>
+</tr>
+<tr>
+<td>6</td>
+<td>EPD_DC</td>
+<td>Data/command</td>
+</tr>
+<tr>
+<td>7</td>
+<td>EPD_RST</td>
+<td>Reset</td>
+</tr>
+<tr>
+<td>8</td>
+<td>EPD_BUSY</td>
+<td>Busy flag</td>
+</tr>
+</tbody>
+</table>
+</li>
+<li>
+<p>Wire pin 1 to <code>+3V3</code>, pin 2 to <code>GND</code>, pins 3-8 to the labels shown above.</p>
+</li>
+</ol>
+<p>These labels match the ones you placed on the ESP32 — KiCad automatically connects them.</p>
+<hr />
+<h3 id="28-lis2dh12tr-accelerometer-i2c">2.8 LIS2DH12TR Accelerometer (I2C)<a class="headerlink" href="#28-lis2dh12tr-accelerometer-i2c" title="Permanent link">&para;</a></h3>
+<p>The LIS2DH12TR measures acceleration (tilt, motion, tap detection). It connects via I2C.</p>
+<blockquote>
+<p><strong>Electronics principle: I2C (Inter-Integrated Circuit).</strong> I2C uses just 2 wires:</p>
+<ul>
+<li><strong>SDA (Serial Data)</strong> — bidirectional data line</li>
+<li><strong>SCL (Serial Clock)</strong> — clock driven by the master (ESP32)</li>
+</ul>
+<p>Both lines need <strong>pull-up resistors</strong> (typically 10k to 3V3). This is because I2C uses "open-drain" outputs — devices can only pull the line LOW. The resistor pulls it back HIGH when no device is driving it. Without pull-ups, the bus stays LOW forever and nothing works.</p>
+<p>Each I2C device has a 7-bit <strong>address</strong> hardwired or pin-selectable. The LIS2DH12 address is 0x18 when SDO is connected to GND, or 0x19 when SDO is connected to VCC.</p>
+</blockquote>
+<h4 id="steps_7">Steps<a class="headerlink" href="#steps_7" title="Permanent link">&para;</a></h4>
+<ol>
+<li>Place <code>Sensor_Motion:LIS2DH</code> (U5). Footprint: <code>Package_LGA:LGA-12_2x2mm_P0.5mm</code></li>
+<li>
+<p>Wire the pins:</p>
+<table>
+<thead>
+<tr>
+<th>Pin</th>
+<th>Connection</th>
+<th>Why</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>SCL/SPC (1)</td>
+<td><code>I2C_SCL</code></td>
+<td>I2C clock</td>
+</tr>
+<tr>
+<td>SDA/SDI (4)</td>
+<td><code>I2C_SDA</code></td>
+<td>I2C data</td>
+</tr>
+<tr>
+<td>CS (2)</td>
+<td><code>+3V3</code></td>
+<td>Tie HIGH to select I2C mode (LOW = SPI mode)</td>
+</tr>
+<tr>
+<td>SDO/SA0 (3)</td>
+<td><code>GND</code></td>
+<td>Sets I2C address to 0x18</td>
+</tr>
+<tr>
+<td>INT1 (12)</td>
+<td><code>ACCEL_INT1</code></td>
+<td>Motion interrupt to ESP32</td>
+</tr>
+<tr>
+<td>INT2 (11)</td>
+<td>No connect</td>
+<td>Not used</td>
+</tr>
+<tr>
+<td>VDD_IO (9)</td>
+<td><code>+3V3</code></td>
+<td>Logic level voltage</td>
+</tr>
+<tr>
+<td>VDD (8)</td>
+<td><code>+3V3</code></td>
+<td>Analog supply</td>
+</tr>
+<tr>
+<td>GND (6,7,8)</td>
+<td><code>GND</code></td>
+<td>All ground pins</td>
+</tr>
+<tr>
+<td>Res (5,10)</td>
+<td>No connect</td>
+<td>Reserved pins</td>
+</tr>
+</tbody>
+</table>
+</li>
+<li>
+<p>Add I2C pull-up resistors:</p>
+<ul>
+<li>R4 = 10k between <code>I2C_SDA</code> and <code>+3V3</code></li>
+<li>R5 = 10k between <code>I2C_SCL</code> and <code>+3V3</code></li>
+</ul>
+</li>
+<li>
+<p>Add decoupling capacitor C7 = 100nF between <code>+3V3</code> and <code>GND</code> (near U5)</p>
+</li>
+</ol>
+<hr />
+<h3 id="29-aht20-temperature-humidity-sensor-i2c">2.9 AHT20 Temperature &amp; Humidity Sensor (I2C)<a class="headerlink" href="#29-aht20-temperature-humidity-sensor-i2c" title="Permanent link">&para;</a></h3>
+<p>The AHT20 measures ambient temperature and humidity. It shares the same I2C bus as the accelerometer — no extra GPIOs or pull-ups needed.</p>
+<blockquote>
+<p><strong>Electronics principle: I2C bus sharing.</strong> Multiple I2C devices can share the same SDA/SCL wires. Each device has a unique 7-bit address. The master (ESP32) sends the address before each transaction, and only the addressed device responds. Our bus has three devices with no conflicts:</p>
+<ul>
+<li>LIS2DH12 (accelerometer): <strong>0x18</strong></li>
+<li>AHT20 (temp/humidity): <strong>0x38</strong></li>
+<li>BH1750 (light sensor): <strong>0x23</strong></li>
+</ul>
+<p>Only ONE set of pull-up resistors is needed per bus (R4, R5 already installed).</p>
+</blockquote>
+<p><strong>What it provides for Dilder:</strong></p>
+<ul>
+<li>Ambient temperature — gameplay weather sync, "too cold/hot" pet reactions</li>
+<li>Humidity level — "comfort" metrics, environmental awareness</li>
+<li>Sleep mode intelligence — detect pocket vs open air vs refrigerator prank</li>
+</ul>
+<h4 id="steps_8">Steps<a class="headerlink" href="#steps_8" title="Permanent link">&para;</a></h4>
+<ol>
+<li>Place <code>Device:Generic_I2C</code> or create a custom symbol for AHT20 (U6). If no symbol exists, use <code>Connector_Generic:Conn_01x04</code> as a placeholder with pins: VDD, GND, SDA, SCL.</li>
+<li>Assign footprint: <code>Package_DFN_QFN:DFN-6-1EP_3x3mm_P1.0mm</code> (LCSC: C2757850)</li>
+<li>
+<p>Wire:</p>
+<table>
+<thead>
+<tr>
+<th>Pin</th>
+<th>Connection</th>
+<th>Why</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>VDD</td>
+<td><code>+3V3</code></td>
+<td>2.0-5.5V supply, 3.3V is fine</td>
+</tr>
+<tr>
+<td>GND</td>
+<td><code>GND</code></td>
+<td>Ground</td>
+</tr>
+<tr>
+<td>SDA</td>
+<td><code>I2C_SDA</code></td>
+<td>Shared with LIS2DH12</td>
+</tr>
+<tr>
+<td>SCL</td>
+<td><code>I2C_SCL</code></td>
+<td>Shared with LIS2DH12</td>
+</tr>
+</tbody>
+</table>
+</li>
+<li>
+<p>Add decoupling capacitor C9 = 100nF between <code>+3V3</code> and <code>GND</code> (near U6)</p>
+</li>
+</ol>
+<p><strong>No additional pull-ups needed</strong> — R4 and R5 (10k) already serve the bus.</p>
+<hr />
+<h3 id="210-bh1750fvi-ambient-light-sensor-i2c">2.10 BH1750FVI Ambient Light Sensor (I2C)<a class="headerlink" href="#210-bh1750fvi-ambient-light-sensor-i2c" title="Permanent link">&para;</a></h3>
+<p>The BH1750FVI measures ambient light intensity in lux and outputs a 16-bit digital value directly via I2C. No ADC needed on the ESP32 side.</p>
+<blockquote>
+<p><strong>Electronics principle: Lux.</strong> Lux is the SI unit of illuminance — how much visible light hits a surface. Reference values:</p>
+<table>
+<thead>
+<tr>
+<th>Condition</th>
+<th>Lux</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Moonlight</td>
+<td>~1</td>
+</tr>
+<tr>
+<td>Dim room</td>
+<td>~50</td>
+</tr>
+<tr>
+<td>Office lighting</td>
+<td>~500</td>
+</tr>
+<tr>
+<td>Overcast outdoors</td>
+<td>~10,000</td>
+</tr>
+<tr>
+<td>Direct sunlight</td>
+<td>~100,000</td>
+</tr>
+</tbody>
+</table>
+<p>The BH1750 uses a photodiode with a spectral filter matched to human eye sensitivity, then integrates the photocurrent over time and converts it to a 16-bit lux value. Range: 1-65535 lux.</p>
+</blockquote>
+<p><strong>What it provides for Dilder:</strong></p>
+<ul>
+<li>Day/night detection — pet sleep cycle follows real light conditions</li>
+<li>"In pocket" detection — screen off, low-power mode</li>
+<li>Screen brightness adaptation — dim display in dark rooms</li>
+<li>Light-based gameplay events — "found a sunny spot!" happiness boost</li>
+</ul>
+<h4 id="steps_9">Steps<a class="headerlink" href="#steps_9" title="Permanent link">&para;</a></h4>
+<ol>
+<li>Place a custom symbol or generic IC for BH1750FVI (U7). 6 pins: VCC, GND, SDA, SCL, ADDR, DVI.</li>
+<li>Assign footprint: a WSOF-6 package. Use <code>Package_SO:SSOP-6_2.8x2.6mm_P0.65mm</code> or a custom WSOF-6 footprint (LCSC: C78960)</li>
+<li>
+<p>Wire:</p>
+<table>
+<thead>
+<tr>
+<th>Pin</th>
+<th>Connection</th>
+<th>Why</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>VCC</td>
+<td><code>+3V3</code></td>
+<td>2.4-3.6V supply</td>
+</tr>
+<tr>
+<td>GND</td>
+<td><code>GND</code></td>
+<td>Ground</td>
+</tr>
+<tr>
+<td>SDA</td>
+<td><code>I2C_SDA</code></td>
+<td>Shared I2C bus</td>
+</tr>
+<tr>
+<td>SCL</td>
+<td><code>I2C_SCL</code></td>
+<td>Shared I2C bus</td>
+</tr>
+<tr>
+<td>ADDR</td>
+<td><code>GND</code></td>
+<td>Sets I2C address to 0x23</td>
+</tr>
+<tr>
+<td>DVI</td>
+<td>leave unconnected</td>
+<td>Data valid input — not needed for basic operation</td>
+</tr>
+</tbody>
+</table>
+</li>
+<li>
+<p>Add decoupling capacitor C10 = 100nF between <code>+3V3</code> and <code>GND</code> (near U7)</p>
+</li>
+</ol>
+<hr />
+<h3 id="211-joystick-buttons-renumbered-from-29">2.11 Joystick &amp; Buttons (renumbered from 2.9)<a class="headerlink" href="#211-joystick-buttons-renumbered-from-29" title="Permanent link">&para;</a></h3>
+<p>The SKRHABE010 is a 5-way navigation joystick (up, down, left, right, center press). Each direction is simply a switch that connects to GND when pressed.</p>
+<blockquote>
+<p><strong>Electronics principle: Internal pull-ups.</strong> The ESP32 has configurable internal pull-up resistors on most GPIO pins (typically 45k). We enable these in firmware so each joystick switch reads HIGH normally and LOW when pressed. This means we do NOT need external pull-up resistors for the joystick — saving 5 components.</p>
+</blockquote>
+<h4 id="steps_10">Steps<a class="headerlink" href="#steps_10" title="Permanent link">&para;</a></h4>
+<p>Since the SKRHABE010 doesn't have a standard KiCad symbol, model it as 5 individual push buttons:</p>
+<ol>
+<li>Place 5 copies of <code>Switch:SW_Push</code></li>
+<li>Name them SW1a (UP), SW1b (DOWN), SW1c (LEFT), SW1d (RIGHT), SW1e (CENTER)</li>
+<li>For each: wire pin 1 to the corresponding net label (<code>JOY_UP</code>, etc.), wire pin 2 to <code>GND</code></li>
+</ol>
+<p>For the BOOT and RESET buttons (already placed in section 2.6):</p>
+<ul>
+<li>SW2 connects <code>BOOT</code> to GND</li>
+<li>SW3 connects <code>EN</code> to GND</li>
+</ul>
+<p><strong>Note on footprints:</strong> The joystick (SKRHABE010) needs a custom footprint based on its datasheet. The PTS810 buttons may also need a custom footprint. You can create these in the Footprint Editor or find them online.</p>
+<hr />
+<h3 id="212-status-leds">2.12 Status LEDs<a class="headerlink" href="#212-status-leds" title="Permanent link">&para;</a></h3>
+<p>Two LEDs indicate charging status:</p>
+<ul>
+<li><strong>D2 (RED)</strong> — lit while charging (driven by TP4056 CHRG pin)</li>
+<li><strong>D3 (GREEN)</strong> — lit when fully charged (driven by TP4056 STDBY pin)</li>
+</ul>
+<blockquote>
+<p><strong>Electronics principle: LED current limiting.</strong> LEDs need a series resistor to limit current. Without it, the LED draws too much current and burns out instantly. The TP4056's CHRG and STDBY pins are open-drain — they sink current to GND when active. So the circuit is: 3V3 → LED → Resistor → TP4056 pin → GND.</p>
+<p><strong>Calculating the resistor:</strong> R = (V_supply - V_LED) / I_LED. For a red LED: V_LED ≈ 1.8V, I_LED = 5mA (dim but visible for 0402). R = (3.3 - 1.8) / 0.005 = 300 ohms. We use 1k for a dimmer, lower-power LED (about 1.5mA) which is fine for a status indicator.</p>
+</blockquote>
+<h4 id="steps_11">Steps<a class="headerlink" href="#steps_11" title="Permanent link">&para;</a></h4>
+<ol>
+<li>Place D2 (<code>Device:LED</code>), R2 (<code>Device:R</code> = 1k) in series</li>
+<li>Wire: label <code>CHRG_OUT</code> → D2 Anode → D2 Cathode → R2 → <code>GND</code></li>
+<li>Wait: actually the TP4056 CHRG pin sinks current (open-drain to GND), so the correct wiring is:</li>
+<li><code>CHRG_OUT</code> → R2 → D2 Anode → D2 Cathode → <code>GND</code>... No, let me think again.</li>
+<li>The CHRG pin goes LOW when charging. So: <code>+3V3</code> → R2 → LED → <code>CHRG_OUT</code>. When CHRG is LOW, current flows through the LED. When HIGH (not charging), no current flows.</li>
+<li>Actually for simplicity: <code>CHRG_OUT</code> → LED Cathode, LED Anode → R2 → <code>+3V3</code>. OR: <code>CHRG_OUT</code> → R2 → LED → GND. Both work since CHRG is open-drain.</li>
+<li><strong>Simplest:</strong> Wire <code>CHRG_OUT</code> label to the cathode (K) of D2, wire the anode (A) through R2 to <code>+3V3</code>.</li>
+<li>Repeat for D3 (GREEN) with <code>STDBY_OUT</code></li>
+<li>Footprints: D2, D3 = <code>LED_SMD:LED_0402_1005Metric</code>, R2, R3 = <code>Resistor_SMD:R_0402_1005Metric</code></li>
+</ol>
+<hr />
+<h3 id="213-power-symbols-flags">2.13 Power Symbols &amp; Flags<a class="headerlink" href="#213-power-symbols-flags" title="Permanent link">&para;</a></h3>
+<p>Before running ERC, you need to add <strong>power flags</strong> to tell KiCad which nets are actually driven by power.</p>
+<blockquote>
+<p><strong>Why?</strong> KiCad's ERC checks that every power pin has a power source. Some pins are "power input" type (they consume power) and some are "power output" (they provide power). If a net only has power inputs, ERC complains. A <code>PWR_FLAG</code> tells ERC "yes, this net IS actually powered."</p>
+</blockquote>
+<h4 id="steps_12">Steps<a class="headerlink" href="#steps_12" title="Permanent link">&para;</a></h4>
+<ol>
+<li>Press <code>P</code>, search for <code>PWR_FLAG</code></li>
+<li>Place one on the <code>VBUS</code> net (connects to USB-C power output)</li>
+<li>Place one on the <code>GND</code> net if ERC complains about ground not being driven</li>
+</ol>
+<hr />
+<h2 id="part-3-electrical-rules-check-erc">Part 3 — Electrical Rules Check (ERC)<a class="headerlink" href="#part-3-electrical-rules-check-erc" title="Permanent link">&para;</a></h2>
+<p>Now that the schematic is complete, verify it.</p>
+<ol>
+<li><strong>Inspect &gt; Electrical Rules Checker</strong> (or press the ERC button in the toolbar)</li>
+<li>Click <strong>Run ERC</strong></li>
+<li>KiCad shows a list of violations. Common ones:</li>
+</ol>
+<table>
+<thead>
+<tr>
+<th>Error</th>
+<th>Meaning</th>
+<th>Fix</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>"Pin not connected"</td>
+<td>A pin has no wire</td>
+<td>Wire it, or add No Connect flag (<code>Q</code>) if intentional</td>
+</tr>
+<tr>
+<td>"Power pin not driven"</td>
+<td>A power input pin has no power source on its net</td>
+<td>Add a <code>PWR_FLAG</code> on that net</td>
+</tr>
+<tr>
+<td>"Wire not connected"</td>
+<td>A wire ends in empty space</td>
+<td>Extend it to a pin, or delete the dangling end</td>
+</tr>
+<tr>
+<td>"Duplicate reference"</td>
+<td>Two components have the same reference (e.g., two R1s)</td>
+<td>Renumber: Tools &gt; Annotate Schematic</td>
+</tr>
+<tr>
+<td>"Different net names on same wire"</td>
+<td>Two labels on the same wire with different names</td>
+<td>Remove the duplicate label</td>
+</tr>
+</tbody>
+</table>
+<ol>
+<li>Fix all <strong>errors</strong> (red). <strong>Warnings</strong> (yellow) can often be ignored but review each one.</li>
+<li>Run ERC again until you have zero errors.</li>
+</ol>
+<p><strong>Annotate the schematic:</strong> Before proceeding, run <strong>Tools &gt; Annotate Schematic</strong> to automatically assign reference designators (R1, R2, R3, C1, C2, etc.) if you haven't done so manually.</p>
+<hr />
+<h2 id="part-4-pcb-layout">Part 4 — PCB Layout<a class="headerlink" href="#part-4-pcb-layout" title="Permanent link">&para;</a></h2>
+<h3 id="41-board-setup">4.1 Board Setup<a class="headerlink" href="#41-board-setup" title="Permanent link">&para;</a></h3>
+<ol>
+<li>From the Schematic Editor, click <strong>Tools &gt; Update PCB from Schematic</strong> (or press <code>F8</code>). This creates/opens the PCB Editor with all your components imported.</li>
+<li>All components appear as a pile in the corner. Don't worry — you will place them.</li>
+</ol>
+<p><strong>Board outline:</strong></p>
+<ol>
+<li>Select the <strong>Edge.Cuts</strong> layer in the layer panel (right side)</li>
+<li>Use <strong>Place &gt; Rectangle</strong> to draw the board outline: 30mm x 70mm</li>
+<li>Or use <strong>Place &gt; Line</strong> to draw each edge (click the start point, click the end point)</li>
+</ol>
+<p><strong>Layer stack:</strong></p>
+<ol>
+<li><strong>File &gt; Board Setup &gt; Board Stackup &gt; Physical Stackup</strong></li>
+<li>Set <strong>4 layers</strong>: F.Cu, In1.Cu, In2.Cu, B.Cu</li>
+<li>Set thickness to 1.6mm</li>
+</ol>
+<p><strong>Design rules:</strong></p>
+<ol>
+<li><strong>File &gt; Board Setup &gt; Design Rules &gt; Net Classes</strong></li>
+<li>Set Default net class: Track width = 0.2mm, Clearance = 0.2mm, Via diameter = 0.6mm, Via drill = 0.3mm</li>
+<li>Create a net class called "Power": Track width = 0.4mm. Assign nets <code>VBUS</code>, <code>VBUS_CHG</code>, <code>VBAT</code>, <code>3V3</code>, <code>GND</code> to this class.</li>
+</ol>
+<hr />
+<h3 id="42-import-netlist">4.2 Import Netlist<a class="headerlink" href="#42-import-netlist" title="Permanent link">&para;</a></h3>
+<p>If you used "Update PCB from Schematic", the footprints are already imported with their nets. If not:</p>
+<ol>
+<li>In the Schematic Editor: <strong>File &gt; Export &gt; Netlist</strong>, save as <code>dilder.net</code></li>
+<li>In the PCB Editor: <strong>File &gt; Import &gt; Netlist</strong>, load <code>dilder.net</code></li>
+<li>Click "Update PCB" — footprints appear with thin lines (called a "ratsnest") showing which pads need to be connected</li>
+</ol>
+<hr />
+<h3 id="43-component-placement">4.3 Component Placement<a class="headerlink" href="#43-component-placement" title="Permanent link">&para;</a></h3>
+<p>This is the most important step. Good placement makes routing easy; bad placement makes it impossible.</p>
+<h4 id="placement-strategy">Placement Strategy<a class="headerlink" href="#placement-strategy" title="Permanent link">&para;</a></h4>
+<p>Our board is divided into 6 zones from top to bottom:</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-3-1"><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>┌──────────────────────────────┐ y=0mm
+</span><span id="__span-3-2"><a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a>│       Antenna zone            │ Zone A: NO components (0-3mm)
+</span><span id="__span-3-3"><a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a>│       (keep clear!)           │
+</span><span id="__span-3-4"><a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a>├──────────────────────────────┤ y=3mm
+</span><span id="__span-3-5"><a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a>│     ESP32-S3-WROOM-1         │ Zone B: MCU + decoupling (3-25mm)
+</span><span id="__span-3-6"><a id="__codelineno-3-6" name="__codelineno-3-6" href="#__codelineno-3-6"></a>│   C3 C4 R10 R11 on sides    │
+</span><span id="__span-3-7"><a id="__codelineno-3-7" name="__codelineno-3-7" href="#__codelineno-3-7"></a>│                D2 R2 D3 R3   │
+</span><span id="__span-3-8"><a id="__codelineno-3-8" name="__codelineno-3-8" href="#__codelineno-3-8"></a>├──────────────────────────────┤ y=26mm
+</span><span id="__span-3-9"><a id="__codelineno-3-9" name="__codelineno-3-9" href="#__codelineno-3-9"></a>│  AMS1117  C5 C6              │ Zone C: Power (26-42mm)
+</span><span id="__span-3-10"><a id="__codelineno-3-10" name="__codelineno-3-10" href="#__codelineno-3-10"></a>│  TP4056  D1  R1              │
+</span><span id="__span-3-11"><a id="__codelineno-3-11" name="__codelineno-3-11" href="#__codelineno-3-11"></a>│  DW01A  Q1  J2(battery)     │
+</span><span id="__span-3-12"><a id="__codelineno-3-12" name="__codelineno-3-12" href="#__codelineno-3-12"></a>├──────────────────────────────┤ y=42mm
+</span><span id="__span-3-13"><a id="__codelineno-3-13" name="__codelineno-3-13" href="#__codelineno-3-13"></a>│  LIS2DH  R4 R5  C7          │ Zone D: Peripherals (42-54mm)
+</span><span id="__span-3-14"><a id="__codelineno-3-14" name="__codelineno-3-14" href="#__codelineno-3-14"></a>│         J3(ePaper)           │
+</span><span id="__span-3-15"><a id="__codelineno-3-15" name="__codelineno-3-15" href="#__codelineno-3-15"></a>│  SW2(BOOT) SW3(RESET) C8    │
+</span><span id="__span-3-16"><a id="__codelineno-3-16" name="__codelineno-3-16" href="#__codelineno-3-16"></a>├──────────────────────────────┤ y=54mm
+</span><span id="__span-3-17"><a id="__codelineno-3-17" name="__codelineno-3-17" href="#__codelineno-3-17"></a>│     SW1 (Joystick)           │ Zone E: User input (54-62mm)
+</span><span id="__span-3-18"><a id="__codelineno-3-18" name="__codelineno-3-18" href="#__codelineno-3-18"></a>│                              │
+</span><span id="__span-3-19"><a id="__codelineno-3-19" name="__codelineno-3-19" href="#__codelineno-3-19"></a>├──────────────────────────────┤ y=62mm
+</span><span id="__span-3-20"><a id="__codelineno-3-20" name="__codelineno-3-20" href="#__codelineno-3-20"></a>│  R8 R9   J1 (USB-C)         │ Zone F: USB (62-70mm)
+</span><span id="__span-3-21"><a id="__codelineno-3-21" name="__codelineno-3-21" href="#__codelineno-3-21"></a>└──────────────────────────────┘ y=70mm
+</span></code></pre></div>
+<h4 id="placement-rules">Placement Rules<a class="headerlink" href="#placement-rules" title="Permanent link">&para;</a></h4>
+<ol>
+<li><strong>Start with the largest components</strong> — ESP32 module, USB-C connector, JST connectors, joystick. These constrain everything else.</li>
+<li><strong>Place connectors at board edges</strong> — USB-C at the bottom edge, battery connector on the right side, ePaper header accessible.</li>
+<li><strong>Place decoupling caps as close as possible to their IC</strong> — C3/C4 next to ESP32, C5/C6 next to AMS1117, C7 next to LIS2DH. "As close as possible" means within 2-3mm of the power pins.</li>
+<li><strong>Keep the antenna zone clear</strong> — absolutely NO copper, components, or ground plane within the top 5mm of the board. The ESP32 module's antenna extends beyond its body into this area. Copper near the antenna kills wireless performance.</li>
+<li><strong>Group related components</strong> — charging circuit together, battery protection together, etc.</li>
+</ol>
+<h4 id="how-to-place">How to Place<a class="headerlink" href="#how-to-place" title="Permanent link">&para;</a></h4>
+<ul>
+<li>Select a component and press <code>M</code> to move it</li>
+<li>Press <code>R</code> to rotate (90 degrees each press)</li>
+<li>Press <code>X</code> to flip to back side of board (for back-mounted components)</li>
+<li>Use the coordinate readout (bottom-left of screen) to place precisely</li>
+<li>Set the grid to 0.5mm or 0.25mm for fine positioning: <strong>Preferences &gt; Grid</strong></li>
+</ul>
+<hr />
+<h3 id="44-routing-power-traces">4.4 Routing — Power Traces<a class="headerlink" href="#44-routing-power-traces" title="Permanent link">&para;</a></h3>
+<p>Route power traces FIRST because they carry the most current and are most critical.</p>
+<blockquote>
+<p><strong>Electronics principle: Trace width and current capacity.</strong> A PCB trace is just a thin strip of copper. Wider traces carry more current with less resistance and less heat. For 1oz copper (standard):</p>
+<ul>
+<li>0.2mm trace ≈ 0.5A max (signals)</li>
+<li>0.4mm trace ≈ 1.0A max (power)</li>
+<li>1.0mm trace ≈ 2.0A max (high-power)</li>
+</ul>
+<p>Our power traces need to handle up to 1A (charging current), so 0.4mm is the minimum.</p>
+</blockquote>
+<h4 id="steps_13">Steps<a class="headerlink" href="#steps_13" title="Permanent link">&para;</a></h4>
+<ol>
+<li>Select the <strong>Route Tracks</strong> tool (press <code>X</code>)</li>
+<li>Set track width to 0.4mm (use the dropdown in the top toolbar)</li>
+<li>
+<p>Route these power paths on F.Cu:</p>
+<ul>
+<li><code>VBUS</code>: USB-C → D1 (Schottky diode)</li>
+<li><code>VBUS_CHG</code>: D1 → TP4056 VCC, TP4056 CE</li>
+<li><code>VBAT</code>: TP4056 BAT → DW01A VCC → AMS1117 VI → C5</li>
+<li><code>3V3</code>: AMS1117 VO → C6 → ESP32 3V3 → other 3V3 devices</li>
+<li><code>BAT_PLUS</code>: FS8205A → J2 battery connector</li>
+<li><code>GND</code>: handled by zone pours (see section 4.6), but add short stubs to connect pads to the ground pour</li>
+</ul>
+</li>
+</ol>
+<p><strong>Tip:</strong> Route power as short, wide, direct paths. Avoid zigzags. If a power trace needs to cross another, use a via to jump to B.Cu and back.</p>
+<hr />
+<h3 id="45-routing-signal-traces">4.5 Routing — Signal Traces<a class="headerlink" href="#45-routing-signal-traces" title="Permanent link">&para;</a></h3>
+<p>After power, route signal traces at 0.2mm width.</p>
+<h4 id="signal-priority-order">Signal Priority Order<a class="headerlink" href="#signal-priority-order" title="Permanent link">&para;</a></h4>
+<p>Route in this order (highest priority first):</p>
+<ol>
+<li><strong>USB D+/D-</strong> — these are a differential pair. Route them parallel, equal length, on the same layer, close together (0.2mm gap). Keep them short.</li>
+</ol>
+<blockquote>
+<p><strong>Electronics principle: Differential pairs.</strong> USB uses two signals (D+ and D-) that carry opposite voltages. The receiver measures the DIFFERENCE between them, which rejects noise. For this to work, both traces must be the same length (within 0.5mm) and maintain consistent spacing. For USB 2.0 Full Speed (12 Mbps), this is not super critical, but good practice.</p>
+</blockquote>
+<ol>
+<li>
+<p><strong>SPI (ePaper)</strong> — EPD_CLK, EPD_MOSI, EPD_DC, EPD_RST, EPD_CS, EPD_BUSY. These can run at 10-40 MHz. Keep traces under 50mm. Route on B.Cu if needed to avoid crossing other signals.</p>
+</li>
+<li>
+<p><strong>I2C</strong> — I2C_SDA, I2C_SCL. These run at 100-400 kHz (slow). Not length-sensitive. Route however is convenient.</p>
+</li>
+<li>
+<p><strong>Joystick/buttons</strong> — JOY_UP through JOY_CENTER, BOOT, EN. Pure digital signals, very slow. Route wherever convenient.</p>
+</li>
+<li>
+<p><strong>LED outputs</strong> — CHRG_OUT, STDBY_OUT. Very slow. Route last.</p>
+</li>
+</ol>
+<h4 id="routing-technique">Routing Technique<a class="headerlink" href="#routing-technique" title="Permanent link">&para;</a></h4>
+<ul>
+<li>Start a trace by clicking on a pad (the highlighted circles are unrouted connections)</li>
+<li>KiCad shows the ratsnest line pointing to where the trace needs to go</li>
+<li>Click intermediate points to add bends</li>
+<li>Double-click the destination pad to finish</li>
+<li>If you need to cross another trace: drop a <strong>via</strong> (press <code>V</code> while routing), route on B.Cu, then via back up</li>
+</ul>
+<hr />
+<h3 id="46-zone-pours-planes">4.6 Zone Pours &amp; Planes<a class="headerlink" href="#46-zone-pours-planes" title="Permanent link">&para;</a></h3>
+<p>The inner layers (In1.Cu, In2.Cu) are continuous copper planes. The outer layers (F.Cu, B.Cu) get zone pours (copper fill around existing traces).</p>
+<blockquote>
+<p><strong>Electronics principle: Ground planes.</strong> A solid copper ground plane has very low resistance and inductance. It provides an excellent return path for all signals, reduces electromagnetic interference (EMI), and improves thermal performance. Every professional board uses at least one ground plane. Our 4-layer stack uses the dedicated In1.Cu layer as a continuous GND plane.</p>
+<p><strong>Why a 3V3 plane too?</strong> Having a dedicated 3V3 plane (In2.Cu) eliminates the need to route 3V3 traces everywhere. Any component that needs 3V3 just drops a via to the plane. This also reduces noise on the power rail.</p>
+</blockquote>
+<h4 id="steps_14">Steps<a class="headerlink" href="#steps_14" title="Permanent link">&para;</a></h4>
+<ol>
+<li>
+<p><strong>In1.Cu GND plane:</strong></p>
+<ul>
+<li>Select layer In1.Cu</li>
+<li><strong>Place &gt; Zone</strong> (or press <code>Ctrl+Shift+Z</code>)</li>
+<li>Select net: <code>GND</code></li>
+<li>Draw a rectangle covering the entire board (but starting at y=5mm to avoid the antenna zone)</li>
+<li>Click to close the rectangle</li>
+</ul>
+</li>
+<li>
+<p><strong>In2.Cu 3V3 plane:</strong></p>
+<ul>
+<li>Select layer In2.Cu</li>
+<li>Place Zone, net: <code>3V3</code></li>
+<li>Same rectangle (y=5mm to y=70mm, full width)</li>
+</ul>
+</li>
+<li>
+<p><strong>F.Cu GND pour:</strong></p>
+<ul>
+<li>Select F.Cu</li>
+<li>Place Zone, net: <code>GND</code></li>
+<li>Same rectangle. Set priority to 0 (lower than signal traces).</li>
+<li>This fills empty space on the top copper layer with ground copper.</li>
+</ul>
+</li>
+<li>
+<p><strong>B.Cu GND pour:</strong></p>
+<ul>
+<li>Same as above but on B.Cu</li>
+</ul>
+</li>
+<li>
+<p><strong>Fill all zones:</strong> Press <code>B</code> (or Edit &gt; Fill All Zones)</p>
+</li>
+</ol>
+<p>You should see copper fill appear on all layers, with clearances around non-GND pads and traces.</p>
+<hr />
+<h3 id="47-vias">4.7 Vias<a class="headerlink" href="#47-vias" title="Permanent link">&para;</a></h3>
+<p>Vias are small plated holes that connect copper between layers.</p>
+<p><strong>3V3 power vias:</strong> For every component pad on F.Cu that connects to 3V3, place a via nearby that drops to In2.Cu (the 3V3 plane). Select the via tool, set net to 3V3, click near the pad, then route a short trace from the pad to the via.</p>
+<p><strong>GND stitching vias:</strong> Place vias around the board perimeter connecting F.Cu ground pour to In1.Cu ground plane. This creates a low-impedance ground path and helps with EMI. Space them every 5-8mm around the edges.</p>
+<p>Via settings: Drill = 0.3mm, Diameter = 0.6mm (JLCPCB minimum for standard vias).</p>
+<hr />
+<h3 id="48-silkscreen-labels">4.8 Silkscreen &amp; Labels<a class="headerlink" href="#48-silkscreen-labels" title="Permanent link">&para;</a></h3>
+<p>The silkscreen is the white text/markings printed on the board.</p>
+<ol>
+<li>KiCad automatically places component reference designators (R1, U1, etc.)</li>
+<li>Adjust their position/size so they don't overlap pads: select, press <code>M</code> to move</li>
+<li>Add custom text: select F.SilkS layer, <strong>Place &gt; Text</strong><ul>
+<li>Add "DILDER v0.5" near the bottom</li>
+<li>Add "USB-C" near J1</li>
+<li>Add "BAT" near J2</li>
+<li>Add "BOOT" and "RST" near the buttons</li>
+</ul>
+</li>
+</ol>
+<hr />
+<h3 id="49-design-rules-check-drc">4.9 Design Rules Check (DRC)<a class="headerlink" href="#49-design-rules-check-drc" title="Permanent link">&para;</a></h3>
+<ol>
+<li><strong>Inspect &gt; Design Rules Checker</strong></li>
+<li>Click <strong>Run DRC</strong></li>
+<li>Fix violations:</li>
+</ol>
+<table>
+<thead>
+<tr>
+<th>Error</th>
+<th>Fix</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Clearance violation</td>
+<td>Move traces/components apart</td>
+</tr>
+<tr>
+<td>Unconnected items</td>
+<td>Route the missing connection</td>
+</tr>
+<tr>
+<td>Track too close to pad</td>
+<td>Nudge the trace</td>
+</tr>
+<tr>
+<td>Via too close to track</td>
+<td>Move the via</td>
+</tr>
+<tr>
+<td>Silk over copper</td>
+<td>Move the silkscreen text</td>
+</tr>
+<tr>
+<td>Courtyard overlap</td>
+<td>Spread components apart</td>
+</tr>
+<tr>
+<td>Drill too small</td>
+<td>Increase via drill to 0.3mm minimum</td>
+</tr>
+</tbody>
+</table>
+<ol>
+<li>Run DRC repeatedly until ZERO errors.</li>
+</ol>
+<p><strong>Warnings</strong> are OK for prototype boards but fix them for production.</p>
+<hr />
+<h3 id="410-gerber-export">4.10 Gerber Export<a class="headerlink" href="#410-gerber-export" title="Permanent link">&para;</a></h3>
+<p>Once DRC is clean:</p>
+<ol>
+<li><strong>File &gt; Fabrication Outputs &gt; Gerbers (.gbr)</strong></li>
+<li>Select output directory (create a <code>gerbers/</code> folder)</li>
+<li>Check all copper layers: F.Cu, In1.Cu, In2.Cu, B.Cu</li>
+<li>Check: F.SilkS, B.SilkS, F.Mask, B.Mask, F.Paste, B.Paste, Edge.Cuts</li>
+<li>Click <strong>Plot</strong></li>
+</ol>
+<p>Then export drill files:</p>
+<ol>
+<li>Click <strong>Generate Drill Files</strong></li>
+<li>Select Excellon format, metric units</li>
+<li>Click <strong>Generate Drill File</strong></li>
+</ol>
+<p>For JLCPCB SMT assembly, also generate BOM and CPL:</p>
+<ol>
+<li>Use the JLCPCB Tools plugin: <strong>Tools &gt; Generate JLCPCB Fabrication Files</strong></li>
+<li>
+<p>This creates BOM.csv (bill of materials) and positions.csv (component placement) automatically</p>
+</li>
+<li>
+<p>ZIP all the gerber + drill files together</p>
+</li>
+</ol>
+<hr />
+<h2 id="part-5-ordering-from-jlcpcb">Part 5 — Ordering from JLCPCB<a class="headerlink" href="#part-5-ordering-from-jlcpcb" title="Permanent link">&para;</a></h2>
+<ol>
+<li>Go to <a href="https://jlcpcb.com">jlcpcb.com</a></li>
+<li>Click <strong>Order Now</strong> and upload the gerber ZIP</li>
+<li>JLCPCB auto-detects board parameters. Verify:<ul>
+<li>Layers: 4</li>
+<li>Dimensions: 30 x 70 mm</li>
+<li>PCB Thickness: 1.6mm</li>
+<li>Surface Finish: HASL (lead-free)</li>
+<li>Solder Mask Color: Green</li>
+</ul>
+</li>
+<li>Enable <strong>SMT Assembly</strong>:<ul>
+<li>Assembly Side: Top</li>
+<li>Upload BOM.csv and positions.csv</li>
+<li>JLCPCB matches your LCSC part numbers and shows which components it can place</li>
+</ul>
+</li>
+<li>Review, pay, and wait ~1 week for delivery</li>
+</ol>
+<p>Estimated cost: ~$35-50 for 5 assembled boards + shipping.</p>
+<hr />
+<h2 id="electronics-principles-reference">Electronics Principles Reference<a class="headerlink" href="#electronics-principles-reference" title="Permanent link">&para;</a></h2>
+<h3 id="ohms-law">Ohm's Law<a class="headerlink" href="#ohms-law" title="Permanent link">&para;</a></h3>
+<p><strong>V = I x R</strong> — Voltage (volts) = Current (amps) x Resistance (ohms).</p>
+<p>This is the most fundamental equation in electronics. If you know any two values, you can calculate the third:</p>
+<ul>
+<li>I = V / R (current through a resistor given voltage across it)</li>
+<li>R = V / I (what resistor to use for a desired current at a given voltage)</li>
+</ul>
+<p>Example: LED with 3.3V supply, 1.8V forward voltage, 1k resistor:
+I = (3.3 - 1.8) / 1000 = 0.0015A = 1.5mA</p>
+<h3 id="decoupling-capacitors">Decoupling Capacitors<a class="headerlink" href="#decoupling-capacitors" title="Permanent link">&para;</a></h3>
+<p>Every IC needs capacitors between its power and ground pins, placed as close to the IC as physically possible. There are two types:</p>
+<ul>
+<li><strong>Bulk capacitor (10uF)</strong> — stores energy for sudden current demands. Like a small battery that fills in while the main power supply reacts.</li>
+<li><strong>Bypass capacitor (100nF)</strong> — filters high-frequency noise. At MHz frequencies, even short wires have significant inductance, so a local cap provides the instantaneous current the IC needs.</li>
+</ul>
+<p>Rule of thumb: 100nF on every IC power pin, plus 10uF on voltage regulators and power-hungry ICs (MCUs, wireless modules).</p>
+<h3 id="pull-up-and-pull-down-resistors">Pull-Up and Pull-Down Resistors<a class="headerlink" href="#pull-up-and-pull-down-resistors" title="Permanent link">&para;</a></h3>
+<p>A pull-up resistor connects a signal to VCC. A pull-down connects it to GND. Purpose: ensure a signal has a known state (HIGH or LOW) when nothing is actively driving it. Without them, the pin "floats" at an unpredictable voltage, causing erratic behavior.</p>
+<p>Common values: 10k for general purpose, 4.7k for I2C (faster rise time), 5.1k for USB-C CC pins (specified by standard).</p>
+<h3 id="power-dissipation">Power Dissipation<a class="headerlink" href="#power-dissipation" title="Permanent link">&para;</a></h3>
+<p>When current flows through a resistor or regulator, power is dissipated as heat: <strong>P = V x I</strong> or <strong>P = I^2 x R</strong>.</p>
+<p>The AMS1117 dropping from 4.2V to 3.3V with 200mA load: P = (4.2 - 3.3) x 0.2 = 0.18W. The SOT-223 package can handle about 1.5W, so this is fine.</p>
+<h3 id="trace-width-vs-current">Trace Width vs Current<a class="headerlink" href="#trace-width-vs-current" title="Permanent link">&para;</a></h3>
+<p>For 1oz copper on outer layers (35um thick):</p>
+<table>
+<thead>
+<tr>
+<th>Width</th>
+<th>Max Current (10C rise)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>0.15mm</td>
+<td>0.3A</td>
+</tr>
+<tr>
+<td>0.2mm</td>
+<td>0.5A</td>
+</tr>
+<tr>
+<td>0.3mm</td>
+<td>0.7A</td>
+</tr>
+<tr>
+<td>0.5mm</td>
+<td>1.0A</td>
+</tr>
+<tr>
+<td>1.0mm</td>
+<td>2.0A</td>
+</tr>
+</tbody>
+</table>
+<p>Use <a href="http://saturnpcb.com/pcb_toolkit/">Saturn PCB Toolkit</a> for precise calculations.</p>
+<h3 id="4-layer-pcb-stack">4-Layer PCB Stack<a class="headerlink" href="#4-layer-pcb-stack" title="Permanent link">&para;</a></h3>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-4-1"><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>F.Cu (top)    — signal traces, component pads, GND pour
+</span><span id="__span-4-2"><a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a>In1.Cu        — continuous GND plane (return path for signals)
+</span><span id="__span-4-3"><a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a>In2.Cu        — continuous 3V3 plane (power distribution)
+</span><span id="__span-4-4"><a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a>B.Cu (bottom) — signal traces, GND pour
+</span></code></pre></div>
+<p>Why this order? Signals on F.Cu have an immediate ground reference on In1.Cu (just 0.2mm away through the prepreg). This gives low impedance and good signal integrity. The 3V3 plane on In2.Cu distributes power without needing traces.</p>
+<hr />
+<h2 id="glossary">Glossary<a class="headerlink" href="#glossary" title="Permanent link">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th>Term</th>
+<th>Definition</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Anode</strong></td>
+<td>The positive terminal of a diode or LED (current flows IN)</td>
+</tr>
+<tr>
+<td><strong>BOM</strong></td>
+<td>Bill of Materials — list of all components with part numbers and quantities</td>
+</tr>
+<tr>
+<td><strong>Cathode</strong></td>
+<td>The negative terminal of a diode or LED (current flows OUT)</td>
+</tr>
+<tr>
+<td><strong>Clearance</strong></td>
+<td>Minimum gap between copper features (traces, pads, pours)</td>
+</tr>
+<tr>
+<td><strong>Courtyard</strong></td>
+<td>The physical outline around a component showing how much board space it occupies</td>
+</tr>
+<tr>
+<td><strong>CPL</strong></td>
+<td>Component Placement List — XY coordinates and rotation for each component (for pick-and-place machines)</td>
+</tr>
+<tr>
+<td><strong>Decoupling cap</strong></td>
+<td>Capacitor placed near an IC to filter noise on power supply</td>
+</tr>
+<tr>
+<td><strong>DRC</strong></td>
+<td>Design Rules Check — automated check that the PCB meets manufacturing constraints</td>
+</tr>
+<tr>
+<td><strong>Drill file</strong></td>
+<td>File specifying the position and size of all holes (vias, mounting holes, through-hole pads)</td>
+</tr>
+<tr>
+<td><strong>ERC</strong></td>
+<td>Electrical Rules Check — automated check for wiring errors in the schematic</td>
+</tr>
+<tr>
+<td><strong>Footprint</strong></td>
+<td>The physical land pattern on the PCB where a component is soldered (pads, outline, courtyard)</td>
+</tr>
+<tr>
+<td><strong>Gerber</strong></td>
+<td>Industry-standard file format for PCB layers (one file per layer)</td>
+</tr>
+<tr>
+<td><strong>GND</strong></td>
+<td>Ground — the 0V reference voltage that all other voltages are measured relative to</td>
+</tr>
+<tr>
+<td><strong>HASL</strong></td>
+<td>Hot Air Solder Leveling — a PCB surface finish where exposed copper pads are coated with solder</td>
+</tr>
+<tr>
+<td><strong>I2C</strong></td>
+<td>Inter-Integrated Circuit — a 2-wire serial protocol (SDA + SCL)</td>
+</tr>
+<tr>
+<td><strong>LCSC</strong></td>
+<td>The component distributor used by JLCPCB for SMT assembly</td>
+</tr>
+<tr>
+<td><strong>LDO</strong></td>
+<td>Low-Dropout Regulator — a voltage regulator that works with very small input-output voltage difference</td>
+</tr>
+<tr>
+<td><strong>LGA</strong></td>
+<td>Land Grid Array — a package type with pads on the bottom (no leads), common for sensors</td>
+</tr>
+<tr>
+<td><strong>MOSFET</strong></td>
+<td>Metal-Oxide-Semiconductor Field-Effect Transistor — an electronically controlled switch</td>
+</tr>
+<tr>
+<td><strong>Net</strong></td>
+<td>An electrical connection — all pins/pads on the same net are electrically connected</td>
+</tr>
+<tr>
+<td><strong>Netlist</strong></td>
+<td>A file listing all nets and which component pins belong to each</td>
+</tr>
+<tr>
+<td><strong>Open-drain</strong></td>
+<td>An output type that can only pull a signal LOW (to GND). Needs an external pull-up to go HIGH</td>
+</tr>
+<tr>
+<td><strong>Pad</strong></td>
+<td>The copper area on a PCB where a component pin is soldered</td>
+</tr>
+<tr>
+<td><strong>Pull-up</strong></td>
+<td>A resistor connecting a signal line to VCC, ensuring it reads HIGH by default</td>
+</tr>
+<tr>
+<td><strong>Pour</strong></td>
+<td>A large area of copper fill on a layer, usually connected to GND</td>
+</tr>
+<tr>
+<td><strong>Ratsnest</strong></td>
+<td>Thin lines in the PCB editor showing unrouted connections</td>
+</tr>
+<tr>
+<td><strong>Reference designator</strong></td>
+<td>The identifier for a component (R1, C2, U3, J4, etc.)</td>
+</tr>
+<tr>
+<td><strong>Schottky diode</strong></td>
+<td>A diode with very low forward voltage drop (~0.3V vs 0.7V for standard)</td>
+</tr>
+<tr>
+<td><strong>SMD/SMT</strong></td>
+<td>Surface Mount Device/Technology — components soldered to the surface of the PCB (not through holes)</td>
+</tr>
+<tr>
+<td><strong>SOT-23</strong></td>
+<td>Small Outline Transistor package with 3, 5, or 6 pins</td>
+</tr>
+<tr>
+<td><strong>SPI</strong></td>
+<td>Serial Peripheral Interface — a 4-wire protocol (SCK, MOSI, MISO, CS)</td>
+</tr>
+<tr>
+<td><strong>Symbol</strong></td>
+<td>The schematic representation of a component (shows pins and function, not physical shape)</td>
+</tr>
+<tr>
+<td><strong>Thermal relief</strong></td>
+<td>A pad connection to a copper pour through narrow spokes instead of a solid connection, making soldering easier</td>
+</tr>
+<tr>
+<td><strong>Trace</strong></td>
+<td>A copper track on the PCB connecting two pads</td>
+</tr>
+<tr>
+<td><strong>Via</strong></td>
+<td>A plated hole connecting copper on different layers of the PCB</td>
+</tr>
+<tr>
+<td><strong>Zone</strong></td>
+<td>A filled area of copper on a layer (used for ground planes, power planes, and pours)</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="further-resources">Further Resources<a class="headerlink" href="#further-resources" title="Permanent link">&para;</a></h2>
+<h3 id="learning-electronics">Learning Electronics<a class="headerlink" href="#learning-electronics" title="Permanent link">&para;</a></h3>
+<ul>
+<li><strong>"The Art of Electronics" by Horowitz &amp; Hill</strong> — the definitive electronics reference. Get the 3rd edition. Read chapters 1-2 for fundamentals.</li>
+<li><strong>"Getting Started in Electronics" by Forrest Mims</strong> — a beginner-friendly illustrated guide that covers all the basics in 128 pages.</li>
+<li><strong>EEVBlog YouTube Channel</strong> — Dave Jones explains electronics concepts with practical demonstrations. Start with his "Fundamentals Friday" series.</li>
+<li><strong>Ben Eater's YouTube Channel</strong> — builds computers from scratch, explains every component along the way.</li>
+</ul>
+<h3 id="learning-kicad">Learning KiCad<a class="headerlink" href="#learning-kicad" title="Permanent link">&para;</a></h3>
+<ul>
+<li><strong><a href="https://docs.kicad.org/10.0/en/getting_started_in_kicad/getting_started_in_kicad.html">KiCad Official Getting Started Guide</a></strong> — the official tutorial, covers the full workflow</li>
+<li><strong>Digikey's KiCad Tutorial Series on YouTube</strong> — step-by-step video walkthroughs</li>
+<li><strong>Chris Gammel's "Getting to Blinky"</strong> — free video course that takes you from zero to a blinking LED board</li>
+</ul>
+<h3 id="esp32-s3-hardware-design">ESP32-S3 Hardware Design<a class="headerlink" href="#esp32-s3-hardware-design" title="Permanent link">&para;</a></h3>
+<ul>
+<li><strong><a href="https://www.espressif.com/sites/default/files/documentation/esp32-s3-wroom-1_wroom-1u_datasheet_en.pdf">ESP32-S3-WROOM-1 Datasheet</a></strong> — pinout, electrical specs, absolute maximums</li>
+<li><strong><a href="https://www.espressif.com/sites/default/files/documentation/esp32-s3_hardware_design_guidelines_en.pdf">ESP32-S3 Hardware Design Guidelines</a></strong> — antenna placement, decoupling, layout recommendations. READ THIS before finalizing PCB layout.</li>
+</ul>
+<h3 id="component-datasheets">Component Datasheets<a class="headerlink" href="#component-datasheets" title="Permanent link">&para;</a></h3>
+<p>Always read the datasheet for every IC you use. Key sections:</p>
+<ul>
+<li><strong>Absolute Maximum Ratings</strong> — voltages/currents that will DESTROY the chip</li>
+<li><strong>Typical Application Circuit</strong> — copy this! The manufacturer already designed the circuit for you.</li>
+<li><strong>Pin Description</strong> — what each pin does</li>
+<li><strong>Electrical Characteristics</strong> — operating voltages, currents, timing</li>
+</ul>
+<p>Our component datasheets:</p>
+<ul>
+<li><a href="https://www.lcsc.com/product-detail/Battery-Management_C382139.html">TP4056 Datasheet</a></li>
+<li><a href="https://www.lcsc.com/product-detail/Battery-Protection-ICs_C351410.html">DW01A Datasheet</a></li>
+<li><a href="https://www.lcsc.com/product-detail/Voltage-Regulators-Linear-Low-Drop-Out-LDO-Regulators_C6186.html">AMS1117-3.3 Datasheet</a></li>
+<li><a href="https://www.st.com/resource/en/datasheet/lis2dh12.pdf">LIS2DH12TR Datasheet</a></li>
+</ul>
+<h3 id="pcb-design-calculators">PCB Design Calculators<a class="headerlink" href="#pcb-design-calculators" title="Permanent link">&para;</a></h3>
+<ul>
+<li><strong><a href="http://saturnpcb.com/pcb_toolkit/">Saturn PCB Toolkit</a></strong> — trace width, via current, impedance calculations (free, Windows)</li>
+<li><strong><a href="https://jlcpcb.com/capabilities/pcb-capabilities">JLCPCB Capabilities</a></strong> — what JLCPCB can manufacture (minimum trace width, via size, etc.)</li>
+</ul>
+<h3 id="reference-board-designs">Reference Board Designs<a class="headerlink" href="#reference-board-designs" title="Permanent link">&para;</a></h3>
+<p>Study existing open-source designs to learn good practices. These are in the repo:</p>
+<ul>
+<li><code>reference-boards/esp32s3-ducky-epaper/</code> — ESP32-S3 with ePaper, very similar to Dilder</li>
+<li><code>reference-boards/esp32s3-basic-devboard/</code> — clean minimal ESP32-S3 reference design</li>
+<li><code>reference-boards/rp2040-minimal-jlcpcb/</code> — minimal MCU board targeting JLCPCB</li>
+</ul>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+  <script>var tabs=__md_get("__tabs");if(Array.isArray(tabs))e:for(var set of document.querySelectorAll(".tabbed-set")){var labels=set.querySelector(".tabbed-labels");for(var tab of tabs)for(var label of labels.getElementsByTagName("label"))if(label.innerText.trim()===tab){var input=document.getElementById(label.htmlFor);input.checked=!0;continue e}}</script>
+
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+    
+      
+      <nav class="md-footer__inner md-grid" aria-label="Footer" >
+        
+          
+          <a href="../../setup/dev-environment/" class="md-footer__link md-footer__link--prev" aria-label="Previous: Dev Environment">
+            <div class="md-footer__button md-icon">
+              
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+            </div>
+            <div class="md-footer__title">
+              <span class="md-footer__direction">
+                Previous
+              </span>
+              <div class="md-ellipsis">
+                Dev Environment
+              </div>
+            </div>
+          </a>
+        
+        
+          
+          <a href="../user-guide/" class="md-footer__link md-footer__link--next" aria-label="Next: User Guide: How to Play">
+            <div class="md-footer__title">
+              <span class="md-footer__direction">
+                Next
+              </span>
+              <div class="md-ellipsis">
+                User Guide: How to Play
+              </div>
+            </div>
+            <div class="md-footer__button md-icon">
+              
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11z"/></svg>
+            </div>
+          </a>
+        
+      </nav>
+    
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+        
+<div class="md-social">
+  
+    
+    
+    
+    
+    <a href="https://github.com/rompasaurus/dilder" target="_blank" rel="noopener" title="GitHub" class="md-social__link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M173.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M252.8 8C114.1 8 8 113.3 8 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C436.2 457.8 504 362.9 504 252 504 113.3 391.5 8 252.8 8M105.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"/></svg>
+    </a>
+  
+    
+    
+    
+    
+    <a href="https://discord.gg/PLACEHOLDER" target="_blank" rel="noopener" title="Discord" class="md-social__link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M492.5 69.8c-.2-.3-.4-.6-.8-.7-38.1-17.5-78.4-30-119.7-37.1-.4-.1-.8 0-1.1.1s-.6.4-.8.8c-5.5 9.9-10.5 20.2-14.9 30.6-44.6-6.8-89.9-6.8-134.4 0-4.5-10.5-9.5-20.7-15.1-30.6-.2-.3-.5-.6-.8-.8s-.7-.2-1.1-.2C162.5 39 122.2 51.5 84.1 69c-.3.1-.6.4-.8.7C7.1 183.5-13.8 294.6-3.6 404.2c0 .3.1.5.2.8s.3.4.5.6c44.4 32.9 94 58 146.8 74.2.4.1.8.1 1.1 0s.7-.4.9-.7c11.3-15.4 21.4-31.8 30-48.8.1-.2.2-.5.2-.8s0-.5-.1-.8-.2-.5-.4-.6-.4-.3-.7-.4c-15.8-6.1-31.2-13.4-45.9-21.9-.3-.2-.5-.4-.7-.6s-.3-.6-.3-.9 0-.6.2-.9.3-.5.6-.7c3.1-2.3 6.2-4.7 9.1-7.1.3-.2.6-.4.9-.4s.7 0 1 .1c96.2 43.9 200.4 43.9 295.5 0 .3-.1.7-.2 1-.2s.7.2.9.4c2.9 2.4 6 4.9 9.1 7.2.2.2.4.4.6.7s.2.6.2.9-.1.6-.3.9-.4.5-.6.6c-14.7 8.6-30 15.9-45.9 21.8-.2.1-.5.2-.7.4s-.3.4-.4.7-.1.5-.1.8.1.5.2.8c8.8 17 18.8 33.3 30 48.8.2.3.6.6.9.7s.8.1 1.1 0c52.9-16.2 102.6-41.3 147.1-74.2.2-.2.4-.4.5-.6s.2-.5.2-.8c12.3-126.8-20.5-236.9-86.9-334.5zm-302 267.7c-29 0-52.8-26.6-52.8-59.2s23.4-59.2 52.8-59.2c29.7 0 53.3 26.8 52.8 59.2 0 32.7-23.4 59.2-52.8 59.2m195.4 0c-29 0-52.8-26.6-52.8-59.2s23.4-59.2 52.8-59.2c29.7 0 53.3 26.8 52.8 59.2 0 32.7-23.2 59.2-52.8 59.2"/></svg>
+    </a>
+  
+    
+    
+    
+    
+    <a href="https://patreon.com/MchenrysDevelopment" target="_blank" rel="noopener" title="Patreon" class="md-social__link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M490 153.8c-.1-65.4-51-119-110.7-138.3-74.2-24-172-20.5-242.9 12.9C50.6 68.9 23.6 157.7 22.6 246.2 21.8 319 29 510.6 137.2 512c80.3 1 92.3-102.5 129.5-152.3 26.4-35.5 60.5-45.5 102.4-55.9 72-17.8 121.1-74.7 121-150z"/></svg>
+    </a>
+  
+    
+    
+    
+    
+    <a href="https://youtube.com/@rompasaurus" target="_blank" rel="noopener" title="YouTube" class="md-social__link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M549.7 124.1c-6.2-23.7-24.8-42.3-48.3-48.6C458.9 64 288.1 64 288.1 64S117.3 64 74.7 75.5c-23.5 6.3-42 24.9-48.3 48.6C15 167 15 256.4 15 256.4s0 89.4 11.4 132.3c6.3 23.6 24.8 41.5 48.3 47.8C117.3 448 288.1 448 288.1 448s170.8 0 213.4-11.5c23.5-6.3 42-24.2 48.3-47.8 11.4-42.9 11.4-132.3 11.4-132.3s0-89.4-11.4-132.3zM232.2 337.6V175.2l142.7 81.2z"/></svg>
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../../..", "features": ["navigation.tabs", "navigation.sections", "navigation.top", "navigation.footer", "search.suggest", "search.highlight", "content.tabs.link", "content.code.annotation", "content.code.copy"], "search": "../../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../../../assets/javascripts/bundle.79ae519e.min.js"></script>
+      
+        <script src="../../../javascripts/octopus-banner.js"></script>
+      
+    
+  </body>
+</html>
