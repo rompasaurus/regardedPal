@@ -147,7 +147,7 @@ Spelling and grammar are lightly cleaned for readability while preserving the or
 - **Output Tokens (est):** ~4,500
 - **Commit:** `0360ba9` — Build out full MkDocs website scaffold and dev tooling (Prompts 9–13)
 - **Files Created/Modified:**
-  - `website/dev.py` (created — CLI with subcommands: check, install, serve, build, deploy, clean, status; ANSI colour output with spinner; argparse; no external dependencies)
+  - `website/dev.py` (created — CLI with subcommands: check, install, serve, build, deploy, clean, status; ANSI color output with spinner; argparse; no external dependencies)
 
 ---
 
@@ -377,7 +377,7 @@ Spelling and grammar are lightly cleaned for readability while preserving the or
 - **Output Tokens (est):** ~25,000
 - **Commit:** `8f0df95` — Add C SDK dev environment, setup CLI, and first-time hardware guide
 - **Files Created/Modified:**
-  - `hardware-design/hardware-planning.md` (created — comprehensive enclosure planning document with TOC: component dimensions, button selection with cost breakdown, concept image links, enclosure constraints, CAD software comparison, step-by-step 3D modelling plan, printing service comparison with costs, prototype timeline)
+  - `hardware-design/hardware-planning.md` (created — comprehensive enclosure planning document with TOC: component dimensions, button selection with cost breakdown, concept image links, enclosure constraints, CAD software comparison, step-by-step 3D modeling plan, printing service comparison with costs, prototype timeline)
 
 ---
 
@@ -811,7 +811,7 @@ Spelling and grammar are lightly cleaned for readability while preserving the or
 
 ## Prompt #64
 - **Date/Time:** 2026-04-12
-- **Prompt:** "Ok the testing pulled screenshot for the website. I also need the devtool and the setup to have screenshots walkthrough as well and detailed documentation. Also scan code changes and ensure the tests are up to date."
+- **Prompt:** "Ok, the testing pulled screenshots for the website. I also need the devtool and the setup to have screenshot walkthroughs as well and detailed documentation. Also scan code changes and ensure the tests are up to date."
 - **Input Tokens (est):** ~50
 - **Output Tokens (est):** ~120,000
 - **Commit:** *(included in multi-commit push)*
@@ -869,7 +869,7 @@ Spelling and grammar are lightly cleaned for readability while preserving the or
 - **Output Tokens (est):** ~15,000
 - **Commit:** `d61b2ff` — Add 3D printing prototyping pipeline analysis
 - **Files Created/Modified:**
-  - `hardware-design/3d-printing-pipeline.md` (created — comprehensive 15-section analysis covering FDM/SLA/SLS/MJF technologies, 9 third-party services deep-dived with pricing, material guide, CAD software comparison, cost estimates specific to Dilder enclosure, 5 ranked viable options, decision framework, and scaling path to injection moulding)
+  - `hardware-design/3d-printing-pipeline.md` (created — comprehensive 15-section analysis covering FDM/SLA/SLS/MJF technologies, 9 third-party services deep-dived with pricing, material guide, CAD software comparison, cost estimates specific to Dilder enclosure, 5 ranked viable options, decision framework, and scaling path to injection molding)
 
 ---
 
@@ -1137,7 +1137,7 @@ Spelling and grammar are lightly cleaned for readability while preserving the or
   - `dev-setup/docker-compose.yml` (modified — 3 new build services)
   - `.gitignore` (modified — new build/lib entries)
   - `website/docs/javascripts/octopus-banner.js` (modified — 3 new quote arrays, labels, sources)
-  - `website/docs/stylesheets/extra.css` (modified — hungry pink, tired gray, slap happy teal)
+  - `website/docs/stylesheets/extra.css` (modified — hungry pink, tired gray, slap-happy teal)
 
 ---
 
@@ -1740,7 +1740,7 @@ Spelling and grammar are lightly cleaned for readability while preserving the or
 
 ## Prompt #140
 - **Date/Time:** 2026-04-14
-- **Prompt:** "OK I have the DollaTek 5-way joystick, the GY-NEO6MV2 NEO-6M GPS module, speakers, and HC-SR04. I want to set this up on a breadboard with the Waveshare 2.13 V3 display. Give me a proper wiring diagram for me to set this up proper to the Pico WH board. Add this to a hardware doc in the root of this project as an MD file."
+- **Prompt:** "OK I have the DollaTek 5-way joystick, the GY-NEO6MV2 NEO-6M GPS module, speakers, and HC-SR04. I want to set this up on a breadboard with the Waveshare 2.13 V3 display. Give me a proper wiring diagram for me to set this up properly to the Pico WH board. Add this to a hardware doc in the root of this project as an MD file."
 - **Input Tokens (est):** ~100
 - **Output Tokens (est):** ~20,000
 - **Files Created/Modified:**
@@ -1912,7 +1912,7 @@ Spelling and grammar are lightly cleaned for readability while preserving the or
 
 ## Prompt #149
 - **Date/Time:** 2026-04-15
-- **Prompt:** "I need to update the schematics get rid of the rp2040 use the esp32 add a parts list and wire up all the components on this if you can"
+- **Prompt:** "I need to update the schematics, get rid of the RP2040, use the ESP32, add a parts list, and wire up all the components on this if you can."
 - **Input Tokens (est):** ~50
 - **Output Tokens (est):** ~25,000
 - **Files Created/Modified:**
@@ -1926,7 +1926,7 @@ Spelling and grammar are lightly cleaned for readability while preserving the or
 
 ## Prompt #150
 - **Date/Time:** 2026-04-15
-- **Prompt:** "ok pull in some example schematics and kicad files in to a new example folder in hardware design that use the esp32 and somewhat similar functions find as many related examples as possible put them in their own folder and create an md file for each to describe the use of each design and origin and backstory and details and links and toc"
+- **Prompt:** "OK, pull in some example schematics and KiCad files into a new example folder in hardware design that use the ESP32 and somewhat similar functions. Find as many related examples as possible, put them in their own folder, and create an MD file for each to describe the use of each design and origin and backstory and details and links and TOC."
 - **Input Tokens (est):** ~80
 - **Output Tokens (est):** ~15,000
 - **Files Created/Modified:**
