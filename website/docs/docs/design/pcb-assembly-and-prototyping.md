@@ -8,6 +8,8 @@
 
 ## Table of Contents
 
+- [Visual BOM — Component Gallery](#visual-bom--component-gallery)
+
 1. [Provider Comparison](#1-provider-comparison)
 2. [JLCPCB — Detailed Pricing Breakdown](#2-jlcpcb--detailed-pricing-breakdown)
 3. [PCBWay — Detailed Pricing Breakdown](#3-pcbway--detailed-pricing-breakdown)
@@ -18,6 +20,117 @@
 8. [Open-Source Reference Designs](#8-open-source-reference-designs)
 9. [Recommended Manufacturing Path](#9-recommended-manufacturing-path)
 10. [Sources](#10-sources)
+
+---
+
+## Visual BOM — Component Gallery
+
+Every component on the Dilder board, with LCSC part numbers and per-unit pricing at qty 5. Images sourced from [LCSC](https://www.lcsc.com/).
+
+### Core MCU
+
+<figure>
+  <img src="../../assets/images/components/esp32-s3-wroom1-n16r8.jpg" width="200" />
+  <figcaption><strong>U1 — ESP32-S3-WROOM-1-N16R8</strong><br/>Dual-core Xtensa LX7 @ 240MHz, 512KB SRAM, 16MB flash, 8MB PSRAM, WiFi + BLE 5.0<br/>18×25.5mm module · <a href="https://www.lcsc.com/product-detail/C2913202.html">LCSC C2913202</a> · <strong>~$2.80</strong></figcaption>
+</figure>
+
+### Power Management
+
+<table>
+<tr>
+<td align="center" width="25%">
+<img src="../../assets/images/components/usb-c-16pin-connector.jpg" width="150" /><br/>
+<strong>J1 — USB-C 16-pin</strong><br/>
+Programming + charging input<br/>
+<a href="https://www.lcsc.com/product-detail/C2765186.html">C2765186</a> · <strong>$0.10</strong>
+</td>
+<td align="center" width="25%">
+<img src="../../assets/images/components/ss34-schottky-diode.jpg" width="150" /><br/>
+<strong>D1 — SS34 Schottky</strong><br/>
+USB/battery path selection (SMA)<br/>
+<a href="https://www.lcsc.com/product-detail/C8678.html">C8678</a> · <strong>$0.03</strong>
+</td>
+<td align="center" width="25%">
+<img src="../../assets/images/components/tp4056-charger-ic.jpg" width="150" /><br/>
+<strong>U2 — TP4056</strong><br/>
+1A LiPo charger IC (ESOP-8)<br/>
+<a href="https://www.lcsc.com/product-detail/C382139.html">C382139</a> · <strong>$0.07</strong>
+</td>
+<td align="center" width="25%">
+<img src="../../assets/images/components/dw01a-battery-protection.jpg" width="150" /><br/>
+<strong>U3 — DW01A</strong><br/>
+Battery over-discharge/charge protection (SOT-23)<br/>
+<a href="https://www.lcsc.com/product-detail/C351410.html">C351410</a> · <strong>$0.05</strong>
+</td>
+</tr>
+<tr>
+<td align="center">
+<img src="../../assets/images/components/fs8205a-mosfet.jpg" width="150" /><br/>
+<strong>Q1 — FS8205A</strong><br/>
+Dual MOSFET for protection (SOT-23-6)<br/>
+<a href="https://www.lcsc.com/product-detail/C908265.html">C908265</a> · <strong>$0.05</strong>
+</td>
+<td align="center">
+<img src="../../assets/images/components/ams1117-3v3-ldo.jpg" width="150" /><br/>
+<strong>U4 — AMS1117-3.3</strong><br/>
+1A LDO regulator, 3.3V (SOT-223)<br/>
+<a href="https://www.lcsc.com/product-detail/C6186.html">C6186</a> · <strong>$0.05</strong>
+</td>
+<td align="center">
+<img src="../../assets/images/components/jst-ph-2pin-battery.jpg" width="150" /><br/>
+<strong>J2 — JST PH 2.0mm 2-pin</strong><br/>
+LiPo battery connector (SMD)<br/>
+<a href="https://www.lcsc.com/product-detail/C131337.html">C131337</a> · <strong>$0.03</strong>
+</td>
+<td align="center"></td>
+</tr>
+</table>
+
+### Input
+
+<figure>
+  <img src="../../assets/images/components/alps-skrhabe010-joystick.jpg" width="200" />
+  <figcaption><strong>SW1 — SKRHABE010 (Alps Alpine)</strong><br/>5-way SMD joystick: UP/DOWN/LEFT/RIGHT + center push, 7.4×7.5×1.8mm<br/><a href="https://www.lcsc.com/product-detail/C139794.html">LCSC C139794</a> · <strong>$0.38</strong></figcaption>
+</figure>
+
+### Sensors
+
+<figure>
+  <img src="../../assets/images/components/mpu-6050-imu.jpg" width="200" />
+  <figcaption><strong>U5 — MPU-6050</strong><br/>6-axis accelerometer + gyroscope, I2C @ 0x68, QFN-24 (4×4mm), 3.3V<br/><a href="https://www.lcsc.com/product-detail/C24112.html">LCSC C24112</a> · <strong>$6.88</strong></figcaption>
+</figure>
+
+### Status LEDs
+
+<table>
+<tr>
+<td align="center" width="50%">
+<img src="../../assets/images/components/led-red-0805.jpg" width="150" /><br/>
+<strong>D2 — Red LED (0805)</strong><br/>
+Charging indicator (from TP4056 CHRG)<br/>
+<a href="https://www.lcsc.com/product-detail/C84256.html">C84256</a> · <strong>$0.01</strong>
+</td>
+<td align="center" width="50%">
+<img src="../../assets/images/components/led-green-0603.jpg" width="150" /><br/>
+<strong>D3 — Green LED (0603)</strong><br/>
+Charge complete indicator (from TP4056 STDBY)<br/>
+<a href="https://www.lcsc.com/product-detail/C72043.html">C72043</a> · <strong>$0.01</strong>
+</td>
+</tr>
+</table>
+
+### Passives (Not Pictured — Standard 0402 SMD)
+
+| Ref | Value | Purpose | LCSC # | Price |
+|-----|-------|---------|--------|-------|
+| R1 | 1.2kΩ | TP4056 charge current (~1A) | C25752 | $0.001 |
+| R2, R3 | 1kΩ | LED current limiting | C25585 | $0.001 |
+| R4, R5 | 10kΩ | I2C pull-ups (MPU-6050) | C25744 | $0.001 |
+| R6, R7 | 27Ω | USB D+/D- series resistors | — | $0.001 |
+| R8, R9 | 5.1kΩ | USB-C CC pins to GND | — | $0.001 |
+| R10 | 10kΩ | Pull-up/config | — | $0.001 |
+| C1, C2 | 15pF | Crystal load caps (if needed) | — | $0.002 |
+| C3–C9 | 100nF / 10µF | Decoupling + bulk filtering | C14663 / C19702 | $0.002–0.01 |
 
 ---
 
