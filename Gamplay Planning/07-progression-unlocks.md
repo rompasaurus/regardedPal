@@ -19,7 +19,7 @@
 ```c
 typedef enum {
     BOND_STRANGER,       // 0     XP  — Basic feeding, minimal dialogue
-    BOND_ACQUAINTANCE,   // 100   XP  — Petting response, more expressions
+    BOND_ACQUAINTANCE,   // 100   XP  — Comfort response, more expressions
     BOND_COMPANION,      // 500   XP  — Dialogue options, 1 decor slot
     BOND_FRIEND,         // 1500  XP  — Mini-games, nickname
     BOND_BEST_FRIEND,    // 4000  XP  — Full dialogue, 3 decor slots
@@ -63,7 +63,7 @@ typedef struct {
 
 static const xp_source_t XP_SOURCES[] = {
     { EVENT_FED,                5,   "Feed when hungry" },
-    { EVENT_PETTED,             2,   "Pet (touch)" },
+    { EVENT_PETTED,             2,   "Comfort (center button)" },
     { EVENT_PLAYED,            10,   "Play mini-game" },
     { EVENT_CLEANED,            5,   "Clean" },
     { EVENT_MEDICINE,           5,   "Give medicine" },
@@ -433,7 +433,7 @@ typedef struct {
 
 static const feature_gate_t FEATURE_GATES[] = {
     { "Basic feeding",         BOND_STRANGER,     -1 },
-    { "Petting response",      BOND_ACQUAINTANCE, -1 },
+    { "Comfort response",      BOND_ACQUAINTANCE, -1 },
     { "Dialogue options",      BOND_COMPANION,    -1 },
     { "First decor slot",      BOND_COMPANION,    -1 },
     { "Mini-games",            BOND_FRIEND,       -1 },

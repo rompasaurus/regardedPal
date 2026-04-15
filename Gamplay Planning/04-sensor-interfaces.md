@@ -31,20 +31,6 @@ typedef struct {
 #define LIGHT_DIM      1       // 10-100 lux
 #define LIGHT_DARK     0       // < 10 lux
 
-// ─── Touch (MPR121) ──────────────────────────────────────────
-typedef struct {
-    bool     zones[4];         // TOUCH_HEAD, TOUCH_LEFT, TOUCH_RIGHT, TOUCH_BACK
-    bool     any_zone_active;  // Convenience: OR of all zones
-    uint32_t hold_duration_ms; // How long any zone has been continuously held
-    uint8_t  tap_count;        // Rapid taps in last 2 seconds
-    bool     sustained;        // Hold > 5 seconds (comfort/purr threshold)
-} touch_data_t;
-
-#define TOUCH_HEAD   0
-#define TOUCH_LEFT   1
-#define TOUCH_RIGHT  2
-#define TOUCH_BACK   3
-
 // ─── Microphone (MAX9814 via ADC) ────────────────────────────
 typedef struct {
     uint16_t level;            // Current RMS level (12-bit ADC, 0-4095)
@@ -115,7 +101,6 @@ typedef struct {
 // ─── Combined Sensor Context ─────────────────────────────────
 typedef struct {
     light_data_t       light;
-    touch_data_t       touch;
     mic_data_t         mic;
     environment_data_t temperature;
     environment_data_t humidity;     // Same AHT20, split for clarity
@@ -143,7 +128,6 @@ typedef struct {
 
 typedef enum {
     SENSOR_LIGHT,
-    SENSOR_TOUCH,
     SENSOR_MIC,
     SENSOR_ENV,       // AHT20 (temp + humidity)
     SENSOR_ACCEL,
@@ -160,7 +144,6 @@ typedef struct {
 static const poll_schedule_t SCHEDULE_ACTIVE = {
     .intervals = {
         [SENSOR_LIGHT] = 10000,    // Every 10s
-        [SENSOR_TOUCH] = 100,      // Every 100ms (responsive petting)
         [SENSOR_MIC]   = 100,      // Every 100ms (volume tracking)
         [SENSOR_ENV]   = 60000,    // Every 60s
         [SENSOR_ACCEL] = 10000,    // Every 10s (read pedometer register)
@@ -172,7 +155,6 @@ static const poll_schedule_t SCHEDULE_ACTIVE = {
 static const poll_schedule_t SCHEDULE_SLEEP = {
     .intervals = {
         [SENSOR_LIGHT] = 60000,    // Every 60s (wake trigger check)
-        [SENSOR_TOUCH] = 0,        // Off (use interrupt instead)
         [SENSOR_MIC]   = 0,        // Off
         [SENSOR_ENV]   = 0,        // Off
         [SENSOR_ACCEL] = 0,        // Off (interrupt on motion)
@@ -185,7 +167,6 @@ static const poll_schedule_t SCHEDULE_SLEEP = {
 void sensor_init(sensor_manager_t *mgr) {
     // Probe I2C bus for each sensor
     mgr->sensor_present[SENSOR_LIGHT] = drv_light_probe();   // 0x23
-    mgr->sensor_present[SENSOR_TOUCH] = drv_touch_probe();   // 0x5A
     mgr->sensor_present[SENSOR_ENV]   = drv_env_probe();     // 0x38
     mgr->sensor_present[SENSOR_ACCEL] = drv_accel_probe();   // 0x18
     mgr->sensor_present[SENSOR_GPS]   = drv_gps_probe();     // 0x10
@@ -197,7 +178,6 @@ void sensor_init(sensor_manager_t *mgr) {
 
     // Configure sensors that were found
     if (mgr->sensor_present[SENSOR_LIGHT]) drv_light_configure();
-    if (mgr->sensor_present[SENSOR_TOUCH]) drv_touch_configure();
     if (mgr->sensor_present[SENSOR_ENV])   drv_env_configure();
     if (mgr->sensor_present[SENSOR_ACCEL]) drv_accel_configure_pedometer();
     if (mgr->sensor_present[SENSOR_GPS])   drv_gps_configure();
@@ -221,9 +201,6 @@ sensor_context_t sensor_poll(sensor_manager_t *mgr, uint32_t now) {
         switch (i) {
             case SENSOR_LIGHT:
                 drv_light_read(&mgr->current.light);
-                break;
-            case SENSOR_TOUCH:
-                drv_touch_read(&mgr->current.touch);
                 break;
             case SENSOR_MIC:
                 drv_mic_read(&mgr->current.mic);
@@ -274,54 +251,6 @@ void drv_light_read(light_data_t *out) {
     else if (new_lux > 100) out->zone = LIGHT_INDOOR;
     else if (new_lux > 10)  out->zone = LIGHT_DIM;
     else                     out->zone = LIGHT_DARK;
-}
-```
-
-### Touch Sensor (MPR121)
-
-```c
-// drv_touch.h
-bool  drv_touch_probe(void);
-void  drv_touch_configure(void);  // Set touch/release thresholds
-void  drv_touch_read(touch_data_t *out);
-
-// drv_touch.c
-void drv_touch_read(touch_data_t *out) {
-    uint16_t touched = mpr121_read_touched();  // 12-bit register
-
-    // Map physical electrodes to zones
-    // Electrode mapping depends on PCB layout / enclosure wiring
-    out->zones[TOUCH_HEAD]  = (touched & (1 << ELECTRODE_HEAD))  != 0;
-    out->zones[TOUCH_LEFT]  = (touched & (1 << ELECTRODE_LEFT))  != 0;
-    out->zones[TOUCH_RIGHT] = (touched & (1 << ELECTRODE_RIGHT)) != 0;
-    out->zones[TOUCH_BACK]  = (touched & (1 << ELECTRODE_BACK))  != 0;
-
-    out->any_zone_active = (touched & ZONE_MASK) != 0;
-
-    // Track hold duration
-    static uint32_t hold_start = 0;
-    if (out->any_zone_active) {
-        if (hold_start == 0) hold_start = time_mgr_now_ms();
-        out->hold_duration_ms = time_mgr_now_ms() - hold_start;
-        out->sustained = (out->hold_duration_ms > 5000);
-    } else {
-        hold_start = 0;
-        out->hold_duration_ms = 0;
-        out->sustained = false;
-    }
-
-    // Track rapid taps (for annoyance detection)
-    static uint32_t tap_times[8] = {0};
-    static uint8_t tap_idx = 0;
-    if (out->any_zone_active && out->hold_duration_ms < 200) {
-        tap_times[tap_idx++ % 8] = time_mgr_now_ms();
-    }
-    // Count taps in last 2 seconds
-    uint32_t now = time_mgr_now_ms();
-    out->tap_count = 0;
-    for (int i = 0; i < 8; i++) {
-        if (now - tap_times[i] < 2000) out->tap_count++;
-    }
 }
 ```
 
@@ -495,15 +424,6 @@ void sensor_classify_events(const sensor_context_t *prev,
         // (should be a separate event — EVENT_LIGHT_STARTLE)
     }
 
-    // ─── Touch events ────────────────────────────────────────
-    if (curr->touch.sustained && !prev->touch.sustained) {
-        event_fire(EVENT_TOUCH_SUSTAINED, NULL);
-    }
-    if (curr->touch.tap_count >= 6) {
-        // Rapid tapping — annoyed
-        event_fire(EVENT_SHAKEN, NULL);  // Reuse shake event for annoyance
-    }
-
     // ─── Mic events ──────────────────────────────────────────
     if (curr->mic.zone == MIC_YELL && prev->mic.zone < MIC_YELL) {
         event_fire(EVENT_LOUD_NOISE, NULL);
@@ -543,7 +463,7 @@ Reduce power by polling less frequently when not needed:
 ```c
 typedef enum {
     DUTY_ACTIVE,     // Normal gameplay — full polling
-    DUTY_IDLE,       // User hasn't interacted for 30+ min — reduce mic/touch
+    DUTY_IDLE,       // User hasn't interacted for 30+ min — reduce mic
     DUTY_SLEEP,      // Dilder sleeping — light sensor only for wake trigger
     DUTY_HUNT,       // Treasure hunt — GPS + mag at full rate, reduce others
 } duty_mode_t;

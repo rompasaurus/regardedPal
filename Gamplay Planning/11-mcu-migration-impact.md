@@ -560,7 +560,7 @@ idf_component_register(
 
 # sensor/CMakeLists.txt:
 idf_component_register(
-    SRCS "sensor.c" "drv_light.c" "drv_touch.c" "drv_mic.c"
+    SRCS "sensor.c" "drv_light.c" "drv_mic.c"
          "drv_env.c" "drv_accel.c" "drv_gps.c" "drv_mag.c"
     INCLUDE_DIRS "."
     REQUIRES "driver"    # I2C, ADC, GPIO drivers
@@ -680,7 +680,6 @@ hal/esp32s3/              # ESP-IDF implementations
 
 sensor/                   # Sensor protocols (platform-agnostic via hal_i2c)
     drv_light.c           # Uses hal_i2c_read/write — same code on both
-    drv_touch.c
     drv_accel.c
     ...
 
@@ -702,7 +701,7 @@ With this structure, migrating to ESP32-S3 means:
 |--------|-------|--------|-------|
 | `game/` (all gameplay) | 12 files | **None** | Pure logic, zero platform calls |
 | `hal/` (new abstraction) | ~12 files | **Medium** | Write thin wrappers — mostly boilerplate |
-| `sensor/drv_*.c` | 7 drivers | **Low** | If using HAL: no changes. If drivers call SDK directly: rewrite I2C calls. |
+| `sensor/drv_*.c` | 6 drivers | **Low** | If using HAL: no changes. If drivers call SDK directly: rewrite I2C calls. |
 | `ui/` (rendering) | 5 files | **Low** | SPI display writes go through HAL. Drawing math unchanged. |
 | `main.c` (entry point) | 1 file | **Low** | `main()` → `app_main()`, add FreeRTOS task creation |
 | `persist.c` (flash) | 1 file | **Medium** | LittleFS mount API differs. Save/load struct unchanged. |

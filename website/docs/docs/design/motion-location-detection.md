@@ -115,7 +115,7 @@ ESP32-S3 (deep sleep, 10uA)     LIS2DH12 (pedometer active, 2uA)
 
 The LIS2DH12 has hardware **click/double-click detection** on all three axes:
 
-- **Single tap** — user taps the device (e.g. "pet the octopus")
+- **Single tap** — user taps the device (e.g. "interact with the octopus")
 - **Double tap** — user double-taps (e.g. "feed the octopus")
 - **Shake** — high-g activity on multiple axes (e.g. "wake up!" or "you're scaring me")
 

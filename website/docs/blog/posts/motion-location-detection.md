@@ -28,7 +28,7 @@ But the price isn't the interesting part. The LIS2DH12 has a **built-in hardware
 
 The chip also provides:
 
-- **Tap and double-tap detection** — pet the octopus with a single tap, feed it with a double-tap
+- **Tap and double-tap detection** — interact with a single tap, feed it with a double-tap
 - **Activity/inactivity interrupts** — the device knows when it's been picked up or set down, no polling required
 - **6D orientation detection** — which face is pointing up (face-down could mean sleep mode)
 - **Free-fall detection** — "You dropped me!" before impact

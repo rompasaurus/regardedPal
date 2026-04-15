@@ -137,7 +137,6 @@ game_loop ──► sensor_manager ──► [I2C drivers, ADC]
   ┌─── SENSORS ──────────────────────────────────────────────────┐
   │                                                               │
   │  light ─────────────┐                                         │
-  │  touch ─────────────┤                                         │
   │  mic_level ─────────┤                                         │
   │  temperature ───────┼──► sensor_context_t ──┐                 │
   │  humidity ──────────┤                       │                 │
@@ -321,7 +320,6 @@ dev-setup/dilder-game/
 │   ├── sensor.h                    # Unified sensor context API
 │   ├── sensor.c                    # Poll orchestration, event classification
 │   ├── drv_light.h / drv_light.c   # BH1750 driver
-│   ├── drv_touch.h / drv_touch.c   # MPR121 driver
 │   ├── drv_mic.h / drv_mic.c       # MAX9814 ADC processing
 │   ├── drv_env.h / drv_env.c       # AHT20 driver
 │   ├── drv_accel.h / drv_accel.c   # LIS2DH12TR driver + pedometer

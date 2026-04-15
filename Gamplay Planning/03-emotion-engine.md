@@ -193,9 +193,8 @@ float eval_chaotic(const stats_t *s, const sensor_context_t *ctx,
     int event_count = event_count_recent(ev, 30000);
     if (event_count >= 5) return 0.8f;  // Lots happening at once
 
-    // Shaken + loud noise + touch simultaneously
-    if (ctx->accel.shaking && ctx->mic.level > MIC_YELL_THRESHOLD &&
-        ctx->touch.any_zone_active) return 0.9f;
+    // Shaken + loud noise simultaneously
+    if (ctx->accel.shaking && ctx->mic.level > MIC_YELL_THRESHOLD) return 0.9f;
 
     return 0.0f;
 }
@@ -401,9 +400,9 @@ typedef struct {
     float talking_happy;        // Sustained mid → +happy, +intelligence
     float silence_lonely;       // Long silence → +sad, +homesick
 
-    // Touch
-    float pet_happy;            // Gentle touch → +happy weight
-    float rapid_tap_annoy;      // Rapid tapping → +angry weight
+    // Interaction
+    float comfort_happy;        // Center button comfort → +happy weight
+    float accel_tap_annoy;      // Rapid accelerometer taps → +angry weight
 
     // Motion
     float walking_happy;        // Steps → +happy, +excited weight
@@ -530,9 +529,6 @@ void on_sensor_event(event_type_t type) {
             break;
         case EVENT_LOUD_NOISE:
             emotion_force(&game.emotion, EMOTION_EXCITED, 5000);  // Startled
-            break;
-        case EVENT_TOUCH_SUSTAINED:
-            emotion_force(&game.emotion, EMOTION_CHILL, 10000);   // Purring
             break;
     }
 }

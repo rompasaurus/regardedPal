@@ -49,7 +49,7 @@ It's only 2mm x 2mm — about the size of a sesame seed — yet inside it contai
 
 In the Dilder, it provides:
 - **Step counting** — tracks how many steps the user takes (pet engagement metric)
-- **Tap/click detection** — tap to pet, double-tap to feed
+- **Tap/click detection** — tap to interact, double-tap to feed
 - **Free-fall detection** — "you dropped me!" emotional reaction
 - **Orientation sensing** — face-down triggers sleep mode
 - **Wake-from-sleep** — any motion wakes the ESP32 from deep sleep
@@ -172,7 +172,7 @@ These features run inside the LIS2DH12's embedded logic — no ESP32 processing 
 | Feature | How It Works | Dilder Use |
 |---------|-------------|------------|
 | **Pedometer** | Counts periodic acceleration patterns matching human gait (configurable thresholds and debounce). Fires an interrupt per step. | Step counting for pet engagement metric |
-| **Single-click** | Detects a sharp acceleration spike above a threshold on any axis, with configurable time window. | Tap to pet |
+| **Single-click** | Detects a sharp acceleration spike above a threshold on any axis, with configurable time window. | Tap to interact |
 | **Double-click** | Two single-clicks within a configurable time window. | Double-tap to feed |
 | **Free-fall** | All three axes simultaneously read near 0g (below threshold for configured duration). | "You dropped me!" reaction |
 | **6D Orientation** | Determines which of the 6 device faces is pointing up using gravity vector direction. | Face-down = sleep mode |

@@ -44,20 +44,18 @@
     - [7.1 Feeding](#71-feeding)
     - [7.2 Cleaning](#72-cleaning)
     - [7.3 Playing](#73-playing)
-    - [7.4 Petting](#74-petting)
-    - [7.5 Medicine](#75-medicine)
-    - [7.6 Scolding & Discipline](#76-scolding--discipline)
-    - [7.7 Sleep](#77-sleep)
+    - [7.4 Medicine](#74-medicine)
+    - [7.5 Scolding & Discipline](#75-scolding--discipline)
+    - [7.6 Sleep](#76-sleep)
 - [8. The Daily Rhythm](#8-the-daily-rhythm)
 
 ### IV. The Physical World
 
 - [9. Sensor Interactions](#9-sensor-interactions)
-    - [9.1 Touch Zones](#91-touch-zones)
-    - [9.2 Voice & Sound](#92-voice--sound)
-    - [9.3 Light & Darkness](#93-light--darkness)
-    - [9.4 Temperature & Humidity](#94-temperature--humidity)
-    - [9.5 Motion & Movement](#95-motion--movement)
+    - [9.1 Voice & Sound](#91-voice--sound)
+    - [9.2 Light & Darkness](#92-light--darkness)
+    - [9.3 Temperature & Humidity](#93-temperature--humidity)
+    - [9.4 Motion & Movement](#94-motion--movement)
 - [10. Step Tracking & Activity](#10-step-tracking--activity)
     - [10.1 Daily Step Targets](#101-daily-step-targets)
     - [10.2 Weekly Targets](#102-weekly-targets)
@@ -353,7 +351,7 @@ Teary eyes with pixel tear drops falling, a wobbly trying-not-to-cry mouth, and 
 > "I miss the armchair..."
 
 **Triggered by:** Away from home WiFi for 4+ hours, or briefly when arriving at a completely new location.
-**Fix:** Go home. Or pet and comfort — the back touch zone reduces Homesick faster.
+**Fix:** Go home. Or comfort with the center button — interaction reduces Homesick faster.
 
 ---
 
@@ -472,24 +470,7 @@ Open the menu → **Play**:
 
 Mini-games are the primary way to manage weight and boost happiness simultaneously.
 
-### 7.4 Petting
-
-Touch any zone on the device case, or press the ACTION button:
-- +10 Happiness per pet
-- +2 Bond XP
-- 5-second cooldown
-- **Sustained hold (5+ seconds):** Maximum comfort. Dilder enters a "purring" happy animation.
-- **Rapid tapping (6+ taps in 2 seconds):** Annoyance → briefly triggers Angry.
-
-**Touch zones react differently:**
-| Zone | Location | Effect |
-|------|----------|--------|
-| Head | Top of device | Petting — +happiness, calming |
-| Left side | Left panel | Tickle — brief Excited/Slap Happy |
-| Right side | Right panel | Tickle — brief Excited/Slap Happy |
-| Back | Rear of device | Comfort — reduces Sad/Homesick faster |
-
-### 7.5 Medicine
+### 7.4 Medicine
 
 Open the menu → **Care** → **Medicine**:
 - Only available when Health < 30 (the menu item is hidden otherwise)
@@ -497,7 +478,7 @@ Open the menu → **Care** → **Medicine**:
 - 120-second cooldown
 - Forces brief Sad emotion (medicine is yucky)
 
-### 7.6 Scolding & Discipline
+### 7.5 Scolding & Discipline
 
 Dilder sometimes misbehaves — refusing food, making a mess, acting out. A prompt appears: **"Dilder is being defiant!"**
 
@@ -510,7 +491,7 @@ You have 60 seconds to respond:
 
 4 discipline windows open per life stage. 100% discipline at a stage transition gives the best evolution path.
 
-### 7.7 Sleep
+### 7.6 Sleep
 
 Dilder sleeps when:
 - **Auto-sleep:** Ambient light < 10 lux AND (energy < 20 OR it's after 10pm). Dilder shows a drowsy animation, then falls asleep after 30 seconds.
@@ -575,18 +556,7 @@ During sleep:
 
 Dilder doesn't just live on a screen — it senses the real world around it.
 
-### 9.1 Touch Zones
-
-The device case has 4 capacitive touch zones (MPR121 sensor):
-
-| Zone | Location | Short Touch | Sustained Hold (5s+) | Rapid Tapping |
-|------|----------|------------|---------------------|---------------|
-| **Head** | Top | Pet (+happiness) | Maximum comfort, "purr" animation | Annoyance → Angry |
-| **Left** | Left panel | Tickle → Excited | Comfort | Annoyance → Angry |
-| **Right** | Right panel | Tickle → Excited | Comfort | Annoyance → Angry |
-| **Back** | Rear | Comfort (+reduces Sad) | Deep comfort | Annoyance → Angry |
-
-### 9.2 Voice & Sound
+### 9.1 Voice & Sound
 
 The microphone (MAX9814) detects volume and patterns — not words (no speech recognition on the microcontroller):
 
@@ -600,7 +570,7 @@ The microphone (MAX9814) detects volume and patterns — not words (no speech re
 | **Music** | Sustained varied signal | Chill mood boost |
 | **Whispering** | Just above noise floor | Secret/intimate interaction, +Bond |
 
-### 9.3 Light & Darkness
+### 9.2 Light & Darkness
 
 The BH1750 light sensor reads ambient light:
 
@@ -613,7 +583,7 @@ The BH1750 light sensor reads ambient light:
 | **Sudden bright flash** | Delta > 300 in 5s | Startled reaction |
 | **Dark but awake** | < 10 for 5+ min, energy > 50 | Scared / Homesick |
 
-### 9.4 Temperature & Humidity
+### 9.3 Temperature & Humidity
 
 The AHT20 sensor reads the environment:
 
@@ -626,7 +596,7 @@ The AHT20 sensor reads the environment:
 | **Very dry** | < 30% RH | Uncomfortable, "skin drying out" dialogue |
 | **Temperature swing** | > 5C change in 10 min | Confused / Chaotic reaction |
 
-### 9.5 Motion & Movement
+### 9.4 Motion & Movement
 
 The LIS2DH12TR accelerometer tracks:
 
@@ -818,7 +788,7 @@ A cloak, dim eyes, stoic presence. Rare but profound dialogue.
 > "..."
 > (Abyssal Hermit speaks only when it matters.)
 
-**How to evolve:** High discipline through correct scolding, but low total interactions. Feed and maintain, but don't overindulge in play or petting.
+**How to evolve:** High discipline through correct scolding, but low total interactions. Feed and maintain, but don't overindulge in play.
 
 ### 13.5 Coral Dancer
 **Requirements:** High happiness + lots of music/singing exposure + creative
@@ -866,7 +836,7 @@ Every interaction earns Bond XP. Your bond level determines which features are a
 | Level | Name | XP | Unlocks |
 |-------|------|-----|---------|
 | 1 | **Stranger** | 0 | Basic feeding, minimal dialogue |
-| 2 | **Acquaintance** | 100 | Petting response, more expressions |
+| 2 | **Acquaintance** | 100 | Tap response, more expressions |
 | 3 | **Companion** | 500 | Dialogue options, 1st decor slot |
 | 4 | **Friend** | 1,500 | Mini-games, nickname, treats |
 | 5 | **Best Friend** | 4,000 | Full dialogue tree, 3 decor slots |

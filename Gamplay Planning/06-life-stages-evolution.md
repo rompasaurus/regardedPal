@@ -46,7 +46,7 @@ typedef struct {
     evolution_form_t adult_form;          // Determined at adolescent → adult
 
     // Egg-specific
-    uint16_t        hatch_progress;       // 0-100. Touch/warmth fills this.
+    uint16_t        hatch_progress;       // 0-100. Tap interaction + warmth fills this.
 
     // Evolution accumulators (tracked across stages)
     uint16_t        total_care_quality;   // Inverse of care_mistakes (higher = better)
@@ -100,7 +100,7 @@ static const stage_transition_t TRANSITIONS[] = {
 ```c
 bool cond_egg_hatch(const life_state_t *life, const stats_t *stats,
                     const game_time_t *gt) {
-    // Hatch when progress reaches 100 (filled by touch and warmth)
+    // Hatch when progress reaches 100 (filled by accelerometer taps and warmth)
     return life->hatch_progress >= 100;
 }
 
@@ -195,7 +195,7 @@ void life_stage_check(life_state_t *life, const stats_t *stats,
     // Increment age
     life->age_seconds++;
 
-    // Egg special: accumulate hatch progress from touch/warmth
+    // Egg special: accumulate hatch progress from taps/warmth
     if (life->stage == LIFE_STAGE_EGG) {
         egg_progress_update(life);
     }
@@ -340,14 +340,15 @@ void life_accumulate_stats(life_state_t *life, const stats_t *stats) {
 
 ```c
 void egg_progress_update(life_state_t *life) {
-    // Touch advances hatch progress
-    if (game.sensor.touch.any_zone_active) {
-        life->hatch_progress += 2;  // ~50 seconds of touch to hatch
+    // Accelerometer tap detection advances hatch progress
+    // (LIS2DH12 hardware tap/double-tap interrupt)
+    if (game.sensor.accel.picked_up || game.sensor.accel.shaking) {
+        life->hatch_progress += 2;  // Tapping/shaking the egg
     }
 
-    // Warmth (comfortable temperature) adds progress passively
+    // Warmth (comfortable temperature from AHT20) adds progress passively
     if (game.sensor.temperature.comfort_zone == COMFORT_GOOD) {
-        life->hatch_progress += 1;  // Slow passive progress
+        life->hatch_progress += 1;  // Slow passive progress from warmth
     }
 
     // Talking to the egg

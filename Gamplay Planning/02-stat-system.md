@@ -195,7 +195,7 @@ typedef enum {
     CARE_FEED_TREAT,    // +5 hunger, +25 happiness, +3 weight (rare/unlockable)
     CARE_CLEAN,         // +40 hygiene
     CARE_MEDICINE,      // +20 health (only when sick, health < 30)
-    CARE_PET,           // +10 happiness (touch sensor or button)
+    CARE_PET,           // +10 happiness (center button)
     CARE_PLAY,          // +20 happiness, -10 energy, -1 weight
     CARE_TICKLE,        // +5 happiness (quick)
     CARE_SCOLD,         // +25 discipline (if misbehaving), else -10 happiness

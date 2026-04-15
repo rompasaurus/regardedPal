@@ -128,7 +128,6 @@ typedef struct {
 
 // Poll rates defined as tick divisors
 #define TICK_RATE_INPUT       1     // Every tick   (1s)   — button responsiveness
-#define TICK_RATE_TOUCH      10     // Every 10s           — touch zone check
 #define TICK_RATE_SOUND       1     // Every tick   (1s)   — mic level sampling
 #define TICK_RATE_LIGHT      10     // Every 10s           — ambient light
 #define TICK_RATE_TEMP       60     // Every 60s           — temperature/humidity
@@ -210,7 +209,7 @@ typedef enum {
 │  MENU  │           │   │      ┌────────────┐          │
 │        │───────────┘   │      │  SLEEPING  │──────────┘
 │ back   │  menu close   │      │            │  wake trigger:
-└────────┘               │      └────────────┘  light/touch/alarm
+└────────┘               │      └────────────┘  light/button/alarm
                          │
          treasure spawn  │   stat event / evolution
          ┌───────────────┘   ┌──────────────────────────┐
@@ -318,9 +317,6 @@ bool sensor_wake_trigger(sensor_context_t *ctx) {
     // Bright light (curtains opened, lamp on)
     if (ctx->light.delta_lux > 300) return true;
 
-    // Touch (user picks up device)
-    if (ctx->touch.any_zone_active) return true;
-
     // Loud noise
     if (ctx->mic.level > MIC_YELL_THRESHOLD) return true;
 
@@ -342,7 +338,7 @@ void enter_low_power(void) {
     sensor_set_duty_cycle(DUTY_SLEEP);   // Light sensor only, every 60s
     // Display shows sleeping animation (static, no refresh needed)
     // RP2040 enters light sleep (WFI) between tick intervals
-    // Wake on: GPIO interrupt (button/touch) OR RTC alarm
+    // Wake on: GPIO interrupt (button) OR RTC alarm
     __wfi();  // Wait for interrupt
 }
 ```
@@ -363,7 +359,7 @@ typedef enum {
 
     // Care events
     EVENT_FED,                  // User fed Dilder
-    EVENT_PETTED,               // User petted (touch sensor)
+    EVENT_PETTED,               // User comforted (center button)
     EVENT_CLEANED,              // User cleaned
     EVENT_PLAYED,               // Mini-game completed
     EVENT_SCOLDED,              // User scolded (button or yell)
@@ -374,7 +370,6 @@ typedef enum {
     EVENT_TALKING,              // Sustained moderate mic input
     EVENT_SINGING,              // Rhythmic mic pattern detected
     EVENT_SILENCE_LONG,         // No mic input for 30+ min
-    EVENT_TOUCH_SUSTAINED,      // 5+ second hold on touch zone
     EVENT_SHAKEN,               // High-frequency accelerometer
     EVENT_DROPPED,              // Free-fall detected
     EVENT_PICKED_UP,            // Orientation change from resting
@@ -470,7 +465,7 @@ void event_fire(event_type_t type, const event_data_t *data) {
 ```
 EVENT_STAT_CRITICAL     → emotion_engine, dialogue, ui
 EVENT_FED               → progression (XP), emotion_engine, dialogue
-EVENT_PETTED            → progression (XP), emotion_engine, stat_system (+happiness)
+EVENT_PETTED            → progression (XP), emotion_engine, stat_system (+happiness) [center button]
 EVENT_STEP_MILESTONE    → progression (XP), dialogue, decor (unlock check)
 EVENT_NEW_LOCATION      → progression (XP), dialogue, treasure (spawn chance)
 EVENT_STAGE_TRANSITION  → dialogue (vocabulary change), decor (slot unlock),

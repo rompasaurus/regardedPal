@@ -83,7 +83,7 @@ Dilder is not just a Tamagotchi clone. It is a **physical companion** that bridg
 
 Each tick (configurable, default 60 seconds):
 1. Decay stats (hunger, happiness, energy, hygiene)
-2. Read sensor inputs (light, sound, motion, touch, temp)
+2. Read sensor inputs (light, sound, motion, temp)
 3. Evaluate emotional state based on stats + sensor context
 4. Update display if state changed
 5. Check for trigger events (thresholds, time-based, environmental)
@@ -92,7 +92,7 @@ Each tick (configurable, default 60 seconds):
 ### The Engagement Loop (Hourly/Session)
 
 1. User checks on Dilder → sees current state
-2. Takes an action (feed, pet, play, talk)
+2. Takes an action (feed, interact, play, talk)
 3. Sees immediate response (mood shift, animation, dialogue)
 4. Gets feedback on progress (XP, stat bars, unlock hints)
 5. Leaves with anticipation (what will happen next? will it evolve?)
@@ -106,7 +106,7 @@ Each tick (configurable, default 60 seconds):
 | Stat | Range | Decay Rate | Refill Method | Critical Threshold |
 |------|-------|-----------|---------------|-------------------|
 | **Hunger** | 0-100 | -1/10min | Feed action | <20 → Hungry mood |
-| **Happiness** | 0-100 | -1/15min | Pet, play, talk, walk | <20 → Sad mood |
+| **Happiness** | 0-100 | -1/15min | Interact, play, talk, walk | <20 → Sad mood |
 | **Energy** | 0-100 | -1/12min (awake) | Sleep | <15 → Tired mood |
 | **Hygiene** | 0-100 | -1/30min | Clean action | <25 → Uncomfortable |
 | **Health** | 0-100 | Static unless neglected | Maintain other stats | <30 → Sick |
@@ -166,7 +166,7 @@ EMOTION = f(hunger, happiness, energy, hygiene, health,
 | **Chill** | All stats > 60, calm environment | Low noise, comfortable temp |
 | **Lazy** | Energy 15-30, no interaction for 2+ hours | Overfed (weight high) |
 | **Fat** | Weight > threshold (overfed) | Happiness high + hunger full |
-| **Chaotic** | Rapidly changing inputs, conflicting stats | Shaken + loud noise + touch |
+| **Chaotic** | Rapidly changing inputs, conflicting stats | Shaken + loud noise + tap |
 | **Weird** | Random trigger (5% chance per tick if bored) | Low interaction + moderate stats |
 | **Unhinged** | Health < 20, multiple stats critical | Extreme neglect |
 | **Slap Happy** | Happiness > 90 after being < 30 | Major recovery event |
@@ -181,7 +181,7 @@ EMOTION = f(hunger, happiness, energy, hygiene, health,
 | **Bright light** | +energy (morning), forced awake if sleeping |
 | **Darkness** | Triggers tiredness, enables sleep |
 | **Loud noise** | Startled → brief Excited or Angry; sustained → Annoyed |
-| **Gentle touch** | +happiness, calming effect |
+| **Gentle interaction** | +happiness, calming effect |
 | **Rapid shaking** | Angry or Chaotic; if playful context → Excited |
 | **Cold temperature** | Uncomfortable → Sad; extreme → Sick |
 | **Hot temperature** | Uncomfortable → Angry; octopus prefers cool |
@@ -213,7 +213,7 @@ Duration: 2-3 frames (~8-12 seconds on e-ink)
 | **B (Back)** | Cancel / dismiss | Toggle backlight | — |
 | **Up** | Scroll up / navigate | — | — |
 | **Down** | Scroll down / navigate | — | — |
-| **C (Action)** | Context action (feed/pet/play) | Scold | Quick status view |
+| **C (Action)** | Context action (feed/interact/play) | Scold | Quick status view |
 
 ### Menu System
 
@@ -258,19 +258,6 @@ Scolding serves the **discipline** function (from Tamagotchi research):
 ---
 
 ## 6. User Interactions — Physical (Sensors)
-
-### Touch / Petting (MPR121 Capacitive Touch)
-
-Multiple touch zones on the octopus enclosure:
-
-| Zone | Touch Effect | Location on Case |
-|------|-------------|-----------------|
-| **Head** | +happiness (petting), calming | Top of device |
-| **Side (left)** | Tickle → brief Excited/Slap Happy | Left panel |
-| **Side (right)** | Tickle → brief Excited/Slap Happy | Right panel |
-| **Back** | Comfort → reduces Sad/Homesick faster | Rear of device |
-| **Sustained hold** | Maximum comfort. Dilder "purrs" (happy animation) | Any zone, 5+ seconds |
-| **Rapid tapping** | Annoyance → Angry if overdone | Any zone |
 
 ### Microphone Interactions (MAX9814 Analog Mic)
 
@@ -377,7 +364,7 @@ Using WiFi geolocation (free, no extra hardware):
 
 ```
 Stage 1: EGG          (Age 0-1 day)
-   │ Hatches after warmth (touch), patience, gentle interaction
+   │ Hatches after warmth (AHT20 temperature sensor), patience, gentle interaction
    ▼
 Stage 2: HATCHLING    (Age 1-3 days)
    │ Tiny octopus, very needy, limited expressions
@@ -425,12 +412,12 @@ The adult form Dilder evolves into depends on how it was raised. Inspired by Tam
 
 | Stage | Primary Need | Unique Mechanic | Failure Consequence |
 |-------|-------------|-----------------|-------------------|
-| **Egg** | Warmth (touch) | Must be held/touched periodically | Delayed hatching |
+| **Egg** | Warmth (AHT20 temperature sensor) | Must be kept warm periodically | Delayed hatching |
 | **Hatchling** | Constant feeding | Cries every 3 minutes if hungry | Care mistakes accumulate fast |
 | **Juvenile** | Exploration | Wants to go to new places | Becomes Homesick/bored |
 | **Adolescent** | Discipline + Freedom balance | Rebels, tests limits | Evolves into lesser adult form |
 | **Adult** | Maintenance + Activity | Self-sufficient but still needs bond | Gradual happiness decline |
-| **Elder** | Comfort + Routine | Prefers familiar locations, gentle touch | Accelerated aging |
+| **Elder** | Comfort + Routine | Prefers familiar locations, gentle interaction | Accelerated aging |
 
 ---
 
@@ -441,7 +428,7 @@ The adult form Dilder evolves into depends on how it was raised. Inspired by Tam
 | XP Source | Amount | Category |
 |----------|--------|----------|
 | Feed when hungry | +5 | Care |
-| Pet (touch) | +2 | Bond |
+| Tap (interact) | +2 | Bond |
 | Play mini-game | +10 | Bond |
 | Walk 1,000 steps | +15 | Fitness |
 | Visit new location | +25 | Exploration |
@@ -456,7 +443,7 @@ The adult form Dilder evolves into depends on how it was raised. Inspired by Tam
 | Bond Level | XP Required | Unlocks |
 |-----------|-------------|---------|
 | **1: Stranger** | 0 | Basic feeding, minimal dialogue |
-| **2: Acquaintance** | 100 | Petting response, more expressions |
+| **2: Acquaintance** | 100 | Tap response, more expressions |
 | **3: Companion** | 500 | Dialogue options, 1 decor slot |
 | **4: Friend** | 1,500 | Mini-games, nickname feature |
 | **5: Best Friend** | 4,000 | Full dialogue tree, 3 decor slots |
@@ -559,7 +546,7 @@ Achievements provide one-time rewards and visible badges:
 | When visiting new location | "Whoa, where are we? Everything's different here!" |
 | When temperature drops | "Brrr... can you put me somewhere warmer?" |
 | After being yelled at | "...that was loud. Are you okay?" |
-| After gentle sustained petting | "Mmm... keep doing that. Eight arms of relaxation." |
+| After gentle sustained interaction | "Mmm... keep doing that. Eight arms of relaxation." |
 | When overfed | "I can't... eat... another... *burp*" |
 | When all stats are perfect | "You know what? Life is good. Really good." |
 | At night, refusing sleep | "Five more minutes? The dark is so... dark." |
@@ -948,7 +935,6 @@ Steps don't just give rewards — they continuously affect Dilder's mood:
 | Component | Part | Interface | Cost (USD) | Priority |
 |-----------|------|-----------|-----------|----------|
 | **Accelerometer/Pedometer** | LIS2DH12TR | I2C (0x18) | ~$0.46 | High |
-| **Capacitive Touch** | MPR121 (12-channel) | I2C (0x5A) | ~$4 | High |
 | **Ambient Light** | BH1750 | I2C (0x23) | ~$2 | High |
 | **Microphone** | MAX9814 (analog) | ADC (GP26) | ~$4 | High |
 | **Temp/Humidity** | AHT20 | I2C (0x38) | ~$0.43 | Medium |
@@ -962,8 +948,8 @@ Steps don't just give rewards — they continuously affect Dilder's mood:
 
 | Tier | Components | Total Cost |
 |------|-----------|-----------|
-| **Essential** | LIS2DH12TR + MPR121 + BH1750 + MAX9814 + Battery + TP4056 | **~$16.96** |
-| **Recommended** | Essential + AHT20 | **~$17.39** |
+| **Essential** | LIS2DH12TR + BH1750 + MAX9814 + Battery + TP4056 | **~$12.96** |
+| **Recommended** | Essential + AHT20 | **~$13.39** |
 | **Explorer** | Recommended + QMC5883L (compass, WiFi/BLE location) | **~$24.96** |
 | **Full** | Explorer + APDS-9960 + LIS3MDL upgrade | **~$33.96** |
 
@@ -976,7 +962,6 @@ Pico W I2C0 (GP4=SDA, GP5=SCL)
   ├── 0x10  PA1010D (GPS)
   ├── 0x23  BH1750  (Light)
   ├── 0x39  APDS-9960 (Gesture)
-  ├── 0x5A  MPR121  (Touch)
   ├── 0x6A  LSM6DSO (Accel/Gyro/Pedometer)
   └── 0x38  AHT20   (Temp/Humidity)
 
@@ -992,7 +977,6 @@ All sensors on a single I2C bus with no address conflicts. Pico W's I2C1 availab
 | Pico W (WiFi off) | 30 | 0.8 |
 | E-ink display | 5 (refresh) / 0 (static) | 0 |
 | LIS2DH12TR (pedometer mode) | 0.02 | 0.003 |
-| MPR121 | 0.03 | 0.003 |
 | BH1750 | 0.12 | 0.01 |
 | MAX9814 | 3.0 | 0 (power gate) |
 | AHT20 | 0.023 | 0.00025 |
@@ -1124,7 +1108,7 @@ Key differences from Tamagotchi:
 - **Voice recognition**: Microphone teaches dogs their name and tricks ("sit," "roll over"). Adapted to multiple languages and accents.
 - **23.96 million copies sold** — demonstrated massive market for interactive pet simulation.
 
-**Relevance to Dilder**: The capacitive touch zones directly mirror Nintendogs' touch interaction model. The voice element validates mic input as engaging.
+**Relevance to Dilder**: The physical tap interaction (via accelerometer) mirrors Nintendogs' touch concept. The voice element validates mic input as engaging.
 
 ### Creatures (1996 Artificial Life Game)
 
@@ -1222,7 +1206,6 @@ A survey of 449 videogames using voice identified these categories:
 | **ADC noise from mic** | Medium | Add hardware LP filter (RC circuit) before ADC pin, software averaging |
 | **Battery life optimization** | High | Aggressive sleep modes, sensor duty cycling, e-ink (no backlight drain) |
 | **GPS power drain** | High | Defer to WiFi geolocation; GPS only on Phase 5 with larger battery |
-| **Capacitive touch through case** | Medium | Test sensitivity per case material; adjustable thresholds in MPR121 registers |
 | **Sensor wiring in small enclosure** | Medium | Use Qwiic/STEMMA QT connectors for I2C daisy chain; design PCB in Phase 5 |
 | **Pico W RAM limits (264KB)** | Medium | Keep stat arrays compact, don't buffer full audio, stream sensor data |
 | **E-ink refresh rate** | Low | Already handled — partial refresh works for 4s frame cycle |
@@ -1248,7 +1231,7 @@ A survey of 449 videogames using voice identified these categories:
 | **Preventing cheat-shaking for steps** | Medium | Step detection algorithm with gait-pattern validation. Reject frequencies >4Hz (natural walking is 1.5-2.5Hz). |
 | **Keeping dialogue fresh** | High | 800+ quotes already exist. Expand per life stage. Context-sensitive triggers prevent repetition. |
 | **Evolution feeling meaningful** | High | Clear visual differences between adult forms. Unique dialogue sets per form. The journey matters — evolution is the payoff for weeks of care. |
-| **Sensor data overwhelming the game loop** | Medium | Sample sensors on different tick intervals: touch (every tick), sound (every 100ms), light (every 5s), temp (every 60s), steps (hardware counter, read every 10s). |
+| **Sensor data overwhelming the game loop** | Medium | Sample sensors on different tick intervals: sound (every 100ms), light (every 5s), temp (every 60s), steps (hardware counter, read every 10s). |
 | **Scope creep** | High | This document is intentionally comprehensive. Implementation must be phased ruthlessly. See Phase Rollout Plan below. |
 
 ---
@@ -1263,7 +1246,7 @@ A survey of 449 videogames using voice identified these categories:
 |------|-----------|
 | Implement stat system (hunger, happiness, energy, hygiene, health) | None |
 | Implement stat decay with configurable rates | Stat system |
-| Implement care actions via serial/GPIO buttons (feed, pet, clean, sleep) | Input system (Phase 2) |
+| Implement care actions via serial/GPIO buttons (feed, interact, clean, sleep) | Input system (Phase 2) |
 | Implement emotion resolution from stats | Stat system + existing emotion renderer |
 | Implement basic dialogue (mood-matched quotes already exist) | Emotion system |
 | Implement day/night cycle from RTC | RTC (exists) |
@@ -1276,7 +1259,6 @@ A survey of 449 videogames using voice identified these categories:
 | Task | Hardware Needed |
 |------|----------------|
 | Integrate BH1750 light sensor → sleep/wake mechanics | BH1750 (~$2) |
-| Integrate MPR121 touch → petting/interaction | MPR121 (~$4) |
 | Integrate MAX9814 mic → volume-based reactions | MAX9814 (~$4) |
 | Integrate AHT20 temp/humidity → comfort mechanics | AHT20 (~$0.43) |
 
@@ -1363,7 +1345,6 @@ A survey of 449 videogames using voice identified these categories:
 - Raspberry Pi Pico W — https://datasheets.raspberrypi.com/picow/pico-w-datasheet.pdf
 - RP2040 — https://datasheets.raspberrypi.com/rp2040/rp2040-datasheet.pdf
 - LSM6DSO — https://www.st.com/en/mems-and-sensors/lsm6dso.html
-- MPR121 — https://www.adafruit.com/product/1982
 - BH1750 — https://www.mouser.com/datasheet/2/348/bh1750fvi-e-186247.pdf
 - MAX9814 — https://www.adafruit.com/product/1713
 - AHT20 — https://www.adafruit.com/product/4566
