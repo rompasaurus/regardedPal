@@ -1,0 +1,28 @@
+# Ignore folders
+ignore
+.vscode/
+.pio/
+build/
+__pycache__/
+*-backups/
+
+# Ignore compiled and build artifacts
+*.o
+*.ko
+*.obj
+*.elf
+*.bin
+*.hex
+*.d
+
+# Ignore logs
+*.log
+
+# Ignore backup and autosave files
+*.bak
+*.tmp
+.autosave*
+
+# OS/System files
+.DS_Store
+Thumbs.db
