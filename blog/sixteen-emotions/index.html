@@ -2752,7 +2752,7 @@
 
 
 <h1 id="16-emotions-building-the-octopus-personality-system">16 Emotions — Building the Octopus Personality System<a class="headerlink" href="#16-emotions-building-the-octopus-personality-system" title="Permanent link">&para;</a></h1>
-<p>One octopus personality isn't a pet. It's a novelty. Today the octopus learned to feel — angry eyebrows, sad droopy eyes, chaotic spiral pupils, heart-shaped horny eyes, and 12 more distinct emotional states. Each one changes how the octopus looks, moves, and talks.</p>
+<p>One octopus personality isn't a pet. It's a novelty. Today the octopus learned to feel — angry eyebrows, sad droopy eyes, chaotic spiral pupils, heart-shaped creepy eyes, and 12 more distinct emotional states. Each one changes how the octopus looks, moves, and talks.</p>
 <!-- more -->
 
 <h2 id="the-emotion-architecture">The Emotion Architecture<a class="headerlink" href="#the-emotion-architecture" title="Permanent link">&para;</a></h2>
@@ -2763,7 +2763,7 @@
 <li><strong>Eyelids</strong> — partial circle fills covering the top of the eye socket (tired, lazy)</li>
 <li><strong>Mouth</strong> — distinct mathematical curve per emotion (parabola, sine wave, zigzag, ellipse with drool)</li>
 <li><strong>Body transform</strong> — per-frame animation (breathing bob, jitter, sway, puff, droop)</li>
-<li><strong>Special effects</strong> — tear drops (homesick), tongue (horny), cheek puffs (fat)</li>
+<li><strong>Special effects</strong> — tear drops (homesick), tongue (creepy), cheek puffs (fat)</li>
 </ul>
 <p>The system is composable. Adding a new emotion means writing 2-3 small draw functions and a 4-element animation cycle. No bitmaps to create, no sprites to manage.</p>
 <h2 id="the-lineup">The Lineup<a class="headerlink" href="#the-lineup" title="Permanent link">&para;</a></h2>
@@ -2864,7 +2864,7 @@
 <td>Stoner philosopher</td>
 </tr>
 <tr>
-<td>Horny</td>
+<td>Creepy</td>
 <td>Heart-shaped</td>
 <td>Tongue out</td>
 <td>Rhythmic pulse</td>
@@ -2901,13 +2901,13 @@
 </span></code></pre></div>
 <p>New quotes are selected on <code>EXPR_OPEN</code> frames. So the angry octopus mostly frowns with brief mouth-opens between rants. The lazy octopus holds its flat line for three frames before reluctantly opening its mouth. The chaotic octopus mixes chaotic, unhinged, and weird mouths — it can't even commit to one expression.</p>
 <h2 id="each-emotion-is-a-standalone-firmware">Each Emotion is a Standalone Firmware<a class="headerlink" href="#each-emotion-is-a-standalone-firmware" title="Permanent link">&para;</a></h2>
-<p>Every emotional state has its own firmware directory under <code>dev-setup/</code> — <code>angry-octopus/</code>, <code>sad-octopus/</code>, <code>horny-octopus/</code>, etc. Each has its own <code>main.c</code> (identical rendering code) and <code>quotes.h</code> (30-196 themed quotes generated to match the personality).</p>
+<p>Every emotional state has its own firmware directory under <code>dev-setup/</code> — <code>angry-octopus/</code>, <code>sad-octopus/</code>, <code>creepy-octopus/</code>, etc. Each has its own <code>main.c</code> (identical rendering code) and <code>quotes.h</code> (30-196 themed quotes generated to match the personality).</p>
 <p>Pick a mood, flash it, and your desk octopus becomes that emotion permanently until you flash a different one. Or use the Mood Selector firmware that contains all 823 quotes across all 16 moods and lets you browse with serial commands.</p>
 <h2 id="the-quote-generation-pipeline">The Quote Generation Pipeline<a class="headerlink" href="#the-quote-generation-pipeline" title="Permanent link">&para;</a></h2>
 <p>Each personality has a curated quote list. The quotes are short (fits in a 170x70 pixel bubble at 5x7 font), thematically consistent, and written in ALL CAPS (the font only has uppercase). Some examples:</p>
 <p><strong>Angry:</strong> "I DIDN'T ASK TO BE BORN WITH 8 ARMS AND ANGER ISSUES."</p>
 <p><strong>Tired:</strong> "MY BRAIN HAS 47 TABS OPEN AND THEY'RE ALL LOADING."</p>
-<p><strong>Horny:</strong> "ARE YOU A CORAL REEF? BECAUSE I WANT TO EXPLORE YOU."</p>
+<p><strong>Creepy:</strong> "ARE YOU A CORAL REEF? BECAUSE I WANT TO EXPLORE YOU."</p>
 <p><strong>Homesick:</strong> "THE DEEP OCEAN NEVER JUDGED ME FOR BEING SQUISHY."</p>
 <h2 id="what-this-enables">What This Enables<a class="headerlink" href="#what-this-enables" title="Permanent link">&para;</a></h2>
 <p>With 16 emotions, the octopus isn't a static display anymore. It's a character. It has range. Future features can trigger emotional transitions — feed the octopus and it goes from hungry to fat, ignore it and it goes from normal to sad, play with it and it gets excited. The emotion system is the foundation for the actual Tamagotchi gameplay loop.</p>
