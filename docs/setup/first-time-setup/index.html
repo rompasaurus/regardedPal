@@ -776,6 +776,36 @@
   
   
     <li class="md-nav__item">
+      <a href="../../../blog/category/devtool/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    DevTool
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    
+  
+  
+    <li class="md-nav__item">
       <a href="../../../blog/category/firmware/" class="md-nav__link">
         
   
@@ -3688,19 +3718,22 @@
 <p class="admonition-title">Recommended: Use the interactive setup script</p>
 <p>Before following the manual steps below, try the automated setup script. It walks you through the entire process with explanations, automates installs and builds, and lets you skip/quit/resume at any point.</p>
 </div>
-<div class="language-bash highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>python3<span class="w"> </span>setup.py<span class="w">              </span><span class="c1"># full interactive walkthrough</span>
-</span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>python3<span class="w"> </span>setup.py<span class="w"> </span>--status<span class="w">     </span><span class="c1"># see what&#39;s installed and what&#39;s missing</span>
-</span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>python3<span class="w"> </span>setup.py<span class="w"> </span>--list<span class="w">       </span><span class="c1"># list all 15 steps</span>
-</span><span id="__span-0-4"><a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>python3<span class="w"> </span>setup.py<span class="w"> </span>--step<span class="w"> </span><span class="m">7</span><span class="w">     </span><span class="c1"># jump to a specific step</span>
-</span><span id="__span-0-5"><a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>python3<span class="w"> </span>setup.py<span class="w"> </span>--test-setup<span class="w"> </span><span class="c1"># install testing dependencies</span>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>python3<span class="w"> </span>setup.py<span class="w">              </span><span class="c1"># interactive board selection menu (Pico W / ESP32-S3 / Both)</span>
+</span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>python3<span class="w"> </span>setup.py<span class="w"> </span>--board<span class="w"> </span>pico<span class="w"> </span><span class="c1"># run setup for Pico W only</span>
+</span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>python3<span class="w"> </span>setup.py<span class="w"> </span>--board<span class="w"> </span>esp32<span class="w"> </span><span class="c1"># run setup for ESP32-S3 only</span>
+</span><span id="__span-0-4"><a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>python3<span class="w"> </span>setup.py<span class="w"> </span>--status<span class="w">     </span><span class="c1"># see what&#39;s installed and what&#39;s missing</span>
+</span><span id="__span-0-5"><a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>python3<span class="w"> </span>setup.py<span class="w"> </span>--list<span class="w">       </span><span class="c1"># list all 16 steps</span>
+</span><span id="__span-0-6"><a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a>python3<span class="w"> </span>setup.py<span class="w"> </span>--step<span class="w"> </span><span class="m">7</span><span class="w">     </span><span class="c1"># jump to a specific step</span>
+</span><span id="__span-0-7"><a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a>python3<span class="w"> </span>setup.py<span class="w"> </span>--test-setup<span class="w"> </span><span class="c1"># install testing dependencies</span>
 </span></code></pre></div>
 <p><img alt="Setup CLI step list" src="../../../assets/images/setup-cli/setup_cli_list_rendered.png" /></p>
-<p>The script handles 15 steps across three checkpoints:</p>
+<p>The script handles 16 steps across three checkpoints:</p>
 <table>
 <thead>
 <tr>
 <th>Step</th>
 <th>Name</th>
+<th>Board</th>
 <th>Description</th>
 </tr>
 </thead>
@@ -3708,77 +3741,98 @@
 <tr>
 <td>1</td>
 <td>Check Prerequisites</td>
+<td>[Both]</td>
 <td>Detects distro, verifies git/cmake/Python/Tkinter/pyserial</td>
 </tr>
 <tr>
 <td>2</td>
 <td>Install ARM Toolchain</td>
+<td>[Pico W]</td>
 <td>Runs the correct package manager command</td>
 </tr>
 <tr>
 <td>3</td>
 <td>Clone Pico SDK</td>
+<td>[Pico W]</td>
 <td>Clones <code>pico-sdk</code> with submodules</td>
 </tr>
 <tr>
 <td>4</td>
 <td>Set PICO_SDK_PATH</td>
+<td>[Pico W]</td>
 <td>Adds export to your shell profile</td>
 </tr>
 <tr>
 <td>5</td>
 <td>Serial Port Permissions</td>
+<td>[Both]</td>
 <td>Adds user to <code>uucp</code> (Arch) or <code>dialout</code> (Debian)</td>
 </tr>
 <tr>
 <td>6</td>
 <td>Install VSCode Extensions</td>
+<td>[Both]</td>
 <td>Installs C/C++ (or clangd for Code OSS), CMake Tools, Cortex-Debug</td>
 </tr>
 <tr>
 <td>7</td>
 <td>Build Hello Serial</td>
+<td>[Pico W]</td>
 <td>CMake + Ninja build of serial-only test</td>
 </tr>
 <tr>
 <td>8</td>
 <td>Flash Hello Serial</td>
+<td>[Pico W]</td>
 <td>Guides BOOTSEL, auto-detects mount, copies UF2</td>
 </tr>
 <tr>
 <td>9</td>
 <td>Verify Serial Output</td>
+<td>[Pico W]</td>
 <td>Confirms serial and LED work (Checkpoint 1)</td>
 </tr>
 <tr>
 <td>10</td>
 <td>Connect the Display</td>
+<td>[Pico W]</td>
 <td>Guides HAT-on-header assembly</td>
 </tr>
 <tr>
 <td>11</td>
 <td>Get Waveshare Library</td>
+<td>[Pico W]</td>
 <td>Clones and copies C driver files</td>
 </tr>
 <tr>
 <td>12</td>
 <td>Build Hello Display</td>
+<td>[Pico W]</td>
 <td>Builds the e-ink display test</td>
 </tr>
 <tr>
 <td>13</td>
 <td>Flash Hello Display</td>
+<td>[Pico W]</td>
 <td>Flash display firmware</td>
 </tr>
 <tr>
 <td>14</td>
 <td>Verify Display Output</td>
+<td>[Pico W]</td>
 <td>Confirms text on display (Checkpoint 2)</td>
 </tr>
 <tr>
 <td>15</td>
 <td>Docker Build Toolchain</td>
+<td>[Both]</td>
 <td>Installs Docker and pre-builds the ARM container (Checkpoint 3)</td>
+</tr>
+<tr>
+<td>16</td>
+<td>ESP32-S3 Toolchain (PlatformIO)</td>
+<td>[ESP32-S3]</td>
+<td>Set up PlatformIO and ESP-IDF for the Olimex ESP32-S3</td>
 </tr>
 </tbody>
 </table>

@@ -774,6 +774,36 @@
   
   
     <li class="md-nav__item">
+      <a href="../blog/category/devtool/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    DevTool
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    
+  
+  
+    <li class="md-nav__item">
       <a href="../blog/category/firmware/" class="md-nav__link">
         
   
@@ -4080,6 +4110,39 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#prompts-157-167-2026-04-15-to-2026-04-16" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Prompts #157-167 — 2026-04-15 to 2026-04-16
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#prompts-168-170-2026-04-15" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Prompts #168-170 — 2026-04-15
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#prompts-171-176-2026-04-17" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Prompts #171-176 — 2026-04-17
+      
+    </span>
+  </a>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -5621,6 +5684,39 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#prompts-157-167-2026-04-15-to-2026-04-16" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Prompts #157-167 — 2026-04-15 to 2026-04-16
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#prompts-168-170-2026-04-15" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Prompts #168-170 — 2026-04-15
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#prompts-171-176-2026-04-17" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Prompts #171-176 — 2026-04-17
+      
+    </span>
+  </a>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -6747,6 +6843,23 @@
 <li><strong>Input Tokens (est):</strong> ~60</li>
 <li><strong>Output Tokens (est):</strong> ~5,000</li>
 <li><strong>Files:</strong> Website content commit: 3 blog posts (breadboard prototype guide, motion/location detection, PCB routing complete), 2 docs pages (board design v0.4, breadboard prototype), octopus SVG icon, mkdocs nav/logo updates. Fixed broken link in breadboard blog post. Updated <code>PromptProgression.md</code> with Prompts #154-156.</li>
+</ul>
+<hr />
+<h2 id="prompts-157-167-2026-04-15-to-2026-04-16">Prompts #157-167 — 2026-04-15 to 2026-04-16<a class="headerlink" href="#prompts-157-167-2026-04-15-to-2026-04-16" title="Permanent link">&para;</a></h2>
+<p><strong>Summary:</strong> PCB fabrication pricing research (JLCPCB/PCBWay/Aisler quotes), ESP32-S3 schematic wiring (power chain, USB-C, ESD, crystal), peer-to-peer discovery research (BLE/mDNS/UDP), engagement plan gamification design, asset rendering pipeline, body language system with 16 emotion states. Created corresponding blog posts and documentation for each topic.</p>
+<hr />
+<h2 id="prompts-168-170-2026-04-15">Prompts #168-170 — 2026-04-15<a class="headerlink" href="#prompts-168-170-2026-04-15" title="Permanent link">&para;</a></h2>
+<p><strong>Summary:</strong> Firmware game engine implementation. Built the complete C engine: game loop, event system, emotion/stat/life modules, sensor layer, UI renderer with bitmap font, and DevTool emulator tab with ctypes bridge. Added comprehensive beginner-friendly code comments and FIRMWARE.md architecture guide. All 14 source files documented.</p>
+<hr />
+<h2 id="prompts-171-176-2026-04-17">Prompts #171-176 — 2026-04-17<a class="headerlink" href="#prompts-171-176-2026-04-17" title="Permanent link">&para;</a></h2>
+<p><strong>Summary:</strong> ESP32-S3 multi-board architecture. Major session covering:</p>
+<ul>
+<li><strong>setup.py CLI</strong> — Added <code>--board {pico,esp32}</code> flag with interactive board selection menu. All 16 steps tagged [Pico W], [ESP32-S3], or [Both]. PEP 668 fix using pipx on Arch/CachyOS.</li>
+<li><strong>Dev setup guide</strong> — Restructured as multi-board guide. Every deployment step has Pico W and ESP32-S3 subsections. Troubleshooting organized by board.</li>
+<li><strong>PlatformIO build fixes</strong> — Fixed include paths (<code>-I../../firmware/include</code>), <code>build_src_filter</code> relative paths, removed shadowing local <code>board_config.h</code>, renamed HAL to <code>.cpp</code> for C++ SPI, added <code>extern "C"</code> linkage, renamed <code>hal_init</code> to <code>dilder_hal_init</code> to avoid ESP-IDF collision. Firmware builds at 293KB.</li>
+<li><strong>DevTool Programs tab</strong> — Added Target Board dropdown, ESP32 Flash via PlatformIO, ESP32 Deploy Standalone with quotes.h generation + PlatformIO build.</li>
+<li><strong>DevTool Connect tab</strong> — Board-aware USB steps: ESP32 shows CH340X detection, /dev/ttyUSB* check, download mode button sequence (BOOT + RST), Wi-Fi panel for ESP32-S3.</li>
+<li><strong>Website</strong> — Updated first-time-setup docs with <code>--board</code> flag and Step 16. New blog post: "ESP32-S3 Board Support — Multi-Board Architecture Goes Live". Prompt log synced through #176.</li>
 </ul>
 
 
