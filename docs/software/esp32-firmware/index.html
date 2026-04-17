@@ -12,31 +12,31 @@
         <meta name="author" content="rompasaurus">
       
       
-        <link rel="canonical" href="https://dilder.dev/blog/hardware-arrives/">
+        <link rel="canonical" href="https://dilder.dev/docs/software/esp32-firmware/">
       
       
-        <link rel="prev" href="../peer-discovery/">
+        <link rel="prev" href="../firmware-engine/">
       
       
-        <link rel="next" href="../engagement-plan/">
+        <link rel="next" href="../emotion-states/">
       
       
         
       
       
-      <link rel="icon" href="../../assets/images/dilder-icon.svg">
+      <link rel="icon" href="../../../assets/images/dilder-icon.svg">
       <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.6">
     
     
       
-        <title>New Hardware: Joystick Module and LiPo Battery - Dilder</title>
+        <title>ESP32-S3 Firmware - Dilder</title>
       
     
     
-      <link rel="stylesheet" href="../../assets/stylesheets/main.484c7ddc.min.css">
+      <link rel="stylesheet" href="../../../assets/stylesheets/main.484c7ddc.min.css">
       
         
-        <link rel="stylesheet" href="../../assets/stylesheets/palette.ab4e12ef.min.css">
+        <link rel="stylesheet" href="../../../assets/stylesheets/palette.ab4e12ef.min.css">
       
       
 
@@ -55,9 +55,9 @@
       
     
     
-      <link rel="stylesheet" href="../../stylesheets/extra.css">
+      <link rel="stylesheet" href="../../../stylesheets/extra.css">
     
-    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    <script>__md_scope=new URL("../../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
     
       
   
@@ -92,7 +92,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#new-hardware-joystick-module-and-lipo-battery" class="md-skip">
+        <a href="#esp32-s3-firmware" class="md-skip">
           Skip to content
         </a>
       
@@ -106,9 +106,9 @@
 
 <header class="md-header" data-md-component="header">
   <nav class="md-header__inner md-grid" aria-label="Header">
-    <a href="../.." title="Dilder" class="md-header__button md-logo" aria-label="Dilder" data-md-component="logo">
+    <a href="../../.." title="Dilder" class="md-header__button md-logo" aria-label="Dilder" data-md-component="logo">
       
-  <img src="../../assets/images/dilder-icon.svg" alt="logo">
+  <img src="../../../assets/images/dilder-icon.svg" alt="logo">
 
     </a>
     <label class="md-header__button md-icon" for="__drawer">
@@ -125,7 +125,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              New Hardware: Joystick Module and LiPo Battery
+              ESP32-S3 Firmware
             
           </span>
         </div>
@@ -238,7 +238,7 @@
   
   
     <li class="md-tabs__item">
-      <a href="../.." class="md-tabs__link">
+      <a href="../../.." class="md-tabs__link">
         
   
   
@@ -255,13 +255,11 @@
   
   
   
-    
-  
   
     
     
-      <li class="md-tabs__item md-tabs__item--active">
-        <a href="../" class="md-tabs__link">
+      <li class="md-tabs__item">
+        <a href="../../../blog/" class="md-tabs__link">
           
   
   
@@ -277,11 +275,13 @@
   
   
   
+    
+  
   
     
     
-      <li class="md-tabs__item">
-        <a href="../../docs/" class="md-tabs__link">
+      <li class="md-tabs__item md-tabs__item--active">
+        <a href="../../" class="md-tabs__link">
           
   
   
@@ -301,7 +301,7 @@
     
     
       <li class="md-tabs__item">
-        <a href="../../community/" class="md-tabs__link">
+        <a href="../../../community/" class="md-tabs__link">
           
   
   
@@ -321,7 +321,7 @@
     
     
       <li class="md-tabs__item">
-        <a href="../../about/" class="md-tabs__link">
+        <a href="../../../about/" class="md-tabs__link">
           
   
   
@@ -339,7 +339,7 @@
   
   
     <li class="md-tabs__item">
-      <a href="../../prompts/" class="md-tabs__link">
+      <a href="../../../prompts/" class="md-tabs__link">
         
   
   
@@ -363,9 +363,7 @@
           
             
               
-                
-              
-              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" hidden>
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
                 <div class="md-sidebar__scrollwrap">
                   <div class="md-sidebar__inner">
                     
@@ -376,9 +374,9 @@
 
 <nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Navigation" data-md-level="0">
   <label class="md-nav__title" for="__drawer">
-    <a href="../.." title="Dilder" class="md-nav__button md-logo" aria-label="Dilder" data-md-component="logo">
+    <a href="../../.." title="Dilder" class="md-nav__button md-logo" aria-label="Dilder" data-md-component="logo">
       
-  <img src="../../assets/images/dilder-icon.svg" alt="logo">
+  <img src="../../../assets/images/dilder-icon.svg" alt="logo">
 
     </a>
     Dilder
@@ -405,7 +403,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../.." class="md-nav__link">
+      <a href="../../.." class="md-nav__link">
         
   
   
@@ -429,31 +427,26 @@
       
   
   
-    
   
   
-  
     
     
     
     
-      
-        
-        
       
       
         
       
     
     
-    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+    <li class="md-nav__item md-nav__item--nested">
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" checked>
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" >
         
           
-          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="">
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="0">
             
   
   
@@ -471,7 +464,7 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="true">
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
           <label class="md-nav__title" for="__nav_2">
             <span class="md-nav__icon md-icon"></span>
             
@@ -486,14 +479,12 @@
                 
   
   
-    
-  
   
     
   
   
-    <li class="md-nav__item md-nav__item--active">
-      <a href="../" class="md-nav__link">
+    <li class="md-nav__item">
+      <a href="../../../blog/" class="md-nav__link">
         
   
   
@@ -527,20 +518,17 @@
       
       
         
-          
-          
-        
       
     
     
-    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+    <li class="md-nav__item md-nav__item--nested">
       
         
         
         <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_2" >
         
           
-          <label class="md-nav__link" for="__nav_2_2" id="__nav_2_2_label" tabindex="">
+          <label class="md-nav__link" for="__nav_2_2" id="__nav_2_2_label" tabindex="0">
             
   
   
@@ -578,7 +566,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../archive/2026/" class="md-nav__link">
+      <a href="../../../blog/archive/2026/" class="md-nav__link">
         
   
   
@@ -620,20 +608,17 @@
       
       
         
-          
-          
-        
       
     
     
-    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+    <li class="md-nav__item md-nav__item--nested">
       
         
         
         <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_3" >
         
           
-          <label class="md-nav__link" for="__nav_2_3" id="__nav_2_3_label" tabindex="">
+          <label class="md-nav__link" for="__nav_2_3" id="__nav_2_3_label" tabindex="0">
             
   
   
@@ -671,7 +656,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../category/architecture/" class="md-nav__link">
+      <a href="../../../blog/category/architecture/" class="md-nav__link">
         
   
   
@@ -701,7 +686,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../category/art/" class="md-nav__link">
+      <a href="../../../blog/category/art/" class="md-nav__link">
         
   
   
@@ -731,7 +716,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../category/build-guide/" class="md-nav__link">
+      <a href="../../../blog/category/build-guide/" class="md-nav__link">
         
   
   
@@ -761,7 +746,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../category/design/" class="md-nav__link">
+      <a href="../../../blog/category/design/" class="md-nav__link">
         
   
   
@@ -791,7 +776,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../category/devtool/" class="md-nav__link">
+      <a href="../../../blog/category/devtool/" class="md-nav__link">
         
   
   
@@ -821,7 +806,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../category/firmware/" class="md-nav__link">
+      <a href="../../../blog/category/firmware/" class="md-nav__link">
         
   
   
@@ -851,7 +836,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../category/hardware/" class="md-nav__link">
+      <a href="../../../blog/category/hardware/" class="md-nav__link">
         
   
   
@@ -881,7 +866,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../category/manufacturing/" class="md-nav__link">
+      <a href="../../../blog/category/manufacturing/" class="md-nav__link">
         
   
   
@@ -911,7 +896,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../category/pcb-design/" class="md-nav__link">
+      <a href="../../../blog/category/pcb-design/" class="md-nav__link">
         
   
   
@@ -941,7 +926,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../category/planning/" class="md-nav__link">
+      <a href="../../../blog/category/planning/" class="md-nav__link">
         
   
   
@@ -971,7 +956,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../category/software/" class="md-nav__link">
+      <a href="../../../blog/category/software/" class="md-nav__link">
         
   
   
@@ -1001,7 +986,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../category/tools/" class="md-nav__link">
+      <a href="../../../blog/category/tools/" class="md-nav__link">
         
   
   
@@ -1041,26 +1026,31 @@
       
   
   
+    
   
   
+  
     
     
     
     
+      
+        
+        
       
       
         
       
     
     
-    <li class="md-nav__item md-nav__item--nested">
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" checked>
         
           
-          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="0">
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="">
             
   
   
@@ -1078,7 +1068,7 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="true">
           <label class="md-nav__title" for="__nav_3">
             <span class="md-nav__icon md-icon"></span>
             
@@ -1096,7 +1086,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../docs/" class="md-nav__link">
+      <a href="../../" class="md-nav__link">
         
   
   
@@ -1130,17 +1120,20 @@
       
       
         
+          
+          
+        
       
     
     
-    <li class="md-nav__item md-nav__item--nested">
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
       
         
         
         <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_2" >
         
           
-          <label class="md-nav__link" for="__nav_3_2" id="__nav_3_2_label" tabindex="0">
+          <label class="md-nav__link" for="__nav_3_2" id="__nav_3_2_label" tabindex="">
             
   
   
@@ -1176,7 +1169,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../docs/hardware/materials-list/" class="md-nav__link">
+      <a href="../../hardware/materials-list/" class="md-nav__link">
         
   
   
@@ -1204,7 +1197,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../docs/hardware/wiring-pinout/" class="md-nav__link">
+      <a href="../../hardware/wiring-pinout/" class="md-nav__link">
         
   
   
@@ -1232,7 +1225,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../docs/hardware/joystick-wiring/" class="md-nav__link">
+      <a href="../../hardware/joystick-wiring/" class="md-nav__link">
         
   
   
@@ -1260,7 +1253,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../docs/hardware/battery-wiring/" class="md-nav__link">
+      <a href="../../hardware/battery-wiring/" class="md-nav__link">
         
   
   
@@ -1288,7 +1281,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../docs/hardware/enclosure-design/" class="md-nav__link">
+      <a href="../../hardware/enclosure-design/" class="md-nav__link">
         
   
   
@@ -1316,7 +1309,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../docs/hardware/3d-printing-pipeline/" class="md-nav__link">
+      <a href="../../hardware/3d-printing-pipeline/" class="md-nav__link">
         
   
   
@@ -1358,17 +1351,20 @@
       
       
         
+          
+          
+        
       
     
     
-    <li class="md-nav__item md-nav__item--nested">
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
       
         
         
         <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_3" >
         
           
-          <label class="md-nav__link" for="__nav_3_3" id="__nav_3_3_label" tabindex="0">
+          <label class="md-nav__link" for="__nav_3_3" id="__nav_3_3_label" tabindex="">
             
   
   
@@ -1404,7 +1400,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../docs/setup/first-time-setup/" class="md-nav__link">
+      <a href="../../setup/first-time-setup/" class="md-nav__link">
         
   
   
@@ -1432,7 +1428,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../docs/setup/pi-zero-setup/" class="md-nav__link">
+      <a href="../../setup/pi-zero-setup/" class="md-nav__link">
         
   
   
@@ -1460,7 +1456,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../docs/setup/display-setup/" class="md-nav__link">
+      <a href="../../setup/display-setup/" class="md-nav__link">
         
   
   
@@ -1488,7 +1484,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../docs/setup/dev-environment/" class="md-nav__link">
+      <a href="../../setup/dev-environment/" class="md-nav__link">
         
   
   
@@ -1530,17 +1526,20 @@
       
       
         
+          
+          
+        
       
     
     
-    <li class="md-nav__item md-nav__item--nested">
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
       
         
         
         <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_4" >
         
           
-          <label class="md-nav__link" for="__nav_3_4" id="__nav_3_4_label" tabindex="0">
+          <label class="md-nav__link" for="__nav_3_4" id="__nav_3_4_label" tabindex="">
             
   
   
@@ -1576,7 +1575,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../docs/design/kicad-schematic-pcb-guide/" class="md-nav__link">
+      <a href="../../design/kicad-schematic-pcb-guide/" class="md-nav__link">
         
   
   
@@ -1604,7 +1603,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../docs/design/user-guide/" class="md-nav__link">
+      <a href="../../design/user-guide/" class="md-nav__link">
         
   
   
@@ -1632,7 +1631,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../docs/design/user-engagement-plan/" class="md-nav__link">
+      <a href="../../design/user-engagement-plan/" class="md-nav__link">
         
   
   
@@ -1660,7 +1659,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../docs/design/custom-pcb-design-research/" class="md-nav__link">
+      <a href="../../design/custom-pcb-design-research/" class="md-nav__link">
         
   
   
@@ -1688,7 +1687,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../docs/design/board-design/" class="md-nav__link">
+      <a href="../../design/board-design/" class="md-nav__link">
         
   
   
@@ -1716,7 +1715,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../docs/design/pcb-assembly-and-prototyping/" class="md-nav__link">
+      <a href="../../design/pcb-assembly-and-prototyping/" class="md-nav__link">
         
   
   
@@ -1744,7 +1743,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../docs/design/open-board-designs/" class="md-nav__link">
+      <a href="../../design/open-board-designs/" class="md-nav__link">
         
   
   
@@ -1772,7 +1771,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../docs/design/breadboard-prototype/" class="md-nav__link">
+      <a href="../../design/breadboard-prototype/" class="md-nav__link">
         
   
   
@@ -1800,7 +1799,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../docs/design/motion-location-detection/" class="md-nav__link">
+      <a href="../../design/motion-location-detection/" class="md-nav__link">
         
   
   
@@ -1833,26 +1832,31 @@
                 
   
   
+    
   
   
+  
     
     
     
     
       
       
-        
-      
-    
-    
-    <li class="md-nav__item md-nav__item--nested">
-      
-        
-        
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_5" >
         
           
-          <label class="md-nav__link" for="__nav_3_5" id="__nav_3_5_label" tabindex="0">
+          
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_5" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_3_5" id="__nav_3_5_label" tabindex="">
             
   
   
@@ -1870,7 +1874,7 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_5_label" aria-expanded="false">
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_5_label" aria-expanded="true">
           <label class="md-nav__title" for="__nav_3_5">
             <span class="md-nav__icon md-icon"></span>
             
@@ -1888,7 +1892,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../docs/software/project-structure/" class="md-nav__link">
+      <a href="../project-structure/" class="md-nav__link">
         
   
   
@@ -1916,7 +1920,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../docs/software/firmware-engine/" class="md-nav__link">
+      <a href="../firmware-engine/" class="md-nav__link">
         
   
   
@@ -1941,10 +1945,37 @@
                 
   
   
+    
   
   
-    <li class="md-nav__item">
-      <a href="../../docs/software/esp32-firmware/" class="md-nav__link">
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    ESP32-S3 Firmware
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
         
   
   
@@ -1960,6 +1991,176 @@
   
 
       </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#overview" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Overview
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#building" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Building
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#how-it-works" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        How It Works
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="How It Works">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#rendering-layers" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Rendering Layers
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#controls" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Controls
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Controls">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#joystick" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Joystick
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#serial-keyboard" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Serial Keyboard
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#architecture" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Architecture
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Architecture">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#hardware-abstraction-layer-hal" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Hardware Abstraction Layer (HAL)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pin-mapping" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Pin Mapping
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#project-structure" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Project Structure
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#memory-usage" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Memory Usage
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
     </li>
   
 
@@ -1972,7 +2173,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../docs/software/emotion-states/" class="md-nav__link">
+      <a href="../emotion-states/" class="md-nav__link">
         
   
   
@@ -2014,17 +2215,20 @@
       
       
         
+          
+          
+        
       
     
     
-    <li class="md-nav__item md-nav__item--nested">
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
       
         
         
         <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_6" >
         
           
-          <label class="md-nav__link" for="__nav_3_6" id="__nav_3_6_label" tabindex="0">
+          <label class="md-nav__link" for="__nav_3_6" id="__nav_3_6_label" tabindex="">
             
   
   
@@ -2060,7 +2264,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../docs/tools/devtool/" class="md-nav__link">
+      <a href="../../tools/devtool/" class="md-nav__link">
         
   
   
@@ -2088,7 +2292,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../docs/tools/setup-cli/" class="md-nav__link">
+      <a href="../../tools/setup-cli/" class="md-nav__link">
         
   
   
@@ -2116,7 +2320,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../docs/tools/website-dev/" class="md-nav__link">
+      <a href="../../tools/website-dev/" class="md-nav__link">
         
   
   
@@ -2158,17 +2362,20 @@
       
       
         
+          
+          
+        
       
     
     
-    <li class="md-nav__item md-nav__item--nested">
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
       
         
         
         <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_7" >
         
           
-          <label class="md-nav__link" for="__nav_3_7" id="__nav_3_7_label" tabindex="0">
+          <label class="md-nav__link" for="__nav_3_7" id="__nav_3_7_label" tabindex="">
             
   
   
@@ -2204,7 +2411,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../docs/reference/pico-w/" class="md-nav__link">
+      <a href="../../reference/pico-w/" class="md-nav__link">
         
   
   
@@ -2232,7 +2439,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../docs/reference/pi-zero-wh/" class="md-nav__link">
+      <a href="../../reference/pi-zero-wh/" class="md-nav__link">
         
   
   
@@ -2260,7 +2467,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../docs/reference/waveshare-eink/" class="md-nav__link">
+      <a href="../../reference/waveshare-eink/" class="md-nav__link">
         
   
   
@@ -2288,7 +2495,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../docs/reference/esp32-s3-wroom1/" class="md-nav__link">
+      <a href="../../reference/esp32-s3-wroom1/" class="md-nav__link">
         
   
   
@@ -2383,7 +2590,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../community/" class="md-nav__link">
+      <a href="../../../community/" class="md-nav__link">
         
   
   
@@ -2411,7 +2618,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../community/discord/" class="md-nav__link">
+      <a href="../../../community/discord/" class="md-nav__link">
         
   
   
@@ -2439,7 +2646,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../community/support/" class="md-nav__link">
+      <a href="../../../community/support/" class="md-nav__link">
         
   
   
@@ -2526,7 +2733,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../about/" class="md-nav__link">
+      <a href="../../../about/" class="md-nav__link">
         
   
   
@@ -2554,7 +2761,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../about/contact/" class="md-nav__link">
+      <a href="../../../about/contact/" class="md-nav__link">
         
   
   
@@ -2589,7 +2796,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../prompts/" class="md-nav__link">
+      <a href="../../../prompts/" class="md-nav__link">
         
   
   
@@ -2617,8 +2824,6 @@
             
             
               
-                
-              
               <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
                 <div class="md-sidebar__scrollwrap">
                   <div class="md-sidebar__inner">
@@ -2638,33 +2843,44 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#the-joystick-module" class="md-nav__link">
+  <a href="#overview" class="md-nav__link">
     <span class="md-ellipsis">
       
-        The Joystick Module
-      
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="The Joystick Module">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#wiring" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Wiring
+        Overview
       
     </span>
   </a>
   
 </li>
-        
-          <li class="md-nav__item">
-  <a href="#testing" class="md-nav__link">
+      
+        <li class="md-nav__item">
+  <a href="#building" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Testing
+        Building
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#how-it-works" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        How It Works
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="How It Works">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#rendering-layers" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Rendering Layers
       
     </span>
   </a>
@@ -2677,22 +2893,22 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#the-lipo-battery" class="md-nav__link">
+  <a href="#controls" class="md-nav__link">
     <span class="md-ellipsis">
       
-        The LiPo Battery
+        Controls
       
     </span>
   </a>
   
-    <nav class="md-nav" aria-label="The LiPo Battery">
+    <nav class="md-nav" aria-label="Controls">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#why-this-battery-works" class="md-nav__link">
+  <a href="#joystick" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Why This Battery Works
+        Joystick
       
     </span>
   </a>
@@ -2700,32 +2916,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#battery-life" class="md-nav__link">
+  <a href="#serial-keyboard" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Battery Life
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#charging-options" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Charging Options
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#the-connector-gotcha" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        The Connector Gotcha
+        Serial Keyboard
       
     </span>
   </a>
@@ -2738,10 +2932,49 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#expansion-headroom" class="md-nav__link">
+  <a href="#architecture" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Expansion Headroom
+        Architecture
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Architecture">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#hardware-abstraction-layer-hal" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Hardware Abstraction Layer (HAL)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pin-mapping" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Pin Mapping
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#project-structure" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Project Structure
       
     </span>
   </a>
@@ -2749,10 +2982,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#documentation" class="md-nav__link">
+  <a href="#memory-usage" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Documentation
+        Memory Usage
       
     </span>
   </a>
@@ -2768,197 +3001,332 @@
             
           
           
-  <div class="md-content md-content--post" data-md-component="content">
-    <div class="md-sidebar md-sidebar--post" data-md-component="sidebar" data-md-type="navigation">
-      <div class="md-sidebar__scrollwrap">
-        <div class="md-sidebar__inner md-post">
-          <nav class="md-nav md-nav--primary">
-            <div class="md-post__back">
-              <div class="md-nav__title md-nav__container">
-                <a href="../" class="md-nav__link">
-                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
-                  <span class="md-ellipsis">
-                    Back to index
-                  </span>
-                </a>
-              </div>
-            </div>
-            
-              <div class="md-post__authors md-typeset">
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
                 
-                  <div class="md-profile md-post__profile">
-                    <span class="md-author md-author--long">
-                      <img src="https://avatars.githubusercontent.com/u/600873?v=4" alt="rompasaurus">
-                    </span>
-                    <span class="md-profile__description">
-                      <strong>
-                        
-                          rompasaurus
-                        
-                      </strong>
-                      <br>
-                      Builder
-                    </span>
-                  </div>
-                
-              </div>
-            
-            <ul class="md-post__meta md-nav__list">
-              <li class="md-nav__item md-nav__item--section">
-                <div class="md-post__title">
-                  <span class="md-ellipsis">
-                    Metadata
-                  </span>
-                </div>
-                <nav class="md-nav">
-                  <ul class="md-nav__list">
-                    <li class="md-nav__item">
-                      <div class="md-nav__link">
-                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 19H5V8h14m-3-7v2H8V1H6v2H5c-1.11 0-2 .89-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V5a2 2 0 0 0-2-2h-1V1m-1 11h-5v5h5z"/></svg>
-                        <time datetime="2026-04-13 00:00:00+00:00" class="md-ellipsis">April 13, 2026</time>
-                      </div>
-                    </li>
-                    
-                    
-                      <li class="md-nav__item">
-                        <div class="md-nav__link">
-                          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9 3v15h3V3zm3 2 4 13 3-1-4-13zM5 5v13h3V5zM3 19v2h18v-2z"/></svg>
-                          <span class="md-ellipsis">
-                            in
-                            
-                              <a href="../category/hardware/">Hardware</a></span>
-                        </div>
-                      </li>
-                    
-                    
-                      
-                      <li class="md-nav__item">
-                        <div class="md-nav__link">
-                          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 20a8 8 0 0 0 8-8 8 8 0 0 0-8-8 8 8 0 0 0-8 8 8 8 0 0 0 8 8m0-18a10 10 0 0 1 10 10 10 10 0 0 1-10 10C6.47 22 2 17.5 2 12A10 10 0 0 1 12 2m.5 5v5.25l4.5 2.67-.75 1.23L11 13V7z"/></svg>
-                          <span class="md-ellipsis">
-                            
-                              2 min read
-                            
-                          </span>
-                        </div>
-                      </li>
-                    
-                  </ul>
-                </nav>
-              </li>
-            </ul>
-            
-          </nav>
-          
-        </div>
-      </div>
-    </div>
-    <article class="md-content__inner md-typeset">
-      
-        
-  
-
+                  
 
 
   
   
 
 
-<h1 id="new-hardware-joystick-module-and-lipo-battery">New Hardware: Joystick Module and LiPo Battery<a class="headerlink" href="#new-hardware-joystick-module-and-lipo-battery" title="Permanent link">&para;</a></h1>
-<p>Two new components arrived for the Dilder build — a 5-way navigation joystick and a 1000mAh LiPo battery. Both have been fully documented with wiring guides, test code, and integration plans.</p>
-<!-- more -->
-
-<h2 id="the-joystick-module">The Joystick Module<a class="headerlink" href="#the-joystick-module" title="Permanent link">&para;</a></h2>
-<p>The <a href="https://www.amazon.de/dp/B07HBPW3DF">DollaTek 5-Way Navigation Button Module</a> is a compact rocker joystick with five discrete directions: up, down, left, right, and center press. Unlike an analog joystick, each direction is a simple switch — press a direction and it shorts to ground. This makes it a perfect drop-in replacement for the five individual tactile buttons originally planned.</p>
-<h3 id="wiring">Wiring<a class="headerlink" href="#wiring" title="Permanent link">&para;</a></h3>
-<p>The joystick uses the same GPIO assignments already defined in the codebase:</p>
+<h1 id="esp32-s3-firmware">ESP32-S3 Firmware<a class="headerlink" href="#esp32-s3-firmware" title="Permanent link">&para;</a></h1>
+<p>The ESP32-S3 firmware is a full port of the Pico W mood-selector running on the Olimex ESP32-S3-DevKit-Lipo. It renders the same octopus character with 16 emotional states, 823 quotes, animated expressions, and joystick navigation.</p>
+<hr />
+<h2 id="overview">Overview<a class="headerlink" href="#overview" title="Permanent link">&para;</a></h2>
 <table>
 <thead>
 <tr>
-<th>Direction</th>
-<th>GPIO</th>
-<th>Pin</th>
+<th></th>
+<th>Pico W</th>
+<th>ESP32-S3</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td>Up</td>
-<td>GP2</td>
-<td>4</td>
+<td><strong>MCU</strong></td>
+<td>RP2040 (Cortex-M0+ @ 133MHz)</td>
+<td>ESP32-S3 (Xtensa LX7 @ 240MHz)</td>
 </tr>
 <tr>
-<td>Down</td>
-<td>GP3</td>
-<td>5</td>
+<td><strong>Framework</strong></td>
+<td>Pico SDK (C)</td>
+<td>Arduino + PlatformIO (C++)</td>
 </tr>
 <tr>
-<td>Left</td>
-<td>GP4</td>
-<td>6</td>
+<td><strong>Display driver</strong></td>
+<td>Waveshare C driver</td>
+<td>GxEPD2 library</td>
 </tr>
 <tr>
-<td>Right</td>
-<td>GP5</td>
-<td>7</td>
+<td><strong>Display</strong></td>
+<td>Same: Waveshare 2.13" V3 (SSD1680, 250x122)</td>
+<td>Same</td>
 </tr>
 <tr>
-<td>Center</td>
-<td>GP6</td>
-<td>9</td>
+<td><strong>Rendering</strong></td>
+<td>Same framebuffer engine</td>
+<td>Same</td>
 </tr>
 <tr>
-<td>Ground</td>
-<td>GND</td>
-<td>8</td>
+<td><strong>Input</strong></td>
+<td>Serial keyboard</td>
+<td>Joystick + serial</td>
+</tr>
+<tr>
+<td><strong>Wireless</strong></td>
+<td>WiFi + BLE 5.2</td>
+<td>WiFi + BLE 5.0</td>
+</tr>
+<tr>
+<td><strong>PSRAM</strong></td>
+<td>None</td>
+<td>8MB OPI</td>
 </tr>
 </tbody>
 </table>
-<p>Six wires total. No resistors needed — the Pico W's internal pull-ups handle everything. When a direction is pressed, it pulls the GPIO LOW. The firmware reads this as a button press.</p>
-<p>The joystick sits on the <strong>top-left</strong> of the Pico W (pins 4-9), completely separate from the display wiring (pins 11-17). Clean separation, easy debugging.</p>
-<h3 id="testing">Testing<a class="headerlink" href="#testing" title="Permanent link">&para;</a></h3>
-<p>A simple polling test confirms each direction:</p>
-<div class="language-c highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="k">while</span><span class="w"> </span><span class="p">(</span><span class="mi">1</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
-</span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">gpio_get</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="n">printf</span><span class="p">(</span><span class="s">&quot;UP</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">);</span>
-</span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">gpio_get</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="n">printf</span><span class="p">(</span><span class="s">&quot;DOWN</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">);</span>
-</span><span id="__span-0-4"><a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="w">    </span><span class="c1">// ... etc</span>
-</span><span id="__span-0-5"><a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a><span class="w">    </span><span class="n">sleep_ms</span><span class="p">(</span><span class="mi">100</span><span class="p">);</span>
-</span><span id="__span-0-6"><a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a><span class="p">}</span>
+<p>Both targets produce identical visual output — the octopus rendering engine is platform-independent.</p>
+<hr />
+<h2 id="building">Building<a class="headerlink" href="#building" title="Permanent link">&para;</a></h2>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="nb">cd</span><span class="w"> </span><span class="s2">&quot;ESP Protyping/dilder-esp32&quot;</span>
+</span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>
+</span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="c1"># Build</span>
+</span><span id="__span-0-4"><a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>pio<span class="w"> </span>run
+</span><span id="__span-0-5"><a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>
+</span><span id="__span-0-6"><a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a><span class="c1"># Build + Flash</span>
+</span><span id="__span-0-7"><a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a>pio<span class="w"> </span>run<span class="w"> </span>-t<span class="w"> </span>upload
+</span><span id="__span-0-8"><a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a>
+</span><span id="__span-0-9"><a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a><span class="c1"># Serial Monitor</span>
+</span><span id="__span-0-10"><a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a>pio<span class="w"> </span>device<span class="w"> </span>monitor
 </span></code></pre></div>
-<p>Connect a serial terminal at 115200 baud and press each direction. If it prints, the wiring is good.</p>
-<h2 id="the-lipo-battery">The LiPo Battery<a class="headerlink" href="#the-lipo-battery" title="Permanent link">&para;</a></h2>
-<p>The <a href="https://www.amazon.de/dp/B0F88RQX7C">InnCraft Energy 503450</a> is a 1000mAh 3.7V lithium polymer pouch cell — 51x34x5mm, about the size of a business card and thinner than a pencil.</p>
-<h3 id="why-this-battery-works">Why This Battery Works<a class="headerlink" href="#why-this-battery-works" title="Permanent link">&para;</a></h3>
-<p>The Pico W's VSYS pin accepts <strong>1.8-5.5V</strong>. A LiPo operates between 3.0V (empty) and 4.2V (full). The entire range sits comfortably inside the VSYS window — no boost converter needed. Two wires: red to VSYS (pin 39), black to GND (pin 38).</p>
-<h3 id="battery-life">Battery Life<a class="headerlink" href="#battery-life" title="Permanent link">&para;</a></h3>
-<p>In Tamagotchi mode (10 minutes active per hour, 50 minutes deep sleep):</p>
-<ul>
-<li><strong>~6.8 days</strong> on a single charge</li>
-<li>~12.6 days with aggressive sleep (5 min active / 55 min sleep)</li>
-</ul>
-<h3 id="charging-options">Charging Options<a class="headerlink" href="#charging-options" title="Permanent link">&para;</a></h3>
-<p>Three paths documented:</p>
+<div class="admonition note">
+<p class="admonition-title">PlatformIO required</p>
+<p>Install with <code>pipx install platformio</code>. The setup script (Step 16) handles this automatically: <code>python3 setup.py --step 16</code></p>
+</div>
+<hr />
+<h2 id="how-it-works">How It Works<a class="headerlink" href="#how-it-works" title="Permanent link">&para;</a></h2>
+<pre class="mermaid"><code>flowchart TD
+    SETUP[setup: init HAL + SPI + display] --&gt; LOOP
+    LOOP[loop: repeat every 4 seconds] --&gt; RENDER
+    RENDER[render_frame: compose all layers] --&gt; PUSH
+    PUSH[push_frame_to_display: GxEPD2 drawBitmap] --&gt; INPUT
+    INPUT[poll joystick + serial for 4s] --&gt; MOOD{mood changed?}
+    MOOD --&gt;|yes| QUOTE[pick new quote] --&gt; RENDER
+    MOOD --&gt;|no| LOOP</code></pre>
+<h3 id="rendering-layers">Rendering Layers<a class="headerlink" href="#rendering-layers" title="Permanent link">&para;</a></h3>
+<p>Each frame composites 8 layers onto the 250x122 framebuffer:</p>
 <ol>
-<li><strong>Direct to VSYS</strong> — simplest, no charging (remove battery to charge externally)</li>
-<li><strong>TP4056 module</strong> (~EUR 1.50) — USB charging with over-discharge protection</li>
-<li><strong>Adafruit PowerBoost 500C</strong> (~EUR 16) — premium, full load-sharing</li>
+<li><strong>Clock header</strong> — synthetic time at top center</li>
+<li><strong>Body</strong> — RLE-decoded octopus shape with animation transforms</li>
+<li><strong>Eyes</strong> — white circles cleared from the black body</li>
+<li><strong>Pupils</strong> — mood-specific shapes (16 variations)</li>
+<li><strong>Eye overlays</strong> — eyebrows (angry/sad), eyelids (tired/lazy), tears (homesick)</li>
+<li><strong>Mouth</strong> — one of 17 expression curves</li>
+<li><strong>Chat bubble</strong> — rounded rectangle with speech tail</li>
+<li><strong>Quote + status bar</strong> — text in bubble + "&lt; MOOD &gt;" at bottom</li>
 </ol>
-<p>The TP4056 is the sweet spot for most builders.</p>
-<h3 id="the-connector-gotcha">The Connector Gotcha<a class="headerlink" href="#the-connector-gotcha" title="Permanent link">&para;</a></h3>
-<p>This battery uses a <strong>Molex 51021-0200</strong> (1.25mm pitch), not the common JST PH 2.0mm. It won't plug into an Adafruit-style JST socket. For prototyping, cut the connector and solder wires directly — or get a Molex 1.25mm adapter.</p>
-<h2 id="expansion-headroom">Expansion Headroom<a class="headerlink" href="#expansion-headroom" title="Permanent link">&para;</a></h2>
-<p>With both new components wired up, plus the display, the Pico W still has <strong>11+ GPIO pins free</strong>. Enough room for:</p>
-<ul>
-<li>GPS module on UART0 (GP0, GP1)</li>
-<li>Accelerometer on I2C0 (GP16, GP17)</li>
-<li>All planned Phase 3-4 sensors</li>
-</ul>
-<p>No conflicts between any peripherals. The pin budget was planned from day one to support this exact expansion path.</p>
-<h2 id="documentation">Documentation<a class="headerlink" href="#documentation" title="Permanent link">&para;</a></h2>
-<p>Full wiring guides with step-by-step instructions, diagrams, test code, and troubleshooting tables:</p>
-<ul>
-<li><a href="https://dilder.dev/docs/hardware/joystick-wiring/">Joystick Wiring Guide</a></li>
-<li><a href="https://dilder.dev/docs/hardware/battery-wiring/">Battery Wiring Guide</a></li>
-</ul>
+<hr />
+<h2 id="controls">Controls<a class="headerlink" href="#controls" title="Permanent link">&para;</a></h2>
+<h3 id="joystick">Joystick<a class="headerlink" href="#joystick" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Direction</th>
+<th>Action</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>LEFT</td>
+<td>Previous mood</td>
+</tr>
+<tr>
+<td>RIGHT</td>
+<td>Next mood</td>
+</tr>
+<tr>
+<td>CENTER</td>
+<td>Random mood</td>
+</tr>
+<tr>
+<td>UP</td>
+<td>New quote (same mood)</td>
+</tr>
+</tbody>
+</table>
+<h3 id="serial-keyboard">Serial Keyboard<a class="headerlink" href="#serial-keyboard" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Key</th>
+<th>Mood</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>n</code></td>
+<td>Sassy (Normal)</td>
+</tr>
+<tr>
+<td><code>w</code></td>
+<td>Weird</td>
+</tr>
+<tr>
+<td><code>u</code></td>
+<td>Unhinged</td>
+</tr>
+<tr>
+<td><code>a</code></td>
+<td>Angry</td>
+</tr>
+<tr>
+<td><code>s</code></td>
+<td>Sad</td>
+</tr>
+<tr>
+<td><code>c</code></td>
+<td>Chaotic</td>
+</tr>
+<tr>
+<td><code>h</code></td>
+<td>Hungry</td>
+</tr>
+<tr>
+<td><code>t</code></td>
+<td>Tired</td>
+</tr>
+<tr>
+<td><code>p</code></td>
+<td>Slaphappy</td>
+</tr>
+<tr>
+<td><code>l</code></td>
+<td>Lazy</td>
+</tr>
+<tr>
+<td><code>f</code></td>
+<td>Fat</td>
+</tr>
+<tr>
+<td><code>k</code></td>
+<td>Chill</td>
+</tr>
+<tr>
+<td><code>y</code></td>
+<td>Creepy</td>
+</tr>
+<tr>
+<td><code>e</code></td>
+<td>Excited</td>
+</tr>
+<tr>
+<td><code>o</code></td>
+<td>Nostalgic</td>
+</tr>
+<tr>
+<td><code>m</code></td>
+<td>Homesick</td>
+</tr>
+<tr>
+<td><code>[</code> / <code>]</code></td>
+<td>Navigate left/right</td>
+</tr>
+<tr>
+<td><code>r</code></td>
+<td>Random mood</td>
+</tr>
+<tr>
+<td><code>q</code></td>
+<td>New random quote</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="architecture">Architecture<a class="headerlink" href="#architecture" title="Permanent link">&para;</a></h2>
+<h3 id="hardware-abstraction-layer-hal">Hardware Abstraction Layer (HAL)<a class="headerlink" href="#hardware-abstraction-layer-hal" title="Permanent link">&para;</a></h3>
+<p>The firmware uses a HAL pattern to support multiple boards from the same codebase:</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>board_config.h     → compile-time pin selection (#if BOARD_ESP32S3)
+</span><span id="__span-1-2"><a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>hal.h              → common function declarations
+</span><span id="__span-1-3"><a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>esp32s3_hal.cpp    → ESP32 implementation (Arduino GPIO/SPI/ADC)
+</span></code></pre></div>
+<p>This means the octopus rendering code never touches hardware directly — it just calls <code>hal_btn_left()</code>, <code>hal_led_on()</code>, etc., and the HAL translates to the right GPIO calls for each board.</p>
+<h3 id="pin-mapping">Pin Mapping<a class="headerlink" href="#pin-mapping" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Signal</th>
+<th>Pico W GPIO</th>
+<th>ESP32-S3 GPIO</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>SPI CLK</td>
+<td>10</td>
+<td>12</td>
+</tr>
+<tr>
+<td>SPI MOSI</td>
+<td>11</td>
+<td>11</td>
+</tr>
+<tr>
+<td>SPI CS</td>
+<td>9</td>
+<td>10</td>
+</tr>
+<tr>
+<td>EPD DC</td>
+<td>8</td>
+<td>9</td>
+</tr>
+<tr>
+<td>EPD RST</td>
+<td>12</td>
+<td>3</td>
+</tr>
+<tr>
+<td>EPD BUSY</td>
+<td>13</td>
+<td>8</td>
+</tr>
+<tr>
+<td>Joy UP</td>
+<td>2</td>
+<td>4</td>
+</tr>
+<tr>
+<td>Joy DOWN</td>
+<td>3</td>
+<td>7</td>
+</tr>
+<tr>
+<td>Joy LEFT</td>
+<td>4</td>
+<td>1</td>
+</tr>
+<tr>
+<td>Joy RIGHT</td>
+<td>5</td>
+<td>2</td>
+</tr>
+<tr>
+<td>Joy CENTER</td>
+<td>6</td>
+<td>15</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="project-structure">Project Structure<a class="headerlink" href="#project-structure" title="Permanent link">&para;</a></h2>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>ESP Protyping/dilder-esp32/
+</span><span id="__span-2-2"><a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>├── platformio.ini          PlatformIO build config
+</span><span id="__span-2-3"><a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a>├── src/
+</span><span id="__span-2-4"><a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a>│   ├── main.cpp            Full mood-selector (666 lines)
+</span><span id="__span-2-5"><a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a>│   └── quotes.h            823 mood-indexed quotes
+</span><span id="__span-2-6"><a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a>└── README.md               Implementation guide
+</span><span id="__span-2-7"><a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a>
+</span><span id="__span-2-8"><a id="__codelineno-2-8" name="__codelineno-2-8" href="#__codelineno-2-8"></a>Shared firmware:
+</span><span id="__span-2-9"><a id="__codelineno-2-9" name="__codelineno-2-9" href="#__codelineno-2-9"></a>firmware/include/platform/
+</span><span id="__span-2-10"><a id="__codelineno-2-10" name="__codelineno-2-10" href="#__codelineno-2-10"></a>├── board_config.h          Pin definitions per board
+</span><span id="__span-2-11"><a id="__codelineno-2-11" name="__codelineno-2-11" href="#__codelineno-2-11"></a>└── hal.h                   HAL interface
+</span><span id="__span-2-12"><a id="__codelineno-2-12" name="__codelineno-2-12" href="#__codelineno-2-12"></a>firmware/src/platform/esp32s3/
+</span><span id="__span-2-13"><a id="__codelineno-2-13" name="__codelineno-2-13" href="#__codelineno-2-13"></a>└── esp32s3_hal.cpp         Arduino GPIO/SPI implementation
+</span></code></pre></div>
+<div class="admonition tip">
+<p class="admonition-title">Learning the code</p>
+<p>Every source file is heavily commented with beginner-friendly explanations of C/C++ concepts. Start with <code>hal.h</code> (simplest), then <code>board_config.h</code>, then <code>esp32s3_hal.cpp</code>, then <code>main.cpp</code>. The README in the ESP32 project directory has a detailed section-by-section code map.</p>
+</div>
+<hr />
+<h2 id="memory-usage">Memory Usage<a class="headerlink" href="#memory-usage" title="Permanent link">&para;</a></h2>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-3-1"><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>RAM:    8.2% (27 KB / 328 KB)
+</span><span id="__span-3-2"><a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a>Flash: 10.4% (346 KB / 3.3 MB)
+</span></code></pre></div>
+<p>The entire firmware including 823 quotes, the octopus body data, bitmap font, and all rendering code fits in under 350 KB of flash. The 8 MB PSRAM is available for future features (image caching, WiFi buffers, game state).</p>
+
+
 
 
 
@@ -2967,21 +3335,14 @@
 
 
   
-  
 
 
 
-  
 
-
-  
-
-
-
-      
-    </article>
-  </div>
-
+                
+              </article>
+            </div>
+          
           
   <script>var tabs=__md_get("__tabs");if(Array.isArray(tabs))e:for(var set of document.querySelectorAll(".tabbed-set")){var labels=set.querySelector(".tabbed-labels");for(var tab of tabs)for(var label of labels.getElementsByTagName("label"))if(label.innerText.trim()===tab){var input=document.getElementById(label.htmlFor);input.checked=!0;continue e}}</script>
 
@@ -3000,12 +3361,10 @@
   
     
       
-        
-      
       <nav class="md-footer__inner md-grid" aria-label="Footer" >
         
           
-          <a href="../peer-discovery/" class="md-footer__link md-footer__link--prev" aria-label="Previous: Peer Discovery and Mating — When Dilders Meet">
+          <a href="../firmware-engine/" class="md-footer__link md-footer__link--prev" aria-label="Previous: Firmware Game Engine">
             <div class="md-footer__button md-icon">
               
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
@@ -3015,20 +3374,20 @@
                 Previous
               </span>
               <div class="md-ellipsis">
-                Peer Discovery and Mating — When Dilders Meet
+                Firmware Game Engine
               </div>
             </div>
           </a>
         
         
           
-          <a href="../engagement-plan/" class="md-footer__link md-footer__link--next" aria-label="Next: The User Engagement Plan — Making Dilder Feel Alive">
+          <a href="../emotion-states/" class="md-footer__link md-footer__link--next" aria-label="Next: Emotion States">
             <div class="md-footer__title">
               <span class="md-footer__direction">
                 Next
               </span>
               <div class="md-ellipsis">
-                The User Engagement Plan — Making Dilder Feel Alive
+                Emotion States
               </div>
             </div>
             <div class="md-footer__button md-icon">
@@ -3102,12 +3461,12 @@
     
       
       
-      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.tabs", "navigation.sections", "navigation.top", "navigation.footer", "search.suggest", "search.highlight", "content.tabs.link", "content.code.annotation", "content.code.copy"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+      <script id="__config" type="application/json">{"annotate": null, "base": "../../..", "features": ["navigation.tabs", "navigation.sections", "navigation.top", "navigation.footer", "search.suggest", "search.highlight", "content.tabs.link", "content.code.annotation", "content.code.copy"], "search": "../../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
     
     
-      <script src="../../assets/javascripts/bundle.79ae519e.min.js"></script>
+      <script src="../../../assets/javascripts/bundle.79ae519e.min.js"></script>
       
-        <script src="../../javascripts/octopus-banner.js"></script>
+        <script src="../../../javascripts/octopus-banner.js"></script>
       
     
   </body>
