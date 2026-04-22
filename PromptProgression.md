@@ -2511,3 +2511,18 @@ Spelling and grammar are lightly cleaned for readability while preserving the or
   - `website/docs/docs/hardware/design-evolution.md` (modified — added physical prototype photo section)
   - `website/docs/blog/posts/enclosure-first-prints.md` (created — blog post on first 3D-printed prototype)
   - `PromptProgression.md` (modified — added Prompts #196-203)
+
+---
+
+## Prompts #204–207 — 2026-04-22
+- **Prompt series:** Created 6 top cover height variants (12mm, 17mm, 22mm for both flat-top and rounded-top v3). Expanded the windowed plate outer edge by 0.5mm per side for a tighter fit in the cover frame. Analyzed a new HEIC photo of the ESP32-S3 board fit-check, converted to JPEG, and used it to design a board cradle separator — an outer-footprint sheet with a board-shaped cutout and a 2mm raised cradle wall to hold the board in place. Updated design evolution page with new parts, version history entries, and the fit-check photo. Committed and pushed.
+- **Input Tokens (est):** ~250
+- **Output Tokens (est):** ~40,000
+- **Files Created/Modified:**
+  - `hardware-design/scad Parts/top-cover-v3-{12,17,22}mm.scad` (created — height variants of flat-top v3)
+  - `hardware-design/scad Parts/top-cover-v3-rounded-top-{12,17,22}mm.scad` (created — height variants of rounded-top v3)
+  - `hardware-design/scad Parts/top-plate-windowed-v1.scad` (modified — +0.5mm outer edge expansion)
+  - `hardware-design/scad Parts/case-separator-board-cradle.scad` (created — outer separator with board cutout and raised cradle wall)
+  - `website/docs/assets/images/enclosure/esp32-board-fitcheck-closeup.jpg` (created — board fit-check photo)
+  - `website/docs/docs/hardware/design-evolution.md` (modified — new parts table, version history, fit-check photo)
+  - `PromptProgression.md` (modified — added Prompts #204-207)
