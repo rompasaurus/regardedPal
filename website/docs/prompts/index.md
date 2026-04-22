@@ -1406,3 +1406,22 @@ This is part of the transparency experiment — showing AI-assisted development 
 - **DevTool Programs tab** — Added Target Board dropdown, ESP32 Flash via PlatformIO, ESP32 Deploy Standalone with quotes.h generation + PlatformIO build.
 - **DevTool Connect tab** — Board-aware USB steps: ESP32 shows CH340X detection, /dev/ttyUSB* check, download mode button sequence (BOOT + RST), Wi-Fi panel for ESP32-S3.
 - **Website** — Updated first-time-setup docs with `--board` flag and Step 16. New blog post: "ESP32-S3 Board Support — Multi-Board Architecture Goes Live". Prompt log synced through #176.
+
+---
+
+## Prompts #211–227 — 2026-04-22
+
+**Summary:** Full SCAD enclosure design session for the ESP32-S3 + Waveshare 2.13" display + 1000mAh battery. Started from port identification (pUEXT1 = Olimex UEXT10) and evolved into a 5-piece parametric 3MF-exportable enclosure. The case is a stacked sandwich: rounded base with battery tray at the bottom, middle board tray, display slot, top-mid retainer plate, and open-top cover that wraps over the base.
+
+Iterations hit:
+
+- **Initial sandwich mount** — 3 plates + 4 corner pillars matching board dimensions (56 × 28mm, 22mm between headers, 18 × 6mm antenna).
+- **Stacked enclosure** — battery → middle plate → board → display → top-mid plate → cover, with a 5mm gap above the display and a `top_gap` parameter.
+- **Shelves + rails** — generalized `plate_shelf()` for both mid/topmid levels; 4 internal corner posts for display lateral constraint; extended lower shelf to the floor (printable rib without overhang).
+- **Rounded exterior** — `rounded_v_box` helper, sphere-offset trick for a curvy bottom that still prints upright (~30° overhang). Cover and base top corners match.
+- **Flush assembly** — base walls raised to `z_disp_top + plate_thk`, cover reuses the base footprint. Top-mid plate corner notches replaced by shortened rails so the plate top is a solid flush surface.
+- **Display snap rails** — two long rails on the top-mid plate underside, each with a 0.5 × 0.5mm bottom lip; rails flex outward when the plate is pressed over the pre-placed display, then snap back with the lips engaging under the display edges.
+- **Wire routing** — 30 × 6mm hole through the top-mid plate and snap rail (centered on the -X long edge) for wires; matching 30 × 6 notch at the bottom of the cover's -Y short wall for external pass-through.
+- **Screw plugs** — plastic-weldable plug part (`screws.3mf`) that fits the M3 clearance holes; heat-fuse the head to permanently seal the case.
+
+All 5 pieces exported cleanly (CGAL manifold) as 3MF for Bambu Studio: `base.3mf`, `middle.3mf`, `topmid.3mf`, `cover.3mf`, `screws.3mf`. Full SCAD at `hardware-design/esp32s3-enclosure.scad`. Documentation page: [ESP32-S3 Enclosure (SCAD)](../docs/hardware/esp32s3-enclosure-scad.md). Blog post: [Sandwich Enclosure — From UEXT Question to a 5-Piece Parametric Case](../blog/esp32s3-enclosure-scad/).

@@ -117,6 +117,7 @@ nav:
           - Battery Wiring: docs/hardware/battery-wiring.md
           - Enclosure Design: docs/hardware/enclosure-design.md
           - Design Evolution: docs/hardware/design-evolution.md
+          - ESP32-S3 Enclosure (SCAD): docs/hardware/esp32s3-enclosure-scad.md
           - 3D Printing Pipeline: docs/hardware/3d-printing-pipeline.md
       - Setup:
           - First-Time Setup (C SDK): docs/setup/first-time-setup.md

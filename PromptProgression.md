@@ -2538,3 +2538,163 @@ Spelling and grammar are lightly cleaned for readability while preserving the or
   - `hardware-design/scad Parts/case-separator-board-cradle.scad` (modified — cutout_extra=1mm per side)
   - `website/docs/docs/hardware/design-evolution.md` (modified — version history entries for rail trim and cradle widening)
   - `PromptProgression.md` (modified — added Prompts #208-210)
+
+---
+
+## Prompt #211 — 2026-04-22
+- **Prompt:** "OK the is a puext1 port on the esp32 wroom board i have can this be connected to the waveshare display?"
+- **Input Tokens (est):** ~25
+- **Output Tokens (est):** ~4,500
+- **Files:** Research-only, no files changed. Identified `pUEXT1` as Olimex ESP32-S3-DevKit-Lipo UEXT10 connector. Mapped 10-pin pinout from reference schematic (GPIO17/18 UART, GPIO47/48 I2C, GPIO10–13 SPI). Compared to Waveshare 2.13" SPI 8-pin requirements and documented how pin repurposing would fill the gaps.
+
+---
+
+## Prompt #212 — 2026-04-22
+- **Prompt:** "Can the display be wired into the OTGUSB port? or the joystick one of the two?"
+- **Input Tokens (est):** ~20
+- **Output Tokens (est):** ~2,800
+- **Files:** Research-only. USB-OTG is a protocol port (VBUS 5V, D+/D-, GND) — only 4 wires, can't drive SPI; "joystick port" is not a dedicated port — the DollaTek 5-way is jumper-wired into EXT1 header GPIOs.
+
+---
+
+## Prompt #213 — 2026-04-22
+- **Prompt:** "[Measurements paste + case sandwich spec] 22mm between headers, antenna 18mm wide 6mm off, board 56x28mm. Need 4 square pillars nestled by the antenna corners + at the bottom of the board. Sandwich the board between a plane and a top cover, with a third plate 6mm below the headers. Let's make a SCAD script to plot this out."
+- **Input Tokens (est):** ~250
+- **Output Tokens (est):** ~7,500
+- **Files:**
+  - `hardware-design/esp32s3-sandwich-mount.scad` (created — 3-plate sandwich mount with 4 corner pillars, screw channels, header pin slots, center window in top plate).
+
+---
+
+## Prompt #214 — 2026-04-22
+- **Prompt:** "Rethink it — stack the board in the middle resting on a 2mm plastic plane, 5mm above the screen will be a cover with a hole for the display that curves down around the side. On the long sides slots for the screen to slide into. 6mm below the board another 2mm plastic layer for the battery. Still 4 square pillars. USB-C ports meet the edge with walls and holes. Make it in a SCAD script and copy it to a 3MF to print on Bambu."
+- **Input Tokens (est):** ~180
+- **Output Tokens (est):** ~12,000
+- **Files:**
+  - `hardware-design/esp32s3-enclosure.scad` (created — full 3-piece enclosure: base with battery tray + side walls + USB-C cutouts + display slots, middle board tray, rounded top cover with display window).
+  - `hardware-design/enclosure-prints/{base,middle,cover}.3mf` exported via OpenSCAD CLI.
+
+---
+
+## Prompt #215 — 2026-04-22
+- **Prompt:** "Looks good but we need a spot for the middle piece to rest on when it's placed in the case."
+- **Input Tokens (est):** ~25
+- **Output Tokens (est):** ~3,500
+- **Files:**
+  - `hardware-design/esp32s3-enclosure.scad` (modified — added `mid_plate_support()`: 2mm short-wall ledges between pillars + 4 pillar-corner tabs for 4-point plate support).
+  - `enclosure-prints/base.3mf` re-exported.
+
+---
+
+## Prompt #216 — 2026-04-22
+- **Prompt:** "Add another middle piece on top of the base that covers the rect holes on the side — a thin plastic pane with two 20mm slots on the middle of both sides of the long edge, 8mm inset."
+- **Input Tokens (est):** ~60
+- **Output Tokens (est):** ~5,500
+- **Files:**
+  - `hardware-design/esp32s3-enclosure.scad` (modified — added `top_mid_plate` module, generalized `plate_shelf()` to support both z=8 and z=20.8 levels).
+  - `enclosure-prints/topmid.3mf` created.
+
+---
+
+## Prompt #217 — 2026-04-22
+- **Prompt:** "Get rid of the holes on the long edge in the base — there should only be 2 holes for the USB-C on that. Bevel all the outside edges and give the case a nice curve to it."
+- **Input Tokens (est):** ~50
+- **Output Tokens (est):** ~6,500
+- **Files:**
+  - `hardware-design/esp32s3-enclosure.scad` (modified — removed display side-slot cutouts, added `rounded_v_box` helper for rounded vertical edges, cover redesigned to wrap over base with matching curves). All 4 pieces re-exported.
+
+---
+
+## Prompt #218 — 2026-04-22
+- **Prompt:** "Add internal rails, make the base bottom as curvy as the top, fix print errors — the shelf edges need to extend to the bottom of the base so the printer can print properly."
+- **Input Tokens (est):** ~70
+- **Output Tokens (est):** ~14,000
+- **Files:**
+  - `hardware-design/esp32s3-enclosure.scad` (modified — added `display_rails()` corner posts, `extend_to_floor` flag on lower shelf so it becomes a printable rib, curved bottom via sphere-offset trick for ~30° overhang).
+
+---
+
+## Prompt #219 — 2026-04-22
+- **Prompt:** "Inset the shelves so the top-mid plate lays flush on top of the base. Also make screw hardware to fit in the screw holes so I can solder-meld it shut. The top-mid plate is not aligned with the base — I need everything to be flush and fit the components."
+- **Input Tokens (est):** ~80
+- **Output Tokens (est):** ~16,000
+- **Files:**
+  - `hardware-design/esp32s3-enclosure.scad` (rewritten — raised `base_wall_top` to `z_disp_top + plate_thk` for flush plate, same-footprint cover, added `screw_plug`/`screw_plug_array` modules, `"screws"` render target).
+
+---
+
+## Prompt #220 — 2026-04-22
+- **Prompt:** "The cover plate needs altering. Get rid of the display slot and add two long rails for the display to snap into. Also the base bottom needs to taper in the same manner as the cover. Ensure everything remains flush on the sides."
+- **Input Tokens (est):** ~60
+- **Output Tokens (est):** ~9,000
+- **Files:**
+  - `hardware-design/esp32s3-enclosure.scad` (modified — removed topmid edge slots, added snap rails with 0.5mm bottom lips on top-mid plate underside, set `base_bot_cut = 0` for cover-matching taper).
+
+---
+
+## Prompt #221 — 2026-04-22
+- **Prompt:** "You indented the wrong holes. It should be on the base — the 4 holes should go down the width of the top-mid plate so that it doesn't cause a gap."
+- **Input Tokens (est):** ~45
+- **Output Tokens (est):** ~4,500
+- **Files:**
+  - `hardware-design/esp32s3-enclosure.scad` (modified — shortened base display-rail posts from `base_wall_top` to `z_disp_top`, removed corner notches from top-mid plate so its top face is solid with no through-holes or gaps).
+
+---
+
+## Prompt #222 — 2026-04-22
+- **Prompt:** "The cover should not have a plastic plane on the base side of the model. The base should be completely open to the view window. Also on the top-mid model, on one of the long sides we need a 30mm by 6mm hole in the middle cut into the rail as well so wires can be fished through."
+- **Input Tokens (est):** ~70
+- **Output Tokens (est):** ~7,000
+- **Files:**
+  - `hardware-design/esp32s3-enclosure.scad` (modified — removed cover's top plate leaving 4 corner posts + walls, added `topmid_window_w/l` cutout (25×50) and `wire_hole_len/depth` (30×6) on top-mid plate -X edge that cuts through both plate and snap rail).
+
+---
+
+## Prompt #223 — 2026-04-22
+- **Prompt:** "No, you took off the wrong side of plastic on the cover. That was the top. Take off the opposite side instead."
+- **Input Tokens (est):** ~25
+- **Output Tokens (est):** ~2,500
+- **Files:**
+  - `hardware-design/esp32s3-enclosure.scad` (modified — restored cover's top plate with 25×50 viewing window aligned with top-mid plate window; bottom remains open).
+
+---
+
+## Prompt #224 — 2026-04-22
+- **Prompt:** "Go back to the previous and cut a 30mm by 6mm hole on the cover base to route wires."
+- **Input Tokens (est):** ~25
+- **Output Tokens (est):** ~2,200
+- **Files:**
+  - `hardware-design/esp32s3-enclosure.scad` (modified — reverted cover to open-top and added a 30×6 notch at the bottom of the -X long wall).
+
+---
+
+## Prompt #225 — 2026-04-22
+- **Prompt:** "Hole is on the wrong edge. It should be on the bottom not side."
+- **Input Tokens (est):** ~20
+- **Output Tokens (est):** ~1,500
+- **Files:**
+  - `hardware-design/esp32s3-enclosure.scad` (modified — moved the wire notch from the -X long wall to the -Y short wall at the bottom edge, centered along X).
+
+---
+
+## Prompt #226 — 2026-04-22
+- **Prompt:** "Take these prompts and update the prompts file and update the website and documentation. Slap a few pics of the models up on the site and make a new doc entry and blog."
+- **Input Tokens (est):** ~60
+- **Output Tokens (est):** ~12,000
+- **Files:**
+  - `PromptProgression.md` (modified — appended #211–227).
+  - `website/docs/prompts/index.md` (appended #211–227 summary).
+  - `website/docs/docs/hardware/esp32s3-enclosure-scad.md` (created — full SCAD enclosure documentation).
+  - `website/docs/blog/posts/esp32s3-enclosure-scad.md` (created — design story blog post).
+  - `website/docs/assets/images/enclosure/enclosure-{base,middle,topmid,cover,screws,all}.png` (6 rendered previews via OpenSCAD CLI).
+  - `website/mkdocs.yml` (modified — nav entry for new doc).
+
+---
+
+## Prompt #227 — 2026-04-22
+- **Prompt:** "Pull the latest code changes then push these updates in staged changes."
+- **Input Tokens (est):** ~20
+- **Output Tokens (est):** ~3,500
+- **Files:**
+  - Fast-forwarded from `a04db76` to `c615df2` (9 upstream commits from parallel session). Reconciled prompt numbering — upstream already had #184-210, so this session's entries land at #211-227.
+  - `PromptProgression.md` / `website/docs/prompts/index.md` (modified — renumbered this session's prompts from #184-199 to #211-227 to avoid collision).
