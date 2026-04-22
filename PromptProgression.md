@@ -2698,3 +2698,16 @@ Spelling and grammar are lightly cleaned for readability while preserving the or
 - **Files:**
   - Fast-forwarded from `a04db76` to `c615df2` (9 upstream commits from parallel session). Reconciled prompt numbering — upstream already had #184-210, so this session's entries land at #211-227.
   - `PromptProgression.md` / `website/docs/prompts/index.md` (modified — renumbered this session's prompts from #184-199 to #211-227 to avoid collision).
+
+---
+
+## Prompt #228 — 2026-04-22
+- **Prompt:** "ok lets take new pics of the latest base revision we made update the docs website and blog add those pics commit then update the prompts commit and push"
+- **Input Tokens (est):** ~35
+- **Output Tokens (est):** ~9,000
+- **Files:**
+  - Verified the staged GUI-rendered PNGs (Tomorrow colorscheme) already reflected the post-pillar-fix SCAD state; discarded a lower-quality Cornfield re-render attempt and kept the originals.
+  - `website/docs/assets/images/enclosure/rev2-base-v1-{iso,top,side,end-plusx,usb-closeup,divet}.png` (created — mirrored from the 6 Rev 2 joystick base renders).
+  - `website/docs/docs/hardware/design-evolution.md` (modified — new "Rev 2 Extended with Joystick — Base v1" section with all 6 renders captioned, plus a new version-history row).
+  - `website/docs/blog/posts/rev2-joystick-base.md` (created — design-story blog post covering layout split, asymmetric end walls, dual USB-C cutouts, shelf divets, and the pillar-clipped-to-fillet fix).
+  - Committed the base-v1 SCAD/STL/3MF/renders/sketch photos + docs + blog together as `3f313be` ("Add Rev 2 joystick base v1 — SCAD, renders, docs page, blog post"), then committed this prompt-log update separately before pushing.

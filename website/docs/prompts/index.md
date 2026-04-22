@@ -1425,3 +1425,13 @@ Iterations hit:
 - **Screw plugs** — plastic-weldable plug part (`screws.3mf`) that fits the M3 clearance holes; heat-fuse the head to permanently seal the case.
 
 All 5 pieces exported cleanly (CGAL manifold) as 3MF for Bambu Studio: `base.3mf`, `middle.3mf`, `topmid.3mf`, `cover.3mf`, `screws.3mf`. Full SCAD at `hardware-design/esp32s3-enclosure.scad`. Documentation page: [ESP32-S3 Enclosure (SCAD)](../docs/hardware/esp32s3-enclosure-scad.md). Blog post: [Sandwich Enclosure — From UEXT Question to a 5-Piece Parametric Case](../blog/esp32s3-enclosure-scad/).
+
+---
+
+## Prompt #228 — 2026-04-22
+
+**Prompt:** "ok lets take new pics of the latest base revision we made update the docs website and blog add those pics commit then update the prompts commit and push"
+
+- **Input Tokens (est):** ~35
+- **Output Tokens (est):** ~9,000
+- **Summary:** Published the Rev 2 "extended with joystick" base-v1. Confirmed the staged Tomorrow-colorscheme renders already reflected the final pillar-fillet fix, so no programmatic re-render was needed. Mirrored all 6 renders (top, side, +X end, iso, USB-C closeup, shelf-divet closeup) into `website/docs/assets/images/enclosure/` under a `rev2-base-v1-*` prefix, added a captioned "Rev 2 Extended with Joystick — Base v1" section to the hardware Design Evolution page, and wrote a new blog post [Rev 2 "Extended with Joystick" — a Purpose-Built Base](../blog/rev2-joystick-base/) walking through the asymmetric end walls, dual USB-C cutouts, shelf divets, and the pillar-clipped-to-fillet fix. Committed the base-v1 SCAD/STL/3MF + renders + sketch photos + docs + blog together, then committed and pushed this prompt-log update.
