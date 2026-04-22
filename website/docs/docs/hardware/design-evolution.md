@@ -4,11 +4,53 @@ A living record of the Dilder enclosure's parametric CAD design as it evolves th
 
 ---
 
+## Physical Prototype (First Print)
+
+The first FDM prints of the ESP32-S3 enclosure, photographed during fit-check and assembly testing on 2026-04-22.
+
+### Assembled enclosure — front view
+
+The stacked shell with e-ink display visible through the viewing window. Four corner screw posts hold everything together. USB-C cable connected for power and programming.
+
+![Assembled enclosure front view](../../assets/images/enclosure/enclosure-assembled-front.jpg)
+
+### Enclosure halves — base shell with LiPo battery
+
+Side-by-side of the display top cover and base shell. The 1000mAh LiPo battery sits in the base chamber with the JST connector routed up through the middle plate.
+
+![Enclosure halves with battery installed](../../assets/images/enclosure/enclosure-halves-with-battery.jpg)
+
+### Components layout
+
+All printed parts and electronics laid out: middle plate (board tray) with header slots, assembled case, and joystick breakout board with labeled directional pins.
+
+![Components layout overview](../../assets/images/enclosure/components-layout-overview.jpg)
+
+### ESP32-S3 board on printed parts
+
+The Olimex ESP32-S3-DevKit-Lipo (red PCB) sitting on the middle plate and separator sheets. WROOM module, dual USB-C ports, and header pins visible.
+
+![ESP32 board on printed parts](../../assets/images/enclosure/esp32-board-on-printed-parts.jpg)
+
+### Middle plate header slots — closeup
+
+The two long rectangular clearance slots (56.5mm x 4mm) that allow the board's header pins to pass through the plate.
+
+![Middle plate header slots closeup](../../assets/images/enclosure/middle-plate-header-slots-closeup.jpg)
+
+### Dev workstation
+
+The full development setup with dual monitors, ESP32 prototype wired up with jumper cables, and joystick input board.
+
+![Dev workstation overview](../../assets/images/enclosure/dev-workstation-overview.jpg)
+
+---
+
 ## Current Assembly (ESP32-S3 Enclosure)
 
 The enclosure is a stacked shell design housing an Olimex ESP32-S3-DevKit-Lipo, Waveshare 2.13" e-ink display, and 1000mAh LiPo battery. Five parts print flat without supports and assemble with 4 corner screw posts.
 
-![Full enclosure assembly](../../assets/images/enclosure/full-enclosure-assembly.png)
+![Full enclosure assembly — CAD render](../../assets/images/enclosure/full-enclosure-assembly.png)
 
 | Dimension | Value |
 |-----------|-------|
@@ -166,3 +208,7 @@ Provides a menu to browse .scad files, pick export format (3MF/STL), set output 
 | 2026-04-22 | Top plate windowed | v1 | Solid face, extended rails, printable lips, wire gap in rails only |
 | 2026-04-22 | Top cover | v1 | Extracted dome cover from main enclosure |
 | 2026-04-22 | Top cover | v2 | Open frame, solid border, countersunk pillar pockets |
+| 2026-04-22 | Top cover | v3 | Rounded inner corners + single-corner-rounded pillars for flush plate insertion |
+| 2026-04-22 | Top cover | v3-rounded-top | v3 with bullnose top edge (2mm radius) |
+| 2026-04-22 | Case separator (inner) | v1 | Thin divider sheet matching inner plate footprint with header slots and screw holes |
+| 2026-04-22 | Case separator (outer) | v1 | Thin divider sheet matching base outer footprint with header slots and screw holes |

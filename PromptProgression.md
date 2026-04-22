@@ -2479,3 +2479,35 @@ Spelling and grammar are lightly cleaned for readability while preserving the or
   - `website/mkdocs.yml` (modified — added Design Evolution to Hardware nav)
   - `website/docs/docs/hardware/enclosure-design.md` (modified — added ESP32-S3 update note and link to design evolution)
   - `PromptProgression.md` (modified — added Prompts #184-195)
+
+---
+
+## Prompts #196–202 — 2026-04-22
+- **Prompt series:** Continued enclosure CAD iteration. Added countersunk pillar pockets to top cover v2. Created top cover v3 with rounded inner corners matching the windowed plate's corner radius. Added single-corner-rounded pillars (only the exposed inner corner of each pillar gets the radius). Created top-cover-v3-rounded-top variant with 2mm bullnose top edge. Created case separator sheets (inner and outer) as thin divider plates with header pass-through slots and screw holes. Applied single-corner-rounded pillars to the rounded-top variant as well.
+- **Input Tokens (est):** ~400
+- **Output Tokens (est):** ~80,000
+- **Files Created/Modified:**
+  - `hardware-design/scad Parts/top-cover-v2.scad` (modified — countersunk pillar pockets, exact pillar sizing to avoid border bleed)
+  - `hardware-design/scad Parts/top-cover-v3.scad` (created — rounded inner corners, single-corner-rounded pillars)
+  - `hardware-design/scad Parts/top-cover-v3-rounded-top.scad` (created — v3 with bullnose top edge + single-corner-rounded pillars)
+  - `hardware-design/scad Parts/case-separator-inner.scad` (created — thin divider, inner plate footprint, header slots, screw holes)
+  - `hardware-design/scad Parts/case-separator-outer.scad` (created — thin divider, outer base footprint, header slots, screw holes)
+
+---
+
+## Prompt #203 — 2026-04-22
+- **Prompt:** "OK I added some pictures to the base of the project directory. Analyze, annotate, rename, and convert to JPEG. Delete the HEIC versions, put them in the images folder for the website and docs, update the docs and blog with the latest progress, update the prompts and fix my English as well. Commit and push."
+- **Input Tokens (est):** ~60
+- **Output Tokens (est):** ~50,000
+- **Files Created/Modified:**
+  - `IMG*.heic` (7 files deleted — converted to JPEG and removed from project root)
+  - `website/docs/assets/images/enclosure/enclosure-assembled-front.jpg` (created — front view of assembled case with e-ink display)
+  - `website/docs/assets/images/enclosure/enclosure-halves-with-battery.jpg` (created — base shell with LiPo + display top cover)
+  - `website/docs/assets/images/enclosure/components-layout-overview.jpg` (created — all printed parts and electronics spread)
+  - `website/docs/assets/images/enclosure/esp32-board-on-printed-parts.jpg` (created — Olimex DevKit-Lipo on middle plate)
+  - `website/docs/assets/images/enclosure/middle-plate-header-slots-closeup.jpg` (created — header slot detail)
+  - `website/docs/assets/images/enclosure/middle-plate-and-joystick-closeup.jpg` (created — middle plate + joystick breakout)
+  - `website/docs/assets/images/enclosure/dev-workstation-overview.jpg` (created — dual-monitor dev setup with wired prototype)
+  - `website/docs/docs/hardware/design-evolution.md` (modified — added physical prototype photo section)
+  - `website/docs/blog/posts/enclosure-first-prints.md` (created — blog post on first 3D-printed prototype)
+  - `PromptProgression.md` (modified — added Prompts #196-203)
