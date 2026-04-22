@@ -50,9 +50,10 @@ pillar_xy = [
     [outer_wid - wall_thk - pillar,        outer_len - wall_thk - pillar       ],
 ];
 
-// Board cutout dimensions (board + antenna + USB overhang + clearance)
-cutout_w       = board_wid + 2 * slop;
-cutout_l       = board_len + antenna_proj + usb_overhang + 2 * slop;
+// Board cutout dimensions (board + antenna + USB overhang + clearance + 1mm wiggle per side)
+cutout_extra   = 1;        // extra clearance per side
+cutout_w       = board_wid + 2 * (slop + cutout_extra);
+cutout_l       = board_len + antenna_proj + usb_overhang + 2 * (slop + cutout_extra);
 cutout_x       = (outer_wid - cutout_w) / 2;
 cutout_y       = (outer_len - cutout_l) / 2;
 

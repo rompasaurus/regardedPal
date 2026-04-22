@@ -104,10 +104,10 @@ module top_plate_windowed() {
     disp_x_local      = disp_x - plate_x;          // display left edge in local coords
     disp_x_right      = disp_x_local + disp_wid;    // display right edge
 
-    // Left rail: from plate edge (x=0) to display left edge
-    rail_w_left       = disp_x_local;                // ~2.5mm
-    // Right rail: from display right edge to plate far edge
-    rail_w_right      = plate_w - disp_x_right;      // ~2.5mm
+    // Rails flush with plate edges, thinned 0.5mm from display side
+    rail_trim         = 0.5;
+    rail_w_left       = disp_x_local - rail_trim;           // ~2.0mm
+    rail_w_right      = plate_w - disp_x_right - rail_trim; // ~2.0mm
 
     // Lip positions (at display edges, protruding inward)
     lip_x_left        = disp_x_local;
@@ -126,18 +126,18 @@ module top_plate_windowed() {
             // Solid face plate
             rounded_v_box(plate_w, plate_l, plate_thk, plate_corner_r);
 
-            // -X long rail (extends to plate edge)
+            // -X long rail (flush with plate edge, trimmed from display side)
             translate([0, rail_y_local, -snap_rail_h])
                 cube([rail_w_left, rail_len, snap_rail_h]);
             // Lip: full-width shelf on rail bottom + inward protrusion
             translate([0, rail_y_local, -snap_rail_h - snap_lip_h])
                 cube([rail_w_left + snap_lip_d, rail_len, snap_lip_h]);
 
-            // +X long rail (extends to plate edge)
-            translate([disp_x_right, rail_y_local, -snap_rail_h])
+            // +X long rail (flush with plate far edge, trimmed from display side)
+            translate([disp_x_right + rail_trim, rail_y_local, -snap_rail_h])
                 cube([rail_w_right, rail_len, snap_rail_h]);
             // Lip: full-width shelf on rail bottom + inward protrusion
-            translate([disp_x_right - snap_lip_d, rail_y_local, -snap_rail_h - snap_lip_h])
+            translate([disp_x_right + rail_trim - snap_lip_d, rail_y_local, -snap_rail_h - snap_lip_h])
                 cube([rail_w_right + snap_lip_d, rail_len, snap_lip_h]);
         }
 
