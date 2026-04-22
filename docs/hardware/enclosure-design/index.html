@@ -18,7 +18,7 @@
         <link rel="prev" href="../battery-wiring/">
       
       
-        <link rel="next" href="../3d-printing-pipeline/">
+        <link rel="next" href="../design-evolution/">
       
       
         
@@ -1476,6 +1476,17 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#current-work-esp32-s3-enclosure" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Current Work (ESP32-S3 Enclosure)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#future-revisions" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -1490,6 +1501,34 @@
   
 </nav>
       
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../design-evolution/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Design Evolution
+  
+
+    
+  </span>
+  
+  
+
+      </a>
     </li>
   
 
@@ -2970,6 +3009,17 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#current-work-esp32-s3-enclosure" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Current Work (ESP32-S3 Enclosure)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#future-revisions" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -3003,7 +3053,8 @@
 <h1 id="enclosure-design">Enclosure Design<a class="headerlink" href="#enclosure-design" title="Permanent link">&para;</a></h1>
 <p>Design specifications and constraints for the Dilder 3D-printed case.</p>
 <blockquote>
-<p><strong>Note:</strong> Enclosure design is deferred until Phase 5/6, when the final board (Pico W or Pi Zero) is confirmed. The current prototype lives on a breadboard. These specs are initial concepts based on the Pi Zero + HAT form factor and will be revised.</p>
+<p><strong>Update (2026-04-22):</strong> Active enclosure prototyping is underway for the ESP32-S3 platform. Parametric OpenSCAD parts are being iterated in <code>hardware-design/scad Parts/</code>. See the <strong><a href="../design-evolution/">Design Evolution</a></strong> page for the latest CAD renders, version history, and part specifications.</p>
+<p><strong>Note:</strong> The original specs below are initial concepts based on the Pi Zero + HAT form factor. The ESP32-S3 enclosure has superseded these dimensions.</p>
 </blockquote>
 <hr />
 <h2 id="form-factor">Form Factor<a class="headerlink" href="#form-factor" title="Permanent link">&para;</a></h2>
@@ -3272,6 +3323,15 @@
 <p>If ordering PCBs from JLCPCB, add the 3D-printed case to the same shipment to eliminate separate shipping costs. MJF PA12 nylon is the recommended material — no layer lines, strong snap-fits, dark grey finish.</p>
 </div>
 <hr />
+<h2 id="current-work-esp32-s3-enclosure">Current Work (ESP32-S3 Enclosure)<a class="headerlink" href="#current-work-esp32-s3-enclosure" title="Permanent link">&para;</a></h2>
+<p>Active parametric CAD development is tracked on the <strong><a href="../design-evolution/">Design Evolution</a></strong> page, including:</p>
+<ul>
+<li>Standalone OpenSCAD parts with per-part version snapshots</li>
+<li>Middle plate (board tray) with tunable header slot dimensions</li>
+<li>Top cover frame with countersunk pillar pockets</li>
+<li>Windowed display plate with snap-fit retaining rails</li>
+<li>Interactive Python export tool and workflow guide</li>
+</ul>
 <h2 id="future-revisions">Future Revisions<a class="headerlink" href="#future-revisions" title="Permanent link">&para;</a></h2>
 <ul>
 <li><strong>v3:</strong> Incorporate real component fits once hardware is assembled — verify display + board stack height, button stem clearance</li>
@@ -3334,13 +3394,13 @@
         
         
           
-          <a href="../3d-printing-pipeline/" class="md-footer__link md-footer__link--next" aria-label="Next: 3D Printing Pipeline">
+          <a href="../design-evolution/" class="md-footer__link md-footer__link--next" aria-label="Next: Design Evolution">
             <div class="md-footer__title">
               <span class="md-footer__direction">
                 Next
               </span>
               <div class="md-ellipsis">
-                3D Printing Pipeline
+                Design Evolution
               </div>
             </div>
             <div class="md-footer__button md-icon">
