@@ -2526,3 +2526,15 @@ Spelling and grammar are lightly cleaned for readability while preserving the or
   - `website/docs/assets/images/enclosure/esp32-board-fitcheck-closeup.jpg` (created — board fit-check photo)
   - `website/docs/docs/hardware/design-evolution.md` (modified — new parts table, version history, fit-check photo)
   - `PromptProgression.md` (modified — added Prompts #204-207)
+
+---
+
+## Prompts #208–210 — 2026-04-22
+- **Prompt series:** Trimmed windowed plate retaining rails by 0.5mm from the display-facing side (rails stay flush with plate edges, just narrower for easier screen insertion without bending). Widened board cradle separator cutout by 1mm per side for better board clearance. Updated design evolution version history and pushed.
+- **Input Tokens (est):** ~150
+- **Output Tokens (est):** ~15,000
+- **Files Created/Modified:**
+  - `hardware-design/scad Parts/top-plate-windowed-v1.scad` (modified — rail_trim=0.5mm from display side, flush outer edges preserved)
+  - `hardware-design/scad Parts/case-separator-board-cradle.scad` (modified — cutout_extra=1mm per side)
+  - `website/docs/docs/hardware/design-evolution.md` (modified — version history entries for rail trim and cradle widening)
+  - `PromptProgression.md` (modified — added Prompts #208-210)
