@@ -1468,6 +1468,17 @@
 </li>
         
           <li class="md-nav__item">
+  <a href="#board-fit-check-closeup" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Board fit-check closeup
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#dev-workstation" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -3045,6 +3056,17 @@
 </li>
         
           <li class="md-nav__item">
+  <a href="#board-fit-check-closeup" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Board fit-check closeup
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#dev-workstation" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -3244,6 +3266,9 @@
 <h3 id="middle-plate-header-slots-closeup">Middle plate header slots — closeup<a class="headerlink" href="#middle-plate-header-slots-closeup" title="Permanent link">&para;</a></h3>
 <p>The two long rectangular clearance slots (56.5mm x 4mm) that allow the board's header pins to pass through the plate.</p>
 <p><img alt="Middle plate header slots closeup" src="../../../assets/images/enclosure/middle-plate-header-slots-closeup.jpg" /></p>
+<h3 id="board-fit-check-closeup">Board fit-check closeup<a class="headerlink" href="#board-fit-check-closeup" title="Permanent link">&para;</a></h3>
+<p>The Olimex ESP32-S3-DevKit-Lipo sitting on a printed separator sheet. The WROOM-1 module and antenna are on the left, dual USB-C ports (OTG + programming) on the right, JST battery connector in the center. This photo drove the design of the board cradle separator.</p>
+<p><img alt="ESP32 board fit-check closeup" src="../../../assets/images/enclosure/esp32-board-fitcheck-closeup.jpg" /></p>
 <h3 id="dev-workstation">Dev workstation<a class="headerlink" href="#dev-workstation" title="Permanent link">&para;</a></h3>
 <p>The full development setup with dual monitors, ESP32 prototype wired up with jumper cables, and joystick input board.</p>
 <p><img alt="Dev workstation overview" src="../../../assets/images/enclosure/dev-workstation-overview.jpg" /></p>
@@ -3451,6 +3476,34 @@
 <td>Open frame cover with countersunk pillars</td>
 </tr>
 <tr>
+<td><code>top-cover-v3.scad</code></td>
+<td>Rounded inner corners, single-corner-rounded pillars</td>
+</tr>
+<tr>
+<td><code>top-cover-v3-rounded-top.scad</code></td>
+<td>v3 with bullnose top edge</td>
+</tr>
+<tr>
+<td><code>top-cover-v3-{12,17,22}mm.scad</code></td>
+<td>v3 height variants (+5/10/15mm)</td>
+</tr>
+<tr>
+<td><code>top-cover-v3-rounded-top-{12,17,22}mm.scad</code></td>
+<td>Rounded-top height variants (+5/10/15mm)</td>
+</tr>
+<tr>
+<td><code>case-separator-inner.scad</code></td>
+<td>Thin divider, inner plate footprint</td>
+</tr>
+<tr>
+<td><code>case-separator-outer.scad</code></td>
+<td>Thin divider, outer base footprint</td>
+</tr>
+<tr>
+<td><code>case-separator-board-cradle.scad</code></td>
+<td>Outer separator with board-shaped cutout and raised cradle wall</td>
+</tr>
+<tr>
 <td><code>scad-export.py</code></td>
 <td>Interactive Python export tool (menu + file browser)</td>
 </tr>
@@ -3572,6 +3625,24 @@
 <td>Case separator (outer)</td>
 <td>v1</td>
 <td>Thin divider sheet matching base outer footprint with header slots and screw holes</td>
+</tr>
+<tr>
+<td>2026-04-22</td>
+<td>Top cover v3</td>
+<td>height variants</td>
+<td>12mm, 17mm, 22mm versions (+5/10/15mm) for both flat-top and rounded-top</td>
+</tr>
+<tr>
+<td>2026-04-22</td>
+<td>Top plate windowed</td>
+<td>v1 update</td>
+<td>Outer edge expanded by 0.5mm per side for tighter fit</td>
+</tr>
+<tr>
+<td>2026-04-22</td>
+<td>Case separator (board cradle)</td>
+<td>v1</td>
+<td>Outer footprint with board-shaped cutout and 2mm raised cradle wall</td>
 </tr>
 </tbody>
 </table>
