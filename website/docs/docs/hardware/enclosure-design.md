@@ -2,7 +2,9 @@
 
 Design specifications and constraints for the Dilder 3D-printed case.
 
-> **Note:** Enclosure design is deferred until Phase 5/6, when the final board (Pico W or Pi Zero) is confirmed. The current prototype lives on a breadboard. These specs are initial concepts based on the Pi Zero + HAT form factor and will be revised.
+> **Update (2026-04-22):** Active enclosure prototyping is underway for the ESP32-S3 platform. Parametric OpenSCAD parts are being iterated in `hardware-design/scad Parts/`. See the **[Design Evolution](design-evolution.md)** page for the latest CAD renders, version history, and part specifications.
+
+> **Note:** The original specs below are initial concepts based on the Pi Zero + HAT form factor. The ESP32-S3 enclosure has superseded these dimensions.
 
 ---
 
@@ -120,6 +122,16 @@ A full analysis of printing technologies, third-party services, CAD workflows, a
     If ordering PCBs from JLCPCB, add the 3D-printed case to the same shipment to eliminate separate shipping costs. MJF PA12 nylon is the recommended material — no layer lines, strong snap-fits, dark grey finish.
 
 ---
+
+## Current Work (ESP32-S3 Enclosure)
+
+Active parametric CAD development is tracked on the **[Design Evolution](design-evolution.md)** page, including:
+
+- Standalone OpenSCAD parts with per-part version snapshots
+- Middle plate (board tray) with tunable header slot dimensions
+- Top cover frame with countersunk pillar pockets
+- Windowed display plate with snap-fit retaining rails
+- Interactive Python export tool and workflow guide
 
 ## Future Revisions
 

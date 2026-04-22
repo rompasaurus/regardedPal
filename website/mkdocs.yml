@@ -116,6 +116,7 @@ nav:
           - Joystick Wiring: docs/hardware/joystick-wiring.md
           - Battery Wiring: docs/hardware/battery-wiring.md
           - Enclosure Design: docs/hardware/enclosure-design.md
+          - Design Evolution: docs/hardware/design-evolution.md
           - 3D Printing Pipeline: docs/hardware/3d-printing-pipeline.md
       - Setup:
           - First-Time Setup (C SDK): docs/setup/first-time-setup.md

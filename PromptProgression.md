@@ -2435,3 +2435,47 @@ Spelling and grammar are lightly cleaned for readability while preserving the or
   - `DevTool/devtool.py` (modified — PATH fix for pipx-installed PlatformIO)
   - `setup.py` (modified — PATH fix for pipx-installed PlatformIO in step 16 + status report)
   - `PromptProgression.md` (modified — added Prompts #177-183)
+
+---
+
+## Prompt #184 — 2026-04-22
+- **Prompt:** "You made a middle.3mf file for this design. Give me a .scad script that I can modify. Also provide an export-to-3mf-from-scad guide and cook up a script to do this as well in Python with a menu and file explorer. Put this all in the scad parts folder."
+- **Input Tokens (est):** ~60
+- **Output Tokens (est):** ~45,000
+- **Commit:** `632db0d` — Add v1 standalone middle plate SCAD, export guide, and Python export tool
+- **Files Created/Modified:**
+  - `hardware-design/scad Parts/middle-plate.scad` (created — standalone parametric middle plate extracted from esp32s3-enclosure.scad)
+  - `hardware-design/scad Parts/scad-to-3mf-guide.md` (created — step-by-step export guide: CLI, GUI, batch, slicer tips, troubleshooting)
+  - `hardware-design/scad Parts/scad-export.py` (created — interactive Python export tool with file browser, batch export, CLI mode)
+
+---
+
+## Prompts #185–194 — 2026-04-22
+- **Prompt series:** Iterative CAD refinement session. Walk through middle plate geometry, extend header slot length to 56mm then 56.5mm, center slots on plate, fix pillar cutout overshoot for clean booleans, extract 3 components from topscreenassembly.3mf into standalone .scad files (top-plate-solid, top-plate-windowed, top-cover), redesign top cover as open frame (v2) with solid border and countersunk pillar pockets, redesign windowed plate (v1) with solid face, extended retaining rails, printable full-width lips, and rail-only wire gap. Attempted dome face plate (reverted).
+- **Input Tokens (est):** ~500
+- **Output Tokens (est):** ~120,000
+- **Files Created/Modified:**
+  - `hardware-design/scad Parts/middle-plate.scad` (modified — 56.5mm centered slots, clean pillar cutout overshoot)
+  - `hardware-design/scad Parts/middle-plate-v1.scad` (created — v1 snapshot)
+  - `hardware-design/scad Parts/middle-plate-v2.scad` (created — v2 snapshot)
+  - `hardware-design/scad Parts/top-plate-solid.scad` (created — display cover without window)
+  - `hardware-design/scad Parts/top-plate-windowed.scad` (created — display cover with window, original version)
+  - `hardware-design/scad Parts/top-plate-windowed-v1.scad` (created — solid face, extended rails, printable lips, rail-only wire gap)
+  - `hardware-design/scad Parts/top-cover.scad` (created — original dome cover)
+  - `hardware-design/scad Parts/top-cover-v2.scad` (created — open frame, solid border, countersunk pillars)
+
+---
+
+## Prompt #195 — 2026-04-22
+- **Prompt:** "OK let's gather a few screenshots of the new CAD designs and add it to the website. We need a living page for this project's design evolution. Also update the docs and everywhere sensible and update the prompts after committing, and commit and push."
+- **Input Tokens (est):** ~50
+- **Output Tokens (est):** ~60,000
+- **Files Created/Modified:**
+  - `website/docs/assets/images/enclosure/middle-plate-v2.png` (created — OpenSCAD render)
+  - `website/docs/assets/images/enclosure/top-plate-windowed-v1.png` (created — OpenSCAD render)
+  - `website/docs/assets/images/enclosure/top-cover-v2.png` (created — OpenSCAD render)
+  - `website/docs/assets/images/enclosure/full-enclosure-assembly.png` (created — OpenSCAD render)
+  - `website/docs/docs/hardware/design-evolution.md` (created — living design evolution page with renders, specs, version history)
+  - `website/mkdocs.yml` (modified — added Design Evolution to Hardware nav)
+  - `website/docs/docs/hardware/enclosure-design.md` (modified — added ESP32-S3 update note and link to design evolution)
+  - `PromptProgression.md` (modified — added Prompts #184-195)

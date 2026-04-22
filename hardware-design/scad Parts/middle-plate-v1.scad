@@ -21,7 +21,7 @@ wroom_h        = 3.2;
 antenna_wid    = 18;
 antenna_proj   = 6;
 header_gap     = 22;       // distance between the two header rows
-header_slot_len = 56.5;    // slot length — board length + 0.5mm clearance
+header_slot_len = 56;      // slot length — full board length so headers clear
 header_slot_wid = 4;       // slot width — wider than hdr_strip (3mm) for easy fit
 
 // ---- Waveshare 2.13" display ----
