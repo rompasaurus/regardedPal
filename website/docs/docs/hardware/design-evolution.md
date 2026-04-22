@@ -228,3 +228,5 @@ Provides a menu to browse .scad files, pick export format (3MF/STL), set output 
 | 2026-04-22 | Top cover v3 | height variants | 12mm, 17mm, 22mm versions (+5/10/15mm) for both flat-top and rounded-top |
 | 2026-04-22 | Top plate windowed | v1 update | Outer edge expanded by 0.5mm per side for tighter fit |
 | 2026-04-22 | Case separator (board cradle) | v1 | Outer footprint with board-shaped cutout and 2mm raised cradle wall |
+| 2026-04-22 | Top plate windowed | v1 update | Rails trimmed 0.5mm from display side (flush with plate edges) |
+| 2026-04-22 | Case separator (board cradle) | v1 update | Cutout widened 1mm per side for board clearance |
