@@ -52,6 +52,50 @@ The full development setup with dual monitors, ESP32 prototype wired up with jum
 
 ---
 
+## Rev 2 "Extended with Joystick" — Base v1
+
+A purpose-built base for the extended layout: battery on the left half, ESP32 stack on the right overhanging the battery top by 2mm, dual USB-C ports popping out the +X end wall, four M3 corner pillars. Outer footprint 82 × 44 × 22mm with a 2mm bottom fillet and 4mm top-view corner radius.
+
+Source: [`hardware-design/scad Parts/Rev 2 extended with joystick/base-v1.scad`](https://github.com/rompasaurus/dilder/blob/main/hardware-design/scad%20Parts/Rev%202%20extended%20with%20joystick/base-v1.scad).
+
+### Isometric render
+
+Four-corner M3 pillars with rounded inner edges, internal Y-axis divider between the battery and ESP32 chambers, and the step-down ESP32 shelf (narrower in Y than the battery to match the real PCB footprint). Notice how the pillars' outer bottom corners now inherit the shell's 2mm fillet — no more plane-popping off the front face.
+
+![Rev 2 joystick base — isometric](../../assets/images/enclosure/rev2-base-v1-iso.png)
+
+### Top view
+
+Layout at a glance: battery chamber (52.8 × 35.8mm interior) on the left, ESP32 chamber (narrower Y, 28.8mm) on the right, 2mm divider rib between them, 4mm outer corner radius, four M3 through-holes visible in the corners.
+
+![Rev 2 joystick base — top](../../assets/images/enclosure/rev2-base-v1-top.png)
+
+### +X end view — dual USB-C cutouts
+
+The +X face with both USB-C cutouts (7.8 × 2.8mm each), centered on Y=16mm and Y=28mm. Wall is intentionally thin at 1.2mm on this end so the ports poke through cleanly.
+
+![Rev 2 joystick base — +X end](../../assets/images/enclosure/rev2-base-v1-end-plusx.png)
+
+### Side view
+
+Outer side profile (the long-axis wall is solid — all cutouts are on the ±X end walls or floor). Bottom fillet visible as the softly rounded underside.
+
+![Rev 2 joystick base — side](../../assets/images/enclosure/rev2-base-v1-side.png)
+
+### USB-C closeup (+X wall)
+
+The two cutouts framed by the thin 1.2mm +X wall, sitting at Z-center ≈ 7mm so each cutout lines up with a USB-C port body above the ESP32 shelf.
+
+![Rev 2 joystick base — USB-C closeup](../../assets/images/enclosure/rev2-base-v1-usb-closeup.png)
+
+### Shelf divet closeup
+
+Inside view of the ESP32 shelf with the two 0.2mm-deep divets carved into its top face. Each divet gives the USB-C receptacle's underside shield tab a place to sit so the PCB lies flat; the divets stop at the inner face of the +X wall rather than breaking through to the outside.
+
+![Rev 2 joystick base — shelf divet closeup](../../assets/images/enclosure/rev2-base-v1-divet.png)
+
+---
+
 ## Current Assembly (ESP32-S3 Enclosure)
 
 The enclosure is a stacked shell design housing an Olimex ESP32-S3-DevKit-Lipo, Waveshare 2.13" e-ink display, and 1000mAh LiPo battery. Five parts print flat without supports and assemble with 4 corner screw posts.
@@ -230,3 +274,4 @@ Provides a menu to browse .scad files, pick export format (3MF/STL), set output 
 | 2026-04-22 | Case separator (board cradle) | v1 | Outer footprint with board-shaped cutout and 2mm raised cradle wall |
 | 2026-04-22 | Top plate windowed | v1 update | Rails trimmed 0.5mm from display side (flush with plate edges) |
 | 2026-04-22 | Case separator (board cradle) | v1 update | Cutout widened 1mm per side for board clearance |
+| 2026-04-22 | Rev 2 joystick base | v1 | Purpose-built base for the extended-with-joystick layout: split battery/ESP32 chambers, 2mm overhang shelf, dual USB-C cutouts, asymmetric end walls (1.2mm +X / 3mm -X), pillars clipped to bottom fillet |
