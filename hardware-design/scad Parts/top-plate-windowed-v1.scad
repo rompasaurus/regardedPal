@@ -92,10 +92,11 @@ module rounded_v_box(w, l, h, r, fn = 48) {
 // ============== TOP-MID PLATE (WINDOWED) v1 ==============
 
 module top_plate_windowed() {
-    plate_w = inner_wid - 2 * slop;
-    plate_l = inner_len - 2 * slop;
-    plate_x = wall_thk + slop;
-    plate_y = wall_thk + slop;
+    plate_expand = 0.5;    // expand outer edge by 0.5mm per side
+    plate_w = inner_wid - 2 * slop + 2 * plate_expand;
+    plate_l = inner_len - 2 * slop + 2 * plate_expand;
+    plate_x = wall_thk + slop - plate_expand;
+    plate_y = wall_thk + slop - plate_expand;
 
     // Rails extend from display edge to plate edge
     rail_y_local      = disp_y - plate_y;

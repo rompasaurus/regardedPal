@@ -38,6 +38,12 @@ The two long rectangular clearance slots (56.5mm x 4mm) that allow the board's h
 
 ![Middle plate header slots closeup](../../assets/images/enclosure/middle-plate-header-slots-closeup.jpg)
 
+### Board fit-check closeup
+
+The Olimex ESP32-S3-DevKit-Lipo sitting on a printed separator sheet. The WROOM-1 module and antenna are on the left, dual USB-C ports (OTG + programming) on the right, JST battery connector in the center. This photo drove the design of the board cradle separator.
+
+![ESP32 board fit-check closeup](../../assets/images/enclosure/esp32-board-fitcheck-closeup.jpg)
+
 ### Dev workstation
 
 The full development setup with dual monitors, ESP32 prototype wired up with jumper cables, and joystick input board.
@@ -155,6 +161,13 @@ All standalone parametric .scad files live in `hardware-design/scad Parts/`:
 | `top-plate-solid.scad` | Display cover without window |
 | `top-cover.scad` | Original curved dome cover |
 | `top-cover-v2.scad` | Open frame cover with countersunk pillars |
+| `top-cover-v3.scad` | Rounded inner corners, single-corner-rounded pillars |
+| `top-cover-v3-rounded-top.scad` | v3 with bullnose top edge |
+| `top-cover-v3-{12,17,22}mm.scad` | v3 height variants (+5/10/15mm) |
+| `top-cover-v3-rounded-top-{12,17,22}mm.scad` | Rounded-top height variants (+5/10/15mm) |
+| `case-separator-inner.scad` | Thin divider, inner plate footprint |
+| `case-separator-outer.scad` | Thin divider, outer base footprint |
+| `case-separator-board-cradle.scad` | Outer separator with board-shaped cutout and raised cradle wall |
 | `scad-export.py` | Interactive Python export tool (menu + file browser) |
 | `scad-to-3mf-guide.md` | Export workflow guide |
 
@@ -212,3 +225,6 @@ Provides a menu to browse .scad files, pick export format (3MF/STL), set output 
 | 2026-04-22 | Top cover | v3-rounded-top | v3 with bullnose top edge (2mm radius) |
 | 2026-04-22 | Case separator (inner) | v1 | Thin divider sheet matching inner plate footprint with header slots and screw holes |
 | 2026-04-22 | Case separator (outer) | v1 | Thin divider sheet matching base outer footprint with header slots and screw holes |
+| 2026-04-22 | Top cover v3 | height variants | 12mm, 17mm, 22mm versions (+5/10/15mm) for both flat-top and rounded-top |
+| 2026-04-22 | Top plate windowed | v1 update | Outer edge expanded by 0.5mm per side for tighter fit |
+| 2026-04-22 | Case separator (board cradle) | v1 | Outer footprint with board-shaped cutout and 2mm raised cradle wall |
