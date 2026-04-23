@@ -4320,6 +4320,39 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#prompt-230-2026-04-23" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Prompt #230 — 2026-04-23
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#prompt-231-2026-04-23" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Prompt #231 — 2026-04-23
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#prompt-232-2026-04-23" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Prompt #232 — 2026-04-23
+      
+    </span>
+  </a>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -5927,6 +5960,39 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#prompt-230-2026-04-23" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Prompt #230 — 2026-04-23
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#prompt-231-2026-04-23" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Prompt #231 — 2026-04-23
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#prompt-232-2026-04-23" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Prompt #232 — 2026-04-23
+      
+    </span>
+  </a>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -7101,6 +7167,30 @@
 <li><strong>Input Tokens (est):</strong> ~50</li>
 <li><strong>Output Tokens (est):</strong> ~10,000</li>
 <li><strong>Summary:</strong> v1.1 resize pass on the Rev 2 joystick base. Five parameter tweaks in <code>base-v1.scad</code>: outer X 82→96mm (+14), total Z 22→12mm (-10), battery cell X 52→66mm (+14), ESP32 overhang shelf 2→5mm (battery pit 3mm deeper under the shelf — the interpretation explicitly surfaced before editing, since "deeper" was ambiguous given the shrinking total height), USB-C z-center 7→6mm. Re-rendered all 6 orthographic/ISO views with Tomorrow colorscheme, regenerated STL + 3MF exports (both <code>Rev 2 .../base-v1.3mf</code> and <code>enclosure-prints/base-v1.3mf</code>), mirrored renders into website assets, updated <code>design-plan.md</code> with a v1.1 section (old→new table + derived consequences + open-question about port-center alignment under z=6), and updated both the Design Evolution doc and the blog post with the new numbers/captions. ESP32 chamber headroom dropped to 5mm as a known trade-off.</li>
+</ul>
+<hr />
+<h2 id="prompt-230-2026-04-23">Prompt #230 — 2026-04-23<a class="headerlink" href="#prompt-230-2026-04-23" title="Permanent link">&para;</a></h2>
+<p><strong>Prompt:</strong> "ok let remove 6.5mm for the length where the battery goes into"</p>
+<ul>
+<li><strong>Input Tokens (est):</strong> ~15</li>
+<li><strong>Output Tokens (est):</strong> ~4,000</li>
+<li><strong>Summary:</strong> v1.2 — the v1.1 battery extension had overshot the real cell. Trimmed 6.5mm end-to-end off the battery section: outer X 96→89.5mm, battery cell X 66→59.5mm. ESP32 chamber inner length is unchanged at 23mm because outer and battery dropped by the same amount. Re-rendered all 6 views, regenerated STL/3MFs, mirrored to website assets, appended a v1.2 section to <code>design-plan.md</code>, bumped the numbers and added a v1.2 row + blog subsection in the docs and blog post.</li>
+</ul>
+<hr />
+<h2 id="prompt-231-2026-04-23">Prompt #231 — 2026-04-23<a class="headerlink" href="#prompt-231-2026-04-23" title="Permanent link">&para;</a></h2>
+<p><strong>Prompt:</strong> "ok lets also move the side holes for the 2 usb c  up 2mm on the side"</p>
+<ul>
+<li><strong>Input Tokens (est):</strong> ~15</li>
+<li><strong>Output Tokens (est):</strong> ~3,500</li>
+<li><strong>Summary:</strong> v1.3 — raised <code>usb_c_port_vertical_center_z_mm</code> 6→8mm so the USB cutouts sit fully above the ESP32 shelf (z=7) instead of straddling/slicing through it. Re-rendered the USB-facing views, regenerated STL/3MFs, mirrored assets, added a v1.3 section to <code>design-plan.md</code> and matching blog + docs entries.</li>
+</ul>
+<hr />
+<h2 id="prompt-232-2026-04-23">Prompt #232 — 2026-04-23<a class="headerlink" href="#prompt-232-2026-04-23" title="Permanent link">&para;</a></h2>
+<p><strong>Prompt:</strong> "ok now we nee to poke thorugh 2 small holes in the case so that the boot and reset buuton can be presed eaeling so 17 mm in from the inside edge of the sied with the usb hole and 4.2 mm from the top a 1mm diameter  hole should be place then another hole should be placed 12.5 mm to the left of that hole same distance from the top" (plus follow-up clarifications: move holes to the bottom base because the ESP board is mounted upside-down; Y position 11.5mm in from the outer edge)</p>
+<ul>
+<li><strong>Input Tokens (est):</strong> ~120</li>
+<li><strong>Output Tokens (est):</strong> ~12,000</li>
+<li><strong>Summary:</strong> v1.4 — added two Ø1mm vertical paperclip poke-through holes in the base floor. Went through a few interpretation cycles: first implementation placed them on the +Y long wall, which the user corrected; moved to the bottom base floor with a guessed Y; then settled on the final spec of 11.5mm in from the +Y outer edge (y=32.5mm) so the holes open into the ESP32 chamber where the upside-down-mounted board's BOOT/RESET buttons live. Final X positions: hole 1 at x=71.3 (17mm from +X inner wall), hole 2 at x=58.8 (12.5mm further in). Cylinder axis along Z, subtract spans the full enclosure height so floor + shelf + chamber are all pierced in one op. Added a bottom-view render to the docs + blog, rewrote the v1.4 design-plan section, added v1.4 row to version history, and called out the caveat that hole 2 at x=58.8 lies past the battery/ESP32 divider.</li>
 </ul>
 
 

@@ -2831,6 +2831,39 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#v12-battery-trim" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        v1.2 battery trim
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#v13-usb-c-cutouts-raised" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        v1.3 USB-C cutouts raised
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#v14-boot-reset-paperclip-poke-through-holes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        v1.4 BOOT / RESET paperclip poke-through holes
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#whats-next" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -2920,7 +2953,7 @@
                           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 20a8 8 0 0 0 8-8 8 8 0 0 0-8-8 8 8 0 0 0-8 8 8 8 0 0 0 8 8m0-18a10 10 0 0 1 10 10 10 10 0 0 1-10 10C6.47 22 2 17.5 2 12A10 10 0 0 1 12 2m.5 5v5.25l4.5 2.67-.75 1.23L11 13V7z"/></svg>
                           <span class="md-ellipsis">
                             
-                              5 min read
+                              6 min read
                             
                           </span>
                         </div>
@@ -2958,9 +2991,9 @@
 <h2 id="layout-at-a-glance">Layout at a glance<a class="headerlink" href="#layout-at-a-glance" title="Permanent link">&para;</a></h2>
 <p><img alt="Top view" loading="lazy" src="../../assets/images/enclosure/rev2-base-v1-top.png" width="640" /></p>
 <ul>
-<li>Outer shell: <strong>96 × 44 × 12mm</strong> (v1.1 resize), 4mm top-view corner radius, 2mm bottom fillet.</li>
-<li>Battery chamber on the left: inner <strong>66.8 × 35.8mm</strong> to fit a longer 14mm-extended cell with 0.4mm slop per side.</li>
-<li>ESP32 chamber on the right: inner <strong>~21 × 28.8mm</strong> on a 5mm raised shelf, narrower in Y than the battery so the step is visible in plan view.</li>
+<li>Outer shell: <strong>89.5 × 44 × 12mm</strong> (v1.2 trim after v1.1 resize), 4mm top-view corner radius, 2mm bottom fillet.</li>
+<li>Battery chamber on the left: inner <strong>60.3 × 35.8mm</strong> to fit the (actual) cell with 0.4mm slop per side.</li>
+<li>ESP32 chamber on the right: inner <strong>23 × 28.8mm</strong> on a 5mm raised shelf, narrower in Y than the battery so the step is visible in plan view.</li>
 <li>2mm divider rib between the chambers (carries some of the board-left-edge load).</li>
 <li>Four 5×5mm M3 pillars in the corners, Ø3.2mm through-holes.</li>
 </ul>
@@ -2975,7 +3008,7 @@
 <p>The resulting outer corner radius is capped at <code>4mm</code> — any bigger and the outer pillar corner at the USB end would have poked past the shell's rounded profile.</p>
 <h2 id="dual-usb-c-cutouts">Dual USB-C cutouts<a class="headerlink" href="#dual-usb-c-cutouts" title="Permanent link">&para;</a></h2>
 <p><img alt="USB closeup" loading="lazy" src="../../assets/images/enclosure/rev2-base-v1-usb-closeup.png" width="640" /></p>
-<p>Two <code>7.8 × 2.8mm</code> cutouts at Y=16mm and Y=28mm (symmetric about Y=22mm, 12mm apart). Height is the measured port body (2.6mm) plus a 0.2mm allowance so the PCB seats truly flat against the plastic. Z-center is at <strong>6mm</strong> after the v1.1 drop — the cutouts now straddle the ESP32 shelf level (z=7), and the recess carves through the shelf locally under each port so nothing blocks the port body.</p>
+<p>Two <code>7.8 × 2.8mm</code> cutouts at Y=16mm and Y=28mm (symmetric about Y=22mm, 12mm apart). Height is the measured port body (2.6mm) plus a 0.2mm allowance so the PCB seats truly flat against the plastic. Z-center is at <strong>8mm</strong> after the v1.3 bump — fully above the ESP32 shelf (z=7) so the port recess lives in clear chamber space.</p>
 <h2 id="shelf-divets-for-the-usb-shield-tabs">Shelf divets for the USB shield tabs<a class="headerlink" href="#shelf-divets-for-the-usb-shield-tabs" title="Permanent link">&para;</a></h2>
 <p><img alt="Shelf divet" loading="lazy" src="../../assets/images/enclosure/rev2-base-v1-divet.png" width="640" /></p>
 <p>Each USB-C receptacle has a small shield tab on its underside that hangs below the PCB. If the shelf is perfectly flat, the PCB sits 0.2mm proud of the shelf — enough to misalign each USB cutout vertically. Fix: a <code>0.2 × 8 × 7.8mm</code> recess carved into the shelf top under each port. The divets stop at the inner face of the +X wall; an earlier version punched all the way through and rendered as a visible slit below each USB cutout.</p>
@@ -2993,6 +3026,28 @@
 <li>USB-C cutout z-center <strong>7 → 6mm</strong> (holes move down 1mm).</li>
 </ul>
 <p>ESP32 chamber clear height drops from 18mm to 5mm as a consequence — tight but still enough for PCB (1.6mm) + USB-C receptacle body (2.6mm). If the real PCB's port body sits higher than the 6mm cutout, the mount strategy (board orientation, shelf height) gets a follow-up pass.</p>
+<h2 id="v12-battery-trim">v1.2 battery trim<a class="headerlink" href="#v12-battery-trim" title="Permanent link">&para;</a></h2>
+<p>The v1.1 extension overshot — the cell actually on hand needed 6.5mm less length. A one-parameter-pair fix:</p>
+<ul>
+<li>Outer X <strong>96 → 89.5mm</strong> (battery end only).</li>
+<li>Battery cell length <strong>66 → 59.5mm</strong> (chamber → 60.3mm).</li>
+<li>ESP32 chamber inner length is untouched at 23mm — outer and battery each dropped by the same 6.5mm so the remainder for the ESP32 side falls out of the same equation.</li>
+</ul>
+<h2 id="v13-usb-c-cutouts-raised">v1.3 USB-C cutouts raised<a class="headerlink" href="#v13-usb-c-cutouts-raised" title="Permanent link">&para;</a></h2>
+<p>Follow-up to v1.1's USB z-drop: with the shelf at z=7 and the cutout center at z=6, the cutouts straddled the shelf and the port recess had to carve through it. One-parameter fix:</p>
+<ul>
+<li>USB-C cutout z-center <strong>6 → 8mm</strong>.</li>
+</ul>
+<p>Cutout now spans z=6.6–9.4, fully above the shelf. With the PCB on the shelf (z=7), PCB top at 8.6, and a 2.6mm port body above it (z=8.6–11.2, center 9.9), the cutout still sits a bit low of the natural port-center position but now lives in clean chamber space instead of slicing through the shelf.</p>
+<h2 id="v14-boot-reset-paperclip-poke-through-holes">v1.4 BOOT / RESET paperclip poke-through holes<a class="headerlink" href="#v14-boot-reset-paperclip-poke-through-holes" title="Permanent link">&para;</a></h2>
+<p>The board is mounted component-side <strong>down</strong> on the ESP32 shelf — buttons face the floor. So the paperclip access can't be a side-wall hole; it has to be a vertical hole in the base floor that the paperclip enters from underneath the enclosure.</p>
+<p>Two Ø1mm vertical through-holes:</p>
+<ul>
+<li>Hole 1: (x=71.3, y=32.5), 17mm in from the +X inner wall face.</li>
+<li>Hole 2: (x=58.8, y=32.5), 12.5mm to the left of hole 1.</li>
+<li>Y = 32.5mm = 11.5mm in from the +Y outer edge (puts both holes inside the ESP32 chamber's Y range of 7.6–36.4).</li>
+</ul>
+<p>The cylinder subtract runs the full enclosure height, so a single op carves the floor, the shelf-region material, and any chamber space above. Caveat worth noting: hole 2 at x=58.8 is just past the battery/ESP32 divider — if the real board's RESET sits over the ESP32 chamber (x ≥ 65.3), the cluster needs to shift or shrink.</p>
 <h2 id="whats-next">What's next<a class="headerlink" href="#whats-next" title="Permanent link">&para;</a></h2>
 <p>This is the base only. Still to come in this branch:</p>
 <ul>
