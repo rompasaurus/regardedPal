@@ -270,3 +270,131 @@ each Z.
   If the RESET button actually sits over the ESP32 chamber (x ≥ 65.3
   mm), either the 12.5 mm spacing needs to shrink or hole 1 needs to
   shift toward +X so the cluster stays above the board.
+
+---
+
+## Top cover (windowed) — `top-cover-windowed-v1.scad`
+
+Companion top piece for the Rev 2 stack. Outer footprint (`91.5 × 44`)
+and corner-pillar XY positions match `base-v1` and `middle-platform-v1`
+so the M3 through-bolts line up through the entire stack.
+
+Combines two patterns from the Rev 1 enclosure family:
+
+- **Curved bullnose top face** — lifted from `top-cover-v3-rounded-top`
+  and made bigger. The curve now reads from outside as a rolled edge
+  across the whole front face, not just a corner radius.
+- **Display slide-in housing with ±Y snap rails + inward lip** — lifted
+  from `top-plate-windowed-v1`. The rails hang down off the face-plate
+  underside along the display's ±Y edges; an inward-protruding lip at
+  the bottom of each rail catches the display from below. Display is
+  offset as far -X as possible so it sits over the battery half (which
+  is already supported from below by `middle-platform-v1`'s solid fill
+  pedestal).
+
+And one new feature:
+
+- **Joystick through-hole** on the +X half of the face plate, centered
+  in the open region between the display's +X end and the +X inner
+  wall. Ø 12 mm default, chamfered so the bullnose rolls into the
+  opening.
+
+### Parameters
+
+| Parameter | Value | Notes |
+|---|---|---|
+| `enclosure_outer_width_along_x_axis_mm` | 91.5 | X — matches base-v1 |
+| `enclosure_outer_depth_along_y_axis_mm` | 44 | Y — matches base-v1 |
+| `outer_case_top_view_corner_radius_mm` | 4 | Plan-view corner radius |
+| `outer_case_top_edge_bullnose_radius_mm` | **4** | Curved top edge — bigger than a normal fillet so the curve dominates the top face |
+| `minus_x_end_wall_thickness_mm` | 3.0 | Battery end, thick |
+| `plus_x_end_wall_thickness_mm` | 1.2 | USB-C end, thin |
+| `face_plate_thickness_z_mm` | **0.5** | Minimum-printable thin bezel; most of the visible "top-face taper" happens inside the bullnose above |
+| `display_footprint_thickness_z_mm` | 5 | Waveshare 2.13" |
+| `display_footprint_length_along_x_mm` | 65 | Landscape in Rev 2 (was portrait in Rev 1) |
+| `display_footprint_depth_along_y_mm` | 30 | |
+| `display_viewing_window_length_along_x_mm` | 50 | Cut through the face plate + bullnose |
+| `display_viewing_window_depth_along_y_mm` | 25 | |
+| `display_window_top_taper_width_mm` | **2.0** | Window widens by this on each side from face-plate bottom → top of cover, so the top face visibly tapers DOWN into the screen edges |
+| `snap_rail_depth_below_face_plate_z_mm` | 4.5 | Rail drop below the face plate |
+| `snap_lip_thickness_z_mm` | 1.0 | Single printable layer |
+| `snap_lip_protrusion_inward_y_mm` | 1.0 | Lip catch past the display edge |
+| `rail_width_y_mm` | **2.5** | Explicit rail Y-thickness — parity with Rev 1's `top-plate-windowed-v1` (~2.5 mm). Earlier Rev 2 value filled the full wall-to-display gap (~4.5 mm) for no structural reason. |
+| `wire_pass_through_gap_length_along_x_mm` | **30** | Notch length along the rail (copied from Rev 1) |
+| `wire_pass_through_gap_depth_along_y_mm` | **6** | Notch depth across the rail + into the display bay |
+| `joystick_through_hole_diameter_mm` | 12 | Thumb-joystick shaft Ø |
+| `joystick_hole_top_taper_width_mm` | **1.5** | Hole widens on radius from face-plate bottom → top of cover, so the bullnose rolls into the opening |
+| `corner_pillar_square_side_length_mm` | 5 | |
+| `corner_pillar_inner_facing_corner_radius_mm` | 1 | |
+| `m3_screw_clearance_hole_diameter_mm` | 3.2 | |
+
+### Z layout (cover-local, z=0 = mating bottom)
+
+| Z (mm) | Thing |
+|---|---|
+| 0 | Mating bottom (meets middle-platform shell top at stack z=22) |
+| 0 → 5.5 | Corner pillar material |
+| 5 | `middle-platform-v1`'s -X pedestal protrudes 5 mm into the cover; display underside rests here |
+| 5 → 10 | Display body (Waveshare 2.13") |
+| 5.5 → 10 | Snap-rail material on ±Y edges |
+| 4.5 → 5.5 | Snap-lip catch (1 mm layer under rail, protruding inward past display edge) |
+| 10 → 10.5 | Thin face plate (0.5 mm) |
+| 10.5 → 14.5 | Bullnose shell — curves the 4 mm outer edge into the flat top |
+
+### Geometry patterns worth documenting
+
+- **Tapered window cut.** The window is a `hull()` of two rectangular
+  slabs: a true-size rect at the face-plate bottom and a
+  `(window + 2·taper)` rect at the top of the cover. That frustum shape
+  is what carves the bullnose into a shallow funnel around the screen —
+  the face plate + bullnose near the window tapers DOWN toward the
+  screen edges instead of meeting the window at a hard square edge.
+- **Tapered joystick hole.** Same language, cylindrical: `hull()` of a
+  true-Ø cylinder at the face-plate bottom and a
+  `(Ø + 2·taper)` cylinder at the top of the cover.
+- **Wire pass-through gap.** Cut in the MIDDLE of the -Y rail only,
+  Z-bounded to rail + lip material (doesn't touch the face plate
+  above). Lets wires cross the rail boundary without fighting the
+  snap. Lifted from Rev 1's `top-plate-windowed-v1`.
+- **Per-pillar preservation height in the cavity carve.** The cavity
+  is a single `difference()` block where each pillar's preservation
+  column is sized independently. +X pillars preserve the full column
+  up to the face plate; **-X pillars preserve only up to
+  `rail_bottom_z_mm = 5.5`**, so the square pillar exists only where
+  it meets the base. Between `rail_bottom_z` and the face plate, the
+  -X pillar is gone — the bolt passes through the rail + face plate +
+  bullnose instead. Earlier version had a separate "extra cut" after
+  the carve; that introduced coplanar surfaces at
+  `z = face_plate_bottom_z_mm` that rendered as a ghost sliver. The
+  inlined single-difference form eliminates the coincident surface.
+- **Pillars capped at `face_plate_top_z_mm`** so the pillar's square
+  outer corners don't poke past the rounded bullnose top of the shell.
+  The face plate + bullnose above is solid shell material; the M3
+  clearance bore is drilled through both.
+
+### Known constraints
+
+- 0.5 mm face plate is at the printability floor for FDM; it prints
+  as a single perimeter and is fragile until the cover is screwed to
+  the rest of the stack. If this turns out too flimsy in hand, raise
+  to 0.8 mm.
+- The -X pillar column cut means the bolt at the -X corners passes
+  through rail material (Y = 2.5–5) instead of a full 5×5 pillar in
+  the `z = 5.5–10` range. The bolt still has a continuous material
+  path (pillar → rail → face plate → bullnose), but lateral support
+  is reduced in that Z range. Fine for M3 through-bolts held taut
+  between head and nut — not a cantilevered post.
+- Display slot assumes the Waveshare 2.13" in **landscape** (65 × 30
+  with the 65 mm side along X). Rev 1 used the same display in
+  portrait.
+
+### Files for this part
+
+| File | Purpose |
+|---|---|
+| `top-cover-windowed-v1.scad` | Parametric cover — edit constants at the top to tweak |
+| `top-cover-windowed-v1.stl` | STL render |
+| `top-cover-windowed-v1-iso.png` | Isometric view (from above, cavity visible) |
+| `top-cover-windowed-v1-top.png` | Plan view showing the tapered window + joystick holes |
+| `top-cover-windowed-v1-side.png` | Side profile showing the bullnose |
+| `top-cover-windowed-v1-under.png` | Underside showing rails + wire gap + shortened -X pillars |

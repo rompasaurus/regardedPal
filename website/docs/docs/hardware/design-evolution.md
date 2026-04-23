@@ -116,6 +116,42 @@ Inside view showing the 5mm step from the battery floor (lower) up to the ESP32 
 
 ---
 
+## Rev 2 "Extended with Joystick" — Top Cover (Windowed) v1
+
+The top piece for the Rev 2 stack. Outer footprint `91.5 × 44mm` matches `base-v1` and `middle-platform-v1` so the M3 through-bolts line up through the entire sandwich. Combines two Rev 1 ideas — the curved bullnose top from `top-cover-v3-rounded-top` and the display slide-in housing with ±Y snap rails from `top-plate-windowed-v1` — plus a new tapered joystick through-hole on the +X half of the face plate.
+
+Source: [`hardware-design/scad Parts/Rev 2 extended with joystick/top-cover-windowed-v1.scad`](https://github.com/rompasaurus/dilder/blob/main/hardware-design/scad%20Parts/Rev%202%20extended%20with%20joystick/top-cover-windowed-v1.scad).
+
+### Isometric — cavity view
+
+![Rev 2 top cover — isometric](../../assets/images/enclosure/rev2-top-cover-windowed-v1-iso.png)
+
+The bullnose radius is 4mm — big enough that the curve reads across the whole front face as a rolled edge rather than a small corner fillet. The face plate itself is only **0.5mm** thick (minimum printable for FDM); most of the visible "top-face taper" happens inside the bullnose above the face plate, via the tapered window and joystick cuts.
+
+### Top view — tapered window + joystick hole
+
+![Rev 2 top cover — top view](../../assets/images/enclosure/rev2-top-cover-windowed-v1-top.png)
+
+Both openings are cut as a `hull()` frustum — true size at the face-plate bottom and `(opening + 2·taper)` at the top of the cover — so the bullnose rolls into each opening as a shallow funnel instead of meeting it at a hard square edge. Window taper: 2mm per side. Joystick hole taper: 1.5mm on radius (12mm Ø at the face plate, 15mm Ø at the top).
+
+### Side profile — bullnose
+
+![Rev 2 top cover — side](../../assets/images/enclosure/rev2-top-cover-windowed-v1-side.png)
+
+Side view showing the 4mm bullnose rolling the outer wall into the top face across the full long axis.
+
+### Underside — rails, wire gap, -X pillar shortening
+
+![Rev 2 top cover — underside](../../assets/images/enclosure/rev2-top-cover-windowed-v1-under.png)
+
+Two ±Y snap rails run along the display's long edges. Each rail is **2.5mm** wide in Y (matching Rev 1's `top-plate-windowed-v1`), with a 1mm-thick lip at the bottom that protrudes 1mm inward past the display's ±Y edge to catch the display from below. The open space between rail inner edge and display edge doubles as a wire-routing channel.
+
+A **30 × 6mm wire pass-through gap** notches the middle of the -Y rail so wires can cross the rail boundary without fighting the snap — same pattern as Rev 1, rotated for the landscape display orientation.
+
+The **-X corner pillars** show only the screw-clearance hole at this level — the full square pillar only exists at the base (z=0 → 5.5), where it mates with `middle-platform-v1`. Above the rail-bottom level, the -X pillars are omitted so the square-pillar edges don't clutter the cavity between the rail top and the face plate. The M3 bolt still has a continuous material path — pillar → rail → face plate → bullnose — but the visible pillar footprint only appears where it's structurally needed at the base. The +X pillars stay full-height (no rails reach them).
+
+---
+
 ## Current Assembly (ESP32-S3 Enclosure)
 
 The enclosure is a stacked shell design housing an Olimex ESP32-S3-DevKit-Lipo, Waveshare 2.13" e-ink display, and 1000mAh LiPo battery. Five parts print flat without supports and assemble with 4 corner screw posts.
@@ -299,3 +335,4 @@ Provides a menu to browse .scad files, pick export format (3MF/STL), set output 
 | 2026-04-23 | Rev 2 joystick base | v1.2 | Battery section trimmed -6.5mm: outer width 96→89.5mm, battery cell length 66→59.5mm, ESP32 chamber unchanged |
 | 2026-04-23 | Rev 2 joystick base | v1.3 | USB-C cutouts raised +2mm (z-center 6→8mm) so they clear the ESP32 shelf (z=7) and sit fully above it |
 | 2026-04-23 | Rev 2 joystick base | v1.4 | Added two Ø1mm vertical BOOT/RESET paperclip poke-through holes in the base floor at (71.3, 32.5) and (58.8, 32.5); board is mounted component-side down so paperclip reaches buttons from below |
+| 2026-04-23 | Rev 2 top cover (windowed) | v1 | Top piece for the Rev 2 stack: 4mm bullnose across the whole front face, 0.5mm face plate, tapered display window (50×25 → +2mm per side at the cover top) and tapered joystick hole (Ø12 → Ø15), 2.5mm ±Y snap rails with 1mm lips, 30×6mm wire pass-through gap in the -Y rail, -X pillars shortened to `rail_bottom_z` so the square pillar only exists where it meets the base |
