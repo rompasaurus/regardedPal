@@ -2777,3 +2777,69 @@ Spelling and grammar are lightly cleaned for readability while preserving the or
   - `website/docs/docs/hardware/design-evolution.md`: added v1.4 hero-paragraph, replaced the "+Y side with button holes" section with a new "Bottom view — BOOT/RESET paperclip poke-through holes" section, added v1.4 row in the version-history table.
   - `website/docs/blog/posts/rev2-joystick-base.md`: appended "v1.4 BOOT / RESET paperclip poke-through holes" section with final coordinates + caveat.
   - Staged alongside this commit (unrelated to the button-hole work but authored in the same branch by the user): `hardware-design/scad Parts/Rev 2 extended with joystick/middle-platform-v1.scad` and `hardware-design/enclosure-prints/middle-platform-v1.3mf` — a mid-stack platform part for the same Rev 2 assembly.
+
+---
+
+## Prompt #233 — 2026-04-23
+- **Prompt:** "Look at the top-plate-windowed CAD — there's a gap in one side of the rails in the middle. We still need that. Apply it to the top-cover-windowed too. Also the rails seem a bit thicker on the new version — verify the dimensions. I also want more of a curve to the whole front face like the picture. Also the top face is way too thick — I want it as thin as possible and taper down towards the screen edges."
+- **Input Tokens (est):** ~100
+- **Output Tokens (est):** ~14,000
+- **Files:**
+  - `hardware-design/scad Parts/Rev 2 extended with joystick/top-cover-windowed-v1.scad` (modified — five changes in one pass):
+    - `outer_case_top_edge_bullnose_radius_mm` 2 → 4 (bigger rolled top edge).
+    - `face_plate_thickness_z_mm` 2 → 1 (thin bezel).
+    - New `rail_width_y_mm = 2.5` parameter — rails were filling the whole wall-to-display gap at ~4.5 mm (1.8× Rev 1's ~2.5 mm). Rail Y extents now anchored at inner wall + trim and sized to `rail_width_y_mm`, with the lip cantilevered from rail start across the new wire-routing gap to 1 mm past the display edge.
+    - New `wire_pass_through_gap_{length_along_x,depth_along_y}_mm = {30, 6}` parameters + a Stage 3 subtract that notches out the middle of the -Y rail — same pattern as Rev 1, rotated for landscape display orientation.
+    - Display window cut replaced with a `hull()` frustum (true size at face-plate bottom → +2 mm per side at cover top) so the bullnose rolls into the window as a shallow funnel.
+  - `hardware-design/scad Parts/Rev 2 extended with joystick/top-cover-windowed-v1.stl` + 4 preview PNGs (`-iso.png`, `-top.png`, `-side.png`, `-under.png`) regenerated from the updated SCAD.
+
+---
+
+## Prompt #234 — 2026-04-23
+- **Prompt:** "Looks pretty good, but the screw-hole pillars are clipping with the top case of the cover and not flush with the round corners. Also the top face plane is really thick — can we halve its width but keep the nice curvature?"
+- **Input Tokens (est):** ~40
+- **Output Tokens (est):** ~2,500
+- **Files:**
+  - `top-cover-windowed-v1.scad` (modified):
+    - `face_plate_thickness_z_mm` 1 → **0.5** (halved). Bullnose radius stays at 4 mm so the curve is preserved.
+    - Pillar height in the Stage 1 union changed from `cover_total_height_z_mm` → `face_plate_top_z_mm`, so the pillars' square outer corners don't poke past the bullnose. The bullnose above is solid shell material — the M3 bore runs through both.
+  - STL + 4 PNGs re-rendered.
+
+---
+
+## Prompt #235 — 2026-04-23
+- **Prompt:** "Perfect. Now we need to get rid of the outside edges of the screw pillar that exist between the rail-connection and the top face — just let it be a passthrough hole in that section, and a square pillar only where it meets the base. Do this for both of those pillars."
+- **Input Tokens (est):** ~45
+- **Output Tokens (est):** ~3,500
+- **Files / iterations:**
+  - First attempt: only shortened `pillar_one_round` to `rail_bottom_z_mm` for the -X pillars. This had no effect because `chamber_carve_preserving_pillars` was still preserving the full pillar column out of the shell — the shell material was the load-bearing thing, not the redundant `pillar_one_round` union.
+  - User feedback with a highlighted render ("you sliced nothing off") pinpointed the still-visible square pillar above `rail_bottom_z`.
+  - Second attempt: added an explicit post-carve subtract block that cut away the shell's pillar column between `rail_bottom_z` and `face_plate_bottom_z` for the -X pillars only. That worked geometrically.
+  - User follow-up: "there's a ghost of render still there." That was the coplanar-surface artifact at `z = face_plate_bottom_z_mm` where the post-carve cut shared a boundary with the `chamber_carve_preserving_pillars` top. Final fix replaced the helper call + extra cut with a single inlined `difference()` that uses per-pillar preservation heights (`rail_bottom_z_mm` for -X pillars, `face_plate_bottom_z_mm + 0.1` for +X pillars), eliminating the coincident surface. Facet count dropped 773 → 703 confirming the duplicate boundary was gone.
+  - STL + 3 PNGs re-rendered each iteration.
+
+---
+
+## Prompt #236 — 2026-04-23
+- **Prompt:** "Also chamfer the hole for the joystick cutout."
+- **Input Tokens (est):** ~10
+- **Output Tokens (est):** ~1,500
+- **Files:**
+  - `top-cover-windowed-v1.scad` (modified):
+    - New `joystick_hole_top_taper_width_mm = 1.5` parameter.
+    - Joystick cut replaced with a `hull()` of two thin cylinders — Ø 12 mm at the face-plate bottom and Ø 15 mm at the top of the cover. Same language as the window taper.
+  - STL + 3 PNGs re-rendered.
+
+---
+
+## Prompt #237 — 2026-04-23
+- **Prompt:** "Ok, update the doc and the blog and website and commit. Then update prompts, fix grammar, and commit and push."
+- **Input Tokens (est):** ~25
+- **Output Tokens (est):** ~8,000
+- **Files:**
+  - `hardware-design/scad Parts/Rev 2 extended with joystick/design-plan.md` — appended a full "Top cover (windowed)" section: parameter table, Z layout, geometry-pattern notes (tapered window, tapered joystick hole, wire pass-through gap, per-pillar preservation height, pillar cap at bullnose base), known constraints, file list.
+  - `website/docs/docs/hardware/design-evolution.md` — new "Rev 2 Top Cover (Windowed) v1" section with iso / top / side / underside renders and commentary; appended 2026-04-23 top-cover row to the version-history table.
+  - `website/docs/blog/posts/rev2-top-cover-windowed.md` (new) — sibling blog post to `rev2-joystick-base.md` documenting the same geometry with prose.
+  - `website/docs/assets/images/enclosure/rev2-top-cover-windowed-v1-{iso,top,side,under}.png` — 4 renders mirrored from the SCAD folder.
+  - Committed as `Rev 2 top cover (windowed) v1 + docs/blog`.
+  - `PromptProgression.md` — this file, prompts #233–#237, grammar cleaned per the file's own header convention ("Spelling and grammar are lightly cleaned for readability while preserving the original intent and voice").
