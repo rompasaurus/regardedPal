@@ -22,7 +22,7 @@ $fn = 48;
 // ============================================================
 // Outer shell dimensions (overall enclosure footprint and height)
 // ============================================================
-enclosure_outer_width_along_x_axis_mm          = 96;  // extended +14 for longer battery cell
+enclosure_outer_width_along_x_axis_mm          = 89.5; // battery section trimmed 6.5mm (was 96 after +14 extension)
 enclosure_outer_depth_along_y_axis_mm          = 44;
 enclosure_total_height_along_z_axis_mm         = 12;  // lowered -10 from original 22
 perimeter_outer_wall_thickness_mm              = 2;    // ±Y long walls
@@ -45,7 +45,7 @@ minus_x_battery_side_end_wall_thickness_mm     = 3.0;  // -X, battery end
 // ============================================================
 // Battery chamber (LEFT side, 1000 mAh cell — matches top-cover-v3)
 // ============================================================
-battery_cell_footprint_length_x_mm             = 66;  // extended +14 for longer battery cell
+battery_cell_footprint_length_x_mm             = 59.5; // trimmed 6.5mm from battery section (was 66)
 battery_cell_footprint_depth_y_mm              = 35;
 
 // ============================================================
@@ -88,8 +88,9 @@ usb_c_shelf_divet_width_along_y_axis_mm        = 7.8;
 // Vertical center of the USB-C port cutout (z).
 // The board sits INSIDE the base on the ESP32 shelf (component-side UP,
 // headers facing up), so the USB-C ports sit low — close to the base
-// floor. Dropped from 7 to 6 per this revision (USB holes 1 mm lower).
-usb_c_port_vertical_center_z_mm                = 6;
+// floor. Raised to 8 this pass (+2 from v1.2's 6) so the cutouts clear
+// the ESP32 shelf top (z=7) and sit fully above the shelf.
+usb_c_port_vertical_center_z_mm                = 8;
 
 // Y centers of the TWO USB-C ports on the board's end edge. Default layout
 // assumes the two ports sit symmetrically about the ESP32 Y centerline,
@@ -112,6 +113,24 @@ esp32_cavity_overhang_onto_battery_length_x_mm = 4;   // PCB overhangs battery i
 corner_pillar_square_side_length_mm            = 5;
 corner_pillar_inner_facing_corner_radius_mm    = 1;
 m3_screw_clearance_hole_diameter_mm            = 3.2;
+
+// ============================================================
+// BOOT / RESET button poke-through holes in the BASE FLOOR
+// ============================================================
+// Two small Ø 1 mm vertical through-holes in the bottom of the case,
+// going straight up through the 2 mm base plate and the 5 mm shelf
+// material so a paperclip inserted from below reaches the BOOT and
+// RESET buttons on the ESP32 dev board (which is mounted COMPONENT-
+// SIDE DOWN in the ESP32 chamber, so buttons face the floor).
+//
+// X positions are measured from the +X (USB-end) inner wall face.
+// Y position is measured INWARD from the +Y outer long edge of the
+// floor (11.5 mm inset lands the hole inside the ESP32 chamber under
+// where the flipped-board buttons sit).
+button_poke_hole_diameter_mm                          = 1.0;
+button_poke_hole_1_distance_from_plus_x_inner_wall_mm = 17.0;  // nearest the USB end
+button_poke_hole_2_offset_to_left_of_hole_1_mm        = 12.5;  // further into the case
+button_poke_hole_distance_from_plus_y_outer_edge_mm   = 11.5;  // Y inset from +Y outer edge
 
 // ============================================================
 // Derived cavity dimensions (cell + slop on every side)
@@ -402,6 +421,36 @@ module base() {
                 cube([usb_c_cutout_total_depth_x_mm,
                       usb_c_panel_cutout_width_along_y_axis_mm,
                       usb_c_panel_cutout_height_along_z_axis_mm]);
+        }
+
+        // BOOT / RESET paperclip poke-through holes in the BASE FLOOR.
+        // Board is mounted component-side DOWN on the ESP32 shelf, so
+        // BOOT/RST buttons face the floor. Two Ø 1 mm vertical holes
+        // drill straight up from the outside bottom through the base
+        // plate and the shelf material so a paperclip inserted from
+        // below can reach the button contacts.
+        button_poke_hole_1_center_x_mm =
+            enclosure_outer_width_along_x_axis_mm
+              - plus_x_usb_side_end_wall_thickness_mm
+              - button_poke_hole_1_distance_from_plus_x_inner_wall_mm;
+        button_poke_hole_2_center_x_mm =
+            button_poke_hole_1_center_x_mm
+              - button_poke_hole_2_offset_to_left_of_hole_1_mm;
+        button_poke_hole_center_y_mm =
+            enclosure_outer_depth_along_y_axis_mm
+              - button_poke_hole_distance_from_plus_y_outer_edge_mm; // 44 − 11.5 = 32.5
+        // Cylinder starts just below the outer bottom and extends all
+        // the way through to above the shelf so the full bore is
+        // punched in one subtract (floor + shelf material both go).
+        for (button_poke_hole_center_x_mm =
+               [button_poke_hole_1_center_x_mm,
+                button_poke_hole_2_center_x_mm]) {
+            translate([button_poke_hole_center_x_mm,
+                       button_poke_hole_center_y_mm,
+                       -0.5])
+                cylinder(h = enclosure_total_height_along_z_axis_mm + 1,
+                         d = button_poke_hole_diameter_mm,
+                         $fn = 24);
         }
     }
 }

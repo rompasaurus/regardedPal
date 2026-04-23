@@ -184,3 +184,89 @@ the cell more vertical clearance under the ESP32 overhang.
 ### Open questions after this pass
 
 - If the real board's USB-C port center lands at z ≈ 9–10 mm (PCB on shelf z=7, port body above PCB), a z_center of 6 mm puts the cutout **below** the port body. This is intentional per the user's spec but worth re-measuring once the real PCB is in hand — may need to drop the shelf, flip the board component-side down, or re-lift the cutout.
+
+---
+
+## v1.2 — Battery section trimmed (2026-04-23)
+
+Quick follow-up to v1.1: the battery section turned out 6.5 mm too long for
+the cell actually on hand, so the outer X and the battery cell length both
+came down 6.5 mm. The ESP32 side is untouched.
+
+| Parameter | v1.1 | v1.2 | Notes |
+|---|---|---|---|
+| `enclosure_outer_width_along_x_axis_mm` | 96 | **89.5** | Outer X trimmed -6.5 mm (battery end only) |
+| `battery_cell_footprint_length_x_mm` | 66 | **59.5** | Cell is 6.5 mm shorter |
+| `battery_chamber_inner_length_along_x_axis_mm` | 66.8 | **60.3** | Derived = cell + 2·slop |
+
+ESP32 chamber length is unchanged because outer and battery each dropped
+by the same 6.5 mm:
+
+`esp32_chamber_inner_length = outer − (-X wall) − battery_chamber − divider − (+X wall) = 89.5 − 3 − 60.3 − 2 − 1.2 = 23 mm` (same as v1.1).
+
+All other v1.1 numbers (total height 12 mm, shelf step 5 mm, USB z-center 6 mm) remain as-is.
+
+---
+
+## v1.3 — USB-C cutouts raised (2026-04-23)
+
+The v1.1/v1.2 cutouts at z-center **6 mm** straddled the ESP32 shelf (z=7)
+and carved through it under each port body. Moved the cutouts up **+2 mm**
+so they clear the shelf entirely and sit in the wall above it.
+
+| Parameter | v1.2 | v1.3 | Notes |
+|---|---|---|---|
+| `usb_c_port_vertical_center_z_mm` | 6 | **8** | USB holes raised 2 mm |
+
+Cutout now spans `z = 6.6–9.4 mm`. Shelf top is at `z = 7 mm`, so only a
+**0.4 mm sliver** of each cutout dips below the shelf — the bulk of the
+port body (z = 6.7–9.3 with PCB on shelf + 1.6 mm PCB + 2.6 mm port body
+→ port center 9.3) now aligns well with the opening.
+
+---
+
+## v1.4 — BOOT / RESET paperclip poke-through holes (2026-04-23)
+
+Two Ø 1 mm **vertical** through-holes in the **base floor** so a paperclip
+inserted from below can reach the BOOT and RESET buttons on the ESP32 dev
+board without opening the case. The board is mounted **component-side
+DOWN** on the ESP32 shelf — so BOOT/RST buttons face the floor, and the
+paperclip travels from the outside bottom straight up through 2 mm of
+base plate + 5 mm of shelf material + the chamber interior to reach
+each button.
+
+| Parameter | Value | Notes |
+|---|---|---|
+| `button_poke_hole_diameter_mm` | 1.0 | Ø 1 mm, paperclip-compatible |
+| `button_poke_hole_1_distance_from_plus_x_inner_wall_mm` | 17.0 | Hole 1 X-center at 88.3 − 17 = **71.3 mm** |
+| `button_poke_hole_2_offset_to_left_of_hole_1_mm` | 12.5 | Hole 2 X-center at 71.3 − 12.5 = **58.8 mm** |
+| `button_poke_hole_distance_from_plus_y_outer_edge_mm` | 11.5 | Y-center at 44 − 11.5 = **32.5 mm** (inside ESP32 chamber Y range 7.6–36.4) |
+
+Implementation: the cylinder is axis-along-Z, anchored 0.5 mm below the
+outer bottom face (`z = -0.5`) and extended the full enclosure height
++ 1 mm so every layer (outer floor, shelf material, chamber space) is
+pierced in a single subtract. OpenSCAD handles this cleanly as a
+`difference()` op regardless of which regions are solid vs. open at
+each Z.
+
+### History of this spec during the session
+
+- Originally interpreted as **side-wall** holes (through the ±Y long
+  wall) at (x, z) = (71.3, 7.8) / (58.8, 7.8), Ø 1 mm. Built, rendered,
+  then corrected.
+- Moved to the **base floor** per the corrected intent: board is
+  upside-down so buttons face the floor, and the paperclip must enter
+  from below.
+- Y position was clarified as **11.5 mm from the +Y outer edge** →
+  y = 32.5 mm, which lands inside the ESP32 chamber's Y range (7.6 –
+  36.4 mm), so each hole actually opens into the chamber where the
+  board's buttons live.
+
+### Caveats
+
+- Hole 2 at x = 58.8 mm lands on the **battery-chamber** side of the
+  divider (battery cavity ends at x = 63.3 mm). It goes through the
+  base plate and up into the battery chamber, not the ESP32 chamber.
+  If the RESET button actually sits over the ESP32 chamber (x ≥ 65.3
+  mm), either the 12.5 mm spacing needs to shrink or hole 1 needs to
+  shift toward +X so the cluster stays above the board.

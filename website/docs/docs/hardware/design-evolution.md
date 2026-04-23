@@ -52,9 +52,9 @@ The full development setup with dual monitors, ESP32 prototype wired up with jum
 
 ---
 
-## Rev 2 "Extended with Joystick" — Base v1.1
+## Rev 2 "Extended with Joystick" — Base v1.4
 
-A purpose-built base for the extended layout: battery on the left half, ESP32 stack on the right overhanging the battery top by 5mm, dual USB-C ports popping out the +X end wall, four M3 corner pillars. **Outer footprint 96 × 44 × 12mm** (X extended +14mm, height lowered -10mm from the v1.0 pass) with a 2mm bottom fillet and 4mm top-view corner radius.
+A purpose-built base for the extended layout: battery on the left half, ESP32 stack on the right overhanging the battery top by 5mm, dual USB-C ports popping out the +X end wall, four M3 corner pillars, and two Ø1mm **vertical poke-through holes in the base floor** so a paperclip can reach BOOT/RESET on the upside-down-mounted ESP32 board. **Outer footprint 89.5 × 44 × 12mm** — v1.2 trimmed the battery end by 6.5mm, v1.3 raised the USB-C cutouts 2mm above the ESP32 shelf, v1.4 added the button access holes. 2mm bottom fillet, 4mm top-view corner radius.
 
 Source: [`hardware-design/scad Parts/Rev 2 extended with joystick/base-v1.scad`](https://github.com/rompasaurus/dilder/blob/main/hardware-design/scad%20Parts/Rev%202%20extended%20with%20joystick/base-v1.scad).
 
@@ -66,25 +66,33 @@ Four-corner M3 pillars with rounded inner edges, internal Y-axis divider between
 
 ### Top view
 
-Layout at a glance: battery chamber (66.8 × 35.8mm interior) on the left, ESP32 chamber (narrower Y, 28.8mm) on the right, 2mm divider rib between them, 4mm outer corner radius, four M3 through-holes visible in the corners.
+Layout at a glance: battery chamber (60.3 × 35.8mm interior) on the left, ESP32 chamber (narrower Y, 28.8mm, 23mm X) on the right, 2mm divider rib between them, 4mm outer corner radius, four M3 through-holes visible in the corners.
 
 ![Rev 2 joystick base — top](../../assets/images/enclosure/rev2-base-v1-top.png)
 
 ### +X end view — dual USB-C cutouts
 
-The +X face with both USB-C cutouts (7.8 × 2.8mm each), centered on Y=16mm and Y=28mm. Wall is intentionally thin at 1.2mm on this end so the ports poke through cleanly. Cutout z-center is now 6mm (lowered 1mm in this pass).
+The +X face with both USB-C cutouts (7.8 × 2.8mm each), centered on Y=16mm and Y=28mm. Wall is intentionally thin at 1.2mm on this end so the ports poke through cleanly. Cutout z-center now 8mm (raised +2mm in v1.3 so the cutouts clear the ESP32 shelf at z=7).
 
 ![Rev 2 joystick base — +X end](../../assets/images/enclosure/rev2-base-v1-end-plusx.png)
 
 ### Side view
 
-Outer side profile (the long-axis wall is solid — all cutouts are on the ±X end walls or floor). The shorter, longer profile is unmistakable after the resize. Bottom fillet visible as the softly rounded underside.
+Outer long-side profile — the long-axis walls are solid (all cutouts live on the ±X end walls or the bottom). The shorter, elongated profile is from the v1.1/v1.2 resize.
 
 ![Rev 2 joystick base — side](../../assets/images/enclosure/rev2-base-v1-side.png)
 
+### Bottom view — BOOT/RESET paperclip poke-through holes
+
+View of the underside. Four large circles are the corner pillar screw holes. The two small dots in the +X half are the Ø1mm vertical poke-through holes added in v1.4 — placed so a paperclip inserted from below the enclosure travels straight up through 2mm of base plate plus 5mm of shelf material and reaches the BOOT and RESET buttons on the ESP32 board (which is mounted **component-side down**, so the buttons face the floor).
+
+Positions (bottom-face coordinates): hole 1 at (x=71.3, y=32.5), hole 2 at (x=58.8, y=32.5), both Ø1mm.
+
+![Rev 2 joystick base — bottom with button holes](../../assets/images/enclosure/rev2-base-v1-bottom.png)
+
 ### USB-C closeup (looking from inside)
 
-The two cutouts punched through the thin 1.2mm +X wall at z-center 6mm. Each cutout passes cleanly through both the wall and the local shelf material under it — the shelf gets carved away locally in front of each port body so nothing blocks the recess.
+The two cutouts punched through the thin 1.2mm +X wall at z-center 8mm — fully above the ESP32 shelf (z=7) after the v1.3 bump, so the port recess lives entirely in clear chamber space rather than carving through the shelf.
 
 ![Rev 2 joystick base — USB-C closeup](../../assets/images/enclosure/rev2-base-v1-usb-closeup.png)
 
@@ -276,3 +284,6 @@ Provides a menu to browse .scad files, pick export format (3MF/STL), set output 
 | 2026-04-22 | Case separator (board cradle) | v1 update | Cutout widened 1mm per side for board clearance |
 | 2026-04-22 | Rev 2 joystick base | v1 | Purpose-built base for the extended-with-joystick layout: split battery/ESP32 chambers, 2mm overhang shelf, dual USB-C cutouts, asymmetric end walls (1.2mm +X / 3mm -X), pillars clipped to bottom fillet |
 | 2026-04-23 | Rev 2 joystick base | v1.1 | Resize pass: outer width 82→96mm (+14), total height 22→12mm (-10), battery cell length 52→66mm (+14), overhang shelf 2→5mm (battery pit 3mm deeper), USB-C z-center 7→6mm (1mm lower) |
+| 2026-04-23 | Rev 2 joystick base | v1.2 | Battery section trimmed -6.5mm: outer width 96→89.5mm, battery cell length 66→59.5mm, ESP32 chamber unchanged |
+| 2026-04-23 | Rev 2 joystick base | v1.3 | USB-C cutouts raised +2mm (z-center 6→8mm) so they clear the ESP32 shelf (z=7) and sit fully above it |
+| 2026-04-23 | Rev 2 joystick base | v1.4 | Added two Ø1mm vertical BOOT/RESET paperclip poke-through holes in the base floor at (71.3, 32.5) and (58.8, 32.5); board is mounted component-side down so paperclip reaches buttons from below |

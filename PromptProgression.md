@@ -2726,3 +2726,54 @@ Spelling and grammar are lightly cleaned for readability while preserving the or
   - `design-plan.md` (appended v1.1 Resize Pass section with old→new value table, derived consequences, and one open question about port-center alignment given the new z=6 cutout).
   - `website/docs/docs/hardware/design-evolution.md` (updated captions + numbers to match v1.1, added 2026-04-23 version-history row).
   - `website/docs/blog/posts/rev2-joystick-base.md` (updated in-place with new dimensions + a "v1.1 resize pass" section documenting the 5 parameter tweaks and the ESP32 chamber headroom trade-off).
+
+---
+
+## Prompt #230 — 2026-04-23
+- **Prompt:** "ok let remove 6.5mm for the length where the battery goes into"
+- **Input Tokens (est):** ~15
+- **Output Tokens (est):** ~4,000
+- **Files:**
+  - `hardware-design/scad Parts/Rev 2 extended with joystick/base-v1.scad` (modified — outer X 96→89.5, battery cell X 66→59.5). Interpreted as "shorten the battery section by 6.5 mm end-to-end" → outer and cell both drop by 6.5, ESP32 chamber math falls out unchanged at 23 mm.
+  - Mirrored to `hardware-design/scad Parts/base-v1.scad`.
+  - `hardware-design/scad Parts/Rev 2 extended with joystick/base-v1.{stl,3mf}` + `hardware-design/enclosure-prints/base-v1.3mf` (regenerated).
+  - 6 renders regenerated (Tomorrow) and mirrored to `website/docs/assets/images/enclosure/rev2-base-v1-*.png`.
+  - `design-plan.md` appended v1.2 section.
+  - `website/docs/docs/hardware/design-evolution.md` + `website/docs/blog/posts/rev2-joystick-base.md` updated with new dimensions + v1.2 version-history row / blog subsection.
+
+---
+
+## Prompt #231 — 2026-04-23
+- **Prompt:** "ok lets also move the side holes for the 2 usb c  up 2mm on the side"
+- **Input Tokens (est):** ~15
+- **Output Tokens (est):** ~3,500
+- **Files:**
+  - `hardware-design/scad Parts/Rev 2 extended with joystick/base-v1.scad` (modified — `usb_c_port_vertical_center_z_mm` 6→8 so the cutouts sit fully above the ESP32 shelf at z=7 instead of carving through it).
+  - Mirrored to `hardware-design/scad Parts/base-v1.scad`.
+  - STL + both 3MFs regenerated.
+  - `base-v1-{iso,end-plusx,usb-closeup,side}.png` re-rendered (top/divet unchanged by USB-z edit, but kept in sync). Mirrored to `website/docs/assets/images/enclosure/`.
+  - `design-plan.md` appended v1.3 section.
+  - `website/docs/docs/hardware/design-evolution.md` + `website/docs/blog/posts/rev2-joystick-base.md` updated with new z-center + v1.3 version-history row / blog subsection.
+
+---
+
+## Prompt #232 — 2026-04-23
+- **Prompt:** "ok now we nee to poke thorugh 2 small holes in the case so that the boot and reset buuton can be presed eaeling so 17 mm in from the inside edge of the sied with the usb hole and 4.2 mm from the top a 1mm diameter  hole should be place then another hole should be placed 12.5 mm to the left of that hole same distance from the top" (+ multiple clarifications: "you put the holes on the wrong side", "it should be on the bottom base side", "the esp board will be laying upside down in the base and the holes need to be able to go through from there", "the holes need to be 11.5 mm in from the outer edge")
+- **Input Tokens (est):** ~120
+- **Output Tokens (est):** ~12,000
+- **Files / iterations during this prompt:**
+  - First attempt placed the 2 Ø 1 mm holes on the **+Y long wall** at (x=71.3, z=7.8) and (x=58.8, z=7.8). Clarification revealed the board is mounted component-side down so buttons face the floor, not a side wall.
+  - Second attempt moved holes to the **bottom base floor** with Y defaulted to 39.8 (4.2 mm from +Y outer edge). That landed outside the ESP32 chamber Y range → holes would drill through solid plastic.
+  - Final: `button_poke_hole_distance_from_plus_y_outer_edge_mm = 11.5` → y=32.5 mm, inside the ESP32 chamber (Y range 7.6–36.4), axis along Z, spanning z=-0.5 to z=12.5 so the floor + shelf + chamber interior are all pierced by a single `difference()`.
+  - Final parameters in `base-v1.scad`:
+    - `button_poke_hole_diameter_mm = 1.0`
+    - `button_poke_hole_1_distance_from_plus_x_inner_wall_mm = 17.0` → x₁ = 71.3 mm
+    - `button_poke_hole_2_offset_to_left_of_hole_1_mm = 12.5` → x₂ = 58.8 mm
+    - `button_poke_hole_distance_from_plus_y_outer_edge_mm = 11.5` → y = 32.5 mm
+  - Mirrored `base-v1.scad` to `hardware-design/scad Parts/base-v1.scad`.
+  - Regenerated STL + both 3MFs.
+  - Re-rendered `base-v1-{iso,top,side}.png`, added `base-v1-bottom.png` (orthographic view from below showing the 4 pillar screw holes + the 2 small button holes). Discarded an interim side-wall `base-v1-button-holes-closeup.png`.
+  - `design-plan.md` v1.4 section rewritten to describe the bottom-floor implementation + final Y value + caveat that hole 2 at x=58.8 is past the battery/ESP32 divider.
+  - `website/docs/docs/hardware/design-evolution.md`: added v1.4 hero-paragraph, replaced the "+Y side with button holes" section with a new "Bottom view — BOOT/RESET paperclip poke-through holes" section, added v1.4 row in the version-history table.
+  - `website/docs/blog/posts/rev2-joystick-base.md`: appended "v1.4 BOOT / RESET paperclip poke-through holes" section with final coordinates + caveat.
+  - Staged alongside this commit (unrelated to the button-hole work but authored in the same branch by the user): `hardware-design/scad Parts/Rev 2 extended with joystick/middle-platform-v1.scad` and `hardware-design/enclosure-prints/middle-platform-v1.3mf` — a mid-stack platform part for the same Rev 2 assembly.
