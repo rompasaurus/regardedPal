@@ -2820,6 +2820,17 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#v11-resize-pass" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        v1.1 resize pass
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#whats-next" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -2909,7 +2920,7 @@
                           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 20a8 8 0 0 0 8-8 8 8 0 0 0-8-8 8 8 0 0 0-8 8 8 8 0 0 0 8 8m0-18a10 10 0 0 1 10 10 10 10 0 0 1-10 10C6.47 22 2 17.5 2 12A10 10 0 0 1 12 2m.5 5v5.25l4.5 2.67-.75 1.23L11 13V7z"/></svg>
                           <span class="md-ellipsis">
                             
-                              4 min read
+                              5 min read
                             
                           </span>
                         </div>
@@ -2947,9 +2958,9 @@
 <h2 id="layout-at-a-glance">Layout at a glance<a class="headerlink" href="#layout-at-a-glance" title="Permanent link">&para;</a></h2>
 <p><img alt="Top view" loading="lazy" src="../../assets/images/enclosure/rev2-base-v1-top.png" width="640" /></p>
 <ul>
-<li>Outer shell: <strong>82 × 44 × 22mm</strong>, 4mm top-view corner radius, 2mm bottom fillet.</li>
-<li>Battery chamber on the left: inner <strong>52.8 × 35.8mm</strong> to fit the same 1000mAh cell as top-cover-v3 with 0.4mm slop per side.</li>
-<li>ESP32 chamber on the right: inner <strong>~23 × 28.8mm</strong> on a 2mm raised shelf, narrower in Y than the battery so the step is visible in plan view.</li>
+<li>Outer shell: <strong>96 × 44 × 12mm</strong> (v1.1 resize), 4mm top-view corner radius, 2mm bottom fillet.</li>
+<li>Battery chamber on the left: inner <strong>66.8 × 35.8mm</strong> to fit a longer 14mm-extended cell with 0.4mm slop per side.</li>
+<li>ESP32 chamber on the right: inner <strong>~21 × 28.8mm</strong> on a 5mm raised shelf, narrower in Y than the battery so the step is visible in plan view.</li>
 <li>2mm divider rib between the chambers (carries some of the board-left-edge load).</li>
 <li>Four 5×5mm M3 pillars in the corners, Ø3.2mm through-holes.</li>
 </ul>
@@ -2964,7 +2975,7 @@
 <p>The resulting outer corner radius is capped at <code>4mm</code> — any bigger and the outer pillar corner at the USB end would have poked past the shell's rounded profile.</p>
 <h2 id="dual-usb-c-cutouts">Dual USB-C cutouts<a class="headerlink" href="#dual-usb-c-cutouts" title="Permanent link">&para;</a></h2>
 <p><img alt="USB closeup" loading="lazy" src="../../assets/images/enclosure/rev2-base-v1-usb-closeup.png" width="640" /></p>
-<p>Two <code>7.8 × 2.8mm</code> cutouts at Y=16mm and Y=28mm (symmetric about Y=22mm, 12mm apart). Height is the measured port body (2.6mm) plus a 0.2mm allowance so the PCB seats truly flat against the plastic. Z-center lands at about 7mm — PCB on shelf at z=4, PCB thickness ~1.6mm, port body 2.6mm tall → center ≈ 6.9mm.</p>
+<p>Two <code>7.8 × 2.8mm</code> cutouts at Y=16mm and Y=28mm (symmetric about Y=22mm, 12mm apart). Height is the measured port body (2.6mm) plus a 0.2mm allowance so the PCB seats truly flat against the plastic. Z-center is at <strong>6mm</strong> after the v1.1 drop — the cutouts now straddle the ESP32 shelf level (z=7), and the recess carves through the shelf locally under each port so nothing blocks the port body.</p>
 <h2 id="shelf-divets-for-the-usb-shield-tabs">Shelf divets for the USB shield tabs<a class="headerlink" href="#shelf-divets-for-the-usb-shield-tabs" title="Permanent link">&para;</a></h2>
 <p><img alt="Shelf divet" loading="lazy" src="../../assets/images/enclosure/rev2-base-v1-divet.png" width="640" /></p>
 <p>Each USB-C receptacle has a small shield tab on its underside that hangs below the PCB. If the shelf is perfectly flat, the PCB sits 0.2mm proud of the shelf — enough to misalign each USB cutout vertically. Fix: a <code>0.2 × 8 × 7.8mm</code> recess carved into the shelf top under each port. The divets stop at the inner face of the +X wall; an earlier version punched all the way through and rendered as a visible slit below each USB cutout.</p>
@@ -2972,10 +2983,20 @@
 <p><img alt="Side profile" loading="lazy" src="../../assets/images/enclosure/rev2-base-v1-side.png" width="640" /></p>
 <p>Last fix before checking in: the corner pillars' outer bottom edges were flat right down to z=0, but the shell's bottom fillet (via a minkowski sphere sum) contracts the z=0 outline inward by the fillet radius. Result: each pillar's outer corner at z≈0 poked ~1.4mm past the shell outline, showing as a tiny plane popping off the curved front face.</p>
 <p>Solution was trivial once identified — <code>intersection()</code> the union of all four pillars with the outer shell. The pillars now inherit the fillet curve at their bases and the front face is smooth.</p>
+<h2 id="v11-resize-pass">v1.1 resize pass<a class="headerlink" href="#v11-resize-pass" title="Permanent link">&para;</a></h2>
+<p>A quick second pass dropped the base against a longer battery and a thinner overall profile:</p>
+<ul>
+<li>Outer X <strong>82 → 96mm</strong> (+14 to fit a longer cell).</li>
+<li>Total height <strong>22 → 12mm</strong> (-10, making the base much flatter).</li>
+<li>Battery cell length <strong>52 → 66mm</strong> (chamber derived as cell + 2·slop → 66.8mm).</li>
+<li>Overhang shelf raised <strong>2 → 5mm</strong> above the battery floor — battery "pit" under the ESP32 board is now 3mm deeper.</li>
+<li>USB-C cutout z-center <strong>7 → 6mm</strong> (holes move down 1mm).</li>
+</ul>
+<p>ESP32 chamber clear height drops from 18mm to 5mm as a consequence — tight but still enough for PCB (1.6mm) + USB-C receptacle body (2.6mm). If the real PCB's port body sits higher than the 6mm cutout, the mount strategy (board orientation, shelf height) gets a follow-up pass.</p>
 <h2 id="whats-next">What's next<a class="headerlink" href="#whats-next" title="Permanent link">&para;</a></h2>
 <p>This is the base only. Still to come in this branch:</p>
 <ul>
-<li>Middle plate sized for the 82 × 44 footprint (reusing the existing middle plate pattern but adjusted for this Y depth).</li>
+<li>Middle plate sized for the 96 × 44 footprint (reusing the existing middle plate pattern but adjusted for this Y depth).</li>
 <li>Top cover with a joystick window and the USB-facing wire exit.</li>
 <li>Optional straps/anchors for the battery.</li>
 </ul>
