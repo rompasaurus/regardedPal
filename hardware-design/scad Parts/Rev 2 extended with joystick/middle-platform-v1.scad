@@ -6,7 +6,7 @@
 // shell top.
 //
 // Walls:
-//   - ±Y long side walls: 9 mm
+//   - ±Y long side walls: 8 mm
 //   - -X end wall: 3 mm (battery end, matches base-v1)
 //   - +X end wall: 1.2 mm (USB-C end, matches base-v1's thin wall)
 //
@@ -28,7 +28,7 @@ $fn = 48;
 // ============================================================
 // Outer shell dimensions (flush with base-v1)
 // ============================================================
-enclosure_outer_width_along_x_axis_mm           = 89.5;
+enclosure_outer_width_along_x_axis_mm           = 91.5;  // matches base (battery bay +2 mm)
 enclosure_outer_depth_along_y_axis_mm           = 44;
 middle_platform_short_portion_height_z_mm       = 8;
 outer_case_top_view_corner_radius_mm            = 4;
@@ -44,7 +44,7 @@ left_fill_height_above_shell_top_mm             = 5;
 // ============================================================
 // Wall thicknesses (only relevant around the hollow right portion)
 // ============================================================
-perimeter_long_side_wall_thickness_y_mm         = 9;    // ±Y long walls
+perimeter_long_side_wall_thickness_y_mm         = 8;    // ±Y long walls
 minus_x_end_wall_thickness_mm                   = 3.0;  // battery end
 plus_x_end_wall_thickness_mm                    = 1.2;  // USB-C end (thin)
 

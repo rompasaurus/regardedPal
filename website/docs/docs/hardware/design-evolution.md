@@ -58,6 +58,18 @@ A purpose-built base for the extended layout: battery on the left half, ESP32 st
 
 Source: [`hardware-design/scad Parts/Rev 2 extended with joystick/base-v1.scad`](https://github.com/rompasaurus/dilder/blob/main/hardware-design/scad%20Parts/Rev%202%20extended%20with%20joystick/base-v1.scad).
 
+### Hand-drawn design sketches
+
+Initial concept sketches drawn on a tablet showing the Rev 2 extended layout dimensions and component placement.
+
+**Dimensions sketch** — Side profile (22mm tall, 35mm deep) and top view (82mm x 44mm outer) with internal section measurements (56.7mm battery chamber, 26.8mm ESP32 section, 19mm display area), 4mm corner radii, and screw post locations.
+
+![Rev 2 dimensions sketch](../../assets/images/enclosure/rev2-sketch-dimensions.jpg)
+
+**Component layout sketch** — Same views annotated with component placement: battery in the left chamber, ESP32 in the right chamber with a 2mm divider between them. Shows how the board sits alongside the battery in the split-chamber layout.
+
+![Rev 2 component layout sketch](../../assets/images/enclosure/rev2-sketch-component-layout.jpg)
+
 ### Isometric render
 
 Four-corner M3 pillars with rounded inner edges, internal Y-axis divider between the battery and ESP32 chambers, and the step-down ESP32 shelf (narrower in Y than the battery to match the real PCB footprint). The longer/flatter profile and the deeper step under the overhang are visible here. Pillars' outer bottom corners inherit the shell's 2mm fillet — no plane-popping off the front face.
