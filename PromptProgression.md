@@ -2711,3 +2711,18 @@ Spelling and grammar are lightly cleaned for readability while preserving the or
   - `website/docs/docs/hardware/design-evolution.md` (modified — new "Rev 2 Extended with Joystick — Base v1" section with all 6 renders captioned, plus a new version-history row).
   - `website/docs/blog/posts/rev2-joystick-base.md` (created — design-story blog post covering layout split, asymmetric end walls, dual USB-C cutouts, shelf divets, and the pillar-clipped-to-fillet fix).
   - Committed the base-v1 SCAD/STL/3MF/renders/sketch photos + docs + blog together as `3f313be` ("Add Rev 2 joystick base v1 — SCAD, renders, docs page, blog post"), then committed this prompt-log update separately before pushing.
+
+---
+
+## Prompt #229 — 2026-04-23
+- **Prompt:** "ok we need to extend the battery and the whol lenght out by 14mm also we need the batter pit to be 3mm deeper and the usb holes to be 1mm lower, also lower the entire height of the base by 10mm"
+- **Input Tokens (est):** ~50
+- **Output Tokens (est):** ~10,000
+- **Files:**
+  - `hardware-design/scad Parts/Rev 2 extended with joystick/base-v1.scad` (modified — 5 parameter tweaks: outer X 82→96, total Z 22→12, battery cell X 52→66, ESP32 overhang shelf 2→5, USB-C z-center 7→6; interpreted "battery pit 3mm deeper" as raising the ESP32 overhang shelf by 3mm so the battery well under the shelf gains 3mm of vertical clearance).
+  - `hardware-design/scad Parts/Rev 2 extended with joystick/base-v1.{stl,3mf}` + `hardware-design/enclosure-prints/base-v1.3mf` (regenerated from the resized SCAD).
+  - `hardware-design/scad Parts/Rev 2 extended with joystick/base-v1-{iso,top,side,end-plusx,usb-closeup,divet}.png` (re-rendered from the final SCAD with Tomorrow colorscheme — closeups use manual camera positions since OpenSCAD CLI `--viewall` centers poorly on partial features).
+  - `website/docs/assets/images/enclosure/rev2-base-v1-*.png` (mirror of all 6 renders).
+  - `design-plan.md` (appended v1.1 Resize Pass section with old→new value table, derived consequences, and one open question about port-center alignment given the new z=6 cutout).
+  - `website/docs/docs/hardware/design-evolution.md` (updated captions + numbers to match v1.1, added 2026-04-23 version-history row).
+  - `website/docs/blog/posts/rev2-joystick-base.md` (updated in-place with new dimensions + a "v1.1 resize pass" section documenting the 5 parameter tweaks and the ESP32 chamber headroom trade-off).

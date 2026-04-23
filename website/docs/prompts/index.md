@@ -1435,3 +1435,13 @@ All 5 pieces exported cleanly (CGAL manifold) as 3MF for Bambu Studio: `base.3mf
 - **Input Tokens (est):** ~35
 - **Output Tokens (est):** ~9,000
 - **Summary:** Published the Rev 2 "extended with joystick" base-v1. Confirmed the staged Tomorrow-colorscheme renders already reflected the final pillar-fillet fix, so no programmatic re-render was needed. Mirrored all 6 renders (top, side, +X end, iso, USB-C closeup, shelf-divet closeup) into `website/docs/assets/images/enclosure/` under a `rev2-base-v1-*` prefix, added a captioned "Rev 2 Extended with Joystick — Base v1" section to the hardware Design Evolution page, and wrote a new blog post [Rev 2 "Extended with Joystick" — a Purpose-Built Base](../blog/rev2-joystick-base/) walking through the asymmetric end walls, dual USB-C cutouts, shelf divets, and the pillar-clipped-to-fillet fix. Committed the base-v1 SCAD/STL/3MF + renders + sketch photos + docs + blog together, then committed and pushed this prompt-log update.
+
+---
+
+## Prompt #229 — 2026-04-23
+
+**Prompt:** "ok we need to extend the battery and the whol lenght out by 14mm also we need the batter pit to be 3mm deeper and the usb holes to be 1mm lower, also lower the entire height of the base by 10mm"
+
+- **Input Tokens (est):** ~50
+- **Output Tokens (est):** ~10,000
+- **Summary:** v1.1 resize pass on the Rev 2 joystick base. Five parameter tweaks in `base-v1.scad`: outer X 82→96mm (+14), total Z 22→12mm (-10), battery cell X 52→66mm (+14), ESP32 overhang shelf 2→5mm (battery pit 3mm deeper under the shelf — the interpretation explicitly surfaced before editing, since "deeper" was ambiguous given the shrinking total height), USB-C z-center 7→6mm. Re-rendered all 6 orthographic/ISO views with Tomorrow colorscheme, regenerated STL + 3MF exports (both `Rev 2 .../base-v1.3mf` and `enclosure-prints/base-v1.3mf`), mirrored renders into website assets, updated `design-plan.md` with a v1.1 section (old→new table + derived consequences + open-question about port-center alignment under z=6), and updated both the Design Evolution doc and the blog post with the new numbers/captions. ESP32 chamber headroom dropped to 5mm as a known trade-off.

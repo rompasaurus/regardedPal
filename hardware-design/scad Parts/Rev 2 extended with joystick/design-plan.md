@@ -155,3 +155,32 @@ narrows to ~29 mm in Y, centered on the enclosure Y axis.
 1. Exact Y centers of the two USB-C ports on the real board. Defaults of **16 mm and 28 mm** (symmetric about Y=22, 12 mm apart) are placeholders — tweak `usb_c_port_center_y_positions_list` after measuring.
 2. Actual USB-C port body depth (default `usb_c_port_body_recess_depth_into_enclosure_mm = 8 mm`, typical for SMT Type-C receptacles).
 3. Joystick cutout in the top cover — deferred to the top-cover pass.
+
+---
+
+## v1.1 — Resize pass (2026-04-23)
+
+Outer footprint extended along X, total height lowered, battery cell scaled up
+to match a longer cell, and the step down into the battery pit deepened to give
+the cell more vertical clearance under the ESP32 overhang.
+
+| Parameter | Old | New | Notes |
+|---|---|---|---|
+| `enclosure_outer_width_along_x_axis_mm` | 82 | **96** | Outer X extended +14 mm |
+| `enclosure_total_height_along_z_axis_mm` | 22 | **12** | Total height lowered -10 mm |
+| `battery_cell_footprint_length_x_mm` | 52 | **66** | Cell is 14 mm longer |
+| `battery_chamber_inner_length_along_x_axis_mm` | 52.8 | **66.8** | Derived = cell + 2·slop |
+| `esp32_overhang_shelf_height_above_battery_floor_mm` | 2 | **5** | Shelf raised 3 mm → battery pit 3 mm deeper under the overhang |
+| `usb_c_port_vertical_center_z_mm` | 7 | **6** | USB cutouts drop 1 mm |
+
+### Derived consequences
+
+- Battery chamber inner Z clearance: **10 mm** (floor z=2 → top z=12). The 5 mm cell still fits with 5 mm of headroom.
+- ESP32 chamber inner Z clearance: **5 mm** (shelf z=7 → top z=12). PCB (1.6 mm) + USB-C port body (2.6 mm) = 4.2 mm fits.
+- Battery-pit depth under the ESP32 overhang shelf: **5 mm** (up from 2 mm). With the cell seated on the battery floor and the ESP32 PCB at z=7+, the cell has 3 mm more "nose room" under the PCB before binding.
+- USB-C cutout now spans z=4.6 to z=7.4 — i.e., straddles the ESP32 shelf level (z=7). The cutout's recess-into-enclosure carves through the shelf locally under each port, which OpenSCAD handles cleanly since the recess is a difference() subtraction.
+- ESP32 chamber inner X length now falls out of the length equation at **~21.4 mm** (was 19 mm) because the outer grew by 14 mm while the battery chamber grew by the same 14 mm — the remainder for the ESP32 side comes from the 4 mm overhang + the extra shell-trim math.
+
+### Open questions after this pass
+
+- If the real board's USB-C port center lands at z ≈ 9–10 mm (PCB on shelf z=7, port body above PCB), a z_center of 6 mm puts the cutout **below** the port body. This is intentional per the user's spec but worth re-measuring once the real PCB is in hand — may need to drop the shelf, flip the board component-side down, or re-lift the cutout.

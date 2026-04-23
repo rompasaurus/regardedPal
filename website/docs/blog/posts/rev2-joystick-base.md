@@ -26,9 +26,9 @@ Rather than parameterize the existing case into knots, I started a new file (`ba
 
 ![Top view](../../assets/images/enclosure/rev2-base-v1-top.png){ width="640" loading=lazy }
 
-- Outer shell: **82 × 44 × 22mm**, 4mm top-view corner radius, 2mm bottom fillet.
-- Battery chamber on the left: inner **52.8 × 35.8mm** to fit the same 1000mAh cell as top-cover-v3 with 0.4mm slop per side.
-- ESP32 chamber on the right: inner **~23 × 28.8mm** on a 2mm raised shelf, narrower in Y than the battery so the step is visible in plan view.
+- Outer shell: **96 × 44 × 12mm** (v1.1 resize), 4mm top-view corner radius, 2mm bottom fillet.
+- Battery chamber on the left: inner **66.8 × 35.8mm** to fit a longer 14mm-extended cell with 0.4mm slop per side.
+- ESP32 chamber on the right: inner **~21 × 28.8mm** on a 5mm raised shelf, narrower in Y than the battery so the step is visible in plan view.
 - 2mm divider rib between the chambers (carries some of the board-left-edge load).
 - Four 5×5mm M3 pillars in the corners, Ø3.2mm through-holes.
 
@@ -48,7 +48,7 @@ The resulting outer corner radius is capped at `4mm` — any bigger and the oute
 
 ![USB closeup](../../assets/images/enclosure/rev2-base-v1-usb-closeup.png){ width="640" loading=lazy }
 
-Two `7.8 × 2.8mm` cutouts at Y=16mm and Y=28mm (symmetric about Y=22mm, 12mm apart). Height is the measured port body (2.6mm) plus a 0.2mm allowance so the PCB seats truly flat against the plastic. Z-center lands at about 7mm — PCB on shelf at z=4, PCB thickness ~1.6mm, port body 2.6mm tall → center ≈ 6.9mm.
+Two `7.8 × 2.8mm` cutouts at Y=16mm and Y=28mm (symmetric about Y=22mm, 12mm apart). Height is the measured port body (2.6mm) plus a 0.2mm allowance so the PCB seats truly flat against the plastic. Z-center is at **6mm** after the v1.1 drop — the cutouts now straddle the ESP32 shelf level (z=7), and the recess carves through the shelf locally under each port so nothing blocks the port body.
 
 ## Shelf divets for the USB shield tabs
 
@@ -64,11 +64,23 @@ Last fix before checking in: the corner pillars' outer bottom edges were flat ri
 
 Solution was trivial once identified — `intersection()` the union of all four pillars with the outer shell. The pillars now inherit the fillet curve at their bases and the front face is smooth.
 
+## v1.1 resize pass
+
+A quick second pass dropped the base against a longer battery and a thinner overall profile:
+
+- Outer X **82 → 96mm** (+14 to fit a longer cell).
+- Total height **22 → 12mm** (-10, making the base much flatter).
+- Battery cell length **52 → 66mm** (chamber derived as cell + 2·slop → 66.8mm).
+- Overhang shelf raised **2 → 5mm** above the battery floor — battery "pit" under the ESP32 board is now 3mm deeper.
+- USB-C cutout z-center **7 → 6mm** (holes move down 1mm).
+
+ESP32 chamber clear height drops from 18mm to 5mm as a consequence — tight but still enough for PCB (1.6mm) + USB-C receptacle body (2.6mm). If the real PCB's port body sits higher than the 6mm cutout, the mount strategy (board orientation, shelf height) gets a follow-up pass.
+
 ## What's next
 
 This is the base only. Still to come in this branch:
 
-- Middle plate sized for the 82 × 44 footprint (reusing the existing middle plate pattern but adjusted for this Y depth).
+- Middle plate sized for the 96 × 44 footprint (reusing the existing middle plate pattern but adjusted for this Y depth).
 - Top cover with a joystick window and the USB-facing wire exit.
 - Optional straps/anchors for the battery.
 

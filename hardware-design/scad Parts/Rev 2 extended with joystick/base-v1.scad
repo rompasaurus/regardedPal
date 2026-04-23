@@ -22,9 +22,9 @@ $fn = 48;
 // ============================================================
 // Outer shell dimensions (overall enclosure footprint and height)
 // ============================================================
-enclosure_outer_width_along_x_axis_mm          = 82;
+enclosure_outer_width_along_x_axis_mm          = 96;  // extended +14 for longer battery cell
 enclosure_outer_depth_along_y_axis_mm          = 44;
-enclosure_total_height_along_z_axis_mm         = 22;
+enclosure_total_height_along_z_axis_mm         = 12;  // lowered -10 from original 22
 perimeter_outer_wall_thickness_mm              = 2;    // ±Y long walls
 base_floor_plate_thickness_mm                  = 2;
 // Outer corner radius is bounded by the asymmetric end-wall geometry:
@@ -45,14 +45,14 @@ minus_x_battery_side_end_wall_thickness_mm     = 3.0;  // -X, battery end
 // ============================================================
 // Battery chamber (LEFT side, 1000 mAh cell — matches top-cover-v3)
 // ============================================================
-battery_cell_footprint_length_x_mm             = 52;
+battery_cell_footprint_length_x_mm             = 66;  // extended +14 for longer battery cell
 battery_cell_footprint_depth_y_mm              = 35;
 
 // ============================================================
 // ESP32 chamber (RIGHT side — slightly thinner in Y than the battery)
 // ============================================================
 esp32_board_footprint_depth_y_mm               = 28;   // narrower than battery
-esp32_overhang_shelf_height_above_battery_floor_mm = 2; // PCB overhangs battery by this in Z
+esp32_overhang_shelf_height_above_battery_floor_mm = 5; // was 2; +3 = battery pit 3 mm deeper under the shelf
 
 // ============================================================
 // Two USB-C cutouts on the +X end wall (for the board's two USB-C ports)
@@ -88,9 +88,8 @@ usb_c_shelf_divet_width_along_y_axis_mm        = 7.8;
 // Vertical center of the USB-C port cutout (z).
 // The board sits INSIDE the base on the ESP32 shelf (component-side UP,
 // headers facing up), so the USB-C ports sit low — close to the base
-// floor. With the PCB bottom on the z=4 shelf, PCB top at z=5.6, and a
-// 2.6 mm port body on top of the PCB, the port center lands near z=7.
-usb_c_port_vertical_center_z_mm                = 7;
+// floor. Dropped from 7 to 6 per this revision (USB holes 1 mm lower).
+usb_c_port_vertical_center_z_mm                = 6;
 
 // Y centers of the TWO USB-C ports on the board's end edge. Default layout
 // assumes the two ports sit symmetrically about the ESP32 Y centerline,
