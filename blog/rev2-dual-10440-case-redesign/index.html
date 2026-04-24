@@ -12,13 +12,11 @@
         <meta name="author" content="rompasaurus">
       
       
-        <link rel="canonical" href="https://dilder.dev/blog/enclosure-first-prints/">
+        <link rel="canonical" href="https://dilder.dev/blog/rev2-dual-10440-case-redesign/">
       
       
-        <link rel="prev" href="../esp32s3-enclosure-scad/">
+        <link rel="prev" href="../rev2-top-cover-inlay-first-print/">
       
-      
-        <link rel="next" href="../rev2-top-cover-windowed/">
       
       
         
@@ -29,7 +27,7 @@
     
     
       
-        <title>First 3D-Printed Enclosure Prototype - Dilder</title>
+        <title>Dual 10440 Cells, Case Redesign, and a 2-Piece Stack - Dilder</title>
       
     
     
@@ -92,7 +90,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#first-3d-printed-enclosure-prototype" class="md-skip">
+        <a href="#dual-10440-cells-case-redesign-and-a-2-piece-stack" class="md-skip">
           Skip to content
         </a>
       
@@ -125,7 +123,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              First 3D-Printed Enclosure Prototype
+              Dual 10440 Cells, Case Redesign, and a 2-Piece Stack
             
           </span>
         </div>
@@ -2784,10 +2782,10 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#from-cad-to-real-parts" class="md-nav__link">
+  <a href="#the-fit-problem" class="md-nav__link">
     <span class="md-ellipsis">
       
-        From CAD to Real Parts
+        The fit problem
       
     </span>
   </a>
@@ -2795,10 +2793,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#assembly-test" class="md-nav__link">
+  <a href="#chemistry-matters-more-than-form-factor" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Assembly Test
+        Chemistry matters more than form factor
       
     </span>
   </a>
@@ -2806,10 +2804,71 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#component-fit-check" class="md-nav__link">
+  <a href="#four-base-variants-in-one-afternoon" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Component Fit Check
+        Four base variants in one afternoon
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Four base variants in one afternoon">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#base-v2-thin-dual-10440-first-cut" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        base-v2-thin-dual-10440 — first cut
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#base-v3-2piece-merge-the-middle-platform-into-the-base" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        base-v3-2piece — merge the middle platform into the base
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#base-v4-2piece-open-cells-slide-in-from-outside" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        base-v4-2piece-open — cells slide in from outside
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#the-final-layout" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The final layout
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#what-didnt-work" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What didn't work
       
     </span>
   </a>
@@ -2820,7 +2879,7 @@
   <a href="#whats-next" class="md-nav__link">
     <span class="md-ellipsis">
       
-        What's Next
+        What's next
       
     </span>
   </a>
@@ -2883,7 +2942,7 @@
                     <li class="md-nav__item">
                       <div class="md-nav__link">
                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 19H5V8h14m-3-7v2H8V1H6v2H5c-1.11 0-2 .89-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V5a2 2 0 0 0-2-2h-1V1m-1 11h-5v5h5z"/></svg>
-                        <time datetime="2026-04-22 00:00:00+00:00" class="md-ellipsis">April 22, 2026</time>
+                        <time datetime="2026-04-24 00:00:00+00:00" class="md-ellipsis">April 24, 2026</time>
                       </div>
                     </li>
                     
@@ -2895,7 +2954,8 @@
                             in
                             
                               <a href="../category/hardware/">Hardware</a>, 
-                              <a href="../category/3d-printing/">3D Printing</a></span>
+                              <a href="../category/enclosure/">Enclosure</a>, 
+                              <a href="../category/battery/">Battery</a></span>
                         </div>
                       </li>
                     
@@ -2906,7 +2966,7 @@
                           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 20a8 8 0 0 0 8-8 8 8 0 0 0-8-8 8 8 0 0 0-8 8 8 8 0 0 0 8 8m0-18a10 10 0 0 1 10 10 10 10 0 0 1-10 10C6.47 22 2 17.5 2 12A10 10 0 0 1 12 2m.5 5v5.25l4.5 2.67-.75 1.23L11 13V7z"/></svg>
                           <span class="md-ellipsis">
                             
-                              2 min read
+                              5 min read
                             
                           </span>
                         </div>
@@ -2933,30 +2993,52 @@
   
 
 
-<h1 id="first-3d-printed-enclosure-prototype">First 3D-Printed Enclosure Prototype<a class="headerlink" href="#first-3d-printed-enclosure-prototype" title="Permanent link">&para;</a></h1>
-<p>The parametric OpenSCAD enclosure design has made the jump from screen to plastic. First FDM prints are off the bed and components are fitting together.</p>
+<h1 id="dual-10440-cells-case-redesign-and-a-2-piece-stack">Dual 10440 Cells, Case Redesign, and a 2-Piece Stack<a class="headerlink" href="#dual-10440-cells-case-redesign-and-a-2-piece-stack" title="Permanent link">&para;</a></h1>
+<p>The screen inlay was dialed in. Next problem: the 3000 mAh LiPo pouch the case was originally sized for doesn't actually fit in the Rev 2 cavity. A photo study, a chemistry comparison, four base variants, and a 2-piece restructure later, the stack is 11 mm thinner and the cells can be slid in from outside without popping the cover.</p>
 <!-- more -->
 
-<h2 id="from-cad-to-real-parts">From CAD to Real Parts<a class="headerlink" href="#from-cad-to-real-parts" title="Permanent link">&para;</a></h2>
-<p>The ESP32-S3 enclosure started as a single monolithic <code>.scad</code> file and has been broken out into standalone parametric parts, each iterated through multiple versions:</p>
+<h2 id="the-fit-problem">The fit problem<a class="headerlink" href="#the-fit-problem" title="Permanent link">&para;</a></h2>
+<p><img alt="3000 mAh LiPo laid on top of the Rev 2 base with the Pico-ePaper-2.13 installed" loading="lazy" src="../../assets/images/enclosure/rev2-battery-fit-3000mah-oversize.jpg" width="720" /></p>
+<p>The 3000 mAh pouch is roughly 60 × 35 × 10 mm. The Rev 2 base inner cavity is ~87 × 40 × stack. The cell <strong>overhangs the ±Y long walls by ~5 mm</strong>. It can't sit inside the case at all — it has to stack <em>above</em> the Pico W, which burns ~10 mm of stack height the enclosure doesn't have.</p>
+<p>The fix: drop the one-big-cell strategy and go with <strong>two thinner cells flanking the board</strong>.</p>
+<h2 id="chemistry-matters-more-than-form-factor">Chemistry matters more than form factor<a class="headerlink" href="#chemistry-matters-more-than-form-factor" title="Permanent link">&para;</a></h2>
+<p>The initial photo fit-check used 2× Kodak Xtralife alkaline AAAs because they're what was on the desk:</p>
+<p><img alt="2× AAA cells flanking the Pico W in the Rev 2 base — form factor fit check" loading="lazy" src="../../assets/images/enclosure/rev2-layout-2xaaa-fitcheck.jpg" width="640" /></p>
+<p>The cells fit. But alkaline AAAs are a terrible choice here:</p>
 <ul>
-<li><strong>Middle plate</strong> (board tray) — v2 with 56.5mm header slots, centered on the plate</li>
-<li><strong>Top plate windowed</strong> (display cover) — v1 with solid face, snap-fit retaining rails, and printable full-width lips</li>
-<li><strong>Top cover frame</strong> — v3 with rounded inner corners, single-corner-rounded pillars, and countersunk pockets for flush plate seating</li>
-<li><strong>Case separators</strong> — inner and outer divider sheets with header pass-through slots</li>
+<li><strong>1.5 V per cell.</strong> Two in series gives 3.0 V fresh, drops to ~2.0 V near end of life — brownouts against the Pico W's 1.8 V VSYS minimum. Two in parallel gives 1.5 V — doesn't meet VSYS at all.</li>
+<li><strong>Not rechargeable.</strong> The existing TP4056 USB-C charge board is Li-ion only; alkaline chemistry would need to come out of the case and get thrown away.</li>
+<li><strong>High internal resistance.</strong> Pico W's WiFi TX peaks (~250 mA bursts) sag alkaline pack voltage hard, especially as the cells age.</li>
 </ul>
-<h2 id="assembly-test">Assembly Test<a class="headerlink" href="#assembly-test" title="Permanent link">&para;</a></h2>
-<p>The stacked shell design works as intended. The LiPo battery drops into the base chamber, the middle plate rests on the lower shelf with the ESP32-S3 board's headers passing through the clearance slots, and the display cover snaps in over the Waveshare e-ink display.</p>
-<p><img alt="Assembled enclosure with e-ink display" src="../../assets/images/enclosure/enclosure-assembled-front.jpg" /></p>
-<p><img alt="Base shell with LiPo battery and display top cover side by side" src="../../assets/images/enclosure/enclosure-halves-with-battery.jpg" /></p>
-<h2 id="component-fit-check">Component Fit Check<a class="headerlink" href="#component-fit-check" title="Permanent link">&para;</a></h2>
-<p>All printed parts laid out alongside the electronics — the Olimex ESP32-S3-DevKit-Lipo, Waveshare 2.13" e-ink display, joystick breakout board, and 1000mAh LiPo battery.</p>
-<p><img alt="Components layout" src="../../assets/images/enclosure/components-layout-overview.jpg" /></p>
-<p><img alt="ESP32-S3 board sitting on printed middle plate" src="../../assets/images/enclosure/esp32-board-on-printed-parts.jpg" /></p>
-<h2 id="whats-next">What's Next<a class="headerlink" href="#whats-next" title="Permanent link">&para;</a></h2>
-<p>The current prints identified a few fit issues that drove the v2 and v3 iterations of the top cover — rounded inner corners and single-corner-rounded pillars so the windowed plate slides in without catching. The parametric design makes these changes fast: tweak a variable, re-export, reprint.</p>
-<p>Next up: finalizing wire routing, testing snap-fit retention under repeated assembly cycles, and exploring the rounded-top cover variant for a more polished exterior feel.</p>
-<p>All source files are in <code>hardware-design/scad Parts/</code> and the full design history is on the <a href="../../docs/hardware/design-evolution/">Design Evolution</a> page.</p>
+<p>The drop-in fix is <strong>10440 Li-ion</strong> — same exterior dimensions as an AAA (Ø 10 × 44 mm), but 3.7 V per cell, same chemistry as the existing LiPo pouches, and ~350 mAh each. Two in <strong>parallel</strong> gives a ~700 mAh pack at 3.7 V, charges with the unchanged TP4056 (just swap R_prog from 1.2 kΩ → ~3.4 kΩ to derate the charge current to 350 mA CC), and feeds the Pico W's VSYS directly.</p>
+<p>The wiring rule — and it's a real one: <strong>same model, same batch, match voltages within 0.1 V before connecting + to + and − to −, each cell with its own PCM</strong>. Mismatched parallel cells dump current into each other.</p>
+<h2 id="four-base-variants-in-one-afternoon">Four base variants in one afternoon<a class="headerlink" href="#four-base-variants-in-one-afternoon" title="Permanent link">&para;</a></h2>
+<p>All of these landed under <code>hardware-design/scad Parts/Rev 2 extended with joystick/04-24-designs-alterations/</code>:</p>
+<h3 id="base-v2-thin-dual-10440-first-cut"><code>base-v2-thin-dual-10440</code> — first cut<a class="headerlink" href="#base-v2-thin-dual-10440-first-cut" title="Permanent link">&para;</a></h3>
+<p>Minimum change to fit the new cell chemistry into the existing 3-piece stack: bump outer Y from 44 → 46 mm (so two Ø 10 mm cells + 21 mm Pico W + slop actually fits), drop total Z from 14 → 12 mm (cell fills the bay height exactly), thin the floor from 3 → 2 mm, collapse from two USB-C cutouts to one (Pico W has a single port), and add 4 generic contact-tab slots for stamped strip contacts at each cell bay's ±X ends.</p>
+<p>Matching forks: <code>middle-platform-v2-46y</code> and <code>top-cover-windowed-screen-inlay-v2-46y</code> — same content as v1 but +2 mm Y so the full stack bolts up.</p>
+<h3 id="base-v3-2piece-merge-the-middle-platform-into-the-base"><code>base-v3-2piece</code> — merge the middle platform into the base<a class="headerlink" href="#base-v3-2piece-merge-the-middle-platform-into-the-base" title="Permanent link">&para;</a></h3>
+<p>Next ask: <em>"I don't want a middle platform, I want this done in 2 pieces — have the base extend up and inlay into the Pico and secure the back of the Waveshare."</em></p>
+<p>Done. The base now extends up to z=14 and absorbs the role the middle platform used to play. The Pico W drops into the centered chamber at Y=12.1–33.9 (the "inlay"), and the Waveshare display's ±Y edges overhang the 21.8 mm Pico chamber by ~4 mm on each side — those overhangs rest on the solid base rim at z=14. Top cover presses down from above. Display's trapped between.</p>
+<p>Matching cover: <code>top-cover-windowed-screen-inlay-v3-2piece</code> drops the 5 mm middle-platform pedestal reservation that used to sit at the cover's bottom, going from 16.7 mm → 11.7 mm. <strong>Stack total: 25.7 mm, down from 36.7 mm</strong> — 11 mm thinner.</p>
+<h3 id="base-v4-2piece-open-cells-slide-in-from-outside"><code>base-v4-2piece-open</code> — cells slide in from outside<a class="headerlink" href="#base-v4-2piece-open-cells-slide-in-from-outside" title="Permanent link">&para;</a></h3>
+<p>v3's cells were trapped in sealed bays once the top cover was on. Fix: <strong>two rectangular slots cut through the -X end wall</strong>, one per cell bay, matching each bay's Y × Z cross-section. Cells slide in from outside before cover install; spring contacts at the -X end press them +X against the solid +X stop. (For a fully closed case, print a small battery-door clip that snaps onto the -X end over the slots.)</p>
+<p>v4 also adds <strong>raised ±Y lips</strong> on the cell-bay ceiling at the Pico chamber boundary, protruding 1 mm above the case top into the cover's cavity on the non-battery edges. Stiffens the base-cover joint along the long edges without interfering with cell insertion.</p>
+<h3 id="the-final-layout">The final layout<a class="headerlink" href="#the-final-layout" title="Permanent link">&para;</a></h3>
+<p><img alt="Final component layout — 2× AAA flanking Pico W with FPC exiting at -X, joystick at +X" loading="lazy" src="../../assets/images/enclosure/rev2-layout-dual-cell-final.jpg" width="720" /></p>
+<p>Pico 2 W in the middle, two cells along ±Y, FPC ribbon exiting at -X toward the Waveshare display (shown separately below), joystick hat at the +X USB end.</p>
+<p><img alt="Waveshare module shown separately to the side of the base" loading="lazy" src="../../assets/images/enclosure/rev2-layout-waveshare-exploded.jpg" width="720" /></p>
+<h2 id="what-didnt-work">What didn't work<a class="headerlink" href="#what-didnt-work" title="Permanent link">&para;</a></h2>
+<p>A <code>top-cover-v4-contoured-25mm.scad</code> experiment tried to sculpt the cover's underside with downward extensions that wrapped around the cell tops, the FPC fold, and the Pico chamber — hitting a 25 mm total stack by having the cover do more of the enclosing work. The user's response: <em>"this is batshit awful delete it."</em></p>
+<p>Fair. File's gone. The existing base-v4 + cover-v3-2piece combination hits 25.7 mm with a much simpler geometry.</p>
+<h2 id="whats-next">What's next<a class="headerlink" href="#whats-next" title="Permanent link">&para;</a></h2>
+<ul>
+<li>Print <code>base-v4-2piece-open.scad</code> + <code>top-cover-windowed-screen-inlay-v3-2piece.scad</code> as the matched pair.</li>
+<li>Order 2× 10440 Li-ion protected cells (AliExpress, ~$3–6 each) and matching stamped-strip battery contacts.</li>
+<li>Derate TP4056 R_prog to ~3.4 kΩ.</li>
+<li>Test cell insertion and battery-door strategy — either a small printed clip over the -X slots, or rely on the spring contacts + gravity.</li>
+</ul>
+<p>Research docs: <a href="https://github.com/rompasaurus/Dilder/blob/main/docs/battery-redesign-shopping-list.md">battery-redesign-shopping-list.md</a>, <a href="https://github.com/rompasaurus/Dilder/blob/main/docs/solar-charging-research.md">solar-charging-research.md</a>.</p>
 
 
 
@@ -3003,7 +3085,7 @@
       <nav class="md-footer__inner md-grid" aria-label="Footer" >
         
           
-          <a href="../esp32s3-enclosure-scad/" class="md-footer__link md-footer__link--prev" aria-label="Previous: Sandwich Enclosure — From a UEXT Question to a 5-Piece Parametric Case">
+          <a href="../rev2-top-cover-inlay-first-print/" class="md-footer__link md-footer__link--prev" aria-label="Previous: Screen-Inlay Top Cover — First Print and Three Fixes">
             <div class="md-footer__button md-icon">
               
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
@@ -3013,27 +3095,11 @@
                 Previous
               </span>
               <div class="md-ellipsis">
-                Sandwich Enclosure — From a UEXT Question to a 5-Piece Parametric Case
+                Screen-Inlay Top Cover — First Print and Three Fixes
               </div>
             </div>
           </a>
         
-        
-          
-          <a href="../rev2-top-cover-windowed/" class="md-footer__link md-footer__link--next" aria-label="Next: Rev 2 Top Cover — Windowed, Bullnosed, Tapered">
-            <div class="md-footer__title">
-              <span class="md-footer__direction">
-                Next
-              </span>
-              <div class="md-ellipsis">
-                Rev 2 Top Cover — Windowed, Bullnosed, Tapered
-              </div>
-            </div>
-            <div class="md-footer__button md-icon">
-              
-              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11z"/></svg>
-            </div>
-          </a>
         
       </nav>
     

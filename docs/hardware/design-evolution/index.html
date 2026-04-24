@@ -746,6 +746,36 @@
   
   
     <li class="md-nav__item">
+      <a href="../../../blog/category/battery/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Battery
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    
+  
+  
+    <li class="md-nav__item">
       <a href="../../../blog/category/build-guide/" class="md-nav__link">
         
   
@@ -1770,6 +1800,17 @@
         
       </ul>
     </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#rev-2-dual-10440-battery-case-redesign-2026-04-24" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Rev 2 — Dual 10440 Battery Case Redesign (2026-04-24)
+      
+    </span>
+  </a>
   
 </li>
       
@@ -3639,6 +3680,17 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#rev-2-dual-10440-battery-case-redesign-2026-04-24" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Rev 2 — Dual 10440 Battery Case Redesign (2026-04-24)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#current-assembly-esp32-s3-enclosure" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -3939,6 +3991,59 @@
 <h3 id="side-profile">Side profile<a class="headerlink" href="#side-profile" title="Permanent link">&para;</a></h3>
 <p><img alt="Rev 2 screen-inlay cover — side" src="../../../assets/images/enclosure/rev2-top-cover-inlay-v1-side.png" /></p>
 <p>The inlay variant is 2 mm taller overall than the windowed-v1 above because the display envelope thickens from 5 mm to 7 mm (raw module + FPC fold-over wiggle room) and the face plate goes from 0.5 mm to 0.7 mm. Total cover height: <strong>16.7 mm</strong> (was 14.5 mm for windowed-v1).</p>
+<hr />
+<h2 id="rev-2-dual-10440-battery-case-redesign-2026-04-24">Rev 2 — Dual 10440 Battery Case Redesign (2026-04-24)<a class="headerlink" href="#rev-2-dual-10440-battery-case-redesign-2026-04-24" title="Permanent link">&para;</a></h2>
+<p>A fit study of the original 3000 mAh pouch cell against the Rev 2 base showed it overhangs the ±Y long walls by ~5 mm and is thicker than the cavity above the board — the pouch had to stack <em>above</em> the Pico W, adding ~10 mm to the stack. Rethinking the power path around a pair of slim cells flanking the Pico W instead.</p>
+<p><strong>Chemistry decision.</strong> The existing TP4056 USB-C charger and the Pico W's VSYS input (1.8–5.5 V) both want single-cell 3.7 V Li-ion. That rules out AAA alkaline (1.5 V series pair discharges into brownout territory and can't be recharged) and AAA NiMH (2.4 V works but needs a different charger). The drop-in fit is <strong>10440 Li-ion</strong> — same AAA form factor (Ø 10 × 44 mm), same chemistry as the LiPo pouches, ~350 mAh per cell. Two in parallel → ~700 mAh pack, TP4056 unchanged (just derate R_prog to ~3.4 kΩ for 350 mA CC).</p>
+<p><strong>Three case variants</strong> landed under <code>hardware-design/scad Parts/Rev 2 extended with joystick/04-24-designs-alterations/</code>:</p>
+<table>
+<thead>
+<tr>
+<th>Variant</th>
+<th>Outer</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>base-v2-thin-dual-10440</code></td>
+<td>91.5 × 46 × 12 mm</td>
+<td>First cut. +2 mm Y to fit two Ø10 cells flanking a 21 mm Pico W with slop; -2 mm Z (thinner); 4 contact-tab slots; single USB-C on +X. Assumes 3-piece stack.</td>
+</tr>
+<tr>
+<td><code>base-v3-2piece</code></td>
+<td>91.5 × 46 × 14 mm</td>
+<td>Merged the middle platform into the base (per "I want this done in 2 pieces"). Pico inlay chamber at middle Y; display's ±Y overhang (4 mm/side) rests on the solid base rim at z=14. Stack total <strong>25.7 mm</strong> (was 36.7 mm).</td>
+</tr>
+<tr>
+<td><code>base-v4-2piece-open</code></td>
+<td>91.5 × 46 × 14 mm</td>
+<td>v3 + two rectangular slots through the -X end wall so 10440 cells slide in from outside without unbolting the cover. Raised Pico-chamber ±Y lips at z=14–15 for cover-base alignment on the non-battery edges.</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Matching covers</strong> for the Y=46 footprint:</p>
+<table>
+<thead>
+<tr>
+<th>Variant</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>top-cover-windowed-screen-inlay-v2-46y</code></td>
+<td>3-piece sibling with only the +2 mm Y bump (for anyone who wants to keep the middle platform).</td>
+</tr>
+<tr>
+<td><code>top-cover-windowed-screen-inlay-v3-2piece</code></td>
+<td>2-piece sibling — drops the 5 mm middle-platform pedestal reservation; cover is 11.7 mm (was 16.7 mm). Mates with base-v3 / base-v4.</td>
+</tr>
+</tbody>
+</table>
+<p>A fit-check with 2× Kodak Xtralife alkaline AAAs proved the physical clearance works at Y=46 (pre-10440 arrival), and set up the cell-retention plan: stamped strip contacts press-fit into the 4 generic slots at ±X ends of each cell bay; wires route up through the Pico chamber (the cell bay ceiling at z=12 and the Pico chamber at z=8–14 are connected by the shared open cavity above z=12).</p>
+<p><strong>Negative-space contour experiment</strong> (<code>top-cover-v4-contoured-25mm.scad</code>) — a later attempt to sculpt the cover's underside around the cells, FPC fold, and Pico W for a 25 mm clamshell — was deleted after review. Kept here as a note: if the clamshell direction gets revisited, the parameter knobs are <code>cover_downward_extension_below_mating_mm</code>, a half-cylinder cutout per cell along X, and a 2 mm FPC pocket on the -X side of the display.</p>
+<p>Research docs: <a href="https://github.com/rompasaurus/Dilder/blob/main/docs/battery-redesign-shopping-list.md">battery-redesign-shopping-list.md</a>, <a href="https://github.com/rompasaurus/Dilder/blob/main/docs/solar-charging-research.md">solar-charging-research.md</a>.</p>
 <hr />
 <h2 id="current-assembly-esp32-s3-enclosure">Current Assembly (ESP32-S3 Enclosure)<a class="headerlink" href="#current-assembly-esp32-s3-enclosure" title="Permanent link">&para;</a></h2>
 <p>The enclosure is a stacked shell design housing an Olimex ESP32-S3-DevKit-Lipo, Waveshare 2.13" e-ink display, and 1000mAh LiPo battery. Five parts print flat without supports and assemble with 4 corner screw posts.</p>
@@ -4376,6 +4481,48 @@
 <td>Rev 2 top cover (screen inlay)</td>
 <td>iteration</td>
 <td>Post-first-print tweaks to both inlay variants: face plate 0.5→0.7mm (kills a hairline seam at the inlay top edge where the single thin top layer didn't close); removed 4 joystick-PCB mount bores (showed as dimples in a ring around the joystick cutout — retention strategy undecided); window resized 50×25→48×27 with shift 2→3 across all 3 cover variants to match the Waveshare's actual viewable pixel area</td>
+</tr>
+<tr>
+<td>2026-04-24</td>
+<td>Rev 2 top cover (screen inlay)</td>
+<td>window refine</td>
+<td>Second pass on the inlay window after dialing in the Pico 2 module: depth 27→24, shift 3→2.8. Applied to <code>-v1-2mm</code> and a new <code>-pico2-v2-2mm</code> sibling with +0.05 mm/edge Y slop on the screen inlay pocket for easier module drop-in</td>
+</tr>
+<tr>
+<td>2026-04-24</td>
+<td>Rev 2 base</td>
+<td>v2 thin dual-10440</td>
+<td>New case family for 2× 10440 Li-ion in parallel (~700 mAh, 3.7 V, TP4056-compatible). Y 44→46mm (fit two Ø10 cells flanking 21 mm Pico W with slop); Z 14→12 mm (thinner); floor 3→2 mm; single USB-C on +X (Pico W has one port); 4 generic contact-tab slots at each cell bay end</td>
+</tr>
+<tr>
+<td>2026-04-24</td>
+<td>Rev 2 middle platform</td>
+<td>v2-46y</td>
+<td>+2 mm Y fork to match base-v2 (orphaned after 2-piece pivot, kept as 3-piece reference)</td>
+</tr>
+<tr>
+<td>2026-04-24</td>
+<td>Rev 2 top cover (screen inlay)</td>
+<td>v2-46y</td>
+<td>+2 mm Y fork of the pico2-v2 cover so it mates with base-v2 in the 3-piece stack</td>
+</tr>
+<tr>
+<td>2026-04-24</td>
+<td>Rev 2 base</td>
+<td>v3 2-piece</td>
+<td>Merged the middle platform into the base (14 mm tall). Pico W "inlay" chamber centered in Y; Waveshare display's ±Y edges rest on the solid base rim at z=14 (display overhangs the 21.8 mm Pico chamber by ~4 mm each side). Stack drops 36.7 → 25.7 mm</td>
+</tr>
+<tr>
+<td>2026-04-24</td>
+<td>Rev 2 top cover (screen inlay)</td>
+<td>v3 2-piece</td>
+<td>2-piece sibling — removes the 5 mm middle-platform pedestal reservation; total cover height 16.7 → 11.7 mm</td>
+</tr>
+<tr>
+<td>2026-04-24</td>
+<td>Rev 2 base</td>
+<td>v4 2-piece open</td>
+<td>v3 + two rectangular insertion slots through the -X end wall so 10440 cells slide in from outside without unbolting the cover; raised ±Y lips on the cell-bay ceiling at z=14–15 for cover-base alignment on the non-battery long edges</td>
 </tr>
 </tbody>
 </table>
