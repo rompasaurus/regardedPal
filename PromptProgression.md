@@ -2843,3 +2843,57 @@ Spelling and grammar are lightly cleaned for readability while preserving the or
   - `website/docs/assets/images/enclosure/rev2-top-cover-windowed-v1-{iso,top,side,under}.png` — 4 renders mirrored from the SCAD folder.
   - Committed as `Rev 2 top cover (windowed) v1 + docs/blog`.
   - `PromptProgression.md` — this file, prompts #233–#237, grammar cleaned per the file's own header convention ("Spelling and grammar are lightly cleaned for readability while preserving the original intent and voice").
+
+---
+
+## Prompt #238 — 2026-04-24
+- **Prompt:** "Ok, this print looks pretty good so far — look at the latest shot I took of it. I want to get rid of the 4 holes around the joystick cutout, and then add 0.2 mm thickness to the whole layer of the front face of the cover — just the side where the screen slides into is slightly gaping open, and this should fix that."
+- **Input Tokens (est):** ~60
+- **Output Tokens (est):** ~4,500
+- **Context:** Between prompt #237 (the prior session's doc/blog rollup) and this one, the user committed `eaa4593` — a big refactor of the Rev 2 cover family, authored outside this session. That commit introduced two new files, `top-cover-windowed-screen-inlay-v1.scad` (3 mm FPC divet) and `top-cover-windowed-screen-inlay-v1-2mm.scad` (2 mm divet sibling), each adding a Waveshare-sized inlay recess, a 20×20 mm joystick-PCB pocket with 4 blind corner mount bores, and an FPC-ribbon divet cut into the -X wall. The existing `top-cover-windowed-v1.scad` was also rewritten in that same commit — rails + lips removed, all four corner pillars full-height, M3 bores made blind from below, and a new `display_window_shift_toward_joystick_x_mm = 2` param added for asymmetric bezel. Two new print photos (`rev2-print-1.jpg`, `rev2-print-2.jpg`) were also staged — the user's first print of the inlay variant, which this prompt reacts to.
+- **Files:**
+  - `top-cover-windowed-screen-inlay-v1-2mm.scad` (modified):
+    - `face_plate_thickness_z_mm` 0.5 → **0.7** (comment added explaining the first-print seam along the inlay's top edge where 0.5 mm printed as one perimeter + one thin top layer and didn't fully close).
+    - 4 joystick-PCB mount bores removed from the Stage 3 subtract block — replaced with a comment block noting the retention strategy (glue / press-fit / heat-set inserts) hasn't been decided yet. The `joystick_pcb_mount_bore_*` parameter definitions are kept so the geometry is one block away from returning.
+  - `top-cover-windowed-screen-inlay-v1.scad` (modified identically — mirrored the same two edits to the 3 mm-divet sibling for parity).
+  - STLs re-exported for both inlay variants. Preview PNG confirmed the ring of dimples around the joystick cutout was gone — only the joystick through-hole + 4 corner M3 bores remain on the underside.
+
+---
+
+## Prompt #239 — 2026-04-24
+- **Prompt:** "Ok, let's look at the window cutout for the display. I attached some screenshots for you to see. The short side closest to the side needs to be extended in by 2 mm, and the top and bottom long sides need to be extended compared to the edge by 1 mm each, to compensate for the actual viewable screen's dimensions."
+- **Input Tokens (est):** ~75
+- **Output Tokens (est):** ~3,500
+- **Files / interpretation:**
+  - Four `waveshare-screen-*.jpg` photos (staged in the same folder) showed the raw Waveshare 2.13" module from the front (`-1`), from the back (`-2`), seated in the printed inlay with the cover inverted (`-3`), and from the side (`-4`). Against those, the 50 × 25 window on the first print read as 2 mm too long in X on the -X end (cut past the viewable pixels into dead bezel) and 2 mm too short in Y overall (cut *into* the viewable pixels at the ±Y edges).
+  - Applied to all three cover variants for consistency:
+    - `top-cover-windowed-screen-inlay-v1-2mm.scad`
+    - `top-cover-windowed-screen-inlay-v1.scad`
+    - `top-cover-windowed-v1.scad`
+  - Parameter deltas (all three files):
+    - `display_viewing_window_length_along_x_mm`: 50 → **48** (-X short side moves inward 2 mm)
+    - `display_viewing_window_depth_along_y_mm`: 25 → **27** (±Y long sides each extend 1 mm outward)
+    - `display_window_shift_toward_joystick_x_mm`: 2 → **3** (compensates for the length reduction so only the -X edge moves — +X edge stays at X=62.9)
+  - New window bounds: X 14.9 → 62.9, Y 8.5 → 35.5. -X bezel grows 9.5 → 11.5 mm, ±Y bezels shrink 2.5 → 1.5 mm each, +X bezel and joystick-hole position unchanged.
+  - All three STLs re-exported.
+
+---
+
+## Prompt #240 — 2026-04-24
+- **Prompt:** "Update docs, blog, and website, commit. Then update prompts, commit again, and push."
+- **Input Tokens (est):** ~20
+- **Output Tokens (est):** ~9,000
+- **Files:**
+  - `hardware-design/scad Parts/Rev 2 extended with joystick/rev2-models-dimensions.md` — three sections updated:
+    - §3.4 Display viewing window: added a "Updated 2026-04-24" note and a side-by-side table showing first-print vs. post-update values; recomputed the X/Y ranges at face-plate bottom and at cover top; new bezel summary (-X 11.5, +X 5.5, ±Y 1.5 each).
+    - §4.1 Inlay Z-stack overrides: added face_plate_thickness row (0.5 → 0.7) with the first-print seam explanation; recomputed face_plate_top_z_mm (12.5 → 12.7) and cover_total_height_z_mm (16.5 → 16.7); added a paragraph noting the window updates in §3.4 apply to the inlay variants too.
+    - §4.4 Joystick PCB mount bores: retitled "REMOVED 2026-04-24", kept the coordinate table as a reference in case the retention plan brings them back; noted the SCAD parameters are still in the file.
+    - §6 Caveats: added a bullet noting the face-plate thickness now diverges across variants (base v1 still at 0.5 mm, both inlay variants at 0.7 mm).
+  - `website/docs/docs/hardware/design-evolution.md`:
+    - New "Rev 2 Top Cover — Screen Inlay Variant (2026-04-24)" section between the windowed-v1 top-cover section and "Current Assembly". Covers the iso/top/under/side renders, the Waveshare module + inlay fit-check photos, the three first-print fixes, and the final window resize with a before/after table.
+    - Version history appended three rows: one for the windowed-v1 → v1.1 pivot (rails gone, blind bores, +X window shift), one for the new screen-inlay family, and one for the first-print iteration (face plate bump, removed bores, window resize).
+  - `website/docs/blog/posts/rev2-top-cover-inlay-first-print.md` (new) — blog post walking through the three first-print fixes with photos and tables. Sibling to `rev2-top-cover-windowed.md` from the prior session.
+  - `website/docs/assets/images/enclosure/` — 8 new assets: 4 inlay SCAD renders (`rev2-top-cover-inlay-v1-{iso,top,under,side}.png`), 2 first-print photos (`rev2-top-cover-inlay-print-{1,2}.jpg`), and 2 Waveshare module photos (`waveshare-2-13-front.jpg`, `waveshare-2-13-in-inlay.jpg`).
+  - 4 preview PNGs rendered alongside the SCAD (in the Rev 2 folder) as well.
+  - Committed as `a3b9660` — `Rev 2 screen-inlay top cover — first-print fixes + docs`.
+  - `PromptProgression.md` (this file) — prompts #238–#240 appended, grammar lightly cleaned per the file's header convention.
