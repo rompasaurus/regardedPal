@@ -4,6 +4,17 @@ A record of every prompt submitted during the development of Dilder.
 
 Spelling and grammar are lightly cleaned for readability while preserving the original intent and voice.
 
+## Fields tracked per entry
+
+Every prompt entry below uses the following fields. Entries that don't yet list all fields should be treated as incomplete and backfilled when the context is recovered.
+
+- **Date/Time** — absolute date (`YYYY-MM-DD`) of the prompt. Relative dates like "Thursday" get resolved when the entry is written.
+- **Prompt** — the user's message, quoted. Spelling and grammar are lightly cleaned for readability while preserving the original intent and voice.
+- **Input Tokens (est)** — approximate user-facing input token count.
+- **Output Tokens (est)** — approximate assistant output token count across the full turn.
+- **Commit** — the short SHA + subject line of the git commit that landed the changes from this prompt, in the form `` `abc1234` — commit subject ``. Uses `n/a — <reason>` if no files were changed (research / Q&A / explanation turns) or if the work was never committed.
+- **Files Created/Modified** — bulleted list of files touched, with short notes on the change. If nothing changed, omit or write `none`. Multi-prompt sessions may share a single commit; each entry still lists the files the specific prompt touched.
+
 ---
 
 ## Prompt #1
@@ -604,6 +615,7 @@ Spelling and grammar are lightly cleaned for readability while preserving the or
 - **Prompt:** "The octopus needs more legs and it should have less black and more curvaceous. The display emulator tab should have a preview deploy on the Pico as well."
 - **Input Tokens (est):** ~40
 - **Output Tokens (est):** ~30,000
+- **Commit:** `151b575` — Make DevTool serial send non-blocking and backfill Prompt #40 commit hash
 - **Files Created/Modified:**
   - `DevTool/devtool.py` (modified — redesigned octopus to outline style with 6 curvy tentacles, then reverted to original chunky style per user preference; added 6 tentacle legs; fixed deploy hang with write_timeout)
 
@@ -614,6 +626,7 @@ Spelling and grammar are lightly cleaned for readability while preserving the or
 - **Prompt:** "God the octopus looks awful, use the other octopus you made — it looked way better."
 - **Input Tokens (est):** ~20
 - **Output Tokens (est):** ~15,000
+- **Commit:** `b408ab1` — Update website with Tools docs, blog post, prompt log, and DevTool Programs tab
 - **Files Created/Modified:**
   - `DevTool/devtool.py` (modified — reverted to original chunky filled-style octopus with 6 tentacle legs, improved open-mouth with proper white interior and black border)
 
@@ -624,6 +637,7 @@ Spelling and grammar are lightly cleaned for readability while preserving the or
 - **Prompt:** "I don't want to see the logs — write the steps in the write-failed message. Also the logs at the bottom need to be resizable."
 - **Input Tokens (est):** ~30
 - **Output Tokens (est):** ~10,000
+- **Commit:** `63e696b` — Add Programs tab, Sassy Octopus, IMG-receiver and standalone firmware, fix drawing tools
 - **Files Created/Modified:**
   - `DevTool/devtool.py` (modified — moved deploy failure steps to status label; replaced fixed log bar with resizable PanedWindow + scrollbar + Clear button; improved port detection with Raspberry Pi VID 0x2E8A; fixed hardcoded /dev/ttyACM0 references)
 
@@ -634,6 +648,7 @@ Spelling and grammar are lightly cleaned for readability while preserving the or
 - **Prompt:** "Also no device found error — I changed USB ports, does that break this? If so check for the correct port in all the utils."
 - **Input Tokens (est):** ~30
 - **Output Tokens (est):** ~5,000
+- **Commit:** `63e696b` — Add Programs tab, Sassy Octopus, IMG-receiver and standalone firmware, fix drawing tools
 - **Files Created/Modified:**
   - `DevTool/devtool.py` (modified — `find_pico_serial()` now checks Raspberry Pi USB VID 0x2E8A first, then falls back to ttyACM/usbmodem name matching; connection utility uses dynamic detection instead of hardcoded paths)
 
@@ -644,6 +659,7 @@ Spelling and grammar are lightly cleaned for readability while preserving the or
 - **Prompt:** "It says to flash the firmware via the flash tab — where is the image, what am I flashing? Can't you do it in the Programs tab when I have the Pico in BOOTSEL mode?"
 - **Input Tokens (est):** ~40
 - **Output Tokens (est):** ~40,000
+- **Commit:** `63e696b` — Add Programs tab, Sassy Octopus, IMG-receiver and standalone firmware, fix drawing tools
 - **Files Created/Modified:**
   - `dev-setup/img-receiver/main.c` (created — Pico W firmware that receives IMG: protocol over USB serial and displays on e-ink, with landscape-to-portrait transpose and partial refresh)
   - `dev-setup/img-receiver/CMakeLists.txt` (created)
@@ -658,6 +674,7 @@ Spelling and grammar are lightly cleaned for readability while preserving the or
 - **Prompt:** "Also give the octopus more mouth expressions — I want a default smile which is a half-circle that's white and slightly off-angle from the normal mouth."
 - **Input Tokens (est):** ~30
 - **Output Tokens (est):** ~5,000
+- **Commit:** `63e696b` — Add Programs tab, Sassy Octopus, IMG-receiver and standalone firmware, fix drawing tools
 - **Files Created/Modified:**
   - `DevTool/devtool.py` (modified — added smirk expression as default: tilted half-circle with white interior; animation now cycles smirk → open → smile → open)
 
@@ -668,6 +685,7 @@ Spelling and grammar are lightly cleaned for readability while preserving the or
 - **Prompt:** "In the build give some more descriptive logs of what Docker is doing. Also can the logs and windows be resized on this GUI?"
 - **Input Tokens (est):** ~25
 - **Output Tokens (est):** ~15,000
+- **Commit:** `63e696b` — Add Programs tab, Sassy Octopus, IMG-receiver and standalone firmware, fix drawing tools
 - **Files Created/Modified:**
   - `DevTool/devtool.py` (modified — Docker image build step now streams output line-by-line with `[docker]` prefixed log entries; shows download/install/clone progress in real time; increased timeout to 600s; fixed sidebar panels to allow proper horizontal resizing)
 
@@ -678,6 +696,7 @@ Spelling and grammar are lightly cleaned for readability while preserving the or
 - **Prompt:** "I want the ability to deploy the sassy octopus fully to the Pico so I can run it without having the USB connected and it will just boot into this program standalone."
 - **Input Tokens (est):** ~40
 - **Output Tokens (est):** ~30,000
+- **Commit:** `63e696b` — Add Programs tab, Sassy Octopus, IMG-receiver and standalone firmware, fix drawing tools
 - **Files Created/Modified:**
   - `dev-setup/sassy-octopus/main.c` (created — standalone firmware that cycles pre-rendered frames on the e-ink display with partial refresh, no USB needed)
   - `dev-setup/sassy-octopus/CMakeLists.txt` (created)
@@ -1160,6 +1179,7 @@ Spelling and grammar are lightly cleaned for readability while preserving the or
 - **Prompt:** "Excited as well and nostalgic."
 - **Input Tokens (est):** ~5
 - **Output Tokens (est):** ~500
+- **Commit:** `ec59806` — Add Prompts #88-95, update website docs for 16 programs and body animations
 - **Files Created/Modified:** (included in Prompt #89 commit — both were added in the same batch)
 
 ---
@@ -1169,6 +1189,7 @@ Spelling and grammar are lightly cleaned for readability while preserving the or
 - **Prompt:** "Homesick too."
 - **Input Tokens (est):** ~5
 - **Output Tokens (est):** ~500
+- **Commit:** `ec59806` — Add Prompts #88-95, update website docs for 16 programs and body animations
 - **Files Created/Modified:** (included in Prompt #89 commit)
 
 ---
@@ -1204,6 +1225,7 @@ Spelling and grammar are lightly cleaned for readability while preserving the or
 - **Prompt:** "Also I want images of just the octopus in the MD document, focusing on the animations and clearly annotated and described in each picture. Make a robust set, then apply it."
 - **Input Tokens (est):** ~30
 - **Output Tokens (est):** ~5,000
+- **Commit:** `ec59806` — Add Prompts #88-95, update website docs for 16 programs and body animations
 - **Files Created/Modified:** (included in Prompt #93 commit — animation strips were generated in that batch)
 
 ---
@@ -1226,6 +1248,7 @@ Spelling and grammar are lightly cleaned for readability while preserving the or
 - **Prompt:** "OK let's export the octopus and its facial expressions and animations into the assets folder, label and map all the available combinations, and then plan for new implementation. For every emotional state of the octopus planned we need to start moving the body according to its state as well. Give me a nice exhaustive combination of assets that eventually can be put into the C program upon approval. Give me an MD document to outline each state and provide a check mark and notes option for each state for improvements later in Claude."
 - **Input Tokens (est):** ~100
 - **Output Tokens (est):** ~15,000
+- **Commit:** `deb3291` — Add custom fat/lazy octopus bodies, C-faithful renderer, keyboard input plan, and Prompts #96-104
 - **Files Created/Modified:**
   - `assets/octopus-emotion-states.md` (created — comprehensive tracker doc with all 13 emotional states, per-feature tables, body motion priority matrix, implementation approach for RLE body transforms, animation cycle reference, and source file reference)
 
@@ -1236,6 +1259,7 @@ Spelling and grammar are lightly cleaned for readability while preserving the or
 - **Prompt:** "What would it take to map the keyboard actions for the time being to the Pico so that I can play around with user actions on the octopus? Create an MD in the docs and dive into the options."
 - **Input Tokens (est):** ~40
 - **Output Tokens (est):** ~20,000
+- **Commit:** `deb3291` — Add custom fat/lazy octopus bodies, C-faithful renderer, keyboard input plan, and Prompts #96-104
 - **Files Created/Modified:**
   - `docs/keyboard-to-pico-input.md` (created — explores 3 options: Serial Command Mode over existing USB CDC, GPIO Button Array on free pins GP0-GP4, and Hybrid; includes full key mapping table for 30+ commands covering mood selection, expression override, animation control, body motion, quote control, and system commands; provides C code snippets for handle_command(), polling main loop, and state variables; GPIO pinout diagram; DevTool integration mockup; 10-step implementation plan)
 
@@ -1246,6 +1270,7 @@ Spelling and grammar are lightly cleaned for readability while preserving the or
 - **Prompt:** "The fat and lazy octopus legs are hard to differentiate between which leg is which. Perhaps for the fat one make the octopus fat up top with a bit thicker legs, and with the lazy one make it lounge on its side with a tentacle on its belly lying like a French woman."
 - **Input Tokens (est):** ~50
 - **Output Tokens (est):** ~40,000
+- **Commit:** `deb3291` — Add custom fat/lazy octopus bodies, C-faithful renderer, keyboard input plan, and Prompts #96-104
 - **Files Created/Modified:**
   - `dev-setup/fat-octopus/main.c` (modified — replaced `body_rle[]` with custom wider body: dome starts 2 rows higher, +5px per side at peak, no waist taper, tentacles widened +1px per side; updated `setup_body_transform` to remove `body_x_expand=3` since body is inherently fat)
   - `dev-setup/lazy-octopus/main.c` (modified — replaced `body_rle[]` with reclining pose: asymmetric body sloping rightward, belly tentacle overlay function, sprawling tentacles; updated `setup_body_transform`)
@@ -1258,6 +1283,7 @@ Spelling and grammar are lightly cleaned for readability while preserving the or
 - **Prompt:** "Use the C implementation of the animations and produce accurately a set of images in the assets folder to compare against the Python."
 - **Input Tokens (est):** ~25
 - **Output Tokens (est):** ~50,000
+- **Commit:** `deb3291` — Add custom fat/lazy octopus bodies, C-faithful renderer, keyboard input plan, and Prompts #96-104
 - **Files Created/Modified:**
   - `assets/render_c_previews.py` (created — standalone Python script that is a 1:1 port of every C firmware drawing function: `fill_circle`, all `draw_pupils_*`, `draw_brows_*`, `draw_lids_*`, `draw_mouth_*`, body RLE decode, chat bubble, body transforms, and row wobble; renders all 16 moods to PNG at 4x scale plus a comparison grid)
   - `assets/c-render/*.png` (16 individual mood PNGs + `_grid_all_moods.png` generated)
@@ -1272,6 +1298,7 @@ Spelling and grammar are lightly cleaned for readability while preserving the or
 - **Prompt:** "Lazy octopus looks weird. Just have him sit on his side with his legs draped to the right."
 - **Input Tokens (est):** ~20
 - **Output Tokens (est):** ~15,000
+- **Commit:** `deb3291` — Add custom fat/lazy octopus bodies, C-faithful renderer, keyboard input plan, and Prompts #96-104
 - **Files Created/Modified:**
   - `dev-setup/lazy-octopus/main.c` (modified — replaced reclining body_rle with simpler design: standard head dome + body, cheeks taper rightward, all 5 tentacles sweep diagonally to the right with organic sine wobble; removed `draw_belly_tentacle_lazy()` call from render_frame)
   - `DevTool/devtool.py` (modified — updated `_octo_body_lazy()` to match new tentacles-draped-right design, removed belly tentacle from frame builder)
@@ -1285,6 +1312,7 @@ Spelling and grammar are lightly cleaned for readability while preserving the or
 - **Prompt:** "Compare the C renders with the Python images and make sure they line up. Also with the C render, split up each octopus into its own image file named like the emotion previews."
 - **Input Tokens (est):** ~30
 - **Output Tokens (est):** ~10,000
+- **Commit:** `deb3291` — Add custom fat/lazy octopus bodies, C-faithful renderer, keyboard input plan, and Prompts #96-104
 - **Files Created/Modified:**
   - `assets/render_c_previews.py` (modified — added full `setup_body_transform()` with body_dx/dy/x_expand/wobble matching C firmware, added `body_x_expand` to `draw_body()`, added `row_wobble()` to `px_set_off`/`px_clr_off`)
   - `assets/emotion-previews/*.png` (all 34 files regenerated — 17 statics + 17 anim strips from C-faithful renderer)
@@ -1299,6 +1327,7 @@ Spelling and grammar are lightly cleaned for readability while preserving the or
 - **Prompt:** "C renders need to be generated now too."
 - **Input Tokens (est):** ~10
 - **Output Tokens (est):** ~500
+- **Commit:** `deb3291` — Add custom fat/lazy octopus bodies, C-faithful renderer, keyboard input plan, and Prompts #96-104
 - **Files Created/Modified:**
   - `assets/c-render/*.png` (regenerated — 16 individual PNGs + grid)
 
@@ -1309,6 +1338,7 @@ Spelling and grammar are lightly cleaned for readability while preserving the or
 - **Prompt:** "The C renders don't have as many as the emotion previews though."
 - **Input Tokens (est):** ~15
 - **Output Tokens (est):** ~5,000
+- **Commit:** `deb3291` — Add custom fat/lazy octopus bodies, C-faithful renderer, keyboard input plan, and Prompts #96-104
 - **Files Created/Modified:**
   - `assets/c-render/*-anim.png` (17 animation strips generated to match emotion-previews)
   - `assets/c-render/supportive.png` and `assets/c-render/supportive-anim.png` (copied from normal)
@@ -1323,6 +1353,7 @@ Spelling and grammar are lightly cleaned for readability while preserving the or
 - **Prompt:** "OK go through session history, find all my new prompts, update the prompt document, commit and push the change. Be as descriptive as possible. Update docs and the website as well."
 - **Input Tokens (est):** ~30
 - **Output Tokens (est):** ~40,000
+- **Commit:** `deb3291` — Add custom fat/lazy octopus bodies, C-faithful renderer, keyboard input plan, and Prompts #96-104
 - **Files Created/Modified:**
   - `PromptProgression.md` (modified — added Prompts #96–104)
   - `website/docs/prompts/index.md` (modified — added Prompts #93–104)
@@ -1336,6 +1367,7 @@ Spelling and grammar are lightly cleaned for readability while preserving the or
 - **Prompt:** "OK let's implement a new project that combines all the emotional states of the octopus and put the state below and allow keyboard input to go left and right to select a new state and show the quotes for the states. Show < on the left and > on the right to indicate the selection and put the state bottom middle."
 - **Input Tokens (est):** ~75
 - **Output Tokens (est):** ~80,000
+- **Commit:** `dd837c7` — Add Mood Selector program, comprehensive programs guide, and Prompts #105-111
 - **Files Created/Modified:**
   - `dev-setup/mood-selector/main.c` (created — 1,305-line C firmware combining all 16 emotional states into one interactive program; includes all pupil/mouth/brow/lid/tear drawing functions, body transforms, expression cycles, quote filtering by mood, serial input polling with `[`/`]` navigation, and `< MOOD_NAME >` status bar at screen bottom)
   - `dev-setup/mood-selector/quotes.h` (created — auto-generated, 823 quotes from all 16 moods, 51.6 KB)
@@ -1353,6 +1385,7 @@ Spelling and grammar are lightly cleaned for readability while preserving the or
 - **Prompt:** "Also provide input options on the program main page that map to the Pico."
 - **Input Tokens (est):** ~20
 - **Output Tokens (est):** ~5,000
+- **Commit:** `dd837c7` — Add Mood Selector program, comprehensive programs guide, and Prompts #105-111
 - **Files Created/Modified:**
   - `dev-setup/mood-selector/main.c` (modified — added `print_help()` function that prints full key mapping table to serial on startup and on `?` keypress; includes mood navigation `[`/`]`, direct selection letters `n/w/u/a/s/c/h/t/p/l/f/k/y/e/o/m`, quote refresh `q`, and random mood `r`)
 
@@ -1363,6 +1396,7 @@ Spelling and grammar are lightly cleaned for readability while preserving the or
 - **Prompt:** "Move the mood selector more to the bottom and put the actual emotion state in the text field, not mood selector, with < char and > char instead of ~."
 - **Input Tokens (est):** ~30
 - **Output Tokens (est):** ~3,000
+- **Commit:** `dd837c7` — Add Mood Selector program, comprehensive programs guide, and Prompts #105-111
 - **Files Created/Modified:**
   - `dev-setup/mood-selector/main.c` (modified — moved status bar to `IMG_H - 8` for flush-bottom positioning; replaced `~ MOOD SELECTOR ~` tagline with dynamic `< MOOD_NAME >` using `<` and `>` characters; restored bubble to full 70px height)
 
@@ -1373,6 +1407,7 @@ Spelling and grammar are lightly cleaned for readability while preserving the or
 - **Prompt:** "Also when deploying to the Pi give a clear indication of the [] buttons and whether they were pressed and what mood is showing on the Pico."
 - **Input Tokens (est):** ~25
 - **Output Tokens (est):** ~5,000
+- **Commit:** `dd837c7` — Add Mood Selector program, comprehensive programs guide, and Prompts #105-111
 - **Files Created/Modified:**
   - `dev-setup/mood-selector/main.c` (modified — enhanced serial output: each keypress now logs `KEY 'x' pressed | >> RIGHT | SASSY --> WEIRD` with direction indicator `<< LEFT`/`>> RIGHT`/`?? RAND`/`== JUMP`, previous and new mood names, position counter `(N/16)`, and separator lines; frame log updated to show `Frame N | < MOOD > (N/16) | "QUOTE"`)
 
@@ -1383,6 +1418,7 @@ Spelling and grammar are lightly cleaned for readability while preserving the or
 - **Prompt:** "The firmware started with the program though." (Regarding serial input not working — Pico detected at `/dev/ttyACM0` via `/dev/serial/by-id/`)
 - **Input Tokens (est):** ~10
 - **Output Tokens (est):** ~500
+- **Commit:** `dd837c7` — Add Mood Selector program, comprehensive programs guide, and Prompts #105-111
 - **Files Created/Modified:**
   - No files modified — troubleshooting session: confirmed Pico serial device at `/dev/serial/by-id/usb-Raspberry_Pi_Pico_*`, instructed to connect with `screen /dev/ttyACM0 115200` or `picocom`
 
@@ -1393,6 +1429,7 @@ Spelling and grammar are lightly cleaned for readability while preserving the or
 - **Prompt:** (Build failure: `no such service: build-mood-selector` — Docker compose missing the mood-selector service)
 - **Input Tokens (est):** ~15
 - **Output Tokens (est):** ~2,000
+- **Commit:** `dd837c7` — Add Mood Selector program, comprehensive programs guide, and Prompts #105-111
 - **Files Created/Modified:**
   - `dev-setup/docker-compose.yml` (modified — added `build-mood-selector` service with volumes mapping `./mood-selector:/project` and `./hello-world/lib:/project/lib`)
 
@@ -1403,6 +1440,7 @@ Spelling and grammar are lightly cleaned for readability while preserving the or
 - **Prompt:** "OK update the documentation and give an in-depth breakdown of every program and its uses and how to use it fully and provide screenshots. Make a new MD with a TOC for all of the options, then update the prompt, fix spelling, pull latest prompts, and all that. Commit and push."
 - **Input Tokens (est):** ~50
 - **Output Tokens (est):** ~60,000
+- **Commit:** `dd837c7` — Add Mood Selector program, comprehensive programs guide, and Prompts #105-111
 - **Files Created/Modified:**
   - `docs/programs-guide.md` (created — comprehensive guide to all 19 programs with TOC, display layout diagram, animation cycle docs, building/flashing instructions, per-program sections with preview images and feature tables, mood selector serial input reference with connection instructions, and comparison table)
   - `website/docs/docs/software/project-structure.md` (modified — updated directory tree to include all 16 octopus programs, mood-selector, keyboard-to-pico-input.md, and programs-guide.md)
@@ -1418,6 +1456,7 @@ Spelling and grammar are lightly cleaned for readability while preserving the or
 - **Prompt:** "How do I input via the computer connected to the mood selector app? The keys aren't working right now."
 - **Input Tokens (est):** ~20
 - **Output Tokens (est):** ~500
+- **Commit:** `4e891f6` — Add collapsible program tree, update Prompts #112-118
 - **Files Created/Modified:**
   - No files modified — troubleshooting: Pico found at `/dev/serial/by-id/usb-Raspberry_Pi_Pico_*` (`/dev/ttyACM0`), instructed to connect with `screen /dev/ttyACM0 115200`, `picocom`, or `minicom`; noted that only one program can hold the serial port at a time
 
@@ -1428,6 +1467,7 @@ Spelling and grammar are lightly cleaned for readability while preserving the or
 - **Prompt:** "The firmware started with the program though." (Clarifying that the Pico was running but serial input wasn't reaching it)
 - **Input Tokens (est):** ~10
 - **Output Tokens (est):** ~300
+- **Commit:** `4e891f6` — Add collapsible program tree, update Prompts #112-118
 - **Files Created/Modified:**
   - No files modified — confirmed device present at `/dev/ttyACM0` via `/dev/serial/by-id/`; issue was that no serial terminal was connected to send keystrokes to the firmware
 
@@ -1438,6 +1478,7 @@ Spelling and grammar are lightly cleaned for readability while preserving the or
 - **Prompt:** "We need to organize the programs — they are getting too complex. Let's make a tree structure for it that expands and collapses. Use your best judgment, don't make it more than 3 deep."
 - **Input Tokens (est):** ~35
 - **Output Tokens (est):** ~15,000
+- **Commit:** `b0fd97a` — Add joystick wiring guide, update materials list, and sync Prompts #114-133
 - **Files Created/Modified:**
   - `DevTool/devtool.py` (modified — replaced flat `tk.Listbox` program selector with collapsible `ttk.Treeview`; added `PROGRAM_TREE` data structure defining 3-level hierarchy; added `_TOOL_PROGRAMS` dict for utility program metadata; added `_tree_id_to_key` mapping; updated `_build_ui()` to populate tree with categories and subcategories; updated `_get_selected_key()` to use Treeview selection; updated `_on_select()` to look up programs in both `PROGRAMS` and `_TOOL_PROGRAMS` dicts; styled with `Prog.Treeview` theme matching dark UI)
 
@@ -1448,6 +1489,7 @@ Spelling and grammar are lightly cleaned for readability while preserving the or
 - **Prompt:** (Runtime error: `_tkinter.TclError: unknown option "-width"` — `ttk.Treeview` does not accept a `width` constructor argument)
 - **Input Tokens (est):** ~15
 - **Output Tokens (est):** ~500
+- **Commit:** `b0fd97a` — Add joystick wiring guide, update materials list, and sync Prompts #114-133
 - **Files Created/Modified:**
   - `DevTool/devtool.py` (modified — replaced `width=28` constructor kwarg with `self.prog_tree.column("#0", width=220, minwidth=180)` which is the correct Treeview API for setting column width)
 
@@ -1458,6 +1500,7 @@ Spelling and grammar are lightly cleaned for readability while preserving the or
 - **Prompt:** "I think we need to add a level for 'Octopus' to contain all the things below Tools."
 - **Input Tokens (est):** ~20
 - **Output Tokens (est):** ~2,000
+- **Commit:** `b0fd97a` — Add joystick wiring guide, update materials list, and sync Prompts #114-133
 - **Files Created/Modified:**
   - `DevTool/devtool.py` (modified — restructured `PROGRAM_TREE`: merged "Emotional States" and "Interactive" under a single "Octopus" top-level category; tree is now Tools > [programs] and Octopus > Classic/Intense/Melancholy/Playful/Relaxed/Interactive > [programs]; maintains 3-level max depth)
 
@@ -1468,6 +1511,7 @@ Spelling and grammar are lightly cleaned for readability while preserving the or
 - **Prompt:** "OK run through all the session prompts for this project again and update the prompt document. Fix grammar while you're at it."
 - **Input Tokens (est):** ~25
 - **Output Tokens (est):** ~20,000
+- **Commit:** `b0fd97a` — Add joystick wiring guide, update materials list, and sync Prompts #114-133
 - **Files Created/Modified:**
   - `PromptProgression.md` (modified — added Prompts #112–117, corrected website prompt index reference in #111)
   - `website/docs/prompts/index.md` (modified — added Prompts #108–113)
@@ -1479,6 +1523,7 @@ Spelling and grammar are lightly cleaned for readability while preserving the or
 - **Prompt:** "OK run through all the session prompts for this project again and update the prompt document. Fix grammar while you're at it." (Duplicate of #117 — prompted commit of uncommitted changes)
 - **Input Tokens (est):** ~25
 - **Output Tokens (est):** ~2,000
+- **Commit:** `b0fd97a` — Add joystick wiring guide, update materials list, and sync Prompts #114-133
 - **Files Created/Modified:**
   - `PromptProgression.md` (modified — added Prompt #118)
   - `DevTool/devtool.py`, `PromptProgression.md`, `website/docs/prompts/index.md` — all committed and pushed
@@ -1490,6 +1535,7 @@ Spelling and grammar are lightly cleaned for readability while preserving the or
 - **Prompt:** "I've done a bit of research on the Pico and since the Raspberry Pi Pico W features the CYW43439 chip, it supports both Wi-Fi and Bluetooth (BLE). Depending on whether you have an existing Wi-Fi network or want the devices to work entirely independently, there are three primary ways to achieve discovery and synchronization. [Detailed research on Wi-Fi Infrastructure Mode, Wi-Fi SoftAP Mode, and BLE Advertising including detection/sync mechanisms, pros/cons, and handshake logic.] What I would like to have is a feature that synchronizes with other Picos running this pet and provides a bonus or notification to indicate that you discovered other players. Add a research document for this feature to the root docs folder."
 - **Input Tokens (est):** ~500
 - **Output Tokens (est):** ~8,000
+- **Commit:** `b0fd97a` — Add joystick wiring guide, update materials list, and sync Prompts #114-133
 - **Files Created/Modified:**
   - `docs/peer-discovery-research.md` (created — full research document covering three communication methods, recommended BLE approach, discovery protocol design with 13-byte handshake packet, validation logic, cooldown timer, reward/notification system with animations and stat boosts, encounter log data structure, display feedback, technical considerations for power/flash/versioning/security, and phased implementation plan A–E)
 
@@ -1500,6 +1546,7 @@ Spelling and grammar are lightly cleaned for readability while preserving the or
 - **Prompt:** "I think another component of peer discovery would be mating prospects to create unique offspring based on the other types of creatures met via proximity."
 - **Input Tokens (est):** ~30
 - **Output Tokens (est):** ~6,000
+- **Commit:** `b0fd97a` — Add joystick wiring guide, update materials list, and sync Prompts #114-133
 - **Files Created/Modified:**
   - `docs/peer-discovery-research.md` (modified — added Mating & Offspring System section: genetic trait system with 17-bit genome encoding 6 traits, 45/45/10 inheritance algorithm, mating eligibility conditions, offspring lifecycle with egg/hatching/slots, offspring data structure, generation tracking, BLE protocol extension for gene exchange, display integration for mating events; expanded implementation phases from A–E to A–I; added new open questions about trait rendering, offspring permanence, cross-pollination, and consent UX)
 
@@ -1510,6 +1557,7 @@ Spelling and grammar are lightly cleaned for readability while preserving the or
 - **Prompt:** "I suppose with a mating system we could generate unique animals and creatures as a result based on this but would it get too complex to compute this on a Pico?"
 - **Input Tokens (est):** ~30
 - **Output Tokens (est):** ~4,000
+- **Commit:** `b0fd97a` — Add joystick wiring guide, update materials list, and sync Prompts #114-133
 - **Files Created/Modified:**
   - `docs/peer-discovery-research.md` (modified — added Computational Feasibility on the Pico W section: genetics calculation cost analysis showing sub-microsecond execution, rendering cost breakdown showing table lookups vs hardcoded values are identical cost, combinatorial variety analysis showing 131,072 unique combinations from ~308 bytes of lookup tables, SRAM budget showing ~45 bytes additional, flash budget showing ~3.4KB additional, and hardware limitation analysis confirming the Pico W has orders of magnitude more resources than needed)
 
@@ -1520,6 +1568,7 @@ Spelling and grammar are lightly cleaned for readability while preserving the or
 - **Prompt:** "Also tell me what it would take to add more flash memory if that would be needed."
 - **Input Tokens (est):** ~15
 - **Output Tokens (est):** ~6,000
+- **Commit:** `b0fd97a` — Add joystick wiring guide, update materials list, and sync Prompts #114-133
 - **Files Created/Modified:**
   - `docs/hardware-research.md` (modified — added Flash Memory Expansion section: current flash budget analysis, Option 0 Pico 2 W upgrade, Option 1 SPI NOR flash chips W25Q16–W25Q128 with pricing and SPI0 wiring table, Option 2 pre-assembled breakout modules, Option 3 MicroSD card, comparison summary table, and tiered recommendation)
 
@@ -1530,6 +1579,7 @@ Spelling and grammar are lightly cleaned for readability while preserving the or
 - **Prompt:** "Is there a way to get 100+ MB of flash?"
 - **Input Tokens (est):** ~10
 - **Output Tokens (est):** ~2,500
+- **Commit:** `b0fd97a` — Add joystick wiring guide, update materials list, and sync Prompts #114-133
 - **Files Created/Modified:**
   - (No files modified — conversational response explaining SPI NAND flash chips W25N01GV through W25N04KV with pricing, NOR vs NAND trade-offs table, and recommendation that MicroSD is the better choice for 100+ MB)
 
@@ -1540,6 +1590,7 @@ Spelling and grammar are lightly cleaned for readability while preserving the or
 - **Prompt:** "Give the price and update the docs."
 - **Input Tokens (est):** ~10
 - **Output Tokens (est):** ~8,000
+- **Commit:** `b0fd97a` — Add joystick wiring guide, update materials list, and sync Prompts #114-133
 - **Files Created/Modified:**
   - `docs/hardware-research.md` (modified — added Option 3 SPI NAND Flash section with W25N512GV through W25N04KV chip lineup and pricing, NOR vs NAND comparison table, driver complexity notes mentioning dhara FTL library, breakout module availability; restructured Option 4 MicroSD with clearer pricing; expanded comparison summary table with all NAND options; updated recommendation with two paths to 100+ MB)
 
@@ -1550,6 +1601,7 @@ Spelling and grammar are lightly cleaned for readability while preserving the or
 - **Prompt:** "How much more power hungry is the Pi Zero?"
 - **Input Tokens (est):** ~10
 - **Output Tokens (est):** ~1,500
+- **Commit:** `b0fd97a` — Add joystick wiring guide, update materials list, and sync Prompts #114-133
 - **Files Created/Modified:**
   - (No files modified — conversational response referencing existing battery life data from hardware-research.md: Pi Zero W draws 3.2x more active power, 35x more in sleep, needs a boost converter, and lasts ~12 hours on 1000mAh vs 6.8 days for the Pico W)
 
@@ -1560,6 +1612,7 @@ Spelling and grammar are lightly cleaned for readability while preserving the or
 - **Prompt:** "Can I get a Pico with a larger NAND memory somewhere somehow?"
 - **Input Tokens (est):** ~15
 - **Output Tokens (est):** ~3,000
+- **Commit:** `b0fd97a` — Add joystick wiring guide, update materials list, and sync Prompts #114-133
 - **Files Created/Modified:**
   - (No files modified — conversational response explaining no Pico-class board ships with NAND; listed RP2040/RP2350 boards with extra NOR flash including WeAct RP2040, SparkFun Thing Plus, and Pimoroni Pico Plus 2 W with 16MB flash + 8MB PSRAM at ~$14; confirmed 100+ MB always requires external add-on)
 
@@ -1570,6 +1623,7 @@ Spelling and grammar are lightly cleaned for readability while preserving the or
 - **Prompt:** "Add this to the doc and give the power consumption estimates."
 - **Input Tokens (est):** ~10
 - **Output Tokens (est):** ~8,000
+- **Commit:** `b0fd97a` — Add joystick wiring guide, update materials list, and sync Prompts #114-133
 - **Files Created/Modified:**
   - `docs/hardware-research.md` (modified — expanded Option 0 into full board upgrade comparison table with Pico W, Pico 2 W, Adafruit Feather RP2040, SparkFun Thing Plus RP2040, and Pimoroni Pico Plus 2 W; added power consumption comparison table for all boards; added battery life estimates showing Pimoroni at ~5.5–6.0 days vs Pico 2 W at ~6.4 days; added external flash power consumption table for NOR, NAND, MicroSD, and PSRAM; updated comparison summary with power column; updated recommendation to include Pimoroni as Option 3)
 
@@ -1580,6 +1634,7 @@ Spelling and grammar are lightly cleaned for readability while preserving the or
 - **Prompt:** "Let's look at the Chinese market and tell me if there is a Pico-like board with Wi-Fi and a lot of memory."
 - **Input Tokens (est):** ~20
 - **Output Tokens (est):** ~8,000
+- **Commit:** `b0fd97a` — Add joystick wiring guide, update materials list, and sync Prompts #114-133
 - **Files Created/Modified:**
   - (No files modified — conversational research response covering Chinese MCU boards: ESP32-S3 boards from WeAct, Luatos, YD, and Lolin with 16MB flash + 8MB PSRAM + WiFi + BLE at $3.50–6; RP2040 boards from WeAct and YD with 16MB flash but no wireless at $2.50–3.50; exotic options like Sipeed BL616/BL808; trade-off analysis of Pico SDK vs ESP-IDF migration)
 
@@ -1590,6 +1645,7 @@ Spelling and grammar are lightly cleaned for readability while preserving the or
 - **Prompt:** "Give me the processor specs and speed."
 - **Input Tokens (est):** ~10
 - **Output Tokens (est):** ~6,000
+- **Commit:** `b0fd97a` — Add joystick wiring guide, update materials list, and sync Prompts #114-133
 - **Files Created/Modified:**
   - (No files modified — conversational response with detailed ESP32-S3 vs RP2040 vs RP2350 comparison: CPU architecture, clock speeds, FPU, DSP, cache sizes, DMA, crypto acceleration, CoreMark and Dhrystone benchmarks, power consumption comparison)
 
@@ -1600,6 +1656,7 @@ Spelling and grammar are lightly cleaned for readability while preserving the or
 - **Prompt:** "Also give me the documentation rating for these options and how easy code would be given the docs and API and resources available."
 - **Input Tokens (est):** ~25
 - **Output Tokens (est):** ~2,000
+- **Commit:** `b0fd97a` — Add joystick wiring guide, update materials list, and sync Prompts #114-133
 - **Files Created/Modified:**
   - (No files modified — conversational response with developer experience ratings for Pico SDK, Pico SDK 2.x, and ESP-IDF across documentation quality, getting started ease, API clarity, community support, example code, BLE maturity, e-ink library support, Arduino support, and toolchain setup)
 
@@ -1610,6 +1667,7 @@ Spelling and grammar are lightly cleaned for readability while preserving the or
 - **Prompt:** "Other than e-ink, what is another very low watt screen option for this project?"
 - **Input Tokens (est):** ~15
 - **Output Tokens (est):** ~6,000
+- **Commit:** `b0fd97a` — Add joystick wiring guide, update materials list, and sync Prompts #114-133
 - **Files Created/Modified:**
   - (No files modified — conversational research response covering Sharp Memory LCD, OLED, and Nokia PCD8544 displays: Sharp LS013B7DH03 as top pick with 1µA standby and 10–20 fps animation at $15–25; SSD1306 OLED as runner-up at $2–5 with 60 fps but 100–250x more power; PCD8544 as retro budget option at $1–3 but only 84x48 resolution; full comparison matrix of power, animation, sunlight readability, battery life, and pricing)
 
@@ -1620,6 +1678,7 @@ Spelling and grammar are lightly cleaned for readability while preserving the or
 - **Prompt:** "Get all the session prompts for this project and add to the prompts and commit and push the code."
 - **Input Tokens (est):** ~20
 - **Output Tokens (est):** ~15,000
+- **Commit:** `b0fd97a` — Add joystick wiring guide, update materials list, and sync Prompts #114-133
 - **Files Created/Modified:**
   - `PromptProgression.md` (modified — added Prompts #119–132)
   - `docs/peer-discovery-research.md` (created)
@@ -1633,6 +1692,7 @@ Spelling and grammar are lightly cleaned for readability while preserving the or
 - **Prompt:** "OK today I should be receiving this DollaTek 5pcs Five Direction Navigation Button Module for MCU AVR Game 5D Rocker Joystick... let's make a wiring and setup plan to begin testing this component with the Pico board and suggest the ideal way to wire this given the screen and headers already being used and also tell me if a GPS module could be attached along with an accelerometer."
 - **Input Tokens (est):** ~250
 - **Output Tokens (est):** ~30,000
+- **Commit:** `2147300` — Add LiPo battery wiring guide, update materials and pinout, add Prompts #133-134
 - **Files Created/Modified:**
   - `website/docs/docs/hardware/joystick-wiring.md` (created — full wiring guide with TOC, step-by-step instructions, wiring diagram, C and MicroPython test code, debounce notes, GPIO budget, future expansion compatibility, troubleshooting table)
   - `website/mkdocs.yml` (modified — added Joystick Wiring nav entry under Hardware)
@@ -1649,6 +1709,7 @@ Spelling and grammar are lightly cleaned for readability while preserving the or
 - **Prompt:** "OK let's also make a plan for this component as well: InnCraft Energy Lithium Polymer Battery 1000 mAh 3.7V, 51x34x5 Model 503450 2P Molex 51021-020 1.25mm Connection. Guide me through wiring this up and make another MD hardware doc on this."
 - **Input Tokens (est):** ~100
 - **Output Tokens (est):** ~25,000
+- **Commit:** `2147300` — Add LiPo battery wiring guide, update materials and pinout, add Prompts #133-134
 - **Files Created/Modified:**
   - `website/docs/docs/hardware/battery-wiring.md` (created — full LiPo wiring guide with TOC, 3 wiring options, step-by-step for direct and TP4056, safety guide, voltage monitoring code in C and MicroPython, battery life estimates, charging behavior, troubleshooting)
   - `website/mkdocs.yml` (modified — added Battery Wiring nav entry under Hardware)
@@ -1665,6 +1726,7 @@ Spelling and grammar are lightly cleaned for readability while preserving the or
 - **Prompt:** "OK let's get the user engagement plan committed and up on the site as well. Update prompts in this process too, and commit and push."
 - **Input Tokens (est):** ~30
 - **Output Tokens (est):** ~5,000
+- **Commit:** `9379cb0` — Add user engagement plan to website docs, update Prompt #135
 - **Files Created/Modified:**
   - `website/docs/docs/design/user-engagement-plan.md` (created — copied from `docs/user-engagement-plan.md` to website; comprehensive game design document with 21 sections covering gameplay loops, stat system, emotional state engine, sensor interactions, life stages, progression, dialogue, treasure hunts, step rewards, hardware requirements, virtual pet research, and phased rollout plan)
   - `website/mkdocs.yml` (modified — added Design section with User Engagement Plan entry)
@@ -1680,6 +1742,7 @@ Spelling and grammar are lightly cleaned for readability while preserving the or
 - **Prompt:** "OK take a look at this project https://github.com/7west/PicoTop/ — this guy designed a purpose-built Pico with the components he wanted to do the things he designed it to do, a simple desktop. But I want to look at this codebase and see how the PicoTop board was designed and implemented. Reverse this process based on the repo and outline this in a research document in the docs folder of the root. Make an in-depth MD file and also research what it would take to design a board with all the components I have planned for this project. Outline how they can be designed, what open technologies can be used to create the schematics, and how it can be brought into a physical reality, and what services could be used to print out a custom board. Give me a TOC and ample resources that will guide me through this concept to a fleshed-out board and map of learning and implementation plan to do this."
 - **Input Tokens (est):** ~200
 - **Output Tokens (est):** ~50,000
+- **Commit:** `b6ec18d` — Add custom PCB design research with PicoTop case study and learning path
 - **Files Created/Modified:**
   - `docs/custom-pcb-design-research.md` (created — comprehensive 14-section research document: PicoTop reverse-engineering case study with full component inventory and manufacturing pipeline analysis; Dilder custom board target specification with component map, interface diagram, power architecture, and phased board tiers; PCB design tool comparison (KiCad 10, LibrePCB, Horizon EDA); RP2040 minimal circuit with LCSC BOM; full schematic-to-board workflow; fabrication service comparison (JLCPCB, PCBWay, OSH Park, Aisler, Seeed); component sourcing strategy; system block diagram with I2C bus and power tree; 15-week learning path from zero to custom board; curated resources including videos, books, and communities; cost estimate (~$21/board for 5-board run); risk assessment; and milestone-based implementation plan)
   - `PromptProgression.md` (modified — added Prompt #136)
@@ -1693,6 +1756,7 @@ Spelling and grammar are lightly cleaned for readability while preserving the or
 - **Prompt:** "Let's update the website as well with this research and a blog post for this and add some other blog posts for the latest changes implemented as well that would make sense to add."
 - **Input Tokens (est):** ~30
 - **Output Tokens (est):** ~15,000
+- **Commit:** `69ad9a9` — Add breadboard wiring guide, PCB research to site, 4 blog posts, Prompts #137-140
 - **Files Created/Modified:**
   - `website/docs/docs/design/custom-pcb-design-research.md` (created — PCB research added to website Design section)
   - `website/mkdocs.yml` (modified — added Custom PCB Design Research nav entry)
@@ -1711,6 +1775,7 @@ Spelling and grammar are lightly cleaned for readability while preserving the or
 - **Prompt:** "Let's add a backstory to the home page and docs. I have this picture of a plush octopus that my wife Emma bought on a day out last week that started the chain of events. We were shopping at the local TEDi (dollar store) and found him in the bin all happy, big, and soft. We began to anthropomorphize him on the walk home and slowly a personality was developing. On a whim we came up with the name Jamal. The question ultimately asked itself — when realizing how we gave life to this soft lil octopus, what if we could create a somewhat living, responsive, and sassy version of this squid? What would it take and how could we go about it? Take this backstory, clean it up, expound a little, convert the HEIC picture to JPEG, and add it to the blog home page along with the story. Update the docs and README as well. Add spice and flesh out the lore."
 - **Input Tokens (est):** ~200
 - **Output Tokens (est):** ~12,000
+- **Commit:** `55189fd` — Update Prompts #142 with joystick firmware, build errors, and wiring fix
 - **Files Created/Modified:**
   - `assets/pictures/Jamal.heic` (deleted — replaced with JPEG)
   - `website/docs/assets/images/jamal-the-original.jpg` (created — converted from HEIC, quality 90)
@@ -1730,6 +1795,7 @@ Spelling and grammar are lightly cleaned for readability while preserving the or
 - **Prompt:** "The origin story formatting is a bit weird with the image — don't split the text in half, just make it all one block. Highlight the quote like you did, just place it on its own line and give the picture its own line without text wrapped around it."
 - **Input Tokens (est):** ~50
 - **Output Tokens (est):** ~1,500
+- **Commit:** `55189fd` — Update Prompts #142 with joystick firmware, build errors, and wiring fix
 - **Files Created/Modified:**
   - `website/docs/index.md` (modified — removed grid div wrapper from origin story so image and text flow as single column instead of side-by-side)
   - `PromptProgression.md` (modified — added Prompt #139)
@@ -1743,6 +1809,7 @@ Spelling and grammar are lightly cleaned for readability while preserving the or
 - **Prompt:** "OK I have the DollaTek 5-way joystick, the GY-NEO6MV2 NEO-6M GPS module, speakers, and HC-SR04. I want to set this up on a breadboard with the Waveshare 2.13 V3 display. Give me a proper wiring diagram for me to set this up properly to the Pico WH board. Add this to a hardware doc in the root of this project as an MD file."
 - **Input Tokens (est):** ~100
 - **Output Tokens (est):** ~20,000
+- **Commit:** `84e3ad9` — Clean up spelling and grammar in PromptProgression.md
 - **Files Created/Modified:**
   - `docs/breadboard-wiring-guide.md` (created — full breadboard wiring guide: complete pin assignment table for all 5 peripherals on 16 GPIO; master ASCII wiring diagram; annotated Pico WH pin map; component-by-component wiring for e-Paper SPI1, joystick GPIO with pull-ups, GPS UART0 with TX/RX crossover, HC-SR04 with 5V→3.3V voltage divider circuit, and speaker with PWM and NPN transistor amplifier option; breadboard zone layout for full-size board; power budget analysis showing ~130mA total on 300mA 3V3 rail; voltage level warnings; test code for GPS NMEA reading, ultrasonic distance measurement, speaker tone generation, and all-peripherals diagnostic; troubleshooting table)
   - `PromptProgression.md` (modified — added Prompt #140)
@@ -1756,6 +1823,7 @@ Spelling and grammar are lightly cleaned for readability while preserving the or
 - **Prompt:** "The Waveshare I have has a 40-pin header on the back — update the wiring to reflect that and check the online docs to confirm this. [Follow-up: double-check the physical pin mapping for the Waveshare rev 3a with the Pico headers, something doesn't seem right. Follow-up: I don't have VCC on the Waveshare, I have a VSYS though. Follow-up: yes update the README and materials list as well, and update the prompts file with this troubleshooting — all the chats for this project not yet added today.]"
 - **Input Tokens (est):** ~300
 - **Output Tokens (est):** ~25,000
+- **Commit:** `55189fd` — Update Prompts #142 with joystick firmware, build errors, and wiring fix
 - **Files Created/Modified:**
   - `docs/breadboard-wiring-guide.md` (modified — corrected display model from "Waveshare 2.13" e-Paper HAT V3" to "Waveshare Pico-ePaper-2.13"; replaced VCC/3V3(OUT)/pin 36 power with VSYS/pin 39 throughout; replaced RPi HAT 40-pin header section with Pico-native 40-pin direct-plug documentation; updated pin assignment table, master wiring diagram, annotated pin map, power budget, voltage level table, wire shopping list, and breadboard layout notes)
   - `website/docs/docs/hardware/wiring-pinout.md` (modified — replaced RPi HAT 40-pin header section with Pico-native module documentation; corrected all VCC/pin 36 references to VSYS/pin 39; updated visual pin map, text wiring diagram, GPIO pin budget, SPI config note, battery tip, and troubleshooting)
@@ -1777,6 +1845,7 @@ Spelling and grammar are lightly cleaned for readability while preserving the or
 - **Prompt:** "OK I have the joystick wired in — let's add an interactive program that builds on the mood selector and wires the left and right actions to the change of moods selector at the bottom. Then we also want to print on the screen to the right of the mood display the input that was pressed last and update each time an input is received. Add this program to the interactive list in the DevTool."
 - **Input Tokens (est):** ~100
 - **Output Tokens (est):** ~30,000
+- **Commit:** `55189fd` — Update Prompts #142 with joystick firmware, build errors, and wiring fix
 - **Files Created/Modified:**
   - `dev-setup/joystick-mood-selector/main.c` (created — 1400-line C firmware: builds on mood-selector with 5-way GPIO joystick input; LEFT/RIGHT cycle moods, UP = random mood, DOWN = new quote, CENTER = reset to SASSY; last input indicator drawn on right side of status bar; 200ms debounce; serial input still works as fallback)
   - `dev-setup/joystick-mood-selector/CMakeLists.txt` (created — build config with display variant support V2/V3/V3a/V4)
@@ -1800,6 +1869,7 @@ Spelling and grammar are lightly cleaned for readability while preserving the or
 - **Prompt:** "Update the documentation and website and blog with the joystick session. I have added some HEIC images — convert them to JPEG, annotate what's in them, update the MD docs where relevant. Update the blog and docs on the site as well. There is a battery pic in these files — get the battery model and begin to plan out how to wire that up. Then update the prompts and commit."
 - **Input Tokens (est):** ~150
 - **Output Tokens (est):** ~20,000
+- **Commit:** `83d517c` — Add joystick build session photos, blog post, battery planning, Prompt #143
 - **Files Created/Modified:**
   - 16 HEIC images converted to JPEG in `website/docs/assets/images/hardware/build-session/` with descriptive names: sassy-octopus-display-front, pico-w-epaper-stacked-rear, jamal-plush-armchair, dollatek-joystick-closeup, pico-w-jumper-wires-display-side/angle, pico-w-gpio-wiring-top/closeup, test-bench-full-with-joystick, joystick-selector-tired-mood/hungry-left/hungry-npcs, lipo-battery-inncraft-1000mah, workspace-full-breadboard-setup, joystick-on-breadboard
   - `assets/*.heic` (16 files deleted — replaced with JPEGs above)
@@ -1868,6 +1938,7 @@ Spelling and grammar are lightly cleaned for readability while preserving the or
 - **Prompt:** "Let's make a hardware assembly and board prototyping MD document and compile all the pricing research and note all the sources used and data compiled. Give me some rough estimates through various providers. Also find if there are any open board schematics and board Gerber files that can be used that match this project's requirements, and compose a document with this as well."
 - **Input Tokens (est):** ~100
 - **Output Tokens (est):** ~20,000
+- **Commit:** `e11a78d` — Add PCB assembly and prototyping research document, Prompt #146
 - **Files Created/Modified:**
   - `docs/pcb-assembly-and-prototyping.md` (created — comprehensive 10-section document: provider comparison table for 5 fab houses; detailed pricing breakdowns for JLCPCB, PCBWay, OSH Park, Aisler, Seeed Fusion; per-joint assembly costs, setup fees, component handling fees; cost estimates for Dilder board across all providers; break-even analysis for Aisler vs China including 19% DE VAT; 6 open-source reference designs analyzed — Ducky Board, OpenTama, TamaFi V2, PocketMage PDA, AeonLabs template, PicoTop; recommended manufacturing path with ordering checklist; 25+ cited sources)
   - `website/docs/docs/design/pcb-assembly-and-prototyping.md` (created — website copy)
@@ -1884,6 +1955,7 @@ Spelling and grammar are lightly cleaned for readability while preserving the or
 - **Prompt:** "On the PCB design and assembly document, can you pull images for all the components suggested and anything with a price next to it — I want to actually see the component image somewhere."
 - **Input Tokens (est):** ~50
 - **Output Tokens (est):** ~5,000
+- **Commit:** `3f46a7b` — Add open-source board design research page with images and walkthroughs, Prompts #147-148
 - **Files Created/Modified:**
   - 12 component product photos downloaded from LCSC into `website/docs/assets/images/components/` (ESP32-S3-WROOM-1, TP4056, DW01A, FS8205A, AMS1117-3.3, SS34 diode, USB-C connector, JST PH battery connector, Alps joystick, MPU-6050, red/green LEDs)
   - `docs/pcb-assembly-and-prototyping.md` (modified — added Visual BOM gallery section with component images, LCSC links, and pricing)
@@ -1897,6 +1969,7 @@ Spelling and grammar are lightly cleaned for readability while preserving the or
 - **Prompt:** "Is there a KiCad open board design for the Pico and ESP32 dev boards? If so, pull them into the hardware-design folder in individual folders with MD details. Then make another section — do open board design research and provide extensive documentation and pictures and walk through each design on the site."
 - **Input Tokens (est):** ~100
 - **Output Tokens (est):** ~25,000
+- **Commit:** `3f46a7b` — Add open-source board design research page with images and walkthroughs, Prompts #147-148
 - **Files Created/Modified:**
   - `hardware-design/reference-boards/` (created — 7 open-source KiCad projects: rp2040-pico-usbc, rp2040-minimal-jlcpcb, rp2040-designguide, esp32s3-basic-devboard, esp32s3-ducky-epaper, espressif-kicad-libs, opentama-virtual-pet)
   - `hardware-design/reference-boards/README.md` (created — master index documenting all 7 designs)
@@ -1953,6 +2026,7 @@ Spelling and grammar are lightly cleaned for readability while preserving the or
 - **Prompt:** "The MPU-6050 accelerometer is a bit pricey — we really just want to track steps and aggressive motions. Price out GPS and brainstorm location detection. Ditch the GPS, go 3-axis LIS2DH12TR, put WiFi fingerprinting and BLE scanning on the software plan. Create a document, update hardware planning, pics, and pricing."
 - **Input Tokens (est):** ~200
 - **Output Tokens (est):** ~30,000
+- **Commit:** `1a1de2a` — Swap MPU-6050 for LIS2DH12TR, add motion/location plan, parts sheets, Prompts #151-152
 - **Key Decision:** MPU-6050 ($6.88, 6-axis IMU) → LIS2DH12TR ($0.46, 3-axis accel + HW pedometer). GPS dropped — WiFi fingerprinting + BLE scanning (free, built into ESP32-S3) handle location. BOM total: $11.14 → $4.72/board.
 - **Files Created/Modified:**
   - `docs/motion-location-detection.md` (created — 10-section plan: LIS2DH12 specs, HW pedometer, tap/shake/freefall/orientation, WiFi fingerprinting algo, BLE scanning, sensor→pet behavior map, power budget, GPS comparison, implementation phases)
@@ -1974,6 +2048,7 @@ Spelling and grammar are lightly cleaned for readability while preserving the or
 - **Prompt:** "Make a parts-sheets folder in hardware with an MD file for each component and import official datasheets into a manufacturer-datasheets subfolder."
 - **Input Tokens (est):** ~50
 - **Output Tokens (est):** ~15,000
+- **Commit:** `1a1de2a` — Swap MPU-6050 for LIS2DH12TR, add motion/location plan, parts sheets, Prompts #151-152
 - **Files Created/Modified:**
   - `hardware-design/parts-sheets/README.md` (created — index of all 11 component part sheets)
   - 11 part sheet MD files: `esp32-s3-wroom1.md`, `lis2dh12.md`, `tp4056.md`, `dw01a.md`, `fs8205a.md`, `ams1117.md`, `ss34.md`, `skrhabe010.md`, `usb-c-connector.md`, `jst-ph-battery.md`, `led-red.md`, `led-green.md` (each with specs, pin connections, application notes, datasheet links)
@@ -2049,6 +2124,7 @@ Spelling and grammar are lightly cleaned for readability while preserving the or
 - **Prompt:** "Commit the changes and push and update prompts, fix spelling."
 - **Input Tokens (est):** ~60
 - **Output Tokens (est):** ~5,000
+- **Commit:** `dd3f5b3` — Add website blog posts, docs pages, icon, fix link, update prompts, Prompt #156
 - **Files Created/Modified:**
   - `website/docs/blog/posts/breadboard-prototype-guide.md` (created — blog post: breadboard prototype build guide with parts list, GPIO wiring, regional sourcing, alpha board plans)
   - `website/docs/blog/posts/motion-location-detection.md` (created — blog post: MPU-6050 to LIS2DH12TR swap, WiFi fingerprinting, BLE peer detection)
@@ -2068,6 +2144,7 @@ Spelling and grammar are lightly cleaned for readability while preserving the or
 - **Prompt:** "Add AHT20 temp/humidity and BH1750FVI light sensors to board design. Both I2C, sharing bus with LIS2DH12. New parts sheets, updated BOM, docs, and KiCad guide. Board now 30 components, ~$5.20/unit."
 - **Input Tokens (est):** ~500
 - **Output Tokens (est):** ~5,000
+- **Commit:** `9b4508d` — Add gameplay architecture planning docs, BME280→AHT20 update, blog post, Prompt #160
 - **Files Created/Modified:**
   - `Gamplay Planning/04-sensor-interfaces.md` (verified — already updated with AHT20 and BH1750 definitions, I2C address map: LIS2DH12=0x18, BH1750=0x23, AHT20=0x38)
   - `README.md` (modified — updated component count from 27 to 30, added sensor list: LIS2DH12TR, AHT20, BH1750FVI-TR on shared I2C bus)
@@ -2080,6 +2157,7 @@ Spelling and grammar are lightly cleaned for readability while preserving the or
 - **Prompt:** "I have created a gameplay planning folder. We are going to establish the pseudocode and structure of the gameplay loop for this game in several well-structured MD files. Let's take the Dilder User Engagement Plan and begin to outline a program structure and interfaces to orient this gameplay loop and user interface."
 - **Input Tokens (est):** ~80
 - **Output Tokens (est):** ~50,000
+- **Commit:** `9b4508d` — Add gameplay architecture planning docs, BME280→AHT20 update, blog post, Prompt #160
 - **Files Created/Modified:**
   - `Gamplay Planning/00-architecture-overview.md` (created — module map, data flow diagrams, RAM/flash budgets, file organization)
   - `Gamplay Planning/01-core-game-loop.md` (created — main loop pseudocode, tick scheduling, game states FSM, sleep/wake, event bus)
@@ -2100,6 +2178,7 @@ Spelling and grammar are lightly cleaned for readability while preserving the or
 - **Prompt:** "Bear in mind we are going to be changing microcontrollers — tell me how that will affect the C implementation when the time comes in a document."
 - **Input Tokens (est):** ~30
 - **Output Tokens (est):** ~12,000
+- **Commit:** `9b4508d` — Add gameplay architecture planning docs, BME280→AHT20 update, blog post, Prompt #160
 - **Files Created/Modified:**
   - `Gamplay Planning/11-mcu-migration-impact.md` (created — RP2040 → ESP32-S3 migration guide: SDK translation, per-module impact, GPIO remapping, FreeRTOS implications, portability strategy)
 
@@ -2110,6 +2189,7 @@ Spelling and grammar are lightly cleaned for readability while preserving the or
 - **Prompt:** "OK update all the documentation with this and commit and update the prompts and website, add a blog."
 - **Input Tokens (est):** ~30
 - **Output Tokens (est):** ~15,000
+- **Commit:** `9b4508d` — Add gameplay architecture planning docs, BME280→AHT20 update, blog post, Prompt #160
 - **Files Created/Modified:**
   - `Gamplay Planning/04-sensor-interfaces.md` (modified — BME280 → AHT20: comment headers, I2C address 0x76 → 0x38, removed pressure field)
   - `Gamplay Planning/00-architecture-overview.md` (modified — BME280 → AHT20 in driver file listing)
@@ -2128,6 +2208,7 @@ Spelling and grammar are lightly cleaned for readability while preserving the or
 - **Prompt:** "In this same folder for gameplay planning I want you to create a user guide to show off the planned features as if everything has been implemented. Use the existing images of the game to compose this and make an in-depth guide on the game, the story behind it, how to play, and the mechanisms behind it — the environments, the options, and a huge TOC to go along with it. Outline how the stats system works and an achievement system for the player to try to uncover every feature of the game. Let's also separately make an MD document to implement a feature system and menu to view them as well."
 - **Input Tokens (est):** ~120
 - **Output Tokens (est):** ~40,000
+- **Commit:** `a25f89c` — Add user guide, asset system, feature menus, KiCad sensor updates, blog posts, Prompt #162
 - **Files Created/Modified:**
   - `Gamplay Planning/12-user-guide.md` (created — 1,207-line comprehensive player guide with 35-section TOC across 10 chapters: origin story, 16 emotions with images, stat system, care actions, sensor interactions, step tracking, life stages, 6 evolution forms, bond levels, dialogue, decor, treasure hunts, 64 achievements across 7 categories, environments, controls, tips)
   - `Gamplay Planning/13-feature-menus-achievements.md` (created — 963-line implementation spec: 64 achievement definitions as C structs, achievement viewer UI, stats viewer, activity summaries, decor browser, emotion gallery, evolution bestiary, memorial viewer, toast notification system, settings menu, full hierarchical menu map with unlock gates)
@@ -2139,6 +2220,7 @@ Spelling and grammar are lightly cleaned for readability while preserving the or
 - **Prompt:** "OK we've implemented a ton of things in several sessions today. Go through all the changes, update the docs if needed, and commit them, then update the prompts and the webpage as well — add a few blogs and show off the asset images. Get that user guide posted up on the site in the docs and website too."
 - **Input Tokens (est):** ~80
 - **Output Tokens (est):** ~15,000
+- **Commit:** `a25f89c` — Add user guide, asset system, feature menus, KiCad sensor updates, blog posts, Prompt #162
 - **Files Created/Modified:**
   - `website/docs/assets/images/octopus/` (created — copied 24 asset images: 11 grid PNGs + 16 emotion preview PNGs from assets/ for website use)
   - `website/docs/blog/posts/asset-rendering-system.md` (created — blog post: 22 environments, 42 outfits, 29 props, aura particles with grid image showcases)
@@ -2156,6 +2238,7 @@ Spelling and grammar are lightly cleaned for readability while preserving the or
 - **Prompt:** "This board is not good at all. Things are drawn off the board, you don't have the microcontroller in there, not sure this is salvageable. Also the schematic is not wired up properly and you didn't pull actual schematics that already exist via addon."
 - **Input Tokens (est):** ~60
 - **Output Tokens (est):** ~80,000
+- **Commit:** `7a0fab4` — Add prompt log #163-167, schematic generator script, clean up prompts
 - **Files Created/Modified:**
   - `hardware-design/Board Design kicad/sym-lib-table` (created — Espressif symbol library registration)
   - `hardware-design/Board Design kicad/fp-lib-table` (created — Espressif footprint library registration)
@@ -2170,6 +2253,7 @@ Spelling and grammar are lightly cleaned for readability while preserving the or
 - **Prompt:** "This is bad. I need to do this manually obviously. Give me an MD user document instead and explain it to me as if this is my first time using CAD software. I need an extensive how-to document on how to design schematics, best practices, guide me through each component and how to draw it properly and how to account for the wiring of each. Then I will need an in-depth PCB walkthrough, as exhaustive as possible with a huge list of steps that I can follow one by one until completion. Expound on the important electronics principles behind it when necessary and provide further resources and learning material at the end, and definitions as well."
 - **Input Tokens (est):** ~120
 - **Output Tokens (est):** ~45,000
+- **Commit:** `7a0fab4` — Add prompt log #163-167, schematic generator script, clean up prompts
 - **Files Created/Modified:**
   - `website/docs/docs/design/kicad-schematic-pcb-guide.md` (created — 1,300-line beginner-to-gerber KiCad guide: 5 parts, 13 schematic subcircuits, 10 PCB layout sections, electronics principles reference, 40+ term glossary, learning resources)
   - `website/mkdocs.yml` (modified — added KiCad guide to Design nav)
@@ -2181,6 +2265,7 @@ Spelling and grammar are lightly cleaned for readability while preserving the or
 - **Prompt:** "Let's add a light and temp and humidity sensor to the list of hardware requirements. Find the best part or parts to do this as well. Ensure it will work with the controller we have planned to use, then add it to the docs and the planning and pull in the datasheet and create an MD doc for it following the existing parts sheets format."
 - **Input Tokens (est):** ~70
 - **Output Tokens (est):** ~60,000
+- **Commit:** `7a0fab4` — Add prompt log #163-167, schematic generator script, clean up prompts
 - **Files Created/Modified:**
   - `hardware-design/parts-sheets/aht20.md` (created — 436-line parts sheet: AHT20 temp/humidity sensor, capacitive sensing physics, comparison table, I2C bus sharing)
   - `hardware-design/parts-sheets/bh1750fvi.md` (created — 487-line parts sheet: BH1750FVI-TR ambient light sensor, photodiode theory, lux reference, operating modes)
@@ -2202,6 +2287,7 @@ Spelling and grammar are lightly cleaned for readability while preserving the or
 - **Prompt:** "Pull the pictures for this component and update the hardware plan and website documents. Also update the prompts and all relevant documentation."
 - **Input Tokens (est):** ~30
 - **Output Tokens (est):** ~20,000
+- **Commit:** `7a0fab4` — Add prompt log #163-167, schematic generator script, clean up prompts
 - **Files Created/Modified:**
   - All sensor documentation verified and cross-referenced across 12 files (see Prompt #165 for full list)
   - `PromptProgression.md` (updated — spelling/grammar cleanup, added Prompts #163-167)
@@ -2213,6 +2299,7 @@ Spelling and grammar are lightly cleaned for readability while preserving the or
 - **Prompt:** "Add that board design guide you made to the website docs and commit last change and update the prompts. Also be sure to clean up the spelling and grammar in the prompt progression as well."
 - **Input Tokens (est):** ~30
 - **Output Tokens (est):** ~5,000
+- **Commit:** `7a0fab4` — Add prompt log #163-167, schematic generator script, clean up prompts
 - **Files Created/Modified:**
   - `PromptProgression.md` (modified — spelling/grammar cleanup across all 167 entries, added Prompts #163-167)
 
@@ -2280,6 +2367,7 @@ Spelling and grammar are lightly cleaned for readability while preserving the or
 - **Prompt:** "OK commit all the changes and update the prompts with the commit hash and prompts and such. Fix them word spellings and shit and commit again and push."
 - **Input Tokens (est):** ~30
 - **Output Tokens (est):** ~8,000
+- **Commit:** `2d7a8b8` — Add prompt log #168-170, firmware engine and documentation entries
 - **Files Created/Modified:**
   - `PromptProgression.md` (modified — added Prompts #168-170, spelling/grammar cleanup)
 
@@ -2289,6 +2377,7 @@ Spelling and grammar are lightly cleaned for readability while preserving the or
 - **Prompt:** "OK the setup needs to have options in each step if needed to differentiate and choose the ESP board, as well update the CLI."
 - **Input Tokens (est):** ~40
 - **Output Tokens (est):** ~45,000
+- **Commit:** `0a64ad8` — Add ESP32-S3 multi-board support across DevTool, setup CLI, firmware, and docs
 - **Files Created/Modified:**
   - `setup.py` (modified — added `--board {pico,esp32}` flag, board tags on all 16 steps, interactive board selection menu at startup, `step_matches_board()` filtering, `_install_python_app()` helper using pipx on Arch/CachyOS for PEP 668 compliance, board-aware walkthrough overview text)
   - `ESP Protyping/dev setup guide.md` (modified — renamed to multi-board guide, added "Choosing Your Board" section, every deployment step (1-6) now has Pico W and ESP32-S3 subsections, troubleshooting organized by board, automated section documents `--board` flag, Arch pipx instructions added)
@@ -2299,6 +2388,7 @@ Spelling and grammar are lightly cleaned for readability while preserving the or
 - **Prompt:** "PlatformIO install fails with externally-managed-environment error (PEP 668 on Arch/CachyOS)."
 - **Input Tokens (est):** ~100 (error log)
 - **Output Tokens (est):** ~8,000
+- **Commit:** `0a64ad8` — Add ESP32-S3 multi-board support across DevTool, setup CLI, firmware, and docs
 - **Files Created/Modified:**
   - `setup.py` (modified — added `_pip_is_externally_managed()` check, `_install_python_app()` that uses pipx on Arch via pacman, replaced raw pip calls in step 16 with the new helper)
   - `ESP Protyping/dev setup guide.md` (modified — added pipx instructions for Arch, added PEP 668 troubleshooting entry)
@@ -2309,6 +2399,7 @@ Spelling and grammar are lightly cleaned for readability while preserving the or
 - **Prompt:** "Add a selection option to select the setup option depending on the board intended to be used to the setup, make a CLI interface to do this."
 - **Input Tokens (est):** ~30
 - **Output Tokens (est):** ~5,000
+- **Commit:** `0a64ad8` — Add ESP32-S3 multi-board support across DevTool, setup CLI, firmware, and docs
 - **Files Created/Modified:**
   - `setup.py` (modified — added interactive board selection menu: "1) Pico W, 2) ESP32-S3, 3) Both" prompt at walkthrough start, skipped when `--board` is passed or `--step` is used)
 
@@ -2318,6 +2409,7 @@ Spelling and grammar are lightly cleaned for readability while preserving the or
 - **Prompt:** "PlatformIO build fails: board_config.h not found, then HAL linker errors, then hal_init symbol collision."
 - **Input Tokens (est):** ~200 (build logs)
 - **Output Tokens (est):** ~12,000
+- **Commit:** `0a64ad8` — Add ESP32-S3 multi-board support across DevTool, setup CLI, firmware, and docs
 - **Files Created/Modified:**
   - `ESP Protyping/dilder-esp32/platformio.ini` (modified — added `-I../../firmware/include` to build_flags, fixed build_src_filter paths from `../../` to `../../../`, removed invalid `build_src_extra` option)
   - `ESP Protyping/dilder-esp32/include/platform/board_config.h` (deleted — removed shadowing local copy with PIN_JOY_* names)
@@ -2331,6 +2423,7 @@ Spelling and grammar are lightly cleaned for readability while preserving the or
 - **Prompt:** "OK the DevTool Programs tab needs a board selection dropdown above the display model to select either the ESP or Pico, then allows me to deploy standalone or flash to the specified board. Make sure each program can deploy to the ESP."
 - **Input Tokens (est):** ~50
 - **Output Tokens (est):** ~25,000
+- **Commit:** `0a64ad8` — Add ESP32-S3 multi-board support across DevTool, setup CLI, firmware, and docs
 - **Files Created/Modified:**
   - `DevTool/devtool.py` (modified — ProgramsTab: added Target Board dropdown with serial detection status, ESP32 flash via PlatformIO `_build_and_flash_esp32()`, ESP32 standalone deploy `_deploy_standalone_esp32()` generating quotes.h + PlatformIO build + flash, board-aware flash hints, board-agnostic serial status messages; DilderDevTool: `target_board` property now handles label/key reverse-lookup, `_on_board_changed` syncs Programs tab combo, `_update_flash_hint` early-return guard)
 
@@ -2340,6 +2433,7 @@ Spelling and grammar are lightly cleaned for readability while preserving the or
 - **Prompt:** "Update the Connect tab when the target board is changed, I need separate steps for the ESP board. Also I need steps based on my ESP board on how to put it in download mode. Once done, update all the docs and website and add new blog and docs, commit then pull the prompts and update the prompts doc and update the website prompt blog."
 - **Input Tokens (est):** ~60
 - **Output Tokens (est):** ~50,000
+- **Commit:** `0a64ad8` — Add ESP32-S3 multi-board support across DevTool, setup CLI, firmware, and docs
 - **Files Created/Modified:**
   - `DevTool/devtool.py` (modified — ConnectionUtility: added `refresh_for_board()`, `_build_usb_panel_esp32()` with 5 ESP32-specific steps including CH340X detection, /dev/ttyUSB* check, download mode button sequence diagram, `_build_wifi_panel_esp32()` with Arduino WiFi setup, `_check_usb_esp32()` and `_check_serial_esp32()` detection methods; board indicator label in mode selector; DilderDevTool._on_board_changed now refreshes conn_tab)
   - `website/docs/docs/setup/first-time-setup.md` (modified — added `--board` CLI examples, Step 16 to table, board tags column)
@@ -2364,6 +2458,7 @@ Spelling and grammar are lightly cleaned for readability while preserving the or
 - **Prompt:** "OK I need you to make comments through the firmware files as if I don't know C code that well. Explain in depth what every function is doing and any complex line of code, and also the memory management in the code. Be detailed — this is to help in learning. Then we also need an MD doc in the firmware folder to outline the project structure, architecture, and guides to reading the code and debugging. Also update the software documentation and add this to the list of software on the website with the documentation as well."
 - **Input Tokens (est):** ~100
 - **Output Tokens (est):** ~150,000
+- **Commit:** `76f3079` — Port mood-selector to ESP32-S3, add implementation docs and code comments
 - **Files Created/Modified:**
   - All 14 `.c` source files and 2 key `.h` headers rewritten with comprehensive beginner-friendly comments
   - `firmware/FIRMWARE.md` (created — 633-line architecture guide with 5-level reading order, debugging guide, C patterns glossary)
@@ -2377,6 +2472,7 @@ Spelling and grammar are lightly cleaned for readability while preserving the or
 - **Prompt:** "Add the MSK-12C02 power switch to the board design — add it, pull in the specs datasheet, and add an MD file with documentation on it."
 - **Input Tokens (est):** ~30
 - **Output Tokens (est):** ~40,000
+- **Commit:** n/a — work abandoned before commit — MSK-12C02 switch parts sheet + board-design files never preserved in git history (later purged in `85238b0`)
 - **Files Created/Modified:**
   - `hardware-design/parts-sheets/msk-12c02.md` (created — 294-line parts sheet: SPDT slide switch mechanics, contact materials, power path design, enclosure slot notes)
   - `hardware-design/BOM.md` (modified — added SW2, updated to v0.4, 32 components)
@@ -2393,6 +2489,7 @@ Spelling and grammar are lightly cleaned for readability while preserving the or
 - **Prompt:** "Get me a full parts list for the planned new board with the power switch. Get me a BOM file and JLCPCB KiCad parts list. I don't want any extended parts — well, limit them as much as possible."
 - **Input Tokens (est):** ~40
 - **Output Tokens (est):** ~30,000
+- **Commit:** n/a — work abandoned before commit — JLCPCB/BOM optimization files never preserved in git history (later purged in `85238b0`)
 - **Files Created/Modified:**
   - `hardware-design/jlcpcb-kicad-parts.md` (created — optimized BOM with basic/extended tier for each part, 3 parts swapped to basic saving ~$9/order, LCSC quick-copy list, KiCad footprint notes)
   - `hardware-design/BOM.md` (modified — filled in missing LCSC codes: J3→C160407, R8/R9→C25905)
@@ -2403,6 +2500,7 @@ Spelling and grammar are lightly cleaned for readability while preserving the or
 - **Prompt:** "Draw me up a schematic image with all these parts connected up together, make a nice JPEG file I can see. Also provide description labels of what the bigger components do."
 - **Input Tokens (est):** ~30
 - **Output Tokens (est):** ~25,000
+- **Commit:** n/a — work abandoned before commit — schematic-overview JPEG + generator script never preserved in git history (later purged in `85238b0`)
 - **Files Created/Modified:**
   - `hardware-design/generate_schematic_image.py` (created — Pillow script generating full-board schematic overview)
   - `hardware-design/dilder-pcb-schematic-overview.jpg` (created — 3200x2000 schematic showing power path, ESP32, I2C sensors, SPI display, joystick, BOM summary, JLCPCB cost breakdown)
@@ -2413,6 +2511,7 @@ Spelling and grammar are lightly cleaned for readability while preserving the or
 - **Prompt:** "The programs don't work as expected, the joystick mood selector for example just shows a Dilder splash screen and not the octopus and quotes and selection like the Pico was doing. We need to fix the programs so they work identically."
 - **Input Tokens (est):** ~50
 - **Output Tokens (est):** ~80,000
+- **Commit:** `6bbcad0` — Add joystick GPIO debug diagnostics to ESP32-S3 mood selector
 - **Files Created/Modified:**
   - `ESP Protyping/dilder-esp32/src/main.cpp` (rewritten — full port of Pico mood-selector: RLE body, 16 eye variants, 17 mouths, body animations, 823 quotes, joystick + serial input, GxEPD2 display push)
   - `ESP Protyping/dilder-esp32/src/quotes.h` (copied from dev-setup/mood-selector/)
@@ -2470,6 +2569,7 @@ Spelling and grammar are lightly cleaned for readability while preserving the or
 - **Prompt:** "OK let's gather a few screenshots of the new CAD designs and add it to the website. We need a living page for this project's design evolution. Also update the docs and everywhere sensible and update the prompts after committing, and commit and push."
 - **Input Tokens (est):** ~50
 - **Output Tokens (est):** ~60,000
+- **Commit:** `762625a` — Add SCAD enclosure doc, blog post, renders, and Prompts #211-227
 - **Files Created/Modified:**
   - `website/docs/assets/images/enclosure/middle-plate-v2.png` (created — OpenSCAD render)
   - `website/docs/assets/images/enclosure/top-plate-windowed-v1.png` (created — OpenSCAD render)
@@ -2499,6 +2599,7 @@ Spelling and grammar are lightly cleaned for readability while preserving the or
 - **Prompt:** "OK I added some pictures to the base of the project directory. Analyze, annotate, rename, and convert to JPEG. Delete the HEIC versions, put them in the images folder for the website and docs, update the docs and blog with the latest progress, update the prompts and fix my English as well. Commit and push."
 - **Input Tokens (est):** ~60
 - **Output Tokens (est):** ~50,000
+- **Commit:** `762625a` — Add SCAD enclosure doc, blog post, renders, and Prompts #211-227
 - **Files Created/Modified:**
   - `IMG*.heic` (7 files deleted — converted to JPEG and removed from project root)
   - `website/docs/assets/images/enclosure/enclosure-assembled-front.jpg` (created — front view of assembled case with e-ink display)
@@ -2545,6 +2646,7 @@ Spelling and grammar are lightly cleaned for readability while preserving the or
 - **Prompt:** "OK the is a puext1 port on the esp32 wroom board i have can this be connected to the waveshare display?"
 - **Input Tokens (est):** ~25
 - **Output Tokens (est):** ~4,500
+- **Commit:** `762625a` — Add SCAD enclosure doc, blog post, renders, and Prompts #211-227
 - **Files:** Research-only, no files changed. Identified `pUEXT1` as Olimex ESP32-S3-DevKit-Lipo UEXT10 connector. Mapped 10-pin pinout from reference schematic (GPIO17/18 UART, GPIO47/48 I2C, GPIO10–13 SPI). Compared to Waveshare 2.13" SPI 8-pin requirements and documented how pin repurposing would fill the gaps.
 
 ---
@@ -2553,6 +2655,7 @@ Spelling and grammar are lightly cleaned for readability while preserving the or
 - **Prompt:** "Can the display be wired into the OTGUSB port? or the joystick one of the two?"
 - **Input Tokens (est):** ~20
 - **Output Tokens (est):** ~2,800
+- **Commit:** `762625a` — Add SCAD enclosure doc, blog post, renders, and Prompts #211-227
 - **Files:** Research-only. USB-OTG is a protocol port (VBUS 5V, D+/D-, GND) — only 4 wires, can't drive SPI; "joystick port" is not a dedicated port — the DollaTek 5-way is jumper-wired into EXT1 header GPIOs.
 
 ---
@@ -2561,6 +2664,7 @@ Spelling and grammar are lightly cleaned for readability while preserving the or
 - **Prompt:** "[Measurements paste + case sandwich spec] 22mm between headers, antenna 18mm wide 6mm off, board 56x28mm. Need 4 square pillars nestled by the antenna corners + at the bottom of the board. Sandwich the board between a plane and a top cover, with a third plate 6mm below the headers. Let's make a SCAD script to plot this out."
 - **Input Tokens (est):** ~250
 - **Output Tokens (est):** ~7,500
+- **Commit:** `762625a` — Add SCAD enclosure doc, blog post, renders, and Prompts #211-227
 - **Files:**
   - `hardware-design/esp32s3-sandwich-mount.scad` (created — 3-plate sandwich mount with 4 corner pillars, screw channels, header pin slots, center window in top plate).
 
@@ -2570,6 +2674,7 @@ Spelling and grammar are lightly cleaned for readability while preserving the or
 - **Prompt:** "Rethink it — stack the board in the middle resting on a 2mm plastic plane, 5mm above the screen will be a cover with a hole for the display that curves down around the side. On the long sides slots for the screen to slide into. 6mm below the board another 2mm plastic layer for the battery. Still 4 square pillars. USB-C ports meet the edge with walls and holes. Make it in a SCAD script and copy it to a 3MF to print on Bambu."
 - **Input Tokens (est):** ~180
 - **Output Tokens (est):** ~12,000
+- **Commit:** `762625a` — Add SCAD enclosure doc, blog post, renders, and Prompts #211-227
 - **Files:**
   - `hardware-design/esp32s3-enclosure.scad` (created — full 3-piece enclosure: base with battery tray + side walls + USB-C cutouts + display slots, middle board tray, rounded top cover with display window).
   - `hardware-design/enclosure-prints/{base,middle,cover}.3mf` exported via OpenSCAD CLI.
@@ -2580,6 +2685,7 @@ Spelling and grammar are lightly cleaned for readability while preserving the or
 - **Prompt:** "Looks good but we need a spot for the middle piece to rest on when it's placed in the case."
 - **Input Tokens (est):** ~25
 - **Output Tokens (est):** ~3,500
+- **Commit:** `762625a` — Add SCAD enclosure doc, blog post, renders, and Prompts #211-227
 - **Files:**
   - `hardware-design/esp32s3-enclosure.scad` (modified — added `mid_plate_support()`: 2mm short-wall ledges between pillars + 4 pillar-corner tabs for 4-point plate support).
   - `enclosure-prints/base.3mf` re-exported.
@@ -2590,6 +2696,7 @@ Spelling and grammar are lightly cleaned for readability while preserving the or
 - **Prompt:** "Add another middle piece on top of the base that covers the rect holes on the side — a thin plastic pane with two 20mm slots on the middle of both sides of the long edge, 8mm inset."
 - **Input Tokens (est):** ~60
 - **Output Tokens (est):** ~5,500
+- **Commit:** `762625a` — Add SCAD enclosure doc, blog post, renders, and Prompts #211-227
 - **Files:**
   - `hardware-design/esp32s3-enclosure.scad` (modified — added `top_mid_plate` module, generalized `plate_shelf()` to support both z=8 and z=20.8 levels).
   - `enclosure-prints/topmid.3mf` created.
@@ -2600,6 +2707,7 @@ Spelling and grammar are lightly cleaned for readability while preserving the or
 - **Prompt:** "Get rid of the holes on the long edge in the base — there should only be 2 holes for the USB-C on that. Bevel all the outside edges and give the case a nice curve to it."
 - **Input Tokens (est):** ~50
 - **Output Tokens (est):** ~6,500
+- **Commit:** `762625a` — Add SCAD enclosure doc, blog post, renders, and Prompts #211-227
 - **Files:**
   - `hardware-design/esp32s3-enclosure.scad` (modified — removed display side-slot cutouts, added `rounded_v_box` helper for rounded vertical edges, cover redesigned to wrap over base with matching curves). All 4 pieces re-exported.
 
@@ -2609,6 +2717,7 @@ Spelling and grammar are lightly cleaned for readability while preserving the or
 - **Prompt:** "Add internal rails, make the base bottom as curvy as the top, fix print errors — the shelf edges need to extend to the bottom of the base so the printer can print properly."
 - **Input Tokens (est):** ~70
 - **Output Tokens (est):** ~14,000
+- **Commit:** `762625a` — Add SCAD enclosure doc, blog post, renders, and Prompts #211-227
 - **Files:**
   - `hardware-design/esp32s3-enclosure.scad` (modified — added `display_rails()` corner posts, `extend_to_floor` flag on lower shelf so it becomes a printable rib, curved bottom via sphere-offset trick for ~30° overhang).
 
@@ -2618,6 +2727,7 @@ Spelling and grammar are lightly cleaned for readability while preserving the or
 - **Prompt:** "Inset the shelves so the top-mid plate lays flush on top of the base. Also make screw hardware to fit in the screw holes so I can solder-meld it shut. The top-mid plate is not aligned with the base — I need everything to be flush and fit the components."
 - **Input Tokens (est):** ~80
 - **Output Tokens (est):** ~16,000
+- **Commit:** `762625a` — Add SCAD enclosure doc, blog post, renders, and Prompts #211-227
 - **Files:**
   - `hardware-design/esp32s3-enclosure.scad` (rewritten — raised `base_wall_top` to `z_disp_top + plate_thk` for flush plate, same-footprint cover, added `screw_plug`/`screw_plug_array` modules, `"screws"` render target).
 
@@ -2627,6 +2737,7 @@ Spelling and grammar are lightly cleaned for readability while preserving the or
 - **Prompt:** "The cover plate needs altering. Get rid of the display slot and add two long rails for the display to snap into. Also the base bottom needs to taper in the same manner as the cover. Ensure everything remains flush on the sides."
 - **Input Tokens (est):** ~60
 - **Output Tokens (est):** ~9,000
+- **Commit:** `762625a` — Add SCAD enclosure doc, blog post, renders, and Prompts #211-227
 - **Files:**
   - `hardware-design/esp32s3-enclosure.scad` (modified — removed topmid edge slots, added snap rails with 0.5mm bottom lips on top-mid plate underside, set `base_bot_cut = 0` for cover-matching taper).
 
@@ -2636,6 +2747,7 @@ Spelling and grammar are lightly cleaned for readability while preserving the or
 - **Prompt:** "You indented the wrong holes. It should be on the base — the 4 holes should go down the width of the top-mid plate so that it doesn't cause a gap."
 - **Input Tokens (est):** ~45
 - **Output Tokens (est):** ~4,500
+- **Commit:** `762625a` — Add SCAD enclosure doc, blog post, renders, and Prompts #211-227
 - **Files:**
   - `hardware-design/esp32s3-enclosure.scad` (modified — shortened base display-rail posts from `base_wall_top` to `z_disp_top`, removed corner notches from top-mid plate so its top face is solid with no through-holes or gaps).
 
@@ -2645,6 +2757,7 @@ Spelling and grammar are lightly cleaned for readability while preserving the or
 - **Prompt:** "The cover should not have a plastic plane on the base side of the model. The base should be completely open to the view window. Also on the top-mid model, on one of the long sides we need a 30mm by 6mm hole in the middle cut into the rail as well so wires can be fished through."
 - **Input Tokens (est):** ~70
 - **Output Tokens (est):** ~7,000
+- **Commit:** `762625a` — Add SCAD enclosure doc, blog post, renders, and Prompts #211-227
 - **Files:**
   - `hardware-design/esp32s3-enclosure.scad` (modified — removed cover's top plate leaving 4 corner posts + walls, added `topmid_window_w/l` cutout (25×50) and `wire_hole_len/depth` (30×6) on top-mid plate -X edge that cuts through both plate and snap rail).
 
@@ -2654,6 +2767,7 @@ Spelling and grammar are lightly cleaned for readability while preserving the or
 - **Prompt:** "No, you took off the wrong side of plastic on the cover. That was the top. Take off the opposite side instead."
 - **Input Tokens (est):** ~25
 - **Output Tokens (est):** ~2,500
+- **Commit:** `762625a` — Add SCAD enclosure doc, blog post, renders, and Prompts #211-227
 - **Files:**
   - `hardware-design/esp32s3-enclosure.scad` (modified — restored cover's top plate with 25×50 viewing window aligned with top-mid plate window; bottom remains open).
 
@@ -2663,6 +2777,7 @@ Spelling and grammar are lightly cleaned for readability while preserving the or
 - **Prompt:** "Go back to the previous and cut a 30mm by 6mm hole on the cover base to route wires."
 - **Input Tokens (est):** ~25
 - **Output Tokens (est):** ~2,200
+- **Commit:** `762625a` — Add SCAD enclosure doc, blog post, renders, and Prompts #211-227
 - **Files:**
   - `hardware-design/esp32s3-enclosure.scad` (modified — reverted cover to open-top and added a 30×6 notch at the bottom of the -X long wall).
 
@@ -2672,6 +2787,7 @@ Spelling and grammar are lightly cleaned for readability while preserving the or
 - **Prompt:** "Hole is on the wrong edge. It should be on the bottom not side."
 - **Input Tokens (est):** ~20
 - **Output Tokens (est):** ~1,500
+- **Commit:** `762625a` — Add SCAD enclosure doc, blog post, renders, and Prompts #211-227
 - **Files:**
   - `hardware-design/esp32s3-enclosure.scad` (modified — moved the wire notch from the -X long wall to the -Y short wall at the bottom edge, centered along X).
 
@@ -2681,6 +2797,7 @@ Spelling and grammar are lightly cleaned for readability while preserving the or
 - **Prompt:** "Take these prompts and update the prompts file and update the website and documentation. Slap a few pics of the models up on the site and make a new doc entry and blog."
 - **Input Tokens (est):** ~60
 - **Output Tokens (est):** ~12,000
+- **Commit:** `762625a` — Add SCAD enclosure doc, blog post, renders, and Prompts #211-227
 - **Files:**
   - `PromptProgression.md` (modified — appended #211–227).
   - `website/docs/prompts/index.md` (appended #211–227 summary).
@@ -2695,6 +2812,7 @@ Spelling and grammar are lightly cleaned for readability while preserving the or
 - **Prompt:** "Pull the latest code changes then push these updates in staged changes."
 - **Input Tokens (est):** ~20
 - **Output Tokens (est):** ~3,500
+- **Commit:** `762625a` — Add SCAD enclosure doc, blog post, renders, and Prompts #211-227
 - **Files:**
   - Fast-forwarded from `a04db76` to `c615df2` (9 upstream commits from parallel session). Reconciled prompt numbering — upstream already had #184-210, so this session's entries land at #211-227.
   - `PromptProgression.md` / `website/docs/prompts/index.md` (modified — renumbered this session's prompts from #184-199 to #211-227 to avoid collision).
@@ -2705,6 +2823,7 @@ Spelling and grammar are lightly cleaned for readability while preserving the or
 - **Prompt:** "ok lets take new pics of the latest base revision we made update the docs website and blog add those pics commit then update the prompts commit and push"
 - **Input Tokens (est):** ~35
 - **Output Tokens (est):** ~9,000
+- **Commit:** `5e1ee71` — Log Prompt #228 — Rev 2 joystick base docs + blog publish
 - **Files:**
   - Verified the staged GUI-rendered PNGs (Tomorrow colorscheme) already reflected the post-pillar-fix SCAD state; discarded a lower-quality Cornfield re-render attempt and kept the originals.
   - `website/docs/assets/images/enclosure/rev2-base-v1-{iso,top,side,end-plusx,usb-closeup,divet}.png` (created — mirrored from the 6 Rev 2 joystick base renders).
@@ -2718,6 +2837,7 @@ Spelling and grammar are lightly cleaned for readability while preserving the or
 - **Prompt:** "ok we need to extend the battery and the whol lenght out by 14mm also we need the batter pit to be 3mm deeper and the usb holes to be 1mm lower, also lower the entire height of the base by 10mm"
 - **Input Tokens (est):** ~50
 - **Output Tokens (est):** ~10,000
+- **Commit:** `575dea2` — Rev 2 joystick base v1.1 → v1.4 + middle-platform v1
 - **Files:**
   - `hardware-design/scad Parts/Rev 2 extended with joystick/base-v1.scad` (modified — 5 parameter tweaks: outer X 82→96, total Z 22→12, battery cell X 52→66, ESP32 overhang shelf 2→5, USB-C z-center 7→6; interpreted "battery pit 3mm deeper" as raising the ESP32 overhang shelf by 3mm so the battery well under the shelf gains 3mm of vertical clearance).
   - `hardware-design/scad Parts/Rev 2 extended with joystick/base-v1.{stl,3mf}` + `hardware-design/enclosure-prints/base-v1.3mf` (regenerated from the resized SCAD).
@@ -2733,6 +2853,7 @@ Spelling and grammar are lightly cleaned for readability while preserving the or
 - **Prompt:** "ok let remove 6.5mm for the length where the battery goes into"
 - **Input Tokens (est):** ~15
 - **Output Tokens (est):** ~4,000
+- **Commit:** `575dea2` — Rev 2 joystick base v1.1 → v1.4 + middle-platform v1
 - **Files:**
   - `hardware-design/scad Parts/Rev 2 extended with joystick/base-v1.scad` (modified — outer X 96→89.5, battery cell X 66→59.5). Interpreted as "shorten the battery section by 6.5 mm end-to-end" → outer and cell both drop by 6.5, ESP32 chamber math falls out unchanged at 23 mm.
   - Mirrored to `hardware-design/scad Parts/base-v1.scad`.
@@ -2747,6 +2868,7 @@ Spelling and grammar are lightly cleaned for readability while preserving the or
 - **Prompt:** "ok lets also move the side holes for the 2 usb c  up 2mm on the side"
 - **Input Tokens (est):** ~15
 - **Output Tokens (est):** ~3,500
+- **Commit:** `575dea2` — Rev 2 joystick base v1.1 → v1.4 + middle-platform v1
 - **Files:**
   - `hardware-design/scad Parts/Rev 2 extended with joystick/base-v1.scad` (modified — `usb_c_port_vertical_center_z_mm` 6→8 so the cutouts sit fully above the ESP32 shelf at z=7 instead of carving through it).
   - Mirrored to `hardware-design/scad Parts/base-v1.scad`.
@@ -2761,6 +2883,7 @@ Spelling and grammar are lightly cleaned for readability while preserving the or
 - **Prompt:** "ok now we nee to poke thorugh 2 small holes in the case so that the boot and reset buuton can be presed eaeling so 17 mm in from the inside edge of the sied with the usb hole and 4.2 mm from the top a 1mm diameter  hole should be place then another hole should be placed 12.5 mm to the left of that hole same distance from the top" (+ multiple clarifications: "you put the holes on the wrong side", "it should be on the bottom base side", "the esp board will be laying upside down in the base and the holes need to be able to go through from there", "the holes need to be 11.5 mm in from the outer edge")
 - **Input Tokens (est):** ~120
 - **Output Tokens (est):** ~12,000
+- **Commit:** `575dea2` — Rev 2 joystick base v1.1 → v1.4 + middle-platform v1
 - **Files / iterations during this prompt:**
   - First attempt placed the 2 Ø 1 mm holes on the **+Y long wall** at (x=71.3, z=7.8) and (x=58.8, z=7.8). Clarification revealed the board is mounted component-side down so buttons face the floor, not a side wall.
   - Second attempt moved holes to the **bottom base floor** with Y defaulted to 39.8 (4.2 mm from +Y outer edge). That landed outside the ESP32 chamber Y range → holes would drill through solid plastic.
@@ -2784,6 +2907,7 @@ Spelling and grammar are lightly cleaned for readability while preserving the or
 - **Prompt:** "Look at the top-plate-windowed CAD — there's a gap in one side of the rails in the middle. We still need that. Apply it to the top-cover-windowed too. Also the rails seem a bit thicker on the new version — verify the dimensions. I also want more of a curve to the whole front face like the picture. Also the top face is way too thick — I want it as thin as possible and taper down towards the screen edges."
 - **Input Tokens (est):** ~100
 - **Output Tokens (est):** ~14,000
+- **Commit:** `6ce1f8e` — Log Prompts #233-237 — Rev 2 top cover session
 - **Files:**
   - `hardware-design/scad Parts/Rev 2 extended with joystick/top-cover-windowed-v1.scad` (modified — five changes in one pass):
     - `outer_case_top_edge_bullnose_radius_mm` 2 → 4 (bigger rolled top edge).
@@ -2799,6 +2923,7 @@ Spelling and grammar are lightly cleaned for readability while preserving the or
 - **Prompt:** "Looks pretty good, but the screw-hole pillars are clipping with the top case of the cover and not flush with the round corners. Also the top face plane is really thick — can we halve its width but keep the nice curvature?"
 - **Input Tokens (est):** ~40
 - **Output Tokens (est):** ~2,500
+- **Commit:** `6ce1f8e` — Log Prompts #233-237 — Rev 2 top cover session
 - **Files:**
   - `top-cover-windowed-v1.scad` (modified):
     - `face_plate_thickness_z_mm` 1 → **0.5** (halved). Bullnose radius stays at 4 mm so the curve is preserved.
@@ -2811,6 +2936,7 @@ Spelling and grammar are lightly cleaned for readability while preserving the or
 - **Prompt:** "Perfect. Now we need to get rid of the outside edges of the screw pillar that exist between the rail-connection and the top face — just let it be a passthrough hole in that section, and a square pillar only where it meets the base. Do this for both of those pillars."
 - **Input Tokens (est):** ~45
 - **Output Tokens (est):** ~3,500
+- **Commit:** `6ce1f8e` — Log Prompts #233-237 — Rev 2 top cover session
 - **Files / iterations:**
   - First attempt: only shortened `pillar_one_round` to `rail_bottom_z_mm` for the -X pillars. This had no effect because `chamber_carve_preserving_pillars` was still preserving the full pillar column out of the shell — the shell material was the load-bearing thing, not the redundant `pillar_one_round` union.
   - User feedback with a highlighted render ("you sliced nothing off") pinpointed the still-visible square pillar above `rail_bottom_z`.
@@ -2824,6 +2950,7 @@ Spelling and grammar are lightly cleaned for readability while preserving the or
 - **Prompt:** "Also chamfer the hole for the joystick cutout."
 - **Input Tokens (est):** ~10
 - **Output Tokens (est):** ~1,500
+- **Commit:** `6ce1f8e` — Log Prompts #233-237 — Rev 2 top cover session
 - **Files:**
   - `top-cover-windowed-v1.scad` (modified):
     - New `joystick_hole_top_taper_width_mm = 1.5` parameter.
@@ -2836,6 +2963,7 @@ Spelling and grammar are lightly cleaned for readability while preserving the or
 - **Prompt:** "Ok, update the doc and the blog and website and commit. Then update prompts, fix grammar, and commit and push."
 - **Input Tokens (est):** ~25
 - **Output Tokens (est):** ~8,000
+- **Commit:** `6ce1f8e` — Log Prompts #233-237 — Rev 2 top cover session
 - **Files:**
   - `hardware-design/scad Parts/Rev 2 extended with joystick/design-plan.md` — appended a full "Top cover (windowed)" section: parameter table, Z layout, geometry-pattern notes (tapered window, tapered joystick hole, wire pass-through gap, per-pillar preservation height, pillar cap at bullnose base), known constraints, file list.
   - `website/docs/docs/hardware/design-evolution.md` — new "Rev 2 Top Cover (Windowed) v1" section with iso / top / side / underside renders and commentary; appended 2026-04-23 top-cover row to the version-history table.
@@ -2850,6 +2978,7 @@ Spelling and grammar are lightly cleaned for readability while preserving the or
 - **Prompt:** "Ok, this print looks pretty good so far — look at the latest shot I took of it. I want to get rid of the 4 holes around the joystick cutout, and then add 0.2 mm thickness to the whole layer of the front face of the cover — just the side where the screen slides into is slightly gaping open, and this should fix that."
 - **Input Tokens (est):** ~60
 - **Output Tokens (est):** ~4,500
+- **Commit:** `2560376` — Log Prompts #238-240 — Rev 2 screen-inlay first-print iteration
 - **Context:** Between prompt #237 (the prior session's doc/blog rollup) and this one, the user committed `eaa4593` — a big refactor of the Rev 2 cover family, authored outside this session. That commit introduced two new files, `top-cover-windowed-screen-inlay-v1.scad` (3 mm FPC divet) and `top-cover-windowed-screen-inlay-v1-2mm.scad` (2 mm divet sibling), each adding a Waveshare-sized inlay recess, a 20×20 mm joystick-PCB pocket with 4 blind corner mount bores, and an FPC-ribbon divet cut into the -X wall. The existing `top-cover-windowed-v1.scad` was also rewritten in that same commit — rails + lips removed, all four corner pillars full-height, M3 bores made blind from below, and a new `display_window_shift_toward_joystick_x_mm = 2` param added for asymmetric bezel. Two new print photos (`rev2-print-1.jpg`, `rev2-print-2.jpg`) were also staged — the user's first print of the inlay variant, which this prompt reacts to.
 - **Files:**
   - `top-cover-windowed-screen-inlay-v1-2mm.scad` (modified):
@@ -2864,6 +2993,7 @@ Spelling and grammar are lightly cleaned for readability while preserving the or
 - **Prompt:** "Ok, let's look at the window cutout for the display. I attached some screenshots for you to see. The short side closest to the side needs to be extended in by 2 mm, and the top and bottom long sides need to be extended compared to the edge by 1 mm each, to compensate for the actual viewable screen's dimensions."
 - **Input Tokens (est):** ~75
 - **Output Tokens (est):** ~3,500
+- **Commit:** `2560376` — Log Prompts #238-240 — Rev 2 screen-inlay first-print iteration
 - **Files / interpretation:**
   - Four `waveshare-screen-*.jpg` photos (staged in the same folder) showed the raw Waveshare 2.13" module from the front (`-1`), from the back (`-2`), seated in the printed inlay with the cover inverted (`-3`), and from the side (`-4`). Against those, the 50 × 25 window on the first print read as 2 mm too long in X on the -X end (cut past the viewable pixels into dead bezel) and 2 mm too short in Y overall (cut *into* the viewable pixels at the ±Y edges).
   - Applied to all three cover variants for consistency:
@@ -2883,6 +3013,7 @@ Spelling and grammar are lightly cleaned for readability while preserving the or
 - **Prompt:** "Update docs, blog, and website, commit. Then update prompts, commit again, and push."
 - **Input Tokens (est):** ~20
 - **Output Tokens (est):** ~9,000
+- **Commit:** `2560376` — Log Prompts #238-240 — Rev 2 screen-inlay first-print iteration
 - **Files:**
   - `hardware-design/scad Parts/Rev 2 extended with joystick/rev2-models-dimensions.md` — three sections updated:
     - §3.4 Display viewing window: added a "Updated 2026-04-24" note and a side-by-side table showing first-print vs. post-update values; recomputed the X/Y ranges at face-plate bottom and at cover top; new bezel summary (-X 11.5, +X 5.5, ±Y 1.5 each).
