@@ -1,20 +1,13 @@
-// Dilder Rev 2 "extended with joystick" — TOP COVER (windowed, screen inlay) v1
+// Dilder Rev 2 "extended with joystick" — TOP COVER (windowed, screen inlay, 2 mm divet) v1
 //
-// Variant of top-cover-windowed-v1 that adds a 3 mm deep recess in the
-// UNDERSIDE of the face plate, sized to the Waveshare 2.13" e-paper
-// display footprint + a small print-fit slop. The screen slots UP into
-// this recess so its active surface lands flush against the inside of
-// the bezel material above.
-//
-// Also: the 4 M3 corner-pillar bores are now BLIND from below — they
-// stop at the face-plate bottom so the cover's top face reads as a
-// clean unbroken bullnose (no visible screw holes from the front).
-//
-// Dimensions for the display inlay come from waveshare-2.13-dimensions.md
-// in this folder.
+// Variant of top-cover-windowed-screen-inlay-v1 with the FPC ribbon
+// divet extending only 2 mm below the face-plate bottom (vs. 3 mm in
+// the base file). Everything else — inlay, joystick hole, PCB pocket,
+// mount bores, blind stack-bolt bores — is identical. Print both and
+// compare fit before committing to a final divet depth.
 //
 // Export:
-//   openscad -o top-cover-windowed-screen-inlay-v1.3mf top-cover-windowed-screen-inlay-v1.scad
+//   openscad -o top-cover-windowed-screen-inlay-v1-2mm.3mf top-cover-windowed-screen-inlay-v1-2mm.scad
 
 $fn = 48;
 
@@ -45,11 +38,7 @@ display_footprint_thickness_z_mm               = 7;   // was 5; +2 mm
                                                        // FPC fold behind
                                                        // it before the
                                                        // face plate
-// 0.5 mm was one perimeter + one thin top layer — the first print
-// showed a hairline seam along the inlay's top edge where the face
-// plate layer didn't fully close. Bumping to 0.7 mm gives the slicer
-// enough material for a proper multi-layer top skin.
-face_plate_thickness_z_mm                      = 0.7;
+face_plate_thickness_z_mm                      = 0.5;
 
 display_bottom_z_mm =
     middle_platform_pedestal_protrusion_into_cover_z_mm;      // = 5
@@ -120,7 +109,7 @@ fpc_ribbon_divet_wall_remaining_thickness_mm   = 1.0;   // how much -X
 // inlay ceiling / face-plate edge. Also clears any render clipping
 // at the divet's Z-bottom edge where it would otherwise terminate
 // exactly at the cavity's ceiling boundary.
-fpc_ribbon_divet_z_extend_below_inlay_mm       = 3.0;
+fpc_ribbon_divet_z_extend_below_inlay_mm       = 2.0;
 fpc_ribbon_divet_x_start_mm =
     fpc_ribbon_divet_wall_remaining_thickness_mm;       // inside the
                                                         // -X wall
@@ -139,14 +128,9 @@ fpc_ribbon_divet_z_top_mm =
 // ============================================================
 // Display viewing window cut through the face plate + bullnose
 // ============================================================
-// Matched to the Waveshare 2.13" VIEWABLE pixel area (measured against
-// the first print, not the glass / bezel). Relative to the 50 × 25
-// window on the first print, the -X short side was moved INWARD by
-// 2 mm (the shift param is bumped +1 so only the -X edge moves, not
-// both), and the ±Y long sides each extend OUTWARD by 1 mm.
-display_viewing_window_length_along_x_mm       = 48;  // was 50
-display_viewing_window_depth_along_y_mm        = 27;  // was 25
-display_window_shift_toward_joystick_x_mm      = 3;   // was 2
+display_viewing_window_length_along_x_mm       = 50;
+display_viewing_window_depth_along_y_mm        = 25;
+display_window_shift_toward_joystick_x_mm      = 2;
 display_window_origin_x_mm =
     display_minus_x_origin_mm
       + (display_footprint_length_along_x_mm
@@ -439,15 +423,17 @@ module top_cover_windowed_screen_inlay() {
                   joystick_pcb_pocket_depth_y_mm,
                   joystick_pcb_pocket_depth_z_mm + 0.1]);
 
-        // NOTE: the 4 blind joystick-PCB mount bores that used to sit
-        // at the pocket's corners have been removed. On the first print
-        // they showed as a circle of dimples around the joystick cutout
-        // from below, and the joystick-PCB retention strategy hasn't
-        // been decided yet (glue / press-fit / heat-set inserts are all
-        // still on the table). Re-add here when the retention plan
-        // lands — the params above (`joystick_pcb_mount_bore_*`,
-        // `joystick_pcb_mount_bore_xy_positions_list`) are intentionally
-        // kept so the geometry is one block away from returning.
+        // Joystick-PCB mount bores — 4 blind bores at the pocket's
+        // corners, extending UP from the pocket ceiling into the
+        // bullnose material. Stops short of the cover top so no bore
+        // is visible on the front face.
+        for (mount_xy = joystick_pcb_mount_bore_xy_positions_list) {
+            translate([mount_xy[0], mount_xy[1],
+                       joystick_pcb_pocket_ceiling_z_mm - 0.01])
+                cylinder(
+                    h = joystick_pcb_mount_bore_depth_z_mm + 0.01,
+                    d = joystick_pcb_mount_bore_diameter_mm);
+        }
     }
 }
 

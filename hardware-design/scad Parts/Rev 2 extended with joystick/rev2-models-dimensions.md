@@ -250,22 +250,26 @@ Curved bullnose top with a tapered display viewing window and a joystick through
 
 ### 3.4 Display viewing window (tapered cut)
 
-| Parameter | Value |
-|---|---|
-| Window X length (at face-plate bottom) | 50.0 |
-| Window Y depth (at face-plate bottom) | 25.0 |
-| Window +X shift toward joystick | 2.0 |
-| Top taper per edge | 2.0 |
-| X range at face-plate bottom | 12.90 → 62.90 |
-| Y range at face-plate bottom | 9.50 → 34.50 |
-| X range at cover top | 10.90 → 64.90 |
-| Y range at cover top | 7.50 → 36.50 |
-| Z range | 10.0 → 14.5 (through) |
+Updated **2026-04-24** to match the Waveshare 2.13" module's actual viewable pixel area — the first print showed the window was 2 mm too long in X on the -X end and 2 mm too short in Y overall.
 
-Bezel dimensions after +X shift:
-- -X bezel (window edge to display -X edge): 9.5
-- +X bezel: 5.5
-- ±Y bezels: 2.5 each
+| Parameter | Value (post-2026-04-24) | First print |
+|---|---|---|
+| Window X length (at face-plate bottom) | **48.0** | 50.0 |
+| Window Y depth (at face-plate bottom) | **27.0** | 25.0 |
+| Window +X shift toward joystick | **3.0** | 2.0 |
+| Top taper per edge | 2.0 | 2.0 |
+| X range at face-plate bottom | **14.90 → 62.90** | 12.90 → 62.90 |
+| Y range at face-plate bottom | **8.50 → 35.50** | 9.50 → 34.50 |
+| X range at cover top | **12.90 → 64.90** | 10.90 → 64.90 |
+| Y range at cover top | **6.50 → 37.50** | 7.50 → 36.50 |
+| Z range | 10.0 → 14.5 (through) | same |
+
+Length 50 → 48 with the shift bumped +1 keeps the +X short side of the window at exactly X=62.90 (unchanged); only the -X short side moves inward by 2 mm. The ±Y long sides each extend 1 mm further outward symmetrically.
+
+Bezel dimensions after the update:
+- -X bezel (window edge to display -X edge): **11.5** (was 9.5)
+- +X bezel: 5.5 (unchanged)
+- ±Y bezels: **1.5 each** (was 2.5)
 
 ### 3.5 Joystick through-hole (tapered cut)
 
@@ -300,16 +304,21 @@ Variant of v1 that adds a 3 mm-deep recess for the Waveshare 2.13" display to re
 
 ### 4.1 Overrides vs. v1
 
-The inlay variant has an **increased display envelope thickness (7 mm vs. v1's 5 mm)**, which shifts the entire Z stack up by 2 mm. All sections 3.1–3.7 apply identically in XY, but Z values shift:
+The inlay variant has an **increased display envelope thickness (7 mm vs. v1's 5 mm)**, which shifts the entire Z stack up by 2 mm. It also has a **thicker face plate (0.7 mm vs. v1's 0.5 mm)**, bumped 2026-04-24 because the first print showed a hairline seam along the top edge of the inlay recess where 0.5 mm printed as one perimeter + one thin top layer and didn't fully close. 0.7 mm gives the slicer enough material for a proper multi-layer top skin.
 
-| Z-stack value | v1 | inlay v1 |
+All sections 3.1–3.7 apply identically in XY, but Z values shift:
+
+| Z-stack value | v1 | inlay v1 (post-2026-04-24) |
 |---|---|---|
+| face_plate_thickness_z_mm | 0.5 | **0.7** |
 | display_top_z_mm | 10.0 | **12.0** |
 | face_plate_bottom_z_mm | 10.0 | **12.0** |
-| face_plate_top_z_mm | 10.5 | **12.5** |
-| cover_total_height_z_mm | 14.5 | **16.5** |
+| face_plate_top_z_mm | 10.5 | **12.7** |
+| cover_total_height_z_mm | 14.5 | **16.7** |
 
 Display Z: 5.0 → 12.0 (7 mm envelope).
+
+The window dimensions updated in §3.4 (48 × 27, shift 3) apply to the inlay variants too — all three cover variants share the same window geometry.
 
 ### 4.2 Screen inlay recess
 
@@ -355,9 +364,11 @@ Square pocket, carved UP from the face-plate underside. The pocket's -X edge is 
 | Joystick hole center (X, Y) | (79.35, 22.00) |
 | Pocket-to-joystick offset (X) | 0.65 (PCB's joystick component sits this far +X of its geometric center) |
 
-### 4.4 Joystick PCB mount bores (4 blind)
+### 4.4 Joystick PCB mount bores — REMOVED 2026-04-24
 
-Inset 2.5 mm from the pocket corners; carved UP from the pocket ceiling into the bullnose material.
+On the first print these showed as a circle of dimples around the joystick cutout on the underside, and the joystick-PCB retention strategy hasn't been decided yet (glue / press-fit / heat-set inserts are all still on the table). The 4 blind bores that used to sit at the pocket corners have been removed from both inlay variants.
+
+The parameter definitions (`joystick_pcb_mount_bore_*`, `joystick_pcb_mount_bore_xy_positions_list`) are intentionally kept in the SCAD so the geometry is one block away from coming back. Reference values if it returns:
 
 | Corner | Bore center (X, Y) |
 |---|---|
@@ -366,15 +377,9 @@ Inset 2.5 mm from the pocket corners; carved UP from the pocket ceiling into the
 | -X +Y | (71.20, 29.50) |
 | +X +Y | (86.20, 29.50) |
 
-| Parameter | Value |
-|---|---|
-| Bore diameter (M3 clearance) | 3.2 |
-| Bore Z range | 13.0 → 16.0 |
-| Bore depth above pocket ceiling | 3.0 |
-| Bore-pattern pitch (X × Y) | **15.0 × 15.0** |
-| Material above bore top (cap) | 0.5 |
-
-**PCB design target**: 20 × 20 mm, 4 × 3.2 mm holes at 15 × 15 mm center pitch. Joystick component sits **0.65 mm +X of the PCB's geometric center** so it lands at the joystick through-hole (X=79.35, Y=22) in cover coordinates.
+- Bore diameter: 3.2 mm (M3 clearance)
+- Bore-pattern pitch (X × Y): 15.0 × 15.0 mm
+- Matching PCB footprint: 20 × 20 mm with 4 × 3.2 mm holes at 15 × 15 mm center pitch.
 
 ---
 
@@ -415,3 +420,4 @@ USB-C port Y centers (16.0, 28.0) defined in base-v1 only. No matching cutout in
 - Stale comments in `top-cover-windowed-v1.scad` still say `face_plate_top = 12` and `cover_total_height = 14`; the actual computed values with `face_plate_thickness = 0.5` and bullnose radius `4` are 10.5 and 14.5 respectively (values in this doc are the computed ones).
 - All "slop" values (`print_fit_tolerance_slop_mm = 0.4`, `screen_inlay_xy_slop_per_edge_mm = 0.3`) are tuned for typical FDM XY shrink — adjust per filament/printer.
 - Heat-set inserts for M3 typically want a 4.0–4.5 mm bore; the current 3.2 mm blind bores are clearance-sized. Either re-spec the bore diameter or plan for self-tapping screws (tighter, ~2.7 mm) depending on your hardware.
+- **Face plate thickness diverges across variants after 2026-04-24**: `top-cover-windowed-v1.scad` still uses 0.5 mm (it's not currently being printed); both inlay variants were bumped to 0.7 mm based on first-print seam feedback. If base v1 is ever printed as-is, expect the same seam issue until its face plate is also bumped.

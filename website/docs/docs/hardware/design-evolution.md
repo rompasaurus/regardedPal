@@ -152,6 +152,68 @@ The **-X corner pillars** show only the screw-clearance hole at this level — t
 
 ---
 
+## Rev 2 Top Cover — Screen Inlay Variant (2026-04-24)
+
+A second top-cover family, in parallel with the windowed-v1 above, that drops the snap rails entirely and replaces them with a **3 mm-deep inlay recess** carved up into the face plate from below. The raw Waveshare 2.13" module (glass + PCB, no carrier housing) rests *into* the recess, held flat against the face plate from the bottom by a separate retention plate bolting up through the 4 corner pillars.
+
+Source: [`hardware-design/scad Parts/Rev 2 extended with joystick/top-cover-windowed-screen-inlay-v1.scad`](https://github.com/rompasaurus/dilder/blob/main/hardware-design/scad%20Parts/Rev%202%20extended%20with%20joystick/top-cover-windowed-screen-inlay-v1.scad) (3 mm FPC divet) and [`...-screen-inlay-v1-2mm.scad`](https://github.com/rompasaurus/dilder/blob/main/hardware-design/scad%20Parts/Rev%202%20extended%20with%20joystick/top-cover-windowed-screen-inlay-v1-2mm.scad) (2 mm FPC divet sibling).
+
+### Isometric — cavity view
+
+![Rev 2 screen-inlay cover — isometric](../../assets/images/enclosure/rev2-top-cover-inlay-v1-iso.png)
+
+All four corner pillars run full-height to the face plate top. M3 corner bores are **blind from below** — they open at the cover's mating bottom and cap at `face_plate_bottom_z_mm` so no screw holes are visible on the front face. A retention plate (separate part) provides the load path — the cover just has the bolt receivers.
+
+### The Waveshare module — raw form
+
+![Waveshare 2.13" front](../../assets/images/enclosure/waveshare-2-13-front.jpg)
+
+The inlay is sized around the raw display module (glass + FPC + no carrier). The 3 mm recess gives enough Z clearance for the glass plus the FPC fold-over behind it.
+
+![Waveshare 2.13" sitting in the printed inlay](../../assets/images/enclosure/waveshare-2-13-in-inlay.jpg)
+
+The FPC cable exits the +X end of the display through an FPC-ribbon divet cut into the -X end wall (thinning that wall from 3 mm to 1 mm over a 13 mm Y band, directly opposite the joystick hole).
+
+### First print — what needed fixing
+
+![First print — front](../../assets/images/enclosure/rev2-top-cover-inlay-print-1.jpg)
+
+![First print — front closeup](../../assets/images/enclosure/rev2-top-cover-inlay-print-2.jpg)
+
+Three things showed up in the first print (0.5 mm face plate, 50 × 25 window, 4 joystick-PCB mount bores still present):
+
+1. A hairline seam along the top edge of the inlay recess where the 0.5 mm face plate printed as a single perimeter + one thin top layer and didn't fully close. Fix: `face_plate_thickness_z_mm` bumped **0.5 → 0.7** to give the slicer enough material for a proper multi-layer top skin.
+2. Four visible dimples arranged in a ring around the joystick cutout on the underside (the joystick-PCB mount bores). The retention strategy for the joystick PCB hasn't been decided yet (glue, press-fit, and heat-set inserts are all still on the table), so **the 4 bores were removed** from the inlay variants. The parameter definitions are kept in the SCAD so the geometry is one block away from returning.
+3. The window was 2 mm too long in X on the -X end and 2 mm too short in Y overall, compared to the actual viewable pixel area of the Waveshare module.
+
+### Window resize to match the viewable pixel area (2026-04-24)
+
+![Rev 2 screen-inlay cover — top view](../../assets/images/enclosure/rev2-top-cover-inlay-v1-top.png)
+
+Window dimensions updated across all three cover variants (inlay + base):
+
+| Dimension | First print | Post-2026-04-24 | Effect |
+|---|---|---|---|
+| `display_viewing_window_length_along_x_mm` | 50 | **48** | -X short side moves inward 2 mm |
+| `display_viewing_window_depth_along_y_mm` | 25 | **27** | ±Y long sides each extend 1 mm outward |
+| `display_window_shift_toward_joystick_x_mm` | 2 | **3** | compensates for the shorter length so only the -X edge moves — the +X edge stays at X=62.9 |
+
+New window X range: 14.9 → 62.9 (was 12.9 → 62.9). New Y range: 8.5 → 35.5 (was 9.5 → 34.5).
+
+### Underside — rails gone, bores blind, joystick pocket only
+
+![Rev 2 screen-inlay cover — underside](../../assets/images/enclosure/rev2-top-cover-inlay-v1-under.png)
+
+From below you see just the 4 M3 bores at the corners, the display inlay recess (large rectangle), the joystick through-hole, and the 20 × 20 mm joystick-PCB pocket adjacent to it. No rails, no lips — the retention plate handles display holding. No dimples around the joystick (mount bores removed).
+
+### Side profile
+
+![Rev 2 screen-inlay cover — side](../../assets/images/enclosure/rev2-top-cover-inlay-v1-side.png)
+
+The inlay variant is 2 mm taller overall than the windowed-v1 above because the display envelope thickens from 5 mm to 7 mm (raw module + FPC fold-over wiggle room) and the face plate goes from 0.5 mm to 0.7 mm. Total cover height: **16.7 mm** (was 14.5 mm for windowed-v1).
+
+---
+
 ## Current Assembly (ESP32-S3 Enclosure)
 
 The enclosure is a stacked shell design housing an Olimex ESP32-S3-DevKit-Lipo, Waveshare 2.13" e-ink display, and 1000mAh LiPo battery. Five parts print flat without supports and assemble with 4 corner screw posts.
@@ -336,3 +398,6 @@ Provides a menu to browse .scad files, pick export format (3MF/STL), set output 
 | 2026-04-23 | Rev 2 joystick base | v1.3 | USB-C cutouts raised +2mm (z-center 6→8mm) so they clear the ESP32 shelf (z=7) and sit fully above it |
 | 2026-04-23 | Rev 2 joystick base | v1.4 | Added two Ø1mm vertical BOOT/RESET paperclip poke-through holes in the base floor at (71.3, 32.5) and (58.8, 32.5); board is mounted component-side down so paperclip reaches buttons from below |
 | 2026-04-23 | Rev 2 top cover (windowed) | v1 | Top piece for the Rev 2 stack: 4mm bullnose across the whole front face, 0.5mm face plate, tapered display window (50×25 → +2mm per side at the cover top) and tapered joystick hole (Ø12 → Ø15), 2.5mm ±Y snap rails with 1mm lips, 30×6mm wire pass-through gap in the -Y rail, -X pillars shortened to `rail_bottom_z` so the square pillar only exists where it meets the base |
+| 2026-04-24 | Rev 2 top cover (windowed) | v1.1 | Rails + lips removed; full-height pillars; M3 bores blind from below (no holes on front face); window shifted +2mm toward the joystick for asymmetric bezel |
+| 2026-04-24 | Rev 2 top cover (screen inlay) | v1 / v1-2mm | New sibling family: 3mm inlay recess carved up into the face plate for the raw Waveshare module + FPC fold-over; 20×20mm joystick-PCB pocket; FPC-ribbon divet cut into the -X wall (thins 3mm→1mm over a 13mm Y band). Two siblings: `-v1` (3mm FPC divet Z extension below inlay), `-v1-2mm` (2mm variant) for side-by-side fit testing |
+| 2026-04-24 | Rev 2 top cover (screen inlay) | iteration | Post-first-print tweaks to both inlay variants: face plate 0.5→0.7mm (kills a hairline seam at the inlay top edge where the single thin top layer didn't close); removed 4 joystick-PCB mount bores (showed as dimples in a ring around the joystick cutout — retention strategy undecided); window resized 50×25→48×27 with shift 2→3 across all 3 cover variants to match the Waveshare's actual viewable pixel area |

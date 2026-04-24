@@ -97,19 +97,12 @@ display_plus_y_end_mm =
 // Scaled from Rev 1's top-plate-windowed-v1 (25 × 50 opening on a
 // 30 × 65 display), reoriented for landscape so the long axis of the
 // window lies along X.
-// Matched to the Waveshare 2.13" VIEWABLE pixel area (measured against
-// the first print, not the glass / bezel). Relative to the 50 × 25
-// window on the first print, the -X short side was moved INWARD by
-// 2 mm (the shift param is bumped +1 so only the -X edge moves, not
-// both), and the ±Y long sides each extend OUTWARD by 1 mm.
-display_viewing_window_length_along_x_mm       = 48;  // was 50
-display_viewing_window_depth_along_y_mm        = 27;  // was 25
+display_viewing_window_length_along_x_mm       = 50;
+display_viewing_window_depth_along_y_mm        = 25;
 // Nudge the window +X toward the joystick hole from the display-centered
 // position. Asymmetric bezel: more material on the -X (battery) side,
-// less on the +X (joystick) side. Bumped +1 relative to the first print
-// to compensate for the 2 mm length reduction on the -X end so only
-// the -X short edge shifts inward (the +X short edge stays at X=62.9).
-display_window_shift_toward_joystick_x_mm      = 3;   // was 2
+// less on the +X (joystick) side.
+display_window_shift_toward_joystick_x_mm      = 2;
 display_window_origin_x_mm =
     display_minus_x_origin_mm
       + (display_footprint_length_along_x_mm
