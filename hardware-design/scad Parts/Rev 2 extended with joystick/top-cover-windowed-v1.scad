@@ -1,24 +1,21 @@
 // Dilder Rev 2 "extended with joystick" — TOP COVER (windowed) v1
 //
-// Combines two Rev 1 ideas into a single top piece for the Rev 2 stack:
-//   1. Curved BULLNOSE top face (pattern from top-cover-v3-rounded-top).
-//   2. Display slide-in HOUSING with ±Y snap rails + inward lip
-//      (pattern from top-plate-windowed-v1) — proven to hold the
-//      Waveshare 2.13" display flush under the face plate.
+// Curved BULLNOSE top face (pattern from top-cover-v3-rounded-top) with
+// a display viewing window and a joystick through-hole cut through the
+// face plate + bullnose. No internal retention rails or lips — a
+// separate retention plate bolting up through the 4 corner pillars is
+// responsible for holding the display.
 //
 // Outer footprint (91.5 × 44) and corner-pillar XY positions match
 // base-v1 and middle-platform-v1 so the M3 through-bolts line up through
-// the entire stack.
+// the entire stack. All 4 corner pillars run full-height from the cover
+// floor up through the face plate.
 //
 // Display is offset as far -X as possible (over the battery half, which
 // is ALSO the half supported from below by middle-platform-v1's solid
 // fill pedestal). A separate through-hole punches the face plate on the
 // +X half (center of the remaining right-hand region) — intended for a
 // joystick shaft / control input above the ESP32 side.
-//
-// The display slides in from BELOW: rails hang down off the face-plate
-// underside along the display's ±Y edges; an inward-protruding lip at
-// the bottom of each rail catches the display's underside.
 //
 // Export:
 //   openscad -o top-cover-windowed-v1.3mf top-cover-windowed-v1.scad
@@ -102,10 +99,15 @@ display_plus_y_end_mm =
 // window lies along X.
 display_viewing_window_length_along_x_mm       = 50;
 display_viewing_window_depth_along_y_mm        = 25;
+// Nudge the window +X toward the joystick hole from the display-centered
+// position. Asymmetric bezel: more material on the -X (battery) side,
+// less on the +X (joystick) side.
+display_window_shift_toward_joystick_x_mm      = 2;
 display_window_origin_x_mm =
     display_minus_x_origin_mm
       + (display_footprint_length_along_x_mm
-          - display_viewing_window_length_along_x_mm) / 2;       // centered on display in X
+          - display_viewing_window_length_along_x_mm) / 2
+      + display_window_shift_toward_joystick_x_mm;
 display_window_origin_y_mm =
     display_minus_y_origin_mm
       + (display_footprint_depth_along_y_mm
@@ -116,33 +118,6 @@ display_window_origin_y_mm =
 // the very top of the cover, so the bullnose + face-plate material visibly
 // tapers DOWN into the screen edges (a shallow funnel around the window).
 display_window_top_taper_width_mm              = 2.0;
-
-// ============================================================
-// Snap rails (retain the display from below, along ±Y edges, running
-// along the full display X length)
-// ============================================================
-// Lip sits at display_bottom ± snap_lip_thickness/2 and protrudes
-// INWARD past the display's ±Y edge by snap_lip_protrusion — so when
-// the display snaps up past the lip, it's caught from below.
-snap_rail_depth_below_face_plate_z_mm          = 4.5;
-snap_lip_protrusion_inward_y_mm                = 1.0;
-snap_lip_thickness_z_mm                        = 1.0;
-rail_trim_from_inner_wall_y_mm                 = 0.5;    // so rail doesn't fuse into outer wall material
-// Rail Y-thickness. Parity with Rev 1's top-plate-windowed-v1 where
-// rail_w_left = disp_x_local - rail_trim ≈ 2.5 mm. The previous Rev 2
-// value filled the entire wall-to-display gap (~4.5 mm); that's roughly
-// 1.8× Rev 1 for no structural reason, so we explicitly parameterize it
-// and leave a gap between rail inner edge and display edge for wires.
-rail_width_y_mm                                = 2.5;
-
-// ============================================================
-// Wire pass-through gap (copied from Rev 1 top-plate-windowed-v1)
-// ============================================================
-// Cuts a notch through the -Y rail + lip in the MIDDLE of its X length,
-// so wires can pass from the area below the face plate into the display
-// bay without fighting the snap rail. Dimensions inherited from Rev 1.
-wire_pass_through_gap_length_along_x_mm        = 30;
-wire_pass_through_gap_depth_along_y_mm         = 6;
 
 // ============================================================
 // Joystick through-hole on the +X half of the face plate
@@ -262,207 +237,95 @@ module top_cover_windowed() {
         enclosure_outer_depth_along_y_axis_mm
           - perimeter_long_side_wall_thickness_y_mm_base;
 
-    // Rail Y extents — each rail is `rail_width_y_mm` wide, anchored
-    // against the ±Y inner wall face (minus trim). The remaining space
-    // between rail inner edge and display edge is open for wire routing.
-    // The lip cantilevers inward from the rail to catch the display.
-    rail_minus_y_start_mm = cavity_inner_y_start_mm + rail_trim_from_inner_wall_y_mm;
-    rail_minus_y_end_mm   = rail_minus_y_start_mm + rail_width_y_mm;
-    rail_plus_y_end_mm    = cavity_inner_y_end_mm - rail_trim_from_inner_wall_y_mm;
-    rail_plus_y_start_mm  = rail_plus_y_end_mm - rail_width_y_mm;
-
-    rail_bottom_z_mm      = face_plate_bottom_z_mm - snap_rail_depth_below_face_plate_z_mm;
-    lip_top_z_mm          = rail_bottom_z_mm;
-    lip_bottom_z_mm       = lip_top_z_mm - snap_lip_thickness_z_mm;
-
-    // Two-stage construction so the rails aren't carved back out by the
-    // chamber carve:
-    //   Stage 1: outer shell + pillars, MINUS cavity and window and
-    //            joystick hole. Yields a hollow shell with face-plate
-    //            roof and bullnose top.
-    //   Stage 2: union the rails + lips onto Stage 1.
-    //   Stage 3: subtract M3 screw holes through the whole thing.
     difference() {
         union() {
-            // ---- Stage 1 ----
-            difference() {
-                union() {
-                    shell_with_bullnose_top(
-                        enclosure_outer_width_along_x_axis_mm,
-                        enclosure_outer_depth_along_y_axis_mm,
-                        cover_total_height_z_mm,
-                        outer_case_top_view_corner_radius_mm,
-                        outer_case_top_edge_bullnose_radius_mm);
+            shell_with_bullnose_top(
+                enclosure_outer_width_along_x_axis_mm,
+                enclosure_outer_depth_along_y_axis_mm,
+                cover_total_height_z_mm,
+                outer_case_top_view_corner_radius_mm,
+                outer_case_top_edge_bullnose_radius_mm);
 
-                    // Corner pillars — only the exposed INNER corner is
-                    // rounded (convention shared with base-v1).
-                    //
-                    // Height varies per end:
-                    //   -X pillars (battery end): capped at rail_bottom_z_mm
-                    //     so the square pillar only exists where it meets
-                    //     the BASE below. Above rail_bottom the rail itself
-                    //     takes over (stacks on top of the pillar), the
-                    //     face plate continues above that, and the bullnose
-                    //     caps it — the M3 clearance bore passes through
-                    //     all of it. Removes the square pillar edges that
-                    //     otherwise clutter the cavity wall between the
-                    //     rail connection and the top face.
-                    //   +X pillars (USB-C end): no rail reaches them, so
-                    //     they stay capped at face_plate_top_z_mm to carry
-                    //     the bolt path up through the face plate.
-                    for (corner_pillar_origin_xy = corner_pillar_xy_origin_positions_list) {
-                        pillar_rounds_positive_x_corner =
-                            (corner_pillar_origin_xy[0]
-                              < enclosure_outer_width_along_x_axis_mm / 2) ? 1 : 0;
-                        pillar_rounds_positive_y_corner =
-                            (corner_pillar_origin_xy[1]
-                              < enclosure_outer_depth_along_y_axis_mm / 2) ? 1 : 0;
-                        pillar_is_on_minus_x_end =
-                            (corner_pillar_origin_xy[0]
-                              < enclosure_outer_width_along_x_axis_mm / 2);
-                        pillar_top_z_mm =
-                            pillar_is_on_minus_x_end
-                              ? rail_bottom_z_mm
-                              : face_plate_top_z_mm;
-                        translate([corner_pillar_origin_xy[0],
-                                   corner_pillar_origin_xy[1],
-                                   0])
-                            pillar_one_round(
-                                corner_pillar_square_side_length_mm,
-                                corner_pillar_square_side_length_mm,
-                                pillar_top_z_mm,
-                                corner_pillar_inner_facing_corner_radius_mm,
-                                pillar_rounds_positive_x_corner,
-                                pillar_rounds_positive_y_corner);
-                    }
-                }
-
-                // Hollow out the interior below the face plate. Inlined
-                // (instead of calling chamber_carve_preserving_pillars)
-                // so each pillar can have its OWN preservation height:
-                //   -X pillars: preserved only up to rail_bottom_z_mm.
-                //     Above that the cavity extends cleanly through the
-                //     pillar column — no square pillar stub between the
-                //     rail top and the face plate.
-                //   +X pillars: preserved up to the face plate bottom
-                //     (same as the original helper).
-                // This replaces the old "extra cut" approach, which left
-                // coplanar surfaces at z = face_plate_bottom_z_mm that
-                // rendered as a ghost sliver.
-                difference() {
-                    translate([cavity_inner_x_start_mm,
-                               cavity_inner_y_start_mm,
-                               -0.1])
-                        cube([cavity_inner_x_end_mm - cavity_inner_x_start_mm,
-                              cavity_inner_y_end_mm - cavity_inner_y_start_mm,
-                              face_plate_bottom_z_mm + 0.1]);
-                    for (corner_pillar_origin_xy = corner_pillar_xy_origin_positions_list) {
-                        preserve_top_z_mm =
-                            (corner_pillar_origin_xy[0]
-                              < enclosure_outer_width_along_x_axis_mm / 2)
-                              ? rail_bottom_z_mm
-                              : face_plate_bottom_z_mm + 0.1;
-                        translate([corner_pillar_origin_xy[0],
-                                   corner_pillar_origin_xy[1],
-                                   -0.6])
-                            cube([corner_pillar_square_side_length_mm,
-                                  corner_pillar_square_side_length_mm,
-                                  preserve_top_z_mm + 0.6]);
-                    }
-                }
-
-                // Display viewing window — TAPERED cut. At the face
-                // plate bottom the opening is the true window size (so
-                // the display's active area has an unobstructed line of
-                // sight). It widens linearly to (window + 2·taper) at
-                // the top of the cover, so the remaining top-face
-                // material visibly tapers DOWN into the screen edges
-                // and the bullnose rolls smoothly into the window.
-                hull() {
-                    translate([display_window_origin_x_mm,
-                               display_window_origin_y_mm,
-                               face_plate_bottom_z_mm - 0.1])
-                        cube([display_viewing_window_length_along_x_mm,
-                              display_viewing_window_depth_along_y_mm,
-                              0.001]);
-                    translate([display_window_origin_x_mm
-                                 - display_window_top_taper_width_mm,
-                               display_window_origin_y_mm
-                                 - display_window_top_taper_width_mm,
-                               cover_total_height_z_mm + 0.1 - 0.001])
-                        cube([display_viewing_window_length_along_x_mm
-                                + 2 * display_window_top_taper_width_mm,
-                              display_viewing_window_depth_along_y_mm
-                                + 2 * display_window_top_taper_width_mm,
-                              0.001]);
-                }
-
-                // Joystick through-hole on the +X half of the face plate
-                // — TAPERED like the display window. True diameter at the
-                // face-plate bottom, widening by joystick_hole_top_taper
-                // on radius at the top of the cover.
-                translate([joystick_through_hole_center_x_mm,
-                           joystick_through_hole_center_y_mm,
+            // Corner pillars — full-height from cover floor up through
+            // the face plate so the M3 clearance bore is embedded in
+            // solid material top-to-bottom and the face plate ties into
+            // every pillar. Only the inward-facing corner is rounded.
+            for (corner_pillar_origin_xy = corner_pillar_xy_origin_positions_list) {
+                pillar_rounds_positive_x_corner =
+                    (corner_pillar_origin_xy[0]
+                      < enclosure_outer_width_along_x_axis_mm / 2) ? 1 : 0;
+                pillar_rounds_positive_y_corner =
+                    (corner_pillar_origin_xy[1]
+                      < enclosure_outer_depth_along_y_axis_mm / 2) ? 1 : 0;
+                translate([corner_pillar_origin_xy[0],
+                           corner_pillar_origin_xy[1],
                            0])
-                    hull() {
-                        translate([0, 0, face_plate_bottom_z_mm - 0.1])
-                            cylinder(
-                                h = 0.001,
-                                d = joystick_through_hole_diameter_mm);
-                        translate([0, 0,
-                                   cover_total_height_z_mm + 0.1 - 0.001])
-                            cylinder(
-                                h = 0.001,
-                                d = joystick_through_hole_diameter_mm
-                                      + 2 * joystick_hole_top_taper_width_mm);
-                    }
+                    pillar_one_round(
+                        corner_pillar_square_side_length_mm,
+                        corner_pillar_square_side_length_mm,
+                        face_plate_top_z_mm,
+                        corner_pillar_inner_facing_corner_radius_mm,
+                        pillar_rounds_positive_x_corner,
+                        pillar_rounds_positive_y_corner);
             }
-
-            // ---- Stage 2 ----
-            // -Y RAIL: between the -Y inner wall face (plus trim) and the
-            // display's -Y edge; runs along X for the full display length.
-            translate([display_minus_x_origin_mm,
-                       rail_minus_y_start_mm,
-                       rail_bottom_z_mm])
-                cube([display_footprint_length_along_x_mm,
-                      rail_minus_y_end_mm - rail_minus_y_start_mm,
-                      snap_rail_depth_below_face_plate_z_mm]);
-            // -Y LIP: cantilevers from the rail start (anchored on the
-            // rail above) across the open wire-routing gap and past the
-            // display's -Y edge by snap_lip_protrusion, catching the
-            // display's underside.
-            translate([display_minus_x_origin_mm,
-                       rail_minus_y_start_mm,
-                       lip_bottom_z_mm])
-                cube([display_footprint_length_along_x_mm,
-                      display_minus_y_origin_mm
-                        + snap_lip_protrusion_inward_y_mm
-                        - rail_minus_y_start_mm,
-                      snap_lip_thickness_z_mm]);
-
-            // +Y RAIL: between the display's +Y edge and the +Y inner
-            // wall face (minus trim).
-            translate([display_minus_x_origin_mm,
-                       rail_plus_y_start_mm,
-                       rail_bottom_z_mm])
-                cube([display_footprint_length_along_x_mm,
-                      rail_plus_y_end_mm - rail_plus_y_start_mm,
-                      snap_rail_depth_below_face_plate_z_mm]);
-            // +Y LIP: cantilevers from past the display's +Y edge
-            // (by snap_lip_protrusion) out to the rail end, catching
-            // the display's underside.
-            translate([display_minus_x_origin_mm,
-                       display_plus_y_end_mm - snap_lip_protrusion_inward_y_mm,
-                       lip_bottom_z_mm])
-                cube([display_footprint_length_along_x_mm,
-                      rail_plus_y_end_mm
-                        - (display_plus_y_end_mm - snap_lip_protrusion_inward_y_mm),
-                      snap_lip_thickness_z_mm]);
         }
 
-        // ---- Stage 3 ----
-        // M3 screw clearance through every pillar AND through any rail
-        // material that crosses a pillar footprint at the -X end.
+        // Hollow interior below the face plate, preserving each corner
+        // pillar's full-height column so the M3 bore stays in solid
+        // material.
+        chamber_carve_preserving_pillars(
+            cavity_inner_x_start_mm,
+            cavity_inner_y_start_mm,
+            -0.1,
+            cavity_inner_x_end_mm - cavity_inner_x_start_mm,
+            cavity_inner_y_end_mm - cavity_inner_y_start_mm,
+            face_plate_bottom_z_mm + 0.1,
+            corner_pillar_xy_origin_positions_list,
+            corner_pillar_square_side_length_mm);
+
+        // Display viewing window — tapered cut. Face-plate-bottom
+        // opening matches the true window size; widens by
+        // 2·taper at the top of the cover so the face plate + bullnose
+        // read as a shallow funnel around the screen edges.
+        hull() {
+            translate([display_window_origin_x_mm,
+                       display_window_origin_y_mm,
+                       face_plate_bottom_z_mm - 0.1])
+                cube([display_viewing_window_length_along_x_mm,
+                      display_viewing_window_depth_along_y_mm,
+                      0.001]);
+            translate([display_window_origin_x_mm
+                         - display_window_top_taper_width_mm,
+                       display_window_origin_y_mm
+                         - display_window_top_taper_width_mm,
+                       cover_total_height_z_mm + 0.1 - 0.001])
+                cube([display_viewing_window_length_along_x_mm
+                        + 2 * display_window_top_taper_width_mm,
+                      display_viewing_window_depth_along_y_mm
+                        + 2 * display_window_top_taper_width_mm,
+                      0.001]);
+        }
+
+        // Joystick through-hole — tapered cut like the display window.
+        translate([joystick_through_hole_center_x_mm,
+                   joystick_through_hole_center_y_mm,
+                   0])
+            hull() {
+                translate([0, 0, face_plate_bottom_z_mm - 0.1])
+                    cylinder(
+                        h = 0.001,
+                        d = joystick_through_hole_diameter_mm);
+                translate([0, 0,
+                           cover_total_height_z_mm + 0.1 - 0.001])
+                    cylinder(
+                        h = 0.001,
+                        d = joystick_through_hole_diameter_mm
+                              + 2 * joystick_hole_top_taper_width_mm);
+            }
+
+        // BLIND M3 bores — open at the cover's mating bottom, capped
+        // at face_plate_bottom_z_mm so the face plate + bullnose above
+        // hide the bore from the front view.
         for (corner_pillar_origin_xy = corner_pillar_xy_origin_positions_list) {
             screw_hole_center_x_mm =
                 corner_pillar_origin_xy[0]
@@ -473,26 +336,9 @@ module top_cover_windowed() {
             translate([screw_hole_center_x_mm,
                        screw_hole_center_y_mm,
                        -0.1])
-                cylinder(h = cover_total_height_z_mm + 0.2,
+                cylinder(h = face_plate_bottom_z_mm + 0.1,
                          d = m3_screw_clearance_hole_diameter_mm);
         }
-
-        // Wire pass-through gap — notches out the MIDDLE of the -Y
-        // rail + lip (X-centered on the display's long axis) so wires
-        // can cross the rail boundary below the face plate. Cut is
-        // Z-bounded to rail/lip material only; the face plate above is
-        // not touched.
-        wire_gap_x_start_mm =
-            display_minus_x_origin_mm
-              + (display_footprint_length_along_x_mm
-                  - wire_pass_through_gap_length_along_x_mm) / 2;
-        translate([wire_gap_x_start_mm,
-                   cavity_inner_y_start_mm + 0.01,
-                   lip_bottom_z_mm - 0.1])
-            cube([wire_pass_through_gap_length_along_x_mm,
-                  wire_pass_through_gap_depth_along_y_mm,
-                  (face_plate_bottom_z_mm - 0.01)
-                    - (lip_bottom_z_mm - 0.1)]);
     }
 }
 

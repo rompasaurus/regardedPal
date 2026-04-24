@@ -89,7 +89,7 @@ usb_c_port_body_recess_depth_into_enclosure_mm = 8.0;
 // on the port body extends ~0.2 mm BELOW the PCB, so without this divet
 // the board would rock on that tab. The divet is carved into the top of
 // the shelf (z just below the shelf face) at each port's Y position.
-usb_c_shelf_divet_depth_into_shelf_z_mm        = 0.2;
+usb_c_shelf_divet_depth_into_shelf_z_mm        = 0.7;
 usb_c_shelf_divet_length_along_x_axis_mm       = 8.0;
 usb_c_shelf_divet_width_along_y_axis_mm        = 7.8;
 
