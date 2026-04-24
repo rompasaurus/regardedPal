@@ -1,13 +1,13 @@
-// Dilder Rev 2 "extended with joystick" — TOP COVER (windowed, screen inlay, 2 mm divet) v1
+// Dilder Rev 2 "extended with joystick" — TOP COVER (windowed, screen inlay, 2 mm divet) Pico 2 v2
 //
-// Variant of top-cover-windowed-screen-inlay-v1 with the FPC ribbon
-// divet extending only 2 mm below the face-plate bottom (vs. 3 mm in
-// the base file). Everything else — inlay, joystick hole, PCB pocket,
-// mount bores, blind stack-bolt bores — is identical. Print both and
-// compare fit before committing to a final divet depth.
+// Based on v1-2mm. Change from v1:
+//   - Screen inlay cutout widened by 0.1 mm along Y axis (+0.05 mm
+//     per edge) so the Pico 2 screen slots in more easily.
+//   - All other geometry (joystick hole, PCB pocket, mount bores,
+//     blind stack-bolt bores, FPC divet) is identical to v1-2mm.
 //
 // Export:
-//   openscad -o top-cover-windowed-screen-inlay-v1-2mm.3mf top-cover-windowed-screen-inlay-v1-2mm.scad
+//   openscad -o top-cover-windowed-screen-inlay-pico2-v2-2mm.3mf top-cover-windowed-screen-inlay-pico2-v2-2mm.scad
 
 $fn = 48;
 
@@ -80,16 +80,18 @@ display_plus_y_end_mm =
 // room for the FPC fold-over behind it.
 // ============================================================
 screen_inlay_depth_z_mm                        = 3;
-screen_inlay_xy_slop_per_edge_mm               = 0.3;  // press-fit clearance
+screen_inlay_xy_slop_per_edge_mm               = 0.3;  // press-fit clearance (X)
+screen_inlay_y_slop_per_edge_mm                = 0.35; // v2: widened +0.05 mm/edge
+                                                       // (+0.1 mm total Y) vs v1's 0.3
 
 screen_inlay_x_start_mm =
     display_minus_x_origin_mm - screen_inlay_xy_slop_per_edge_mm;
 screen_inlay_x_end_mm =
     display_plus_x_end_mm + screen_inlay_xy_slop_per_edge_mm;
 screen_inlay_y_start_mm =
-    display_minus_y_origin_mm - screen_inlay_xy_slop_per_edge_mm;
+    display_minus_y_origin_mm - screen_inlay_y_slop_per_edge_mm;
 screen_inlay_y_end_mm =
-    display_plus_y_end_mm + screen_inlay_xy_slop_per_edge_mm;
+    display_plus_y_end_mm + screen_inlay_y_slop_per_edge_mm;
 screen_inlay_bottom_z_mm =
     face_plate_bottom_z_mm;                                         // = 10
 screen_inlay_top_z_mm =
@@ -132,16 +134,9 @@ fpc_ribbon_divet_z_top_mm =
 // ============================================================
 // Display viewing window cut through the face plate + bullnose
 // ============================================================
-// Dimensions matched to the Waveshare 2.13" module's actual VIEWABLE
-// pixel area (measured against the first print, not the glass / bezel).
-// Relative to the 50 × 25 window on the first print, the -X short side
-// was moved INWARD by 2 mm (the +X short side stays put — the shift
-// param is bumped +1 to compensate for the shorter length so only the
-// -X edge moves), and the ±Y long sides each extend OUTWARD by 1 mm.
-display_viewing_window_length_along_x_mm       = 48;  // was 50
-display_viewing_window_depth_along_y_mm        = 24
-;  // was 25
-display_window_shift_toward_joystick_x_mm      = 2.8;   // was 2
+display_viewing_window_length_along_x_mm       = 48;  // was 50, -1 mm/edge
+display_viewing_window_depth_along_y_mm        = 22;  // was 24, -1 mm/edge
+display_window_shift_toward_joystick_x_mm      = 2.8;
 display_window_origin_x_mm =
     display_minus_x_origin_mm
       + (display_footprint_length_along_x_mm
