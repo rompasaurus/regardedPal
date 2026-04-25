@@ -1605,3 +1605,23 @@ All 5 pieces exported cleanly (CGAL manifold) as 3MF for Bambu Studio: `base.3mf
 - **Input Tokens (est):** ~80
 - **Output Tokens (est):** ~8,000
 - **Summary:** 7 HEIC photos from the 2026-04-25 cradle insert print session converted to JPEG, renamed with descriptive `rev2-cradle-insert-*` names, and added to the blog post and design evolution doc. Covers standalone cradle with batteries, assembled stack with Pico 2 W, and side profile shots. Added `*.heic` to `.gitignore`. Grammar fix: "laying along X" → "lying along X".
+
+---
+
+## Prompt #246 — 2026-04-25
+
+**Prompt sequence:** "ok I have added a new pic this is the next design change we need to make I have the usb charge board placed where I ideally want it to be..." (followed by 6 refinement turns on battery bay walls, base plate trough orientation, and +X display connector cutout placement).
+
+- **Input Tokens (est):** ~600 across the sequence
+- **Output Tokens (est):** ~18,000
+- **Summary:** TP4056 USB-C charge board integration across all three parts. Enclosure extended 3 mm on -X (91.5→94.5 mm). Cradle insert: connecting block extended to 29 mm X / full height with concave battery curves, 1 mm TP4056 indent, USB-C cutout, AAA bay cuts restructured to outer difference, +X FPC cutout on bottom face. Base plate: square 5×5 mm pillar bases with 3 mm pegs, battery troughs carved into ±Y pocket sides. Top cover: USB-C cutout through -X wall, joystick hardcoded at x=79.35.
+
+---
+
+## Prompt #247 — 2026-04-25
+
+**Prompt:** "perfect render it and add it to the documentation and design evolution and update the site and blog commit then update the prompt file fix grammar"
+
+- **Input Tokens (est):** ~25
+- **Output Tokens (est):** ~6,000
+- **Summary:** 5 render PNGs generated for the v2 parts. New blog post `rev2-tp4056-integration.md` with all renders and the TP4056 reference photo. Design evolution doc updated with new section and 3 version history rows. Prompt log synced.

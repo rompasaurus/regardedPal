@@ -3122,3 +3122,46 @@ Every prompt entry below uses the following fields. Entries that don't yet list 
   - Grammar fix: "laying along X" → "lying along X" in prompt #242
 
 ---
+
+## Prompt #246 — 2026-04-25
+- **Prompt sequence:** "ok I have added a new pic this is the next design change we need to make I have the usb charge board placed where I ideally want it to be but what we have to do is extend the left side of the model by 3 mm then in the insert on the left side where it juts into meet the pico we need it to extend up and down to curve around the battery to allow then a 1 mm indent for the usb board to nestle into then we also need to modify the base plate so that it has square pillars with the pegs coming out 3 mm from them and a curved side extruding on the long sides where it will curve to fit the battery essentially it's going to lay flush and tightly hold in the battery and the right side of the board once closed" — followed by 6 refinement turns fixing battery bay wall clipping, flipping battery cradle trough orientation on the base plate (3 iterations: floating above → inverted arch → carved into plate body), adding the +X display connector cutout, and flipping the cutout to the bottom face.
+- **Input Tokens (est):** ~600 across the sequence
+- **Output Tokens (est):** ~18,000
+- **Commit:** `e3c3485` — `Rev 2 TP4056 integration — cradle v2, base plate v2, cover USB-C cutout`
+- **Files / interpretation:**
+  - `04-25-design-alterations/aaa-cradle-insert-v1.scad` (modified — 8 changes):
+    - `enclosure_outer_width_along_x_axis_mm`: 91.5 → 94.5 (+3 mm on -X side)
+    - Connecting block: `length_along_x_mm` 9.5 → 29 (accommodate 28 mm TP4056), `height_reduction_from_plug_mm` 3.0 → 0 (full plug height z=-5.1 to 7.0)
+    - `-X inset` updated to match: length 29, height reduction 0
+    - Concave battery-following curves on ±Y faces of the connecting block (horizontal cylinder subtractions at AAA bay centers, ~1.3 mm deep arcs)
+    - 1 mm TP4056 indent on connecting block top face (28.4 × 17.4 mm recess centered in Y)
+    - USB-C port cutout through the connecting block's -X face (10 × 5 mm slot at y=23, z=5.5)
+    - AAA bay cuts restructured: moved from inner `difference()` to an outer `difference()` wrapping the entire `union()` of plug + connecting block — eliminates residual walls at the block/bay junction. Bay X range extended from `plug_x_start_mm` (full length) instead of `connecting_block_x_end_mm`
+    - +X display connector cutout: 3 mm pocket from the **bottom face** at the +X end (z=-5.1 to -2.1), Pico nest Y width, for FPC connector/cable clearance
+  - `04-25-design-alterations/base-plate-v1.scad` (modified — 4 changes):
+    - `enclosure_outer_width_along_x_axis_mm`: 91.5 → 94.5
+    - `cradle_plug_x_end_mm`: 90.0 → 93.0 (matches wider cradle)
+    - Bare cylindrical pegs replaced with square 5×5 mm pillar bases (pocket floor to plate top) topped by 3 mm cylindrical pegs with chamfered tips
+    - Battery cradle troughs along ±Y sides: solid fills inside the pocket connected to the enclosure walls (from pocket floor z=1.7 to plate top z=7.0) with AAA cylinder subtracted downward — concave channels the cells drop into. Three iterations to get orientation right (initially floating above plate, then inverted arch, finally carved into plate body)
+  - `04-25-design-alterations/top-cover-windowed-screen-inlay-v3-2piece.scad` (modified — 3 changes):
+    - `enclosure_outer_width_along_x_axis_mm`: 91.5 → 94.5
+    - Joystick through-hole center hardcoded at x=79.35 (was computed formula that would shift +1.5 mm due to enclosure extension)
+    - USB-C port cutout through the -X wall (10 × 5 mm at y=23, z=5.5 cover-local)
+  - 5 render PNGs: `rev2-cradle-insert-v2-{iso,top}.png`, `rev2-base-plate-v2-{iso,top}.png`, `rev2-top-cover-v3-2piece-usbc-iso.png`
+  - `rev2-cradle-insert-tp4056-placement.jpg` — reference photo of the TP4056 board positioned in the cradle
+  - `website/docs/blog/posts/rev2-tp4056-integration.md` (new) — blog post covering all three part changes with renders
+  - `website/docs/docs/hardware/design-evolution.md` (modified) — new "Rev 2 — TP4056 Charge Board Integration" section with renders + 3 version history rows
+
+---
+
+## Prompt #247 — 2026-04-25
+- **Prompt:** "perfect render it and add it to the documentation and design evolution and update the site and blog commit then update the prompt file fix grammar"
+- **Input Tokens (est):** ~25
+- **Output Tokens (est):** ~6,000
+- **Commit:** `e3c3485` — (same commit as #246, documentation was bundled) + a follow-up commit for the prompt log.
+- **Files / interpretation:**
+  - Renders, blog post, and design evolution updates were included in the main commit above.
+  - `PromptProgression.md` (this file) — prompts #246–#247 appended.
+  - `website/docs/prompts/index.md` — synced with prompts #246–#247.
+
+---
