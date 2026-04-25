@@ -73,6 +73,10 @@
          <lastmod>2026-04-25</lastmod>
     </url>
     <url>
+         <loc>https://dilder.dev/blog/joystick-pcb-rev2-autoroute/</loc>
+         <lastmod>2026-04-25</lastmod>
+    </url>
+    <url>
          <loc>https://dilder.dev/blog/motion-location-detection/</loc>
          <lastmod>2026-04-25</lastmod>
     </url>
@@ -297,6 +301,14 @@
          <lastmod>2026-04-25</lastmod>
     </url>
     <url>
+         <loc>https://dilder.dev/blog/category/pcb/</loc>
+         <lastmod>2026-04-25</lastmod>
+    </url>
+    <url>
+         <loc>https://dilder.dev/blog/category/kicad/</loc>
+         <lastmod>2026-04-25</lastmod>
+    </url>
+    <url>
          <loc>https://dilder.dev/blog/category/enclosure/</loc>
          <lastmod>2026-04-25</lastmod>
     </url>
@@ -378,6 +390,10 @@
     </url>
     <url>
          <loc>https://dilder.dev/blog/category/hardware/page/2/</loc>
+         <lastmod>2026-04-25</lastmod>
+    </url>
+    <url>
+         <loc>https://dilder.dev/blog/category/hardware/page/3/</loc>
          <lastmod>2026-04-25</lastmod>
     </url>
 </urlset>

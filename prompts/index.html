@@ -954,6 +954,36 @@
   
   
     <li class="md-nav__item">
+      <a href="../blog/category/kicad/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    KiCad
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    
+  
+  
+    <li class="md-nav__item">
       <a href="../blog/category/manufacturing/" class="md-nav__link">
         
   
@@ -962,6 +992,36 @@
     
   
     Manufacturing
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    
+  
+  
+    <li class="md-nav__item">
+      <a href="../blog/category/pcb/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    PCB
   
 
     
@@ -4570,6 +4630,28 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#prompt-250-2026-04-26" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Prompt #250 — 2026-04-26
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#prompt-251-2026-04-26" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Prompt #251 — 2026-04-26
+      
+    </span>
+  </a>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -6397,6 +6479,28 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#prompt-250-2026-04-26" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Prompt #250 — 2026-04-26
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#prompt-251-2026-04-26" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Prompt #251 — 2026-04-26
+      
+    </span>
+  </a>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -7731,6 +7835,24 @@
 <li><strong>Input Tokens (est):</strong> ~400 across the sequence</li>
 <li><strong>Output Tokens (est):</strong> ~20,000</li>
 <li><strong>Summary:</strong> New <code>hardware-design/joystick-pcb/</code> KiCad 8 project: 20x20mm SKRHABE010 breakout PCB with schematic, layout, BOM (LCSC C139794, ~$15.50 for 5 assembled via JLCPCB). Base plate v3: battery rails +5mm height (extend 2mm above plate top), two 5x15mm support blocks centered on USB-C Y axis for TP4056 board retention. Design evolution and version history updated.</li>
+</ul>
+<hr />
+<h2 id="prompt-250-2026-04-26">Prompt #250 — 2026-04-26<a class="headerlink" href="#prompt-250-2026-04-26" title="Permanent link">&para;</a></h2>
+<p><strong>Prompt sequence:</strong> Joystick PCB iteration sequence (~10 turns) — opening with a parser error in the Rev 1 board ("the schematic won't open either"), through a footprint redesign request ("you halucinated a bunch and the wiring is completely unfeasable look online to see if similar pcb design are available to copy"), to autoroute requests ("autoroute the wiring 2 layer pcb… no 90 degre turns") and finally pinout verification ("confirm the schematic wiring steal an existing one rather than making it up").</p>
+<ul>
+<li><strong>Input Tokens (est):</strong> ~250 across the sequence</li>
+<li><strong>Output Tokens (est):</strong> ~38,000</li>
+<li><strong>Commit:</strong> <code>6d3bbe2</code></li>
+<li><strong>Summary:</strong> Joystick breakout PCB Rev 2.0 — three-stage repair. (1) Parser fixes: stripped illegal <code>;;</code> comments from the <code>.kicad_pcb</code>, replaced KiCad-rejected <code>net_label</code> with <code>label</code>, regenerated 35 bogus quoted UUIDs, added missing <code>(sheet_instances)</code>. (2) Footprint redesign: cloned the <code>SKRHA-boss</code> footprint from <code>crides/kleeb</code> (a production-tested keyboard library), rotated -45° so pads land axis-aligned. All clearances Python-verified before placement; wire pads relocated to clear the M3 mounting holes Rev 1 was overlapping. (3) Datasheet pinout + autoroute: fetched the Alps SKRHABE010 circuit-diagram GIF and confirmed three previously-wrong pin assignments. PCB autorouted headlessly via the <code>ghcr.io/freerouting/freerouting</code> Docker image (DSN export and SES import via <code>pcbnew</code> Python). Result: 23 segments + 1 via, <strong>8 bends all at 45°, zero 90° corners</strong>, 0 copper violations, 0 unconnected, 0 schematic-parity issues per <code>kicad-cli pcb drc</code>.</li>
+</ul>
+<hr />
+<h2 id="prompt-251-2026-04-26">Prompt #251 — 2026-04-26<a class="headerlink" href="#prompt-251-2026-04-26" title="Permanent link">&para;</a></h2>
+<p><strong>Prompt:</strong> "ok lets divide describe all the changes we made in all the session here today and commit all the change also add documentation for the python scripts in the scad folder and write up a hardware design process step document to encapsulate the prototyping process we been using and the evolution in the approach and find way to improve the process without needing to print out a massive amount of junk 3d prints updates the documentation everywhere else and update the design evolution with new renders for each commit and outline what was changes and the flow then update the website and blog with a new entry commit and then update the prompts file fix grammar commit and push"</p>
+<ul>
+<li><strong>Input Tokens (est):</strong> ~150</li>
+<li><strong>Output Tokens (est):</strong> ~25,000</li>
+<li><strong>Commit:</strong> <code>6d3bbe2</code> (substantive work) + a follow-up commit for the prompt-log entry</li>
+<li><strong>Summary:</strong> Documentation and process consolidation pass. New <code>hardware-design/scad Parts/README.md</code> documents the three SCAD helper scripts (<code>scad-export.py</code>, <code>bake-preset.py</code>, <code>export-preset.py</code>). New <code>hardware-design/HARDWARE-DESIGN-PROCESS.md</code> — retrospective on the SCAD→print and PCB→fab loops with concrete print-waste-reduction strategies (calibration coupons, SVG cross-sections, OpenSCAD presets for A/B testing, mandatory dimension comment blocks, machine-checkable clearance gates). Three high-quality PCB renders (top, bottom, iso) added to website assets. New blog post covering the Rev 2 redesign and the headless autoroute pipeline. <code>design-evolution.md</code> got a new section plus five new version-history rows.</li>
 </ul>
 
 
