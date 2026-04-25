@@ -1625,3 +1625,13 @@ All 5 pieces exported cleanly (CGAL manifold) as 3MF for Bambu Studio: `base.3mf
 - **Input Tokens (est):** ~25
 - **Output Tokens (est):** ~6,000
 - **Summary:** 5 render PNGs generated for the v2 parts. New blog post `rev2-tp4056-integration.md` with all renders and the TP4056 reference photo. Design evolution doc updated with new section and 3 version history rows. Prompt log synced.
+
+---
+
+## Prompt #248 — 2026-04-25
+
+**Prompt sequence:** Extended iterative session (~15 turns) refining all three SCAD parts: cradle C/T shapes, battery bay shifts, Pico nest length, base plate wall height/fillet/USB-C notch, top cover wall extension. Then Ansmann battery wiring guide, photo conversion, and docs update.
+
+- **Input Tokens (est):** ~1,500 across the sequence
+- **Output Tokens (est):** ~25,000
+- **Summary:** Cradle rebuilt from yesterday's v1 base with battery bays shifted 20mm toward -X, Pico nest extended to 55mm, +X FPC cutout. Base plate: USB-C stadium notch on +X wall, troughs aligned to cradle, 4mm fillet, 11.5mm height/1.2mm floor. Cover: 5mm wall extension below mating plane. New Ansmann 1.5V Li-Ion AAA series wiring guide with Bauhaus sourcing tips. 3 print photos converted. scad-export.py updated with date-sorted file browser and "View today's models" menu.

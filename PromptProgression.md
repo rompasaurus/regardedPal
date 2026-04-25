@@ -3165,3 +3165,19 @@ Every prompt entry below uses the following fields. Entries that don't yet list 
   - `website/docs/prompts/index.md` — synced with prompts #246–#247.
 
 ---
+
+## Prompt #248 — 2026-04-25
+- **Prompt sequence:** Extended iterative session covering cradle insert C/T shape refinement (battery bay X shift, Pico nest length, connecting block sizing), base plate modifications (wall height, battery rail adjustments, USB-C notch placement/rounding, bottom fillet), top cover wall extension, and mating verification. ~15 refinement turns including several undo/redo cycles to dial in the geometry.
+- **Input Tokens (est):** ~1,500 across the sequence
+- **Output Tokens (est):** ~25,000
+- **Commit:** `a0171e1`
+- **Files / interpretation:**
+  - `aaa-cradle-insert-v1.scad` — rebuilt from yesterday's v1 base: enclosure +3 mm on -X, connecting block 29 mm/full height with TP4056 indent and battery arcs, battery bays shifted 20 mm toward -X, Pico nest extended to 55 mm clear length, +X FPC cutout on bottom face, no USB-C cutout
+  - `base-plate-v1.scad` — USB-C rounded stadium notch on +X wall (8.94×3.26 mm + 0.2 mm tolerance), battery troughs aligned to cradle (x=15.4), 4 mm bottom fillet matching cover bullnose, 11.5 mm height with 1.2 mm floor, square pillar bases, rail depth reduced 2 mm/side, outside edges pulled to inner wall
+  - `top-cover-windowed-screen-inlay-v3-2piece.scad` — 5 mm wall extension below mating plane (z=-5), cavity/pillars/bores extended to match, USB-C cutout removed (lives on base plate only), joystick hardcoded at x=79.35
+  - `scad-export.py` — file browser sorted by mod time (most recent first) with date/time column, new menu option [4] "View today's SCAD models"
+  - `hardware-design/ansmann-1.5v-aaa-series-wiring-guide.md` (new) — full wiring guide for 2× Ansmann 1.5V Li-Ion AAA in series (3.0V → VSYS), battery contact recommendations (Bauhaus, Keystone, BeCu), step-by-step soldering, wire routing, safety notes, charging instructions, alternative 10440 config
+  - 3 HEIC photos converted: `rev2-ansmann-batteries-and-cradle-overview.jpg`, `rev2-cradle-v2-topdown-ansmann-pico-tp4056.jpg`, `rev2-cradle-v2-side-profile-ansmann.jpg`
+  - Blog post and design evolution updated with Ansmann battery photos and compatibility notes
+
+---
