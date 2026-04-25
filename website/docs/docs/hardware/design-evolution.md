@@ -277,6 +277,36 @@ Source: [`04-24-designs-alterations/aaa-cradle-insert-v1.scad`](https://github.c
 
 ---
 
+## Rev 2 — TP4056 Charge Board Integration (2026-04-25)
+
+The cradle insert, base plate, and top cover redesigned to integrate the TP4056 USB-C charge board. The enclosure extends 3 mm on the -X side to accommodate the board, which sits in a 1 mm indent on the connecting block's top face with its USB-C port accessible through cutouts in the cradle and cover walls.
+
+### Cradle insert v2
+
+The connecting block extended to 29 mm in X and full plug height, with concave battery-following curves on the ±Y faces, a 1 mm TP4056 indent, and a USB-C port cutout through the -X face. AAA bay cuts restructured to an outer `difference()` so they pass cleanly through the connecting block with no residual walls. A 3 mm FPC connector cutout added on the bottom face at the +X end.
+
+![Cradle insert v2 — isometric](../../assets/images/enclosure/rev2-cradle-insert-v2-iso.png)
+
+![Cradle insert v2 — top view](../../assets/images/enclosure/rev2-cradle-insert-v2-top.png)
+
+### Base plate v2
+
+Square 5×5 mm pillar bases replace bare cylindrical pegs (pillars from pocket floor to plate top, 3 mm pegs on top). Battery cradle troughs carved into the ±Y pocket sides — solid fills connected to the enclosure walls with the AAA cylinder subtracted downward, creating concave channels the cells drop into.
+
+![Base plate v2 — isometric](../../assets/images/enclosure/rev2-base-plate-v2-iso.png)
+
+![Base plate v2 — top view](../../assets/images/enclosure/rev2-base-plate-v2-top.png)
+
+### Top cover — USB-C cutout
+
+USB-C port cutout (10×5 mm) through the -X wall at y=23, z=5.5 (cover-local). Joystick through-hole position hardcoded at x=79.35 to prevent the 1.5 mm shift from the enclosure extension.
+
+![Top cover with USB-C cutout — isometric](../../assets/images/enclosure/rev2-top-cover-v3-2piece-usbc-iso.png)
+
+Source: [`04-25-design-alterations/aaa-cradle-insert-v1.scad`](https://github.com/rompasaurus/dilder/blob/main/hardware-design/scad%20Parts/Rev%202%20extended%20with%20joystick/04-25-design-alterations/aaa-cradle-insert-v1.scad), [`04-25-design-alterations/base-plate-v1.scad`](https://github.com/rompasaurus/dilder/blob/main/hardware-design/scad%20Parts/Rev%202%20extended%20with%20joystick/04-25-design-alterations/base-plate-v1.scad), [`04-25-design-alterations/top-cover-windowed-screen-inlay-v3-2piece.scad`](https://github.com/rompasaurus/dilder/blob/main/hardware-design/scad%20Parts/Rev%202%20extended%20with%20joystick/04-25-design-alterations/top-cover-windowed-screen-inlay-v3-2piece.scad).
+
+---
+
 ## Current Assembly (ESP32-S3 Enclosure)
 
 The enclosure is a stacked shell design housing an Olimex ESP32-S3-DevKit-Lipo, Waveshare 2.13" e-ink display, and 1000mAh LiPo battery. Five parts print flat without supports and assemble with 4 corner screw posts.
@@ -473,3 +503,6 @@ Provides a menu to browse .scad files, pick export format (3MF/STL), set output 
 | 2026-04-24 | Rev 2 base | v4 2-piece open | v3 + two rectangular insertion slots through the -X end wall so 10440 cells slide in from outside without unbolting the cover; raised ±Y lips on the cell-bay ceiling at z=14–15 for cover-base alignment on the non-battery long edges |
 | 2026-04-25 | Rev 2 AAA cradle insert | v1 print | First print of the drop-in cradle insert — dual AAA bays along ±Y, center Pico nest cutout, connecting block at -X. Cells drop in from above, cradle plugs into the cover's negative space |
 | 2026-04-25 | Rev 2 base plate | v1 print | First print of the shallow base plate with four corner pegs for cover retention and a pocket that receives the cradle's bottom 5.1 mm |
+| 2026-04-25 | Rev 2 cradle insert | v2 | TP4056 integration: enclosure +3 mm on -X, connecting block extended to 29 mm X / full height, concave battery curves on ±Y faces, 1 mm TP4056 indent, USB-C cutout, AAA bay cuts restructured to outer difference, +X FPC connector cutout on bottom face |
+| 2026-04-25 | Rev 2 base plate | v2 | Square 5×5 mm pillar bases with 3 mm pegs, battery cradle troughs carved into ±Y pocket sides (solid fill + cylinder subtraction), enclosure +3 mm on -X |
+| 2026-04-25 | Rev 2 top cover (screen inlay) | v3-2piece USB-C | Enclosure +3 mm on -X, USB-C cutout (10×5 mm) through -X wall, joystick position hardcoded at x=79.35 |
