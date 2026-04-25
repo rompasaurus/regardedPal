@@ -6,802 +6,180 @@
   (paper "A4")
   (title_block
     (title "Dilder Joystick Breakout PCB")
-    (date "2026-04-25")
-    (rev "1.0")
+    (date "2026-04-26")
+    (rev "2.0")
     (comment 1 "5-direction navigation switch breakout")
     (comment 2 "Alps Alpine SKRHABE010 / LCSC C139794")
-    (comment 3 "20x20mm PCB for enclosure pocket mount")
-    (comment 4 "Dilder Project - github.com/rompasaurus/Dilder")
+    (comment 3 "Symbol cloned from crides/kleeb switch:SKRHA")
+    (comment 4 "Pinout per Alps datasheet circuit diagram")
   )
   (lib_symbols
     (symbol "Switch:SW_SKRHABE010"
-      (pin_names
-        (offset 0.254)
-      )
       (exclude_from_sim no)
       (in_bom yes)
       (on_board yes)
       (property "Reference" "SW"
         (at 0 8.89 0)
-        (effects
-          (font
-            (size 1.27 1.27)
-          )
-        )
+        (effects (font (size 1.27 1.27)))
       )
       (property "Value" "SKRHABE010"
         (at 0 -8.89 0)
-        (effects
-          (font
-            (size 1.27 1.27)
-          )
-        )
+        (effects (font (size 1.27 1.27)))
       )
       (property "Footprint" "joystick-pcb:SKRHABE010"
         (at 0 -11.43 0)
-        (effects
-          (font
-            (size 1.27 1.27)
-          )
-          (hide yes)
-        )
+        (effects (font (size 1.27 1.27)) (hide yes))
       )
-      (property "Datasheet" "https://www.mouser.com/datasheet/2/15/SKRH-1370966.pdf"
+      (property "Datasheet" "https://tech.alpsalpine.com/e/products/detail/SKRHABE010/"
         (at 0 -13.97 0)
-        (effects
-          (font
-            (size 1.27 1.27)
-          )
-          (hide yes)
-        )
+        (effects (font (size 1.27 1.27)) (hide yes))
       )
       (property "LCSC" "C139794"
         (at 0 -16.51 0)
-        (effects
-          (font
-            (size 1.27 1.27)
-          )
-          (hide yes)
-        )
+        (effects (font (size 1.27 1.27)) (hide yes))
       )
       (property "MPN" "SKRHABE010"
         (at 0 -19.05 0)
-        (effects
-          (font
-            (size 1.27 1.27)
-          )
-          (hide yes)
-        )
+        (effects (font (size 1.27 1.27)) (hide yes))
       )
       (symbol "SW_SKRHABE010_0_1"
-        (rectangle
-          (start -6.35 7.62)
-          (end 6.35 -7.62)
-          (stroke
-            (width 0.254)
-            (type default)
-          )
-          (fill
-            (type background)
-          )
-        )
-        (circle
-          (center 0 0)
-          (radius 2.54)
-          (stroke
-            (width 0.254)
-            (type default)
-          )
-          (fill
-            (type none)
-          )
-        )
         (polyline
-          (pts (xy 0 2.54) (xy 0 5.08))
-          (stroke
-            (width 0.254)
-            (type default)
-          )
-        )
-        (polyline
-          (pts (xy 0 -2.54) (xy 0 -5.08))
-          (stroke
-            (width 0.254)
-            (type default)
-          )
-        )
-        (polyline
-          (pts (xy -2.54 0) (xy -5.08 0))
-          (stroke
-            (width 0.254)
-            (type default)
-          )
-        )
-        (polyline
-          (pts (xy 2.54 0) (xy 5.08 0))
-          (stroke
-            (width 0.254)
-            (type default)
-          )
-        )
-        (text "U"
-          (at 0 3.81 0)
-          (effects
-            (font
-              (size 0.762 0.762)
-            )
-          )
-        )
-        (text "D"
-          (at 0 -3.81 0)
-          (effects
-            (font
-              (size 0.762 0.762)
-            )
-          )
-        )
-        (text "L"
-          (at -3.81 0 0)
-          (effects
-            (font
-              (size 0.762 0.762)
-            )
-          )
-        )
-        (text "R"
-          (at 3.81 0 0)
-          (effects
-            (font
-              (size 0.762 0.762)
-            )
-          )
+          (pts (xy 0 -6.35) (xy 6.35 0) (xy 0 6.35) (xy -6.35 0) (xy 0 -6.35))
+          (stroke (width 0.1524) (type default))
+          (fill (type none))
         )
       )
       (symbol "SW_SKRHABE010_1_1"
-        (pin passive line
-          (at 0 10.16 270)
-          (length 2.54)
-          (name "UP"
-            (effects
-              (font
-                (size 1.27 1.27)
-              )
-            )
-          )
-          (number "1"
-            (effects
-              (font
-                (size 1.27 1.27)
-              )
-            )
-          )
+        (pin bidirectional line (at -8.89 2.54 0) (length 2.54)
+          (name "A" (effects (font (size 1.27 1.27))))
+          (number "1" (effects (font (size 1.27 1.27))))
         )
-        (pin passive line
-          (at 0 -10.16 90)
-          (length 2.54)
-          (name "DOWN"
-            (effects
-              (font
-                (size 1.27 1.27)
-              )
-            )
-          )
-          (number "2"
-            (effects
-              (font
-                (size 1.27 1.27)
-              )
-            )
-          )
+        (pin bidirectional line (at -8.89 0 0) (length 2.54)
+          (name "Center" (effects (font (size 1.27 1.27))))
+          (number "2" (effects (font (size 1.27 1.27))))
         )
-        (pin passive line
-          (at -8.89 0 0)
-          (length 2.54)
-          (name "LEFT"
-            (effects
-              (font
-                (size 1.27 1.27)
-              )
-            )
-          )
-          (number "3"
-            (effects
-              (font
-                (size 1.27 1.27)
-              )
-            )
-          )
+        (pin bidirectional line (at -8.89 -2.54 0) (length 2.54)
+          (name "C" (effects (font (size 1.27 1.27))))
+          (number "3" (effects (font (size 1.27 1.27))))
         )
-        (pin passive line
-          (at 8.89 0 180)
-          (length 2.54)
-          (name "RIGHT"
-            (effects
-              (font
-                (size 1.27 1.27)
-              )
-            )
-          )
-          (number "4"
-            (effects
-              (font
-                (size 1.27 1.27)
-              )
-            )
-          )
+        (pin bidirectional line (at 8.89 2.54 180) (length 2.54)
+          (name "B" (effects (font (size 1.27 1.27))))
+          (number "4" (effects (font (size 1.27 1.27))))
         )
-        (pin passive line
-          (at 8.89 5.08 180)
-          (length 2.54)
-          (name "CENTER"
-            (effects
-              (font
-                (size 1.27 1.27)
-              )
-            )
-          )
-          (number "5"
-            (effects
-              (font
-                (size 1.27 1.27)
-              )
-            )
-          )
+        (pin bidirectional line (at 8.89 0 180) (length 2.54)
+          (name "Common" (effects (font (size 1.27 1.27))))
+          (number "5" (effects (font (size 1.27 1.27))))
         )
-        (pin passive line
-          (at 8.89 -5.08 180)
-          (length 2.54)
-          (name "COM"
-            (effects
-              (font
-                (size 1.27 1.27)
-              )
-            )
-          )
-          (number "6"
-            (effects
-              (font
-                (size 1.27 1.27)
-              )
-            )
-          )
+        (pin bidirectional line (at 8.89 -2.54 180) (length 2.54)
+          (name "D" (effects (font (size 1.27 1.27))))
+          (number "6" (effects (font (size 1.27 1.27))))
         )
       )
     )
     (symbol "Connector:Conn_01x06_Pin"
-      (pin_names
-        (offset 1.016) hide)
+      (pin_names (offset 1.016) hide)
       (exclude_from_sim no)
       (in_bom yes)
       (on_board yes)
       (property "Reference" "J"
         (at 0 7.62 0)
-        (effects
-          (font
-            (size 1.27 1.27)
-          )
-        )
+        (effects (font (size 1.27 1.27)))
       )
       (property "Value" "Conn_01x06_Pin"
         (at 0 -10.16 0)
-        (effects
-          (font
-            (size 1.27 1.27)
-          )
-        )
+        (effects (font (size 1.27 1.27)))
       )
-      (property "Footprint" "Connector_PinHeader_2.54mm:PinHeader_1x06_P2.54mm_Vertical"
+      (property "Footprint" "joystick-pcb:WirePads_1x06_P1.8mm"
         (at 0 0 0)
-        (effects
-          (font
-            (size 1.27 1.27)
-          )
-          (hide yes)
-        )
+        (effects (font (size 1.27 1.27)) (hide yes))
       )
       (property "Datasheet" "~"
         (at 0 0 0)
-        (effects
-          (font
-            (size 1.27 1.27)
-          )
-          (hide yes)
-        )
+        (effects (font (size 1.27 1.27)) (hide yes))
       )
       (symbol "Conn_01x06_Pin_1_1"
-        (polyline
-          (pts (xy 1.27 -7.62) (xy 0.8636 -7.62))
-          (stroke
-            (width 0.1524)
-            (type default)
-          )
+        (rectangle (start -1.27 -7.874) (end 1.27 7.874)
+          (stroke (width 0.1524) (type default))
+          (fill (type background))
         )
-        (polyline
-          (pts (xy 1.27 -5.08) (xy 0.8636 -5.08))
-          (stroke
-            (width 0.1524)
-            (type default)
-          )
+        (rectangle (start 0 -7.874) (end 0.8636 -7.366)
+          (stroke (width 0.1524) (type default))
+          (fill (type outline))
         )
-        (polyline
-          (pts (xy 1.27 -2.54) (xy 0.8636 -2.54))
-          (stroke
-            (width 0.1524)
-            (type default)
-          )
+        (rectangle (start 0 -5.334) (end 0.8636 -4.826)
+          (stroke (width 0.1524) (type default))
+          (fill (type outline))
         )
-        (polyline
-          (pts (xy 1.27 0) (xy 0.8636 0))
-          (stroke
-            (width 0.1524)
-            (type default)
-          )
+        (rectangle (start 0 -2.794) (end 0.8636 -2.286)
+          (stroke (width 0.1524) (type default))
+          (fill (type outline))
         )
-        (polyline
-          (pts (xy 1.27 2.54) (xy 0.8636 2.54))
-          (stroke
-            (width 0.1524)
-            (type default)
-          )
+        (rectangle (start 0 -0.254) (end 0.8636 0.254)
+          (stroke (width 0.1524) (type default))
+          (fill (type outline))
         )
-        (polyline
-          (pts (xy 1.27 5.08) (xy 0.8636 5.08))
-          (stroke
-            (width 0.1524)
-            (type default)
-          )
+        (rectangle (start 0 2.286) (end 0.8636 2.794)
+          (stroke (width 0.1524) (type default))
+          (fill (type outline))
         )
-        (rectangle
-          (start 0.8636 -7.874)
-          (end 0 -7.366)
-          (stroke
-            (width 0.1524)
-            (type default)
-          )
-          (fill
-            (type outline)
-          )
+        (rectangle (start 0 4.826) (end 0.8636 5.334)
+          (stroke (width 0.1524) (type default))
+          (fill (type outline))
         )
-        (rectangle
-          (start 0.8636 -5.334)
-          (end 0 -4.826)
-          (stroke
-            (width 0.1524)
-            (type default)
-          )
-          (fill
-            (type outline)
-          )
+        (pin passive line (at 3.81 5.08 180) (length 2.54)
+          (name "Pin_1" (effects (font (size 1.27 1.27))))
+          (number "1" (effects (font (size 1.27 1.27))))
         )
-        (rectangle
-          (start 0.8636 -2.794)
-          (end 0 -2.286)
-          (stroke
-            (width 0.1524)
-            (type default)
-          )
-          (fill
-            (type outline)
-          )
+        (pin passive line (at 3.81 2.54 180) (length 2.54)
+          (name "Pin_2" (effects (font (size 1.27 1.27))))
+          (number "2" (effects (font (size 1.27 1.27))))
         )
-        (rectangle
-          (start 0.8636 -0.254)
-          (end 0 0.254)
-          (stroke
-            (width 0.1524)
-            (type default)
-          )
-          (fill
-            (type outline)
-          )
+        (pin passive line (at 3.81 0 180) (length 2.54)
+          (name "Pin_3" (effects (font (size 1.27 1.27))))
+          (number "3" (effects (font (size 1.27 1.27))))
         )
-        (rectangle
-          (start 0.8636 2.286)
-          (end 0 2.794)
-          (stroke
-            (width 0.1524)
-            (type default)
-          )
-          (fill
-            (type outline)
-          )
+        (pin passive line (at 3.81 -2.54 180) (length 2.54)
+          (name "Pin_4" (effects (font (size 1.27 1.27))))
+          (number "4" (effects (font (size 1.27 1.27))))
         )
-        (rectangle
-          (start 0.8636 4.826)
-          (end 0 5.334)
-          (stroke
-            (width 0.1524)
-            (type default)
-          )
-          (fill
-            (type outline)
-          )
+        (pin passive line (at 3.81 -5.08 180) (length 2.54)
+          (name "Pin_5" (effects (font (size 1.27 1.27))))
+          (number "5" (effects (font (size 1.27 1.27))))
         )
-        (pin passive line
-          (at 3.81 5.08 180)
-          (length 2.54)
-          (name "Pin_1"
-            (effects
-              (font
-                (size 1.27 1.27)
-              )
-            )
-          )
-          (number "1"
-            (effects
-              (font
-                (size 1.27 1.27)
-              )
-            )
-          )
-        )
-        (pin passive line
-          (at 3.81 2.54 180)
-          (length 2.54)
-          (name "Pin_2"
-            (effects
-              (font
-                (size 1.27 1.27)
-              )
-            )
-          )
-          (number "2"
-            (effects
-              (font
-                (size 1.27 1.27)
-              )
-            )
-          )
-        )
-        (pin passive line
-          (at 3.81 0 180)
-          (length 2.54)
-          (name "Pin_3"
-            (effects
-              (font
-                (size 1.27 1.27)
-              )
-            )
-          )
-          (number "3"
-            (effects
-              (font
-                (size 1.27 1.27)
-              )
-            )
-          )
-        )
-        (pin passive line
-          (at 3.81 -2.54 180)
-          (length 2.54)
-          (name "Pin_4"
-            (effects
-              (font
-                (size 1.27 1.27)
-              )
-            )
-          )
-          (number "4"
-            (effects
-              (font
-                (size 1.27 1.27)
-              )
-            )
-          )
-        )
-        (pin passive line
-          (at 3.81 -5.08 180)
-          (length 2.54)
-          (name "Pin_5"
-            (effects
-              (font
-                (size 1.27 1.27)
-              )
-            )
-          )
-          (number "5"
-            (effects
-              (font
-                (size 1.27 1.27)
-              )
-            )
-          )
-        )
-        (pin passive line
-          (at 3.81 -7.62 180)
-          (length 2.54)
-          (name "Pin_6"
-            (effects
-              (font
-                (size 1.27 1.27)
-              )
-            )
-          )
-          (number "6"
-            (effects
-              (font
-                (size 1.27 1.27)
-              )
-            )
-          )
+        (pin passive line (at 3.81 -7.62 180) (length 2.54)
+          (name "Pin_6" (effects (font (size 1.27 1.27))))
+          (number "6" (effects (font (size 1.27 1.27))))
         )
       )
     )
     (symbol "Mechanical:MountingHole"
-      (pin_names
-        (offset 1.016)
-      )
+      (pin_names (offset 1.016))
       (exclude_from_sim yes)
       (in_bom no)
       (on_board yes)
       (property "Reference" "H"
         (at 0 5.08 0)
-        (effects
-          (font
-            (size 1.27 1.27)
-          )
-        )
+        (effects (font (size 1.27 1.27)))
       )
       (property "Value" "MountingHole"
         (at 0 3.175 0)
-        (effects
-          (font
-            (size 1.27 1.27)
-          )
-        )
+        (effects (font (size 1.27 1.27)))
       )
       (property "Footprint" "MountingHole:MountingHole_3.2mm_M3"
         (at 0 0 0)
-        (effects
-          (font
-            (size 1.27 1.27)
-          )
-          (hide yes)
-        )
+        (effects (font (size 1.27 1.27)) (hide yes))
       )
       (property "Datasheet" "~"
         (at 0 0 0)
-        (effects
-          (font
-            (size 1.27 1.27)
-          )
-          (hide yes)
-        )
+        (effects (font (size 1.27 1.27)) (hide yes))
       )
       (symbol "MountingHole_0_1"
-        (circle
-          (center 0 0)
-          (radius 1.27)
-          (stroke
-            (width 1.27)
-            (type default)
-          )
-          (fill
-            (type none)
-          )
+        (circle (center 0 0) (radius 1.27)
+          (stroke (width 1.27) (type default))
+          (fill (type none))
         )
       )
     )
-  )
-
-  (junction
-    (at 177.8 76.2)
-    (diameter 0)
-    (color 0 0 0 0)
-    (uuid "j001")
-  )
-
-  (wire
-    (pts (xy 139.7 68.58) (xy 160.02 68.58))
-    (stroke
-      (width 0)
-      (type default)
-    )
-    (uuid "w001")
-  )
-  (wire
-    (pts (xy 160.02 68.58) (xy 160.02 60.96))
-    (stroke
-      (width 0)
-      (type default)
-    )
-    (uuid "w002")
-  )
-  (wire
-    (pts (xy 160.02 60.96) (xy 177.8 60.96))
-    (stroke
-      (width 0)
-      (type default)
-    )
-    (uuid "w003")
-  )
-
-  (wire
-    (pts (xy 139.7 73.66) (xy 162.56 73.66))
-    (stroke
-      (width 0)
-      (type default)
-    )
-    (uuid "w004")
-  )
-  (wire
-    (pts (xy 162.56 73.66) (xy 162.56 63.5))
-    (stroke
-      (width 0)
-      (type default)
-    )
-    (uuid "w005")
-  )
-  (wire
-    (pts (xy 162.56 63.5) (xy 177.8 63.5))
-    (stroke
-      (width 0)
-      (type default)
-    )
-    (uuid "w006")
-  )
-
-  (wire
-    (pts (xy 121.92 78.74) (xy 109.22 78.74))
-    (stroke
-      (width 0)
-      (type default)
-    )
-    (uuid "w007")
-  )
-  (wire
-    (pts (xy 109.22 78.74) (xy 109.22 66.04))
-    (stroke
-      (width 0)
-      (type default)
-    )
-    (uuid "w008")
-  )
-  (wire
-    (pts (xy 109.22 66.04) (xy 177.8 66.04))
-    (stroke
-      (width 0)
-      (type default)
-    )
-    (uuid "w009")
-  )
-
-  (wire
-    (pts (xy 139.7 78.74) (xy 152.4 78.74))
-    (stroke
-      (width 0)
-      (type default)
-    )
-    (uuid "w010")
-  )
-  (wire
-    (pts (xy 152.4 78.74) (xy 152.4 68.58))
-    (stroke
-      (width 0)
-      (type default)
-    )
-    (uuid "w011")
-  )
-  (wire
-    (pts (xy 152.4 68.58) (xy 177.8 68.58))
-    (stroke
-      (width 0)
-      (type default)
-    )
-    (uuid "w012")
-  )
-
-  (wire
-    (pts (xy 130.81 88.9) (xy 130.81 93.98))
-    (stroke
-      (width 0)
-      (type default)
-    )
-    (uuid "w013")
-  )
-  (wire
-    (pts (xy 130.81 93.98) (xy 165.1 93.98))
-    (stroke
-      (width 0)
-      (type default)
-    )
-    (uuid "w014")
-  )
-  (wire
-    (pts (xy 165.1 93.98) (xy 165.1 71.12))
-    (stroke
-      (width 0)
-      (type default)
-    )
-    (uuid "w015")
-  )
-  (wire
-    (pts (xy 165.1 71.12) (xy 177.8 71.12))
-    (stroke
-      (width 0)
-      (type default)
-    )
-    (uuid "w016")
-  )
-
-  (wire
-    (pts (xy 139.7 83.82) (xy 167.64 83.82))
-    (stroke
-      (width 0)
-      (type default)
-    )
-    (uuid "w017")
-  )
-  (wire
-    (pts (xy 167.64 83.82) (xy 167.64 76.2))
-    (stroke
-      (width 0)
-      (type default)
-    )
-    (uuid "w018")
-  )
-  (wire
-    (pts (xy 167.64 76.2) (xy 177.8 76.2))
-    (stroke
-      (width 0)
-      (type default)
-    )
-    (uuid "w019")
-  )
-
-  (net_label "JOY_UP"
-    (at 148.59 60.96 0)
-    (effects
-      (font
-        (size 1.27 1.27)
-      )
-    )
-    (uuid "nl001")
-  )
-  (net_label "JOY_DOWN"
-    (at 148.59 63.5 0)
-    (effects
-      (font
-        (size 1.27 1.27)
-      )
-    )
-    (uuid "nl002")
-  )
-  (net_label "JOY_LEFT"
-    (at 148.59 66.04 0)
-    (effects
-      (font
-        (size 1.27 1.27)
-      )
-    )
-    (uuid "nl003")
-  )
-  (net_label "JOY_RIGHT"
-    (at 148.59 68.58 0)
-    (effects
-      (font
-        (size 1.27 1.27)
-      )
-    )
-    (uuid "nl004")
-  )
-  (net_label "JOY_CENTER"
-    (at 148.59 71.12 0)
-    (effects
-      (font
-        (size 1.27 1.27)
-      )
-    )
-    (uuid "nl005")
-  )
-  (net_label "GND"
-    (at 148.59 76.2 0)
-    (effects
-      (font
-        (size 1.27 1.27)
-      )
-    )
-    (uuid "nl006")
   )
 
   (symbol
@@ -812,248 +190,298 @@
     (in_bom yes)
     (on_board yes)
     (dnp no)
-    (uuid "c0a1b2c3-d4e5-f6a7-b8c9-d0e1f2a3b4c5")
+    (uuid c0a1b2c3-d4e5-46a7-b8c9-d0e1f2a3b4c5)
     (property "Reference" "SW1"
       (at 130.81 67.31 0)
-      (effects
-        (font
-          (size 1.27 1.27)
-        )
-      )
+      (effects (font (size 1.27 1.27)))
     )
     (property "Value" "SKRHABE010"
       (at 130.81 90.17 0)
-      (effects
-        (font
-          (size 1.27 1.27)
-        )
-      )
+      (effects (font (size 1.27 1.27)))
     )
     (property "Footprint" "joystick-pcb:SKRHABE010"
       (at 130.81 92.71 0)
-      (effects
-        (font
-          (size 1.27 1.27)
-        )
-        (hide yes)
-      )
+      (effects (font (size 1.27 1.27)) (hide yes))
     )
-    (property "Datasheet" "https://www.mouser.com/datasheet/2/15/SKRH-1370966.pdf"
+    (property "Datasheet" "https://tech.alpsalpine.com/e/products/detail/SKRHABE010/"
       (at 130.81 95.25 0)
-      (effects
-        (font
-          (size 1.27 1.27)
-        )
-        (hide yes)
-      )
+      (effects (font (size 1.27 1.27)) (hide yes))
     )
     (property "LCSC" "C139794"
       (at 130.81 97.79 0)
-      (effects
-        (font
-          (size 1.27 1.27)
+      (effects (font (size 1.27 1.27)) (hide yes))
+    )
+    (pin "1" (uuid 11000000-0000-4000-8000-000000000001))
+    (pin "2" (uuid 11000000-0000-4000-8000-000000000002))
+    (pin "3" (uuid 11000000-0000-4000-8000-000000000003))
+    (pin "4" (uuid 11000000-0000-4000-8000-000000000004))
+    (pin "5" (uuid 11000000-0000-4000-8000-000000000005))
+    (pin "6" (uuid 11000000-0000-4000-8000-000000000006))
+    (instances
+      (project "joystick-pcb"
+        (path "/d9e59a0e-6c92-4edb-a23d-07e6fbe0eb8e"
+          (reference "SW1") (unit 1)
         )
-        (hide yes)
       )
-    )
-    (pin "1"
-      (uuid "p001")
-    )
-    (pin "2"
-      (uuid "p002")
-    )
-    (pin "3"
-      (uuid "p003")
-    )
-    (pin "4"
-      (uuid "p004")
-    )
-    (pin "5"
-      (uuid "p005")
-    )
-    (pin "6"
-      (uuid "p006")
     )
   )
 
   (symbol
     (lib_id "Connector:Conn_01x06_Pin")
-    (at 181.61 68.58 0)
+    (at 158.75 78.74 0)
     (unit 1)
     (exclude_from_sim no)
     (in_bom yes)
     (on_board yes)
     (dnp no)
-    (uuid "a1b2c3d4-e5f6-a7b8-c9d0-e1f2a3b4c5d6")
+    (uuid a1b2c3d4-e5f6-47b8-89d0-e1f2a3b4c5d6)
     (property "Reference" "J1"
-      (at 181.61 55.88 0)
-      (effects
-        (font
-          (size 1.27 1.27)
-        )
-      )
+      (at 158.75 68.58 0)
+      (effects (font (size 1.27 1.27)))
     )
     (property "Value" "Wire_Pads"
-      (at 181.61 81.28 0)
-      (effects
-        (font
-          (size 1.27 1.27)
+      (at 158.75 90.17 0)
+      (effects (font (size 1.27 1.27)))
+    )
+    (property "Footprint" "joystick-pcb:WirePads_1x06_P1.8mm"
+      (at 158.75 78.74 0)
+      (effects (font (size 1.27 1.27)) (hide yes))
+    )
+    (pin "1" (uuid 22000000-0000-4000-8000-000000000001))
+    (pin "2" (uuid 22000000-0000-4000-8000-000000000002))
+    (pin "3" (uuid 22000000-0000-4000-8000-000000000003))
+    (pin "4" (uuid 22000000-0000-4000-8000-000000000004))
+    (pin "5" (uuid 22000000-0000-4000-8000-000000000005))
+    (pin "6" (uuid 22000000-0000-4000-8000-000000000006))
+    (instances
+      (project "joystick-pcb"
+        (path "/d9e59a0e-6c92-4edb-a23d-07e6fbe0eb8e"
+          (reference "J1") (unit 1)
         )
       )
     )
-    (property "Footprint" "joystick-pcb:WirePads_1x06_P2.0mm"
-      (at 181.61 68.58 0)
-      (effects
-        (font
-          (size 1.27 1.27)
-        )
-        (hide yes)
-      )
-    )
-    (pin "1"
-      (uuid "jp001")
-    )
-    (pin "2"
-      (uuid "jp002")
-    )
-    (pin "3"
-      (uuid "jp003")
-    )
-    (pin "4"
-      (uuid "jp004")
-    )
-    (pin "5"
-      (uuid "jp005")
-    )
-    (pin "6"
-      (uuid "jp006")
-    )
+  )
+
+  (label "JOY_UP"
+    (at 119.38 76.2 180)
+    (effects (font (size 1.27 1.27)) (justify right))
+    (uuid 33000000-0000-4000-8000-000000000001)
+  )
+  (label "JOY_CENTER"
+    (at 119.38 78.74 180)
+    (effects (font (size 1.27 1.27)) (justify right))
+    (uuid 33000000-0000-4000-8000-000000000002)
+  )
+  (label "JOY_DOWN"
+    (at 119.38 81.28 180)
+    (effects (font (size 1.27 1.27)) (justify right))
+    (uuid 33000000-0000-4000-8000-000000000003)
+  )
+  (label "JOY_LEFT"
+    (at 142.24 76.2 0)
+    (effects (font (size 1.27 1.27)) (justify left))
+    (uuid 33000000-0000-4000-8000-000000000004)
+  )
+  (label "GND"
+    (at 142.24 78.74 0)
+    (effects (font (size 1.27 1.27)) (justify left))
+    (uuid 33000000-0000-4000-8000-000000000005)
+  )
+  (label "JOY_RIGHT"
+    (at 142.24 81.28 0)
+    (effects (font (size 1.27 1.27)) (justify left))
+    (uuid 33000000-0000-4000-8000-000000000006)
+  )
+
+  (wire (pts (xy 121.92 76.2) (xy 119.38 76.2))
+    (stroke (width 0) (type default))
+    (uuid 44000000-0000-4000-8000-000000000001)
+  )
+  (wire (pts (xy 121.92 78.74) (xy 119.38 78.74))
+    (stroke (width 0) (type default))
+    (uuid 44000000-0000-4000-8000-000000000002)
+  )
+  (wire (pts (xy 121.92 81.28) (xy 119.38 81.28))
+    (stroke (width 0) (type default))
+    (uuid 44000000-0000-4000-8000-000000000003)
+  )
+  (wire (pts (xy 139.7 76.2) (xy 142.24 76.2))
+    (stroke (width 0) (type default))
+    (uuid 44000000-0000-4000-8000-000000000004)
+  )
+  (wire (pts (xy 139.7 78.74) (xy 142.24 78.74))
+    (stroke (width 0) (type default))
+    (uuid 44000000-0000-4000-8000-000000000005)
+  )
+  (wire (pts (xy 139.7 81.28) (xy 142.24 81.28))
+    (stroke (width 0) (type default))
+    (uuid 44000000-0000-4000-8000-000000000006)
+  )
+
+  (label "JOY_UP"
+    (at 165.1 73.66 0)
+    (effects (font (size 1.27 1.27)) (justify left))
+    (uuid 55000000-0000-4000-8000-000000000001)
+  )
+  (label "JOY_DOWN"
+    (at 165.1 76.2 0)
+    (effects (font (size 1.27 1.27)) (justify left))
+    (uuid 55000000-0000-4000-8000-000000000002)
+  )
+  (label "JOY_LEFT"
+    (at 165.1 78.74 0)
+    (effects (font (size 1.27 1.27)) (justify left))
+    (uuid 55000000-0000-4000-8000-000000000003)
+  )
+  (label "JOY_RIGHT"
+    (at 165.1 81.28 0)
+    (effects (font (size 1.27 1.27)) (justify left))
+    (uuid 55000000-0000-4000-8000-000000000004)
+  )
+  (label "JOY_CENTER"
+    (at 165.1 83.82 0)
+    (effects (font (size 1.27 1.27)) (justify left))
+    (uuid 55000000-0000-4000-8000-000000000005)
+  )
+  (label "GND"
+    (at 165.1 86.36 0)
+    (effects (font (size 1.27 1.27)) (justify left))
+    (uuid 55000000-0000-4000-8000-000000000006)
+  )
+
+  (wire (pts (xy 162.56 73.66) (xy 165.1 73.66))
+    (stroke (width 0) (type default))
+    (uuid 66000000-0000-4000-8000-000000000001)
+  )
+  (wire (pts (xy 162.56 76.2) (xy 165.1 76.2))
+    (stroke (width 0) (type default))
+    (uuid 66000000-0000-4000-8000-000000000002)
+  )
+  (wire (pts (xy 162.56 78.74) (xy 165.1 78.74))
+    (stroke (width 0) (type default))
+    (uuid 66000000-0000-4000-8000-000000000003)
+  )
+  (wire (pts (xy 162.56 81.28) (xy 165.1 81.28))
+    (stroke (width 0) (type default))
+    (uuid 66000000-0000-4000-8000-000000000004)
+  )
+  (wire (pts (xy 162.56 83.82) (xy 165.1 83.82))
+    (stroke (width 0) (type default))
+    (uuid 66000000-0000-4000-8000-000000000005)
+  )
+  (wire (pts (xy 162.56 86.36) (xy 165.1 86.36))
+    (stroke (width 0) (type default))
+    (uuid 66000000-0000-4000-8000-000000000006)
   )
 
   (symbol
     (lib_id "Mechanical:MountingHole")
-    (at 210.82 63.5 0)
+    (at 200.66 67.31 0)
     (unit 1)
     (exclude_from_sim yes)
     (in_bom no)
     (on_board yes)
     (dnp no)
-    (uuid "h001")
+    (uuid 77000000-0000-4000-8000-000000000001)
     (property "Reference" "H1"
-      (at 210.82 58.42 0)
-      (effects
-        (font
-          (size 1.27 1.27)
-        )
-      )
+      (at 200.66 60.96 0)
+      (effects (font (size 1.27 1.27)))
     )
     (property "Value" "M3"
-      (at 210.82 60.96 0)
-      (effects
-        (font
-          (size 1.27 1.27)
+      (at 200.66 63.5 0)
+      (effects (font (size 1.27 1.27)))
+    )
+    (instances
+      (project "joystick-pcb"
+        (path "/d9e59a0e-6c92-4edb-a23d-07e6fbe0eb8e"
+          (reference "H1") (unit 1)
         )
       )
     )
   )
   (symbol
     (lib_id "Mechanical:MountingHole")
-    (at 220.98 63.5 0)
+    (at 210.82 67.31 0)
     (unit 1)
     (exclude_from_sim yes)
     (in_bom no)
     (on_board yes)
     (dnp no)
-    (uuid "h002")
+    (uuid 77000000-0000-4000-8000-000000000002)
     (property "Reference" "H2"
-      (at 220.98 58.42 0)
-      (effects
-        (font
-          (size 1.27 1.27)
-        )
-      )
+      (at 210.82 60.96 0)
+      (effects (font (size 1.27 1.27)))
     )
     (property "Value" "M3"
-      (at 220.98 60.96 0)
-      (effects
-        (font
-          (size 1.27 1.27)
+      (at 210.82 63.5 0)
+      (effects (font (size 1.27 1.27)))
+    )
+    (instances
+      (project "joystick-pcb"
+        (path "/d9e59a0e-6c92-4edb-a23d-07e6fbe0eb8e"
+          (reference "H2") (unit 1)
         )
       )
     )
   )
   (symbol
     (lib_id "Mechanical:MountingHole")
-    (at 210.82 73.66 0)
+    (at 200.66 81.28 0)
     (unit 1)
     (exclude_from_sim yes)
     (in_bom no)
     (on_board yes)
     (dnp no)
-    (uuid "h003")
+    (uuid 77000000-0000-4000-8000-000000000003)
     (property "Reference" "H3"
-      (at 210.82 68.58 0)
-      (effects
-        (font
-          (size 1.27 1.27)
-        )
-      )
+      (at 200.66 74.93 0)
+      (effects (font (size 1.27 1.27)))
     )
     (property "Value" "M3"
-      (at 210.82 71.12 0)
-      (effects
-        (font
-          (size 1.27 1.27)
+      (at 200.66 77.47 0)
+      (effects (font (size 1.27 1.27)))
+    )
+    (instances
+      (project "joystick-pcb"
+        (path "/d9e59a0e-6c92-4edb-a23d-07e6fbe0eb8e"
+          (reference "H3") (unit 1)
         )
       )
     )
   )
   (symbol
     (lib_id "Mechanical:MountingHole")
-    (at 220.98 73.66 0)
+    (at 210.82 81.28 0)
     (unit 1)
     (exclude_from_sim yes)
     (in_bom no)
     (on_board yes)
     (dnp no)
-    (uuid "h004")
+    (uuid 77000000-0000-4000-8000-000000000004)
     (property "Reference" "H4"
-      (at 220.98 68.58 0)
-      (effects
-        (font
-          (size 1.27 1.27)
-        )
-      )
+      (at 210.82 74.93 0)
+      (effects (font (size 1.27 1.27)))
     )
     (property "Value" "M3"
-      (at 220.98 71.12 0)
-      (effects
-        (font
-          (size 1.27 1.27)
+      (at 210.82 77.47 0)
+      (effects (font (size 1.27 1.27)))
+    )
+    (instances
+      (project "joystick-pcb"
+        (path "/d9e59a0e-6c92-4edb-a23d-07e6fbe0eb8e"
+          (reference "H4") (unit 1)
         )
       )
     )
   )
 
-  (text "CONNECTOR PINOUT:\n1 = JOY_UP    (GPIO4)\n2 = JOY_DOWN  (GPIO5)\n3 = JOY_LEFT  (GPIO6)\n4 = JOY_RIGHT (GPIO7)\n5 = JOY_CENTER(GPIO8)\n6 = GND"
-    (at 177.8 91.44 0)
-    (effects
-      (font
-        (size 1.27 1.27)
-      )
-      (justify left)
-    )
-    (uuid "t001")
+  (text "SKRHABE010 pinout (Alps datasheet):\n  1=A, 2=Center, 3=C, 4=B, 5=Common, 6=D\nA/B/C/D are 4 directional contacts; map to UP/DOWN/LEFT/RIGHT\nin firmware after assembly (depends on component orientation)."
+    (at 119.38 95.25 0)
+    (effects (font (size 1 1)) (justify left))
+    (uuid 88000000-0000-4000-8000-000000000001)
   )
 
-  (text "20x20mm breakout PCB\nFits enclosure pocket (1.0mm deep)\n4x M3 mounting holes\n15mm pitch, 2.5mm inset"
-    (at 205.74 86.36 0)
-    (effects
-      (font
-        (size 1.27 1.27)
-      )
-      (justify left)
-    )
-    (uuid "t002")
+  (sheet_instances
+    (path "/" (page "1"))
   )
 )

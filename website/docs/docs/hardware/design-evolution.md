@@ -307,6 +307,60 @@ Source: [`04-25-design-alterations/aaa-cradle-insert-v1.scad`](https://github.co
 
 ---
 
+## Rev 2 — Joystick Breakout PCB v2.0 + Headless Autoroute (2026-04-26)
+
+The Rev 1 joystick PCB shipped with three serious bugs: a hand-drawn footprint with the wrong pad geometry, a wire pad that physically overlapped a mounting hole, and three pin assignments that didn't match the Alps datasheet. Rev 2.0 fixes all three by stealing real reference designs and runs the full autorouter pipeline headless from the CLI.
+
+### What changed
+
+- **Footprint**: cloned verbatim from `crides/kleeb`'s `SKRHA-boss` (a production-tested keyboard library), then mathematically rotated -45° so pads are axis-aligned on left/right faces of the body. Includes the two NPTH alignment-post holes and two SMD anchor pads from the source.
+- **Pin names**: confirmed against the Alps SKRHABE010 datasheet circuit diagram. Pin 1=A, 2=Center (press), 3=C, 4=B, 5=Common (GND), 6=D. Three of these were wrong in Rev 1.
+- **Wire pads**: now 1.8 mm pitch on the bottom edge between the lower M3 holes. Smaller 1.4 mm OD / 0.8 mm drill. All clearances verified with a Python script *before* drawing — 0.74 mm minimum drill-to-drill against M3 holes, 1.0 mm pad-to-pad, 2.30 mm to board edge.
+- **Routing**: 2 layers, 23 segments + 1 via, 534 mm total length. **8 bends, all 45°. Zero 90° corners.**
+
+### Renders
+
+#### Isometric (3D)
+
+![Joystick PCB Rev 2.0 — isometric](../../assets/images/hardware/pcb/joystick-pcb-rev2-iso.png)
+
+#### Top + bottom
+
+![Joystick PCB Rev 2.0 — top](../../assets/images/hardware/pcb/joystick-pcb-rev2-top.png)
+
+![Joystick PCB Rev 2.0 — bottom](../../assets/images/hardware/pcb/joystick-pcb-rev2-bottom.png)
+
+### Headless autoroute pipeline
+
+```bash
+# 1. Export Specctra DSN from KiCad
+python3 -c "
+import pcbnew
+b = pcbnew.LoadBoard('joystick-pcb.kicad_pcb')
+pcbnew.ExportSpecctraDSN(b, '/tmp/joystick.dsn')
+"
+# 2. Run Freerouting headless (Docker — no Java needed locally)
+docker run --rm -v /tmp:/work \
+  --entrypoint java ghcr.io/freerouting/freerouting:latest \
+  -jar /app/freerouting-executable.jar \
+  -de /work/joystick.dsn -do /work/joystick.ses -mp 100
+# 3. Import session back
+python3 -c "
+import pcbnew
+b = pcbnew.LoadBoard('joystick-pcb.kicad_pcb')
+pcbnew.ImportSpecctraSES(b, '/tmp/joystick.ses')
+b.Save('joystick-pcb.kicad_pcb')
+"
+# 4. DRC
+kicad-cli pcb drc --output drc.json --format json joystick-pcb.kicad_pcb
+```
+
+KiCad DRC reports 0 copper, 0 unconnected, 0 schematic-parity issues.
+
+Source: [`hardware-design/joystick-pcb/`](https://github.com/rompasaurus/dilder/tree/main/hardware-design/joystick-pcb), [`design-notes.md`](https://github.com/rompasaurus/dilder/blob/main/hardware-design/joystick-pcb/design-notes.md).
+
+---
+
 ## Current Assembly (ESP32-S3 Enclosure)
 
 The enclosure is a stacked shell design housing an Olimex ESP32-S3-DevKit-Lipo, Waveshare 2.13" e-ink display, and 1000mAh LiPo battery. Five parts print flat without supports and assemble with 4 corner screw posts.
@@ -511,3 +565,7 @@ Provides a menu to browse .scad files, pick export format (3MF/STL), set output 
 | 2026-04-25 | Rev 2 base plate | v3 | Battery rails +5 mm height (extend 2 mm above plate top), two 5×15 mm support blocks centered on USB-C Y axis for TP4056 board retention |
 | 2026-04-25 | Joystick breakout PCB | v1 | KiCad 8 project for 20×20 mm SKRHABE010 breakout board — fits top cover PCB pocket, 4× M3 mounting holes, 6-pin wire pads, JLCPCB BOM (LCSC C139794) |
 | 2026-04-25 | Ansmann battery wiring | guide | Wiring guide for 2× Ansmann 1.5V Li-Ion AAA in series (3.0V → VSYS), battery contact recommendations, safety notes |
+| 2026-04-26 | Joystick breakout PCB | v2.0 redesign | Replaced Rev 1's hand-drawn footprint and hallucinated pinout with: (a) `SKRHA-boss` footprint cloned verbatim from `crides/kleeb` (axis-aligned via -45° rotation), (b) pin names confirmed against the Alps SKRHABE010 datasheet circuit diagram (1=A, 2=Center, 3=C, 4=B, 5=Common, 6=D), (c) wire pads repositioned to 1.8 mm pitch on the bottom edge (clears all four M3 corner holes — Rev 1's GND pad overlapped a mounting hole). All clearances verified by Python script before placement (0.74 mm min pad↔hole, 2.07 mm min courtyard↔hole) |
+| 2026-04-26 | Joystick breakout PCB | v2.0 autoroute | Routed headlessly via Freerouting v2 in Docker (`ghcr.io/freerouting/freerouting`) — DSN exported from KiCad via `pcbnew.ExportSpecctraDSN`, SES imported back via `pcbnew.ImportSpecctraSES`. Result: 23 trace segments + 1 through-hole via, 534 mm total length, **8 bends all at 45°** (zero 90° corners), 0 clearance violations, 0 unconnected, 0 schematic-parity issues. Full pipeline reproducible from a single bash script — see `joystick-pcb/design-notes.md` |
+| 2026-04-26 | SCAD tooling | docs | New `hardware-design/scad Parts/README.md` documenting `scad-export.py` (interactive 3MF/STL exporter with date-sorted file browser), `bake-preset.py` (writes a customizer preset back into the SCAD source as the new default), and `export-preset.py` (renders a preset to 3MF without modifying the source — for A/B variant testing) |
+| 2026-04-26 | Hardware process | doc | New `hardware-design/HARDWARE-DESIGN-PROCESS.md` — retrospective on the SCAD→print and PCB→fab loops with concrete improvements to cut wasted prints (calibration coupons, SVG cross-sections, presets-instead-of-prints, mandatory dimension comment blocks, machine-checkable clearance gates) |

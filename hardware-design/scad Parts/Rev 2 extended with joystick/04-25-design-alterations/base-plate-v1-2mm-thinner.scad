@@ -108,6 +108,17 @@ battery_rail_z_lift_mm                         = 4;
 // ============================================================
 max_z_clip_mm                                  = 14;
 
+// ============================================================
+// Height shave — keeps Z=0..shave_start_z untouched, deletes the
+// next `shave_height_mm` band, and drops everything above down by
+// the same amount. Net effect: total base height reduced by
+// `shave_height_mm` while the curved bottom + first few mm of
+// pocket walls are preserved exactly. Set shave_height_mm to 0 to
+// disable.
+// ============================================================
+base_plate_shave_start_z_mm                    = 3;
+base_plate_shave_height_mm                     = 2;
+
 // USB-C port notch — on the +X wall (thin side), rounded to USB-C
 // connector dimensions + 0.2 mm tolerance. Open on 3 sides (top + ±Y).
 // Standard USB-C receptacle: 8.94 mm wide × 3.26 mm tall.
@@ -213,6 +224,36 @@ module shell_with_curved_bottom(w, l, h, corner_r, fillet_r) {
 // ========== Base plate v1 ==========
 
 module base_plate_v1() {
+    if (base_plate_shave_height_mm <= 0) {
+        base_plate_v1_unshaved();
+    } else {
+        union() {
+            // Bottom slab — preserved exactly: Z = 0 .. shave_start
+            intersection() {
+                base_plate_v1_unshaved();
+                translate([-1, -1, -1])
+                    cube([enclosure_outer_width_along_x_axis_mm + 2,
+                          enclosure_outer_depth_along_y_axis_mm + 2,
+                          base_plate_shave_start_z_mm + 1]);
+            }
+            // Upper portion — shifted down so the deleted band closes up.
+            // 0.01 overlap into the bottom slab so the union seam is sealed.
+            translate([0, 0, -base_plate_shave_height_mm])
+                intersection() {
+                    base_plate_v1_unshaved();
+                    translate([-1, -1,
+                               base_plate_shave_start_z_mm
+                                 + base_plate_shave_height_mm
+                                 - 0.01])
+                        cube([enclosure_outer_width_along_x_axis_mm + 2,
+                              enclosure_outer_depth_along_y_axis_mm + 2,
+                              max_z_clip_mm + 10]);
+                }
+        }
+    }
+}
+
+module base_plate_v1_unshaved() {
     // Final Z clip — everything in the union below is intersected
     // with this slab so nothing renders above max_z_clip_mm.
     intersection() {

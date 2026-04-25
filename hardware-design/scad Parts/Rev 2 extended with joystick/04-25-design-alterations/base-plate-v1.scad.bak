@@ -99,7 +99,7 @@ battery_rail_depth_reduction_per_side_mm       = 2;       // shrink rail Y inwar
 // A solid support block fills the gap from pocket floor to lifted rail
 // bottom, so the rail doesn't float. Increase to push the trough higher
 // up the cylinder; set 0 to drop the rail back to the pocket floor.
-battery_rail_z_lift_mm                         = 4;
+battery_rail_z_lift_mm                         = 5;
 
 // ============================================================
 // Final Z clip — anything drawn above this Z gets sliced off.
@@ -155,7 +155,7 @@ pico_retention_block_x_size_mm                  = 5;      // X depth
 pico_retention_block_y_center_mm =
     enclosure_outer_depth_along_y_axis_mm / 2;             // = 23 (dead-center Y by default)
 // Block top Z = cradle_pocket_floor_z_mm + this. 0 = no block, fully sunk into the floor.
-pico_retention_block_height_above_pocket_floor_mm = 8;
+pico_retention_block_height_above_pocket_floor_mm = 9;
 
 // Peg XY positions = cover screw-bore centers (pillar XY origin + pillar/2)
 peg_xy_positions_list = [
