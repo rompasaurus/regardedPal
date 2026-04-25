@@ -1645,3 +1645,26 @@ All 5 pieces exported cleanly (CGAL manifold) as 3MF for Bambu Studio: `base.3mf
 - **Input Tokens (est):** ~400 across the sequence
 - **Output Tokens (est):** ~20,000
 - **Summary:** New `hardware-design/joystick-pcb/` KiCad 8 project: 20x20mm SKRHABE010 breakout PCB with schematic, layout, BOM (LCSC C139794, ~$15.50 for 5 assembled via JLCPCB). Base plate v3: battery rails +5mm height (extend 2mm above plate top), two 5x15mm support blocks centered on USB-C Y axis for TP4056 board retention. Design evolution and version history updated.
+
+
+---
+
+## Prompt #250 — 2026-04-26
+
+**Prompt sequence:** Joystick PCB iteration sequence (~10 turns) — opening with a parser error in the Rev 1 board ("the schematic won't open either"), through a footprint redesign request ("you halucinated a bunch and the wiring is completely unfeasable look online to see if similar pcb design are available to copy"), to autoroute requests ("autoroute the wiring 2 layer pcb… no 90 degre turns") and finally pinout verification ("confirm the schematic wiring steal an existing one rather than making it up").
+
+- **Input Tokens (est):** ~250 across the sequence
+- **Output Tokens (est):** ~38,000
+- **Commit:** `6d3bbe2`
+- **Summary:** Joystick breakout PCB Rev 2.0 — three-stage repair. (1) Parser fixes: stripped illegal `;;` comments from the `.kicad_pcb`, replaced KiCad-rejected `net_label` with `label`, regenerated 35 bogus quoted UUIDs, added missing `(sheet_instances)`. (2) Footprint redesign: cloned the `SKRHA-boss` footprint from `crides/kleeb` (a production-tested keyboard library), rotated -45° so pads land axis-aligned. All clearances Python-verified before placement; wire pads relocated to clear the M3 mounting holes Rev 1 was overlapping. (3) Datasheet pinout + autoroute: fetched the Alps SKRHABE010 circuit-diagram GIF and confirmed three previously-wrong pin assignments. PCB autorouted headlessly via the `ghcr.io/freerouting/freerouting` Docker image (DSN export and SES import via `pcbnew` Python). Result: 23 segments + 1 via, **8 bends all at 45°, zero 90° corners**, 0 copper violations, 0 unconnected, 0 schematic-parity issues per `kicad-cli pcb drc`.
+
+---
+
+## Prompt #251 — 2026-04-26
+
+**Prompt:** "ok lets divide describe all the changes we made in all the session here today and commit all the change also add documentation for the python scripts in the scad folder and write up a hardware design process step document to encapsulate the prototyping process we been using and the evolution in the approach and find way to improve the process without needing to print out a massive amount of junk 3d prints updates the documentation everywhere else and update the design evolution with new renders for each commit and outline what was changes and the flow then update the website and blog with a new entry commit and then update the prompts file fix grammar commit and push"
+
+- **Input Tokens (est):** ~150
+- **Output Tokens (est):** ~25,000
+- **Commit:** `6d3bbe2` (substantive work) + a follow-up commit for the prompt-log entry
+- **Summary:** Documentation and process consolidation pass. New `hardware-design/scad Parts/README.md` documents the three SCAD helper scripts (`scad-export.py`, `bake-preset.py`, `export-preset.py`). New `hardware-design/HARDWARE-DESIGN-PROCESS.md` — retrospective on the SCAD→print and PCB→fab loops with concrete print-waste-reduction strategies (calibration coupons, SVG cross-sections, OpenSCAD presets for A/B testing, mandatory dimension comment blocks, machine-checkable clearance gates). Three high-quality PCB renders (top, bottom, iso) added to website assets. New blog post covering the Rev 2 redesign and the headless autoroute pipeline. `design-evolution.md` got a new section plus five new version-history rows.

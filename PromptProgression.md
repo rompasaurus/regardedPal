@@ -3203,3 +3203,41 @@ Every prompt entry below uses the following fields. Entries that don't yet list 
   - `PromptProgression.md` — prompt #249 appended
 
 ---
+
+
+## Prompt #250 — 2026-04-26
+- **Prompt sequence:** Joystick PCB iteration sequence (~10 turns):
+  (1) "ok lets work on the joystick pcb you started earlier I can open the schematic and the board is empty when i use kicad Expecting '(' in '...joystick-pcb.kicad_pcb', line 86, offset 3. lets fix this" —
+  (2) "the schematic wont open either" —
+  (3) "ok lets fix the design of this you halucinated a bunch and the wiring is completely unfeasable look online to see if similar pcb design are availble to copy and make sure no holes overlap" —
+  (4) "also autoroute the wiring 2 layer pcb and all that jaz no 90 degre turns in the wiring" —
+  (5) "autoroute the wire and confirm the schematic wiring steal an existing one rather than making it up".
+- **Input Tokens (est):** ~250 across the sequence
+- **Output Tokens (est):** ~38,000
+- **Commit:** `6d3bbe2`
+- **Summary:** Joystick breakout PCB Rev 2.0 — three-stage repair of the Rev 1 board.
+  Stage 1 (parser fixes): stripped illegal `;;` comments from `joystick-pcb.kicad_pcb` (KiCad's S-expression parser doesn't accept comments), replaced KiCad-rejected `net_label` keyword with `label`, regenerated 35 bogus quoted UUIDs as proper UUID4 format, added missing `(sheet_instances)` block.
+  Stage 2 (footprint redesign): cloned the `SKRHA-boss` footprint verbatim from `crides/kleeb` (production-tested keyboard library), rotated -45° so pads land axis-aligned on left/right body faces. All clearances Python-verified before placement (0.74 mm min pad↔M3, 1.0 mm pad↔pad, 2.30 mm to board edge). Wire pads moved to bottom edge at 1.8 mm pitch — Rev 1's GND pad was overlapping a mounting hole drill.
+  Stage 3 (datasheet pinout + autoroute): fetched the Alps SKRHABE010 circuit-diagram GIF, confirmed pin functions (1=A, 2=Center, 3=C, 4=B, 5=Common, 6=D — three pins were wrong in Rev 1). Schematic rebuilt from scratch using the kleeb symbol with the proper pin names. PCB autorouted headlessly via the `ghcr.io/freerouting/freerouting` Docker image (DSN exported via `pcbnew.ExportSpecctraDSN`, SES imported via `pcbnew.ImportSpecctraSES`): 23 segments + 1 via, 534 mm total length, **8 bends all at 45°, zero 90° corners**, 0 clearance violations, 0 unconnected, 0 schematic-parity issues per `kicad-cli pcb drc`.
+- **Files / interpretation:**
+  - `hardware-design/joystick-pcb/joystick-pcb.kicad_sch` — rebuilt with kleeb-cloned `SW_SKRHABE010` lib_symbol (A/Center/C/B/Common/D pin names), Conn_01x06_Pin connector, label-stub style routing.
+  - `hardware-design/joystick-pcb/joystick-pcb.kicad_pcb` — Rev 2 footprint with NPTH alignment posts and SMD anchor pads, fully autorouted by Freerouting v2, KiCad 10 format.
+  - `hardware-design/joystick-pcb/design-notes.md` — new pinout table, clearance verification table, headless Freerouting workflow as copy-pasteable bash, footprint provenance citing kleeb and Painterman/Cardinal as cross-references.
+
+---
+
+## Prompt #251 — 2026-04-26
+- **Prompt:** "ok lets divide describe all the changes we made in all the session here today and commit all the change also add documentation for the python scripts in the scad folder and write up a hardware design process step document to encapsulate the prototyping process we been using and the evolution in the approach and find way to improve the process without needing to print out a massive amount of junk 3d prints updates the documentation everywhere else and update the design evolution with new renders for each commit and outline what was changes and the flow then update the website and blog with a new entry commit and then update the prompts file fix grammar commit and push"
+- **Input Tokens (est):** ~150
+- **Output Tokens (est):** ~25,000
+- **Commit:** `6d3bbe2` (substantive work) + a follow-up commit for this prompt-log entry
+- **Summary:** Documentation and process consolidation pass for the day's PCB work, plus pre-existing uncommitted SCAD helper scripts. New `hardware-design/scad Parts/README.md` documents `scad-export.py`, `bake-preset.py`, and `export-preset.py` with usage and when-to-use guidance. New `hardware-design/HARDWARE-DESIGN-PROCESS.md` — retrospective on the SCAD→print and PCB→fab loops with concrete print-waste-reduction strategies (calibration coupons for tolerance testing, SVG cross-sections for fit verification, OpenSCAD presets plus `export-preset.py` for A/B variant comparison, mandatory dimension comment blocks tied to measured component values, machine-checkable clearance gates as pre-commit hooks). Three high-quality PCB renders (top, bottom, iso) generated with `kicad-cli pcb render --quality high`. New blog post `joystick-pcb-rev2-autoroute.md` covering the redesign and the headless autoroute pipeline. `design-evolution.md` got a new "Rev 2 — Joystick Breakout PCB v2.0 + Headless Autoroute" section plus five new version-history rows.
+- **Files / interpretation:**
+  - `hardware-design/HARDWARE-DESIGN-PROCESS.md` (new) — process documentation
+  - `hardware-design/scad Parts/README.md` (new) — Python scripts documentation
+  - `hardware-design/scad Parts/bake-preset.py`, `export-preset.py` (new — pre-existing uncommitted from prior session) — SCAD preset helpers
+  - `hardware-design/scad Parts/Rev 2 extended with joystick/04-25-design-alterations/base-plate-v1-2mm-thinner.{scad,json,*.3mf}` (new) — preset-driven thin variant of base plate
+  - `website/docs/assets/images/hardware/pcb/joystick-pcb-rev2-{iso,top,bottom}.png` (new) — high-quality `kicad-cli pcb render` output
+  - `website/docs/blog/posts/joystick-pcb-rev2-autoroute.md` (new) — blog post
+  - `website/docs/docs/hardware/design-evolution.md` — new section + 5 version-history rows
+  - `PromptProgression.md` (this file), `website/docs/prompts/index.md` — prompts #250–#251 appended
