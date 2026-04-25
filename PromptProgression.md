@@ -3028,3 +3028,60 @@ Every prompt entry below uses the following fields. Entries that don't yet list 
   - 4 preview PNGs rendered alongside the SCAD (in the Rev 2 folder) as well.
   - Committed as `a3b9660` — `Rev 2 screen-inlay top cover — first-print fixes + docs`.
   - `PromptProgression.md` (this file) — prompts #238–#240 appended, grammar lightly cleaned per the file's header convention.
+
+---
+
+## Prompt #241 — 2026-04-24
+- **Prompt:** "Give me some FreeCAD files for the topcover-windowed SCAD we just made along with the topcover windowed. I need full blueprints and measurements and a guide to modifying this within FreeCAD."
+- **Input Tokens (est):** ~50
+- **Output Tokens (est):** ~6,500
+- **Commit:** (this session)
+- **Files / interpretation:**
+  - Built `hardware-design/scad Parts/Rev 2 extended with joystick/freecad-export/` containing three formats per cover variant via a `freecadcmd` Python script that loads the SCAD-exported STL, builds a `Part::Feature` from the mesh, and writes both `.FCStd` and `.step`:
+    - `*.step` (parametric STEP solid)
+    - `*.FCStd` (native FreeCAD with both `Mesh::Feature` and derived `Part::Feature`)
+    - `*.csg` (OpenSCAD CSG dump for FreeCAD's OpenSCAD workbench)
+  - Variants exported: `top-cover-windowed-v1`, `top-cover-windowed-screen-inlay-v1`, `top-cover-windowed-screen-inlay-v1-2mm`.
+  - `BLUEPRINTS.md` — full dimensions reference: outer shell, walls, Z-stack, corner pillars, screw pattern, display window (tapered), joystick hole (tapered), screen inlay recess, FPC ribbon divet (3 mm and 2 mm variants), joystick PCB pocket, mount bores, exact bezel margins.
+  - `FREECAD-GUIDE.md` — three-workflow guide (FCStd / STEP / CSG), worked Boolean examples (resize joystick hole, add a tab, fillet bottom edges), measurement-verification procedure, regeneration script reference, and gotchas (rounded surfaces appear as 48-segment facets because the STEP is reconstructed from the OpenSCAD mesh at `$fn = 48`).
+  - `blueprints/` subfolder — 5 orthographic projections per variant.
+- **Bambu filament-settings sub-thread (same prompt batch):** built a tuned profile for LANDU PETG (1.75 mm, marketed as 30–600 mm/s): 245 / 240 nozzle, 80 / 70 bed, 40 % max fan, 1.0 mm retract, gyroid 20 % infill, 4 walls. Recommended `Generic PETG` as the closest preset (not `Bambu PETG HF` — runs 260 °C, too hot for LANDU). Print orientation: face-plate-down, no supports needed.
+
+---
+
+## Prompt #242 — 2026-04-24/25
+- **Prompt sequence:** "Design a AAA battery cradle insert to mesh with the top-cover-windowed-screen-inlay-v3-2piece — align the 2 AAA batteries close to the base where the joystick holes are and fill in the rest of the gaps around the Pico board and inside walls with a thick plane." Followed by 12+ refinement turns: "what the fuck is this — I just need a cutout of the negative space," "move the battery holes 3 mm past the pillar cutouts," "move the batteries apart so they meet the long sides," "cut off the top portion at the widest diameter," "reduce the middle block by 10 mm," "add the middle inset to the other side," several "wrong direction" iterations on the connecting block's position, "extend it to meet the pillar hole edges," and finally "OK lets build a base plate to complement the insert — it should have a cutout that matches the cradle and pegs for the screw holes to snap into."
+- **Input Tokens (est):** ~1,200 across the sequence
+- **Output Tokens (est):** ~22,000
+- **Commit:** (this session)
+- **Files / interpretation:**
+  - `04-24-designs-alterations/aaa-cradle-insert-v1.scad` (new, then iterated 13× over the session). Final geometry:
+    - Outer 86.7 × 41.4 × 12.1 plug shaped to the negative space of `top-cover-windowed-screen-inlay-v3-2piece`'s interior.
+    - 2× AAA bays laying along X (cells flush with ±Y long edges; centers at Y=7.85 / Y=38.15).
+    - +X end of bay pulled back 3 mm past the +X corner pillar cutout's -X edge so the bays don't run into the pillar footprint.
+    - Top half of each bay's bounding box cut away above the cell equator — cells drop in from above.
+    - Pico nest (X=6.3 → 48.1) — through-cut in the middle Y stripe for the Pico to nest against the back of the Waveshare.
+    - FPC ribbon gap (X=3.3 → 6.3, full Y, full Z).
+    - Connecting block (X=3.3 → 12.8, Y=12.1 → 33.9, Z=-2.1 → 7) — solid material added AFTER the Pico-nest cut, fills the -X end of the nest with structural mass while leaving a 3 mm cable pass-through underneath.
+    - The big iteration cost was the connecting block's position — went +X end → -X end → -Y edge → +Y edge → middle of Pico nest → flush with -X inset → flush with +X plug edge → finally settled on flush with the -X inset's +X edge after the user described it as "flush with the short side closest to the origin."
+  - `04-24-designs-alterations/base-plate-v1.scad` (new) — shallow 91.5 × 46 × 7 tray that closes the bottom of the cradle+cover stack:
+    - Curved-bottom fillet matching base-v3-2piece's outer profile.
+    - Pocket 5.3 mm deep at cradle XY (slop 0.2 / edge) — receives the cradle's bottom 5.1 mm.
+    - 4 pegs at the cover's screw-bore centers — ⌀ 3.0 mm slip fit in the 3.2 mm cover M3 bores, 9.3 mm long total, rise from the **pocket floor** (Z=1.7) so they're integral columns instead of floating rods above the pocket. Chamfered 0.4 mm tip self-guides each peg into the cover bore.
+    - Brief detour where solid mesas filled X = 0–25 and X = 76.5–91.5 of the pocket (so the cradle's ±X ends would land on solid material instead of the open pocket); user reverted, kept the pocket fully open along X.
+- **Stack-up summary:** base plate (Z=0–7) + cradle (Z=1.9–14) + cover (Z=7–18.7). Total enclosure height **18.7 mm**. Peg-snap retention replaces M3 bolts for the bottom-to-cover joint.
+
+---
+
+## Prompt #243 — 2026-04-25
+- **Prompt:** "Update the docs and website and commit, then update prompts, then take a copy of every SCAD and put it in a new folder and rename them with the date and time created — describe the board and what electronics are expected to fit with it and what the board ties with — overall something super descriptive so I can have an organized list in a historical folder."
+- **Input Tokens (est):** ~80
+- **Output Tokens (est):** ~5,500
+- **Commit:** (this session)
+- **Files / interpretation:**
+  - `website/docs/blog/posts/rev2-aaa-cradle-and-base-plate.md` (new) — blog post for this session covering the rationale for splitting the cradle from the base, full geometry tables for both new parts, the global-Z stack-up diagram, print orientation notes, and an "open questions" list (cell contacts, snap retention strength, cradle ↔ display alignment).
+  - `hardware-design/scad Parts/historical-archive/` (new folder) — chronological snapshot of every SCAD in the Rev 2 family. 15 files, each renamed `<YYYY-MM-DD>_<HHMM>_<original-name>__<short-descriptor>.scad`. The 3-piece-original family snapshots as `2026-04-24_2110_*` (live parent-folder versions), the dual-10440 / 2-piece family as `2026-04-24_2124_*` (alteration-fork versions), the AAA cradle as `2026-04-24_2333_*`, and the base plate as `2026-04-25_0035_*`.
+  - `hardware-design/scad Parts/historical-archive/INDEX.md` (new) — long-form descriptor for every archived file: what it is, footprint, electronics that fit (1000 mAh flat Li-Po vs 2× 10440 vs 2× AAA; ESP32-S3 dev board vs Pico W vs Pico 2; Waveshare 2.13" raw module vs HAT; custom joystick PCB), what it mates with in the stack, and what distinguishes it from sibling files. Includes "How to use this archive" section explaining the append-only policy and the recovery procedure.
+  - `PromptProgression.md` (this file) — prompts #241–#243 appended.
+
+---
