@@ -3057,7 +3057,7 @@ Every prompt entry below uses the following fields. Entries that don't yet list 
 - **Files / interpretation:**
   - `04-24-designs-alterations/aaa-cradle-insert-v1.scad` (new, then iterated 13× over the session). Final geometry:
     - Outer 86.7 × 41.4 × 12.1 plug shaped to the negative space of `top-cover-windowed-screen-inlay-v3-2piece`'s interior.
-    - 2× AAA bays laying along X (cells flush with ±Y long edges; centers at Y=7.85 / Y=38.15).
+    - 2× AAA bays lying along X (cells flush with ±Y long edges; centers at Y=7.85 / Y=38.15).
     - +X end of bay pulled back 3 mm past the +X corner pillar cutout's -X edge so the bays don't run into the pillar footprint.
     - Top half of each bay's bounding box cut away above the cell equator — cells drop in from above.
     - Pico nest (X=6.3 → 48.1) — through-cut in the middle Y stripe for the Pico to nest against the back of the Waveshare.
@@ -3099,5 +3099,26 @@ Every prompt entry below uses the following fields. Entries that don't yet list 
     - "How to use this archive" cheatsheet — `diff` between snapshots, recovering a file (drop the date+descriptor parts), adding a new snapshot, verifying every file still renders
     - Per-part sections (15 of them) — each with a linked iso render, what it is, footprint, electronics it houses, what it mates with in the stack, and distinguishing features. The descriptions match the existing `INDEX.md` but reformatted with images and consistent headings.
   - `PromptProgression.md` (this file) — prompt #244 appended in a separate follow-up commit.
+
+---
+
+## Prompt #245 — 2026-04-25
+- **Prompt:** "ok I have added some more heic photos to the project root of the most recent prints that we modeled specifically the battery cradle insert lets annotate and rename the file and convert to jpeg and place them in the hardware design folder and update the docs and notes with the new pics and then add it to the website as well in the blog too commit update the prompts fix grammar and commit"
+- **Input Tokens (est):** ~80
+- **Output Tokens (est):** ~8,000
+- **Commit:** `1f53591` — `Rev 2 cradle insert first-print photos + blog/docs update` + a follow-up commit for the prompt log and grammar fixes.
+- **Files / interpretation:**
+  - 7 HEIC photos from the 2026-04-25 print session converted to JPEG via ImageMagick, renamed with descriptive names following the existing `rev2-` convention, and placed in `website/docs/assets/images/enclosure/`:
+    - `rev2-cradle-insert-standalone-topdown.jpg` — cradle insert alone, top-down, dual AAA cells loaded in ±Y bays
+    - `rev2-cradle-insert-standalone-front.jpg` — cradle insert alone, front perspective showing cell retention and bay depth
+    - `rev2-cradle-insert-assembly-topdown.jpg` — cradle in base plate with Pico 2 W and dual AAA cells, top-down on laptop
+    - `rev2-cradle-insert-assembly-topdown-2.jpg` — same assembly, top-down on map pad
+    - `rev2-cradle-insert-assembly-side-1.jpg` — assembled stack side profile (OpenSCAD visible on screen)
+    - `rev2-cradle-insert-assembly-side-2.jpg` — side profile, slightly different angle
+    - `rev2-cradle-insert-assembly-profile-low.jpg` — low-angle side profile showing thin form factor
+  - `website/docs/blog/posts/rev2-aaa-cradle-and-base-plate.md` (modified) — added "First prints — 2026-04-25" section with all 7 photos, organized under standalone / assembled / side-profile sub-headings
+  - `website/docs/docs/hardware/design-evolution.md` (modified) — added "Rev 2 — AAA Cradle Insert + Base Plate First Print (2026-04-25)" section with photos and updated the version history table with the v1 print entries
+  - `.gitignore` (modified) — added `*.heic` to exclude raw camera photos from the repo
+  - Grammar fix: "laying along X" → "lying along X" in prompt #242
 
 ---

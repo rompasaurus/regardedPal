@@ -1475,3 +1475,133 @@ All 5 pieces exported cleanly (CGAL manifold) as 3MF for Bambu Studio: `base.3mf
 - **Input Tokens (est):** ~120
 - **Output Tokens (est):** ~12,000
 - **Summary:** v1.4 — added two Ø1mm vertical paperclip poke-through holes in the base floor. Went through a few interpretation cycles: first implementation placed them on the +Y long wall, which the user corrected; moved to the bottom base floor with a guessed Y; then settled on the final spec of 11.5mm in from the +Y outer edge (y=32.5mm) so the holes open into the ESP32 chamber where the upside-down-mounted board's BOOT/RESET buttons live. Final X positions: hole 1 at x=71.3 (17mm from +X inner wall), hole 2 at x=58.8 (12.5mm further in). Cylinder axis along Z, subtract spans the full enclosure height so floor + shelf + chamber are all pierced in one op. Added a bottom-view render to the docs + blog, rewrote the v1.4 design-plan section, added v1.4 row to version history, and called out the caveat that hole 2 at x=58.8 lies past the battery/ESP32 divider.
+
+---
+
+## Prompt #233 — 2026-04-23
+
+**Prompt:** "Look at the top-plate-windowed CAD — there's a gap in one side of the rails in the middle. We still need that. Apply it to the top-cover-windowed too. Also the rails seem a bit thicker on the new version — verify the dimensions. I also want more of a curve to the whole front face like the picture. Also the top face is way too thick — I want it as thin as possible and taper down towards the screen edges."
+
+- **Input Tokens (est):** ~100
+- **Output Tokens (est):** ~14,000
+- **Summary:** Five changes to `top-cover-windowed-v1.scad` in one pass: bullnose radius 2→4 mm, face plate 2→1 mm, rail width pinned to 2.5 mm (was ~4.5 mm), wire pass-through gap added to the -Y rail (30×6 mm), and the display window cut replaced with a `hull()` frustum so the bullnose rolls into the window as a shallow funnel.
+
+---
+
+## Prompt #234 — 2026-04-23
+
+**Prompt:** "Looks pretty good, but the screw-hole pillars are clipping with the top case of the cover and not flush with the round corners. Also the top face plane is really thick — can we halve its width but keep the nice curvature?"
+
+- **Input Tokens (est):** ~40
+- **Output Tokens (est):** ~2,500
+- **Summary:** Face plate thickness halved 1→0.5 mm. Pillar height capped at `face_plate_top_z_mm` so square pillar corners don't poke past the bullnose.
+
+---
+
+## Prompt #235 — 2026-04-23
+
+**Prompt:** "Perfect. Now we need to get rid of the outside edges of the screw pillar that exist between the rail-connection and the top face — just let it be a passthrough hole in that section, and a square pillar only where it meets the base. Do this for both of those pillars."
+
+- **Input Tokens (est):** ~45
+- **Output Tokens (est):** ~3,500
+- **Summary:** Shortened -X pillar visibility to `rail_bottom_z` only. Took three iterations — first attempt had no visual effect (shell material was load-bearing, not the pillar union), second attempt added an explicit post-carve subtract, final fix replaced it with a single inlined `difference()` using per-pillar preservation heights to eliminate a coplanar-surface artifact. Facet count dropped 773→703.
+
+---
+
+## Prompt #236 — 2026-04-23
+
+**Prompt:** "Also chamfer the hole for the joystick cutout."
+
+- **Input Tokens (est):** ~10
+- **Output Tokens (est):** ~1,500
+- **Summary:** Added `joystick_hole_top_taper_width_mm = 1.5` — joystick cut replaced with a `hull()` of two thin cylinders (Ø12 at face plate, Ø15 at cover top), same language as the window taper.
+
+---
+
+## Prompt #237 — 2026-04-23
+
+**Prompt:** "Ok, update the doc and the blog and website and commit. Then update prompts, fix grammar, and commit and push."
+
+- **Input Tokens (est):** ~25
+- **Output Tokens (est):** ~8,000
+- **Summary:** Documentation rollup for the top-cover windowed session: design-plan.md appended with full top-cover section, design-evolution.md got a new "Rev 2 Top Cover (Windowed) v1" section with 4 renders, new blog post `rev2-top-cover-windowed.md`, and 4 render PNGs mirrored to website assets.
+
+---
+
+## Prompt #238 — 2026-04-24
+
+**Prompt:** "Ok, this print looks pretty good so far — look at the latest shot I took of it. I want to get rid of the 4 holes around the joystick cutout, and then add 0.2 mm thickness to the whole layer of the front face of the cover — just the side where the screen slides into is slightly gaping open, and this should fix that."
+
+- **Input Tokens (est):** ~60
+- **Output Tokens (est):** ~4,500
+- **Summary:** First-print iteration on the screen-inlay cover: face plate bumped 0.5→0.7 mm (fixes a hairline seam at the inlay top edge), and 4 joystick-PCB mount bores removed (showed as dimples). Applied to both inlay variants (`-v1` and `-v1-2mm`).
+
+---
+
+## Prompt #239 — 2026-04-24
+
+**Prompt:** "Ok, let's look at the window cutout for the display. I attached some screenshots for you to see. The short side closest to the side needs to be extended in by 2 mm, and the top and bottom long sides need to be extended compared to the edge by 1 mm each, to compensate for the actual viewable screen's dimensions."
+
+- **Input Tokens (est):** ~75
+- **Output Tokens (est):** ~3,500
+- **Summary:** Window resized across all three cover variants: length 50→48 (–X side moves inward 2 mm), depth 25→27 (±Y extend 1 mm each), shift 2→3 (compensates so only –X edge moves). New window bounds X 14.9→62.9, Y 8.5→35.5.
+
+---
+
+## Prompt #240 — 2026-04-24
+
+**Prompt:** "Update docs, blog, and website, commit. Then update prompts, commit again, and push."
+
+- **Input Tokens (est):** ~20
+- **Output Tokens (est):** ~9,000
+- **Summary:** Documentation rollup for the screen-inlay first-print session: updated `rev2-models-dimensions.md` with before/after window values, new "Rev 2 Top Cover — Screen Inlay Variant" section in design-evolution.md with renders + first-print photos, new blog post `rev2-top-cover-inlay-first-print.md`, and 8 new image assets.
+
+---
+
+## Prompt #241 — 2026-04-24
+
+**Prompt:** "Give me some FreeCAD files for the topcover-windowed SCAD we just made along with the topcover windowed. I need full blueprints and measurements and a guide to modifying this within FreeCAD."
+
+- **Input Tokens (est):** ~50
+- **Output Tokens (est):** ~6,500
+- **Summary:** Built `freecad-export/` with STEP + FCStd + CSG for three cover variants, a full `BLUEPRINTS.md` dimensions reference, `FREECAD-GUIDE.md` with three-workflow guide, and orthographic projections. Also built a tuned Bambu filament profile for LANDU PETG (245/240 nozzle, 80/70 bed).
+
+---
+
+## Prompt #242 — 2026-04-24/25
+
+**Prompt sequence:** "Design a AAA battery cradle insert to mesh with the top-cover-windowed-screen-inlay-v3-2piece..." (followed by 12+ refinement turns over the design of the cradle insert geometry and a complementary base plate).
+
+- **Input Tokens (est):** ~1,200 across the sequence
+- **Output Tokens (est):** ~22,000
+- **Summary:** Created `aaa-cradle-insert-v1.scad` (86.7×41.4×12.1 plug matching the cover's negative space, dual AAA bays along ±Y, Pico nest cutout, FPC ribbon gap, connecting block) and `base-plate-v1.scad` (91.5×46×7 tray with pocket and 4 snap pegs). 13 iterations on the cradle — connecting block position went through 7 placements before settling. Stack-up: 18.7 mm total enclosure height with peg-snap retention.
+
+---
+
+## Prompt #243 — 2026-04-25
+
+**Prompt:** "Update the docs and website and commit, then update prompts, then take a copy of every SCAD and put it in a new folder and rename them with the date and time created — describe the board and what electronics are expected to fit with it and what the board ties with — overall something super descriptive so I can have an organized list in a historical folder."
+
+- **Input Tokens (est):** ~80
+- **Output Tokens (est):** ~5,500
+- **Summary:** Blog post `rev2-aaa-cradle-and-base-plate.md` covering the cradle/base-plate rationale and geometry. Created `historical-archive/` with 15 date-stamped SCAD snapshots and an `INDEX.md` with per-file descriptors (electronics, mates, distinguishing features).
+
+---
+
+## Prompt #244 — 2026-04-25
+
+**Prompt:** "Make a README doc in the historical folder and outline the filename procedure and list each part and describe when it was made and how it looks — link a render or picture and describe with a TOC. Then commit, update prompts and commit again."
+
+- **Input Tokens (est):** ~50
+- **Output Tokens (est):** ~5,000
+- **Summary:** Added `historical-archive/renders/` with 15 iso preview PNGs and a `README.md` with TOC, formal filename procedure spec, per-part sections with linked renders, and a usage cheatsheet.
+
+---
+
+## Prompt #245 — 2026-04-25
+
+**Prompt:** "ok I have added some more heic photos to the project root of the most recent prints that we modeled specifically the battery cradle insert lets annotate and rename the file and convert to jpeg and place them in the hardware design folder and update the docs and notes with the new pics and then add it to the website as well in the blog too commit update the prompts fix grammar and commit"
+
+- **Input Tokens (est):** ~80
+- **Output Tokens (est):** ~8,000
+- **Summary:** 7 HEIC photos from the 2026-04-25 cradle insert print session converted to JPEG, renamed with descriptive `rev2-cradle-insert-*` names, and added to the blog post and design evolution doc. Covers standalone cradle with batteries, assembled stack with Pico 2 W, and side profile shots. Added `*.heic` to `.gitignore`. Grammar fix: "laying along X" → "lying along X".

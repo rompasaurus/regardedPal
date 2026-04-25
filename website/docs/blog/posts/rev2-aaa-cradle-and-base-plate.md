@@ -52,7 +52,7 @@ The 2-piece design (base-v3-2piece + cover) puts the cells, the Pico, and the Wa
 
 Splitting it differently:
 
-- **Cradle insert** — handles cell retention and Pico nesting. It's shaped like the cover's interior negative space, so it slides up into the cover from below. The two AAAs lay along X at the cover's ±Y long edges (cells flush with the long edges, cover/base inner walls catch them on the outside). The middle Y stripe is a through-cut where the Pico can nest up against the back of the Waveshare display.
+- **Cradle insert** — handles cell retention and Pico nesting. It's shaped like the cover's interior negative space, so it slides up into the cover from below. The two AAAs lie along X at the cover's ±Y long edges (cells flush with the long edges, cover/base inner walls catch them on the outside). The middle Y stripe is a through-cut where the Pico can nest up against the back of the Waveshare display.
 - **Base plate** — closes the bottom and provides the snap retention. Four pegs at the cover's screw-bore positions slide up into the cover's blind M3 bores. A pocket on the base plate's top side receives the cradle's bottom 5.1 mm (the part that extends below the cover's mating plane).
 
 This trades one big base for two smaller, single-purpose parts. Each can be re-printed independently — change the AAA bay shape without touching the bottom, change the bottom thickness without touching the cells.
