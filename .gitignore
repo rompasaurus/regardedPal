@@ -83,3 +83,6 @@ hardware-design/kicad/dilder-breadboard/.history
 *-backups/
 hardware-design/Board Design kicad/.history/
 **/.history/
+
+# Raw camera photos (converted to JPEG before committing)
+*.heic

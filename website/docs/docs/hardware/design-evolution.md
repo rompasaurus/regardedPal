@@ -243,6 +243,40 @@ Research docs: [battery-redesign-shopping-list.md](https://github.com/rompasauru
 
 ---
 
+## Rev 2 — AAA Cradle Insert + Base Plate First Print (2026-04-25)
+
+A fourth design path for the Rev 2 stack: a **drop-in AAA cradle** that lives in the cover's negative space, plus a **shallow base plate** that snaps into the cover via four corner pegs. The middle platform goes away entirely — what it carried now gets split between the cradle insert and the base plate.
+
+### Cradle insert standalone
+
+The cradle insert printed in dark PLA, shown with two Kodak Xtralife alkaline AAAs as stand-ins for the 10440 Li-ion cells on order. The two cell bays run along ±Y with the center Pico nest cutout open between them.
+
+![Cradle insert standalone — top-down with dual AAA cells loaded](../../assets/images/enclosure/rev2-cradle-insert-standalone-topdown.jpg)
+
+![Cradle insert standalone — front perspective showing cell retention and bay depth](../../assets/images/enclosure/rev2-cradle-insert-standalone-front.jpg)
+
+### Assembled stack — cradle + base plate + Pico 2 W
+
+The cradle drops into the base plate's pocket, Pico 2 W nests into the center cutout between the two cells, and the base plate's four corner pegs engage the cover's blind M3 bores above.
+
+![Assembled cradle in base plate — top-down with Pico 2 W and dual AAA cells](../../assets/images/enclosure/rev2-cradle-insert-assembly-topdown.jpg)
+
+![Assembled cradle in base plate — top-down on map pad](../../assets/images/enclosure/rev2-cradle-insert-assembly-topdown-2.jpg)
+
+### Side profile
+
+The assembled cradle + base plate stack showing the thin form factor. The base plate's 7 mm height plus the cradle's 5.1 mm plug below the cover mating plane gives a sub-cover height of just 12.1 mm.
+
+![Assembled stack — side profile](../../assets/images/enclosure/rev2-cradle-insert-assembly-side-1.jpg)
+
+![Assembled stack — side profile, alternate angle](../../assets/images/enclosure/rev2-cradle-insert-assembly-side-2.jpg)
+
+![Assembled stack — low-angle profile showing battery and Pico clearance](../../assets/images/enclosure/rev2-cradle-insert-assembly-profile-low.jpg)
+
+Source: [`04-24-designs-alterations/aaa-cradle-insert-v1.scad`](https://github.com/rompasaurus/dilder/blob/main/hardware-design/scad%20Parts/Rev%202%20extended%20with%20joystick/04-24-designs-alterations/aaa-cradle-insert-v1.scad), [`04-24-designs-alterations/base-plate-v1.scad`](https://github.com/rompasaurus/dilder/blob/main/hardware-design/scad%20Parts/Rev%202%20extended%20with%20joystick/04-24-designs-alterations/base-plate-v1.scad).
+
+---
+
 ## Current Assembly (ESP32-S3 Enclosure)
 
 The enclosure is a stacked shell design housing an Olimex ESP32-S3-DevKit-Lipo, Waveshare 2.13" e-ink display, and 1000mAh LiPo battery. Five parts print flat without supports and assemble with 4 corner screw posts.
@@ -437,3 +471,5 @@ Provides a menu to browse .scad files, pick export format (3MF/STL), set output 
 | 2026-04-24 | Rev 2 base | v3 2-piece | Merged the middle platform into the base (14 mm tall). Pico W "inlay" chamber centered in Y; Waveshare display's ±Y edges rest on the solid base rim at z=14 (display overhangs the 21.8 mm Pico chamber by ~4 mm each side). Stack drops 36.7 → 25.7 mm |
 | 2026-04-24 | Rev 2 top cover (screen inlay) | v3 2-piece | 2-piece sibling — removes the 5 mm middle-platform pedestal reservation; total cover height 16.7 → 11.7 mm |
 | 2026-04-24 | Rev 2 base | v4 2-piece open | v3 + two rectangular insertion slots through the -X end wall so 10440 cells slide in from outside without unbolting the cover; raised ±Y lips on the cell-bay ceiling at z=14–15 for cover-base alignment on the non-battery long edges |
+| 2026-04-25 | Rev 2 AAA cradle insert | v1 print | First print of the drop-in cradle insert — dual AAA bays along ±Y, center Pico nest cutout, connecting block at -X. Cells drop in from above, cradle plugs into the cover's negative space |
+| 2026-04-25 | Rev 2 base plate | v1 print | First print of the shallow base plate with four corner pegs for cover retention and a pocket that receives the cradle's bottom 5.1 mm |

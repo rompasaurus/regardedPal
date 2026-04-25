@@ -14,6 +14,38 @@ Up to this point the Rev 2 stack has been either three pieces (base + middle-pla
 
 <!-- more -->
 
+## First prints — 2026-04-25
+
+The cradle insert and base plate printed on the Bambu A1 Mini. Here's how they came out:
+
+### Cradle insert standalone
+
+The cradle insert by itself, with two AAA cells (Kodak Xtralife stand-ins for the 10440 Li-ion cells on order) loaded in the ±Y bays. The center Pico nest cutout and the connecting block at the -X end are clearly visible.
+
+![Cradle insert standalone — top-down with dual AAA cells loaded](../../assets/images/enclosure/rev2-cradle-insert-standalone-topdown.jpg){ width="720" loading=lazy }
+
+![Cradle insert standalone — front perspective showing cell retention and bay depth](../../assets/images/enclosure/rev2-cradle-insert-standalone-front.jpg){ width="720" loading=lazy }
+
+### Assembled stack — cradle + base plate + Pico 2 W
+
+The cradle drops into the base plate's pocket, then the Pico 2 W nests into the center cutout between the two cells. The base plate's four corner pegs engage the cover's blind M3 bores above.
+
+![Assembled cradle in base plate — top-down with Pico 2 W and dual AAA cells](../../assets/images/enclosure/rev2-cradle-insert-assembly-topdown.jpg){ width="720" loading=lazy }
+
+![Assembled cradle in base plate — top-down on map pad](../../assets/images/enclosure/rev2-cradle-insert-assembly-topdown-2.jpg){ width="720" loading=lazy }
+
+### Side profile — how thin is it?
+
+The assembled cradle + base plate stack is remarkably thin. The base plate's 7 mm height plus the cradle's 5.1 mm plug below the cover mating plane gives a total sub-cover height of just 12.1 mm.
+
+![Assembled stack — side profile showing thin form factor](../../assets/images/enclosure/rev2-cradle-insert-assembly-side-1.jpg){ width="720" loading=lazy }
+
+![Assembled stack — side profile, alternate angle](../../assets/images/enclosure/rev2-cradle-insert-assembly-side-2.jpg){ width="720" loading=lazy }
+
+![Assembled stack — low-angle profile showing battery and Pico clearance](../../assets/images/enclosure/rev2-cradle-insert-assembly-profile-low.jpg){ width="720" loading=lazy }
+
+---
+
 ## Why a cradle insert instead of a base?
 
 The 2-piece design (base-v3-2piece + cover) puts the cells, the Pico, and the Waveshare display all in the base. That works but the base ends up doing four jobs at once: holding cells, holding the Pico, supporting the display from below, and being the structural shell. Any change to one of those four roles ripples through the whole base.
