@@ -3085,3 +3085,19 @@ Every prompt entry below uses the following fields. Entries that don't yet list 
   - `PromptProgression.md` (this file) — prompts #241–#243 appended.
 
 ---
+
+## Prompt #244 — 2026-04-25
+- **Prompt:** "Make a README doc in the historical folder and outline the filename procedure and list each part and describe when it was made and how it looks — link a render or picture and describe with a TOC. Then commit, update prompts and commit again."
+- **Input Tokens (est):** ~50
+- **Output Tokens (est):** ~5,000
+- **Commit:** `9d2c4ce` — `Historical archive: README with TOC, filename procedure, and per-part renders` + a follow-up commit for the prompt log update.
+- **Files / interpretation:**
+  - `hardware-design/scad Parts/historical-archive/renders/` (new) — 15 iso preview PNGs (one per archived SCAD), rendered from the same camera so the parts read as a consistent visual catalogue. Each render's filename mirrors its SCAD's filename minus the `.scad` extension.
+  - `hardware-design/scad Parts/historical-archive/README.md` (new) — front-of-folder document with:
+    - Table of contents — flat list of every part grouped by date heading
+    - "Filename procedure" section — formal definition of the `<YYYY-MM-DD>_<HHMM>_<original>__<descriptor>.scad` naming spec, with a token-by-token table explaining where each component comes from and why the double-underscore separator exists (single split-token between machine identity and human descriptor)
+    - "How to use this archive" cheatsheet — `diff` between snapshots, recovering a file (drop the date+descriptor parts), adding a new snapshot, verifying every file still renders
+    - Per-part sections (15 of them) — each with a linked iso render, what it is, footprint, electronics it houses, what it mates with in the stack, and distinguishing features. The descriptions match the existing `INDEX.md` but reformatted with images and consistent headings.
+  - `PromptProgression.md` (this file) — prompt #244 appended in a separate follow-up commit.
+
+---
