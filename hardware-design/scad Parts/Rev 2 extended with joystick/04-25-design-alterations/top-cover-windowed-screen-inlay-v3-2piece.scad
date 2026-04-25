@@ -60,6 +60,7 @@ face_plate_top_z_mm =
     face_plate_bottom_z_mm + face_plate_thickness_z_mm;       // = 7.7
 cover_total_height_z_mm =
     face_plate_top_z_mm + outer_case_top_edge_bullnose_radius_mm; // = 11.7
+wall_extension_below_mating_mm                 = 5;       // extend walls 5 mm below z=0
 
 // ============================================================
 // Display footprint & screen inlay (unchanged from v2-46y)
@@ -159,15 +160,6 @@ joystick_pcb_pocket_y_end_mm =
     joystick_pcb_pocket_y_start_mm + joystick_pcb_pocket_depth_y_mm;
 
 // ============================================================
-// USB-C port cutout through the -X wall for the TP4056 charge board
-// ============================================================
-usb_c_cutout_width_y_mm                        = 10;
-usb_c_cutout_height_z_mm                       = 5;
-usb_c_cutout_center_y_mm =
-    enclosure_outer_depth_along_y_axis_mm / 2;              // = 23
-usb_c_cutout_center_z_mm                       = 5.5;
-
-// ============================================================
 // Corner pillars — blind M3 bores capped at face plate bottom
 // ============================================================
 corner_pillar_square_side_length_mm            = 5;
@@ -252,10 +244,13 @@ module top_cover_windowed_screen_inlay_v3_2piece() {
 
     difference() {
         union() {
+            // Shell extended 5 mm below z=0 (the mating plane) so
+            // the walls wrap further down around the base plate.
+            translate([0, 0, -wall_extension_below_mating_mm])
             shell_with_bullnose_top(
                 enclosure_outer_width_along_x_axis_mm,
                 enclosure_outer_depth_along_y_axis_mm,
-                cover_total_height_z_mm,
+                cover_total_height_z_mm + wall_extension_below_mating_mm,
                 outer_case_top_view_corner_radius_mm,
                 outer_case_top_edge_bullnose_radius_mm);
 
@@ -268,11 +263,11 @@ module top_cover_windowed_screen_inlay_v3_2piece() {
                       < enclosure_outer_depth_along_y_axis_mm / 2) ? 1 : 0;
                 translate([corner_pillar_origin_xy[0],
                            corner_pillar_origin_xy[1],
-                           0])
+                           -wall_extension_below_mating_mm])
                     pillar_one_round(
                         corner_pillar_square_side_length_mm,
                         corner_pillar_square_side_length_mm,
-                        face_plate_top_z_mm,
+                        face_plate_top_z_mm + wall_extension_below_mating_mm,
                         corner_pillar_inner_facing_corner_radius_mm,
                         pillar_rounds_positive_x_corner,
                         pillar_rounds_positive_y_corner);
@@ -282,10 +277,10 @@ module top_cover_windowed_screen_inlay_v3_2piece() {
         chamber_carve_preserving_pillars(
             cavity_inner_x_start_mm,
             cavity_inner_y_start_mm,
-            -0.1,
+            -wall_extension_below_mating_mm - 0.1,
             cavity_inner_x_end_mm - cavity_inner_x_start_mm,
             cavity_inner_y_end_mm - cavity_inner_y_start_mm,
-            face_plate_bottom_z_mm + 0.1,
+            face_plate_bottom_z_mm + wall_extension_below_mating_mm + 0.1,
             corner_pillar_xy_origin_positions_list,
             corner_pillar_square_side_length_mm);
 
@@ -349,8 +344,8 @@ module top_cover_windowed_screen_inlay_v3_2piece() {
                   + corner_pillar_square_side_length_mm / 2;
             translate([screw_hole_center_x_mm,
                        screw_hole_center_y_mm,
-                       -0.1])
-                cylinder(h = m3_bore_top_z_mm + 0.1,
+                       -wall_extension_below_mating_mm - 0.1])
+                cylinder(h = m3_bore_top_z_mm + wall_extension_below_mating_mm + 0.1,
                          d = m3_screw_clearance_hole_diameter_mm);
         }
 
@@ -365,13 +360,6 @@ module top_cover_windowed_screen_inlay_v3_2piece() {
         // with the v1-2mm / pico2-v2-2mm / v2-46y lineage). Re-add when
         // the joystick-PCB retention plan lands.
 
-        // USB-C port cutout through the -X wall for TP4056 charge board
-        translate([-0.1,
-                   usb_c_cutout_center_y_mm - usb_c_cutout_width_y_mm / 2,
-                   usb_c_cutout_center_z_mm - usb_c_cutout_height_z_mm / 2])
-            cube([minus_x_end_wall_thickness_mm + 0.2,
-                  usb_c_cutout_width_y_mm,
-                  usb_c_cutout_height_z_mm]);
     }
 }
 

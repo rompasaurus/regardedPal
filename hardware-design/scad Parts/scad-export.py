@@ -12,6 +12,7 @@ import sys
 import subprocess
 import shutil
 import argparse
+from datetime import datetime, date
 from pathlib import Path
 
 # Default search directories (relative to this script)
@@ -82,15 +83,19 @@ def file_browser(search_dirs: list[Path]) -> Path | None:
             print(f"    {d}")
         return None
 
+    # Sort by modification time, most recent first
+    scad_files.sort(key=lambda f: f.stat().st_mtime, reverse=True)
+
     print_header("Select a .scad file")
     for i, f in enumerate(scad_files, 1):
-        # Show path relative to hardware dir if possible
         try:
             rel = f.relative_to(HARDWARE_DIR)
         except ValueError:
             rel = f.name
         size_kb = f.stat().st_size / 1024
-        print(f"  [{i}] {rel}  ({size_kb:.1f} KB)")
+        mtime = datetime.fromtimestamp(f.stat().st_mtime)
+        time_str = mtime.strftime("%Y-%m-%d %H:%M")
+        print(f"  [{i:2d}] {time_str}  {size_kb:6.1f} KB  {rel}")
 
     print(f"  [c] Enter a custom path")
     print(f"  [q] Quit")
@@ -231,6 +236,42 @@ def run_export(openscad: str, scad_path: Path, output_path: Path,
     return result.returncode
 
 
+def view_todays_models(search_dirs: list[Path]):
+    """Show only SCAD files modified today, sorted by modification time."""
+    all_files = find_scad_files(search_dirs)
+    today = date.today()
+
+    todays_files = []
+    for f in all_files:
+        mtime = datetime.fromtimestamp(f.stat().st_mtime)
+        if mtime.date() == today:
+            todays_files.append((f, mtime))
+
+    # Sort by modification time (most recent first)
+    todays_files.sort(key=lambda x: x[1], reverse=True)
+
+    print_header(f"SCAD files modified today ({today.isoformat()})")
+
+    if not todays_files:
+        print("  No .scad files modified today.")
+        print()
+        input("  Press Enter to continue...")
+        return
+
+    print(f"  {len(todays_files)} file(s) found:\n")
+    for i, (f, mtime) in enumerate(todays_files, 1):
+        try:
+            rel = f.relative_to(HARDWARE_DIR)
+        except ValueError:
+            rel = f.name
+        size_kb = f.stat().st_size / 1024
+        time_str = mtime.strftime("%H:%M:%S")
+        print(f"  [{i:2d}] {time_str}  {size_kb:6.1f} KB  {rel}")
+
+    print()
+    input("  Press Enter to continue...")
+
+
 def interactive_menu():
     """Main interactive menu loop."""
     openscad = find_openscad()
@@ -247,6 +288,7 @@ def interactive_menu():
         print("  [1] Browse and export a .scad file")
         print("  [2] Batch export all parts from enclosure")
         print("  [3] Quick export (middle-plate.scad -> middle.3mf)")
+        print("  [4] View today's SCAD models")
         print("  [q] Quit")
         print()
 
@@ -297,6 +339,9 @@ def interactive_menu():
             out = HARDWARE_DIR / "enclosure-prints" / "middle.3mf"
             run_export(openscad, middle, out, None, [])
             input("  Press Enter to continue...")
+
+        elif choice == "4":
+            view_todays_models(DEFAULT_SEARCH_DIRS)
 
         else:
             print("  Invalid choice.")

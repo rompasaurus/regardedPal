@@ -60,5 +60,21 @@ The TP4056 USB-C charge board (blue PCB, ~28 mm x 17 mm) needs to sit at the -X 
 All in `hardware-design/scad Parts/Rev 2 extended with joystick/04-25-design-alterations/`:
 
 - `aaa-cradle-insert-v1.scad` — cradle insert v2 (TP4056 connecting block, battery curves, +X FPC cutout)
-- `base-plate-v1.scad` — base plate v2 (square pillars, battery troughs)
-- `top-cover-windowed-screen-inlay-v3-2piece.scad` — cover with USB-C cutout and hardcoded joystick position
+- `base-plate-v1.scad` — base plate v2 (square pillars, battery troughs, USB-C notch on +X wall)
+- `top-cover-windowed-screen-inlay-v3-2piece.scad` — cover with 5 mm wall extension and hardcoded joystick position
+
+## Second print + Ansmann batteries
+
+The updated cradle and base plate printed while Ansmann 1.5V Li-Ion AAA batteries arrived. These cells have a built-in boost converter and USB-C charging port — they're self-contained 1.5V sources, not raw Li-Ion cells.
+
+![Ansmann battery pack and cradle print overview](../../assets/images/enclosure/rev2-ansmann-batteries-and-cradle-overview.jpg){ width="720" loading=lazy }
+
+![Cradle v2 top-down with Ansmann cell, Pico 2 W, and TP4056](../../assets/images/enclosure/rev2-cradle-v2-topdown-ansmann-pico-tp4056.jpg){ width="720" loading=lazy }
+
+![Cradle v2 side profile with Ansmann cell](../../assets/images/enclosure/rev2-cradle-v2-side-profile-ansmann.jpg){ width="720" loading=lazy }
+
+### Battery compatibility note
+
+The Ansmann 1.5V Li-Ion AAAs **cannot** be charged by the TP4056 — the TP4056 expects raw 3.7V Li-Ion on its output, and the Ansmann's regulated 1.5V terminal would be damaged by 4.2V charge voltage. Instead, these cells wire in **series** (2 × 1.5V = 3.0V) directly to the Pico W's VSYS pin, and each cell charges individually via its built-in USB-C port.
+
+Full wiring guide: [`ansmann-1.5v-aaa-series-wiring-guide.md`](https://github.com/rompasaurus/dilder/blob/main/hardware-design/ansmann-1.5v-aaa-series-wiring-guide.md).

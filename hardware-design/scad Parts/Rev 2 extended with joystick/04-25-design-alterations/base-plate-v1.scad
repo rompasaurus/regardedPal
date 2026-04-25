@@ -36,18 +36,16 @@ minus_x_end_wall_thickness_mm                  = 3.0;
 plus_x_end_wall_thickness_mm                   = 1.2;
 perimeter_long_side_wall_thickness_y_mm_base   = 2;
 outer_case_top_view_corner_radius_mm           = 4;
-outer_case_bottom_edge_fillet_radius_mm        = 2;
+outer_case_bottom_edge_fillet_radius_mm        = 4;       // was 2 — matches top cover bullnose for symmetry
 
 // Plate Z: top flush with cover mating bottom. Pocket depth = cradle's
 // below-cover-mating extension (5.1 mm) + 0.2 mm slop so the cradle
 // settles cleanly on the pocket floor.
-base_plate_total_height_z_mm                   = 7.0;
-cradle_below_cover_mating_mm                   = 5.1;   // = |cradle plug_bottom_z_mm| in cover-local
-cradle_pocket_vertical_slop_mm                 = 0.2;
+base_plate_total_height_z_mm                   = 11.5;   // 6.5 base + 5 mm raised mating edge
+cradle_pocket_floor_thickness_mm                = 1.2;    // minimum printable floor
+cradle_pocket_floor_z_mm                       = cradle_pocket_floor_thickness_mm; // = 1.2
 cradle_pocket_depth_z_mm =
-    cradle_below_cover_mating_mm + cradle_pocket_vertical_slop_mm;                // = 5.3
-cradle_pocket_floor_z_mm =
-    base_plate_total_height_z_mm - cradle_pocket_depth_z_mm;                      // = 1.7
+    base_plate_total_height_z_mm - cradle_pocket_floor_z_mm;                      // = 10.3
 
 // ============================================================
 // Cradle pocket — rectangle matching the cradle's outer footprint
@@ -91,10 +89,32 @@ aaa_bay_center_z_global_mm =
     base_plate_total_height_z_mm + 0.95;                  // = 7.95 (cradle bay center z=0.95 + base top)
 aaa_bay_minus_y_center_y_mm                    = 7.85;   // from cradle insert
 aaa_bay_plus_y_center_y_mm                     = 38.15;  // from cradle insert
-// AAA bay X range — shifts +3 mm due to enclosure extension
-aaa_bay_x_start_global_mm                      = 35.4;
+// AAA bay X range — mirrored to +X side
+aaa_bay_x_start_global_mm                      = 29.6;   // mirrored: 94.5 - 64.9
 aaa_bay_length_along_x_mm                      = 49.5;   // from cradle insert
 battery_cradle_extrusion_wall_mm               = 1.5;
+battery_rail_height_reduction_mm               = 3;       // shorten rail Z by 3 mm
+battery_rail_depth_reduction_per_side_mm       = 2;       // shrink rail Y inward 2 mm each side (was 1)
+
+// USB-C port notch — on the +X wall (thin side), rounded to USB-C
+// connector dimensions + 0.2 mm tolerance. Open on 3 sides (top + ±Y).
+// Standard USB-C receptacle: 8.94 mm wide × 3.26 mm tall.
+usb_c_connector_width_mm                       = 8.94;
+usb_c_connector_height_mm                      = 3.26;
+usb_c_tolerance_mm                             = 0.2;
+usb_c_cutout_width_y_mm =
+    usb_c_connector_width_mm + usb_c_tolerance_mm;         // = 9.14
+usb_c_cutout_height_z_mm =
+    usb_c_connector_height_mm + usb_c_tolerance_mm;        // = 3.46
+usb_c_cutout_corner_r_mm =
+    (usb_c_connector_height_mm + usb_c_tolerance_mm) / 2;  // = 1.73 (fully rounded ends)
+usb_c_cutout_center_y_mm =
+    enclosure_outer_depth_along_y_axis_mm / 2;              // = 23
+usb_c_cutout_z_bottom_mm =
+    base_plate_total_height_z_mm - usb_c_cutout_height_z_mm; // notch from top edge down
+usb_c_wall_x_start_mm =
+    enclosure_outer_width_along_x_axis_mm
+      - plus_x_end_wall_thickness_mm;                       // +X wall inner face
 
 // Peg XY positions = cover screw-bore centers (pillar XY origin + pillar/2)
 peg_xy_positions_list = [
@@ -171,7 +191,39 @@ module base_plate_v1() {
                        cradle_pocket_floor_z_mm])
                 cube([cradle_pocket_x_end_mm - cradle_pocket_x_start_mm,
                       cradle_pocket_y_end_mm - cradle_pocket_y_start_mm,
-                      cradle_pocket_depth_z_mm + 0.1]);
+                      base_plate_total_height_z_mm
+                        - cradle_pocket_floor_z_mm + 0.1]);
+
+            // USB-C port notch on +X wall — rounded to connector shape,
+            // open on top, cut from the mating surface down.
+            translate([usb_c_wall_x_start_mm - 0.1, 0, 0])
+            hull() {
+                // -Y rounded end
+                translate([0,
+                           usb_c_cutout_center_y_mm
+                             - usb_c_cutout_width_y_mm / 2
+                             + usb_c_cutout_corner_r_mm,
+                           usb_c_cutout_z_bottom_mm + usb_c_cutout_corner_r_mm])
+                    rotate([0, 90, 0])
+                        cylinder(h = plus_x_end_wall_thickness_mm + 0.2,
+                                 r = usb_c_cutout_corner_r_mm, $fn = 48);
+                // +Y rounded end
+                translate([0,
+                           usb_c_cutout_center_y_mm
+                             + usb_c_cutout_width_y_mm / 2
+                             - usb_c_cutout_corner_r_mm,
+                           usb_c_cutout_z_bottom_mm + usb_c_cutout_corner_r_mm])
+                    rotate([0, 90, 0])
+                        cylinder(h = plus_x_end_wall_thickness_mm + 0.2,
+                                 r = usb_c_cutout_corner_r_mm, $fn = 48);
+                // Top edge — extends past mating surface
+                translate([0,
+                           usb_c_cutout_center_y_mm - usb_c_cutout_width_y_mm / 2,
+                           base_plate_total_height_z_mm])
+                    cube([plus_x_end_wall_thickness_mm + 0.2,
+                          usb_c_cutout_width_y_mm,
+                          0.1]);
+            }
         }
 
         // 4 square pillar bases — rise from the pocket floor to the
@@ -213,24 +265,27 @@ module base_plate_v1() {
             bay_y_center = bay_params[0];
             is_plus_y    = bay_params[1];
             inner_r = aaa_bay_diameter_mm / 2;
-            // Fill from the enclosure wall inward past the battery edge
+            // Fill from the enclosure wall inward past the battery edge,
+            // reduced 1 mm per side in Y depth
             fill_y_start = is_plus_y
-                ? bay_y_center - inner_r - 0.1
-                : -0.1;
+                ? bay_y_center - inner_r - 0.1 + battery_rail_depth_reduction_per_side_mm
+                : perimeter_long_side_wall_thickness_y_mm_base;
             fill_y_end = is_plus_y
-                ? enclosure_outer_depth_along_y_axis_mm + 0.1
-                : bay_y_center + inner_r + 0.1;
+                ? enclosure_outer_depth_along_y_axis_mm
+                    - perimeter_long_side_wall_thickness_y_mm_base
+                : bay_y_center + inner_r + 0.1 - battery_rail_depth_reduction_per_side_mm;
+            // Rail height reduced by 3 mm
+            fill_z_top = base_plate_total_height_z_mm - battery_rail_height_reduction_mm;
 
             difference() {
                 // Solid fill inside the pocket — from pocket floor
-                // up to plate top, connected to the side wall
+                // up to reduced height, connected to the side wall
                 translate([aaa_bay_x_start_global_mm,
                            fill_y_start,
                            cradle_pocket_floor_z_mm])
                     cube([aaa_bay_length_along_x_mm,
                           fill_y_end - fill_y_start,
-                          base_plate_total_height_z_mm
-                            - cradle_pocket_floor_z_mm + 0.1]);
+                          fill_z_top - cradle_pocket_floor_z_mm + 0.1]);
 
                 // Subtract battery cylinder — carves the concave
                 // trough downward into the fill

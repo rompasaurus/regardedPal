@@ -1,0 +1,804 @@
+(kicad_pcb
+  (version 20240108)
+  (generator "pcbnew")
+  (generator_version "8.0")
+  (general
+    (thickness 1.0)
+    (legacy_teardrops no)
+  )
+  (paper "A4")
+  (title_block
+    (title "Dilder Joystick Breakout PCB")
+    (date "2026-04-25")
+    (rev "1.0")
+    (comment 1 "20x20mm, 1.0mm thick, 2-layer")
+    (comment 2 "Alps Alpine SKRHABE010 / LCSC C139794")
+  )
+  (layers
+    (0 "F.Cu" signal)
+    (31 "B.Cu" signal)
+    (32 "B.Adhes" user "B.Adhesive")
+    (33 "F.Adhes" user "F.Adhesive")
+    (34 "B.Paste" user)
+    (35 "F.Paste" user)
+    (36 "B.SilkS" user "B.Silkscreen")
+    (37 "F.SilkS" user "F.Silkscreen")
+    (38 "B.Mask" user "B.Mask")
+    (39 "F.Mask" user "F.Mask")
+    (40 "Dwgs.User" user "User.Drawings")
+    (41 "Cmts.User" user "User.Comments")
+    (44 "Edge.Cuts" user)
+    (45 "Margin" user)
+    (46 "B.CrtYd" user "B.Courtyard")
+    (47 "F.CrtYd" user "F.Courtyard")
+    (48 "B.Fab" user "B.Fabrication")
+    (49 "F.Fab" user "F.Fabrication")
+  )
+  (setup
+    (pad_to_mask_clearance 0.05)
+    (allow_soldermask_bridges_in_footprints no)
+    (pcbplotparams
+      (layerselection 0x00010fc_ffffffff)
+      (plot_on_all_layers_selection 0x0000000_00000000)
+      (disableapertmacros no)
+      (usegerberextensions no)
+      (usegerberattributes yes)
+      (usegerberadvancedattributes yes)
+      (creategerberjobfile yes)
+      (dashed_line_dash_ratio 12.000000)
+      (dashed_line_gap_ratio 3.000000)
+      (svgprecision 4)
+      (plotframeref no)
+      (viasonmask no)
+      (mode 1)
+      (useauxorigin no)
+      (hpglpennumber 1)
+      (hpglpenspeed 20)
+      (hpglpendiameter 15.000000)
+      (pdf_front_fp_property_popups yes)
+      (pdf_back_fp_property_popups yes)
+      (dxfpolygonmode yes)
+      (dxfimperialunits yes)
+      (dxfusepcbnewfont yes)
+      (psnegative no)
+      (psa4output no)
+      (plotreference yes)
+      (plotvalue yes)
+      (plotfptext yes)
+      (plotinvisibletext no)
+      (sketchpadsonfab no)
+      (subtractmaskfromsilk no)
+      (outputformat 1)
+      (mirror no)
+      (drillshape 1)
+      (scaleselection 1)
+      (outputdirectory "")
+    )
+  )
+  (net 0 "")
+  (net 1 "JOY_UP")
+  (net 2 "JOY_DOWN")
+  (net 3 "JOY_LEFT")
+  (net 4 "JOY_RIGHT")
+  (net 5 "JOY_CENTER")
+  (net 6 "GND")
+
+  ;; Board outline — 20x20mm
+  (gr_rect
+    (start 100 100)
+    (end 120 120)
+    (stroke
+      (width 0.15)
+      (type default)
+    )
+    (fill none)
+    (layer "Edge.Cuts")
+    (uuid "edge001")
+  )
+
+  ;; Board title silkscreen
+  (gr_text "DILDER"
+    (at 110 103 0)
+    (layer "F.SilkS")
+    (uuid "silk001")
+    (effects
+      (font
+        (size 1.5 1.5)
+        (thickness 0.2)
+      )
+    )
+  )
+  (gr_text "JOY v1.0"
+    (at 110 117.5 0)
+    (layer "F.SilkS")
+    (uuid "silk002")
+    (effects
+      (font
+        (size 1.0 1.0)
+        (thickness 0.15)
+      )
+    )
+  )
+
+  ;; Pin labels on silkscreen near wire pads
+  (gr_text "UP"
+    (at 103.5 106 0)
+    (layer "F.SilkS")
+    (uuid "silk_up")
+    (effects
+      (font
+        (size 0.8 0.8)
+        (thickness 0.12)
+      )
+      (justify left)
+    )
+  )
+  (gr_text "DN"
+    (at 103.5 108 0)
+    (layer "F.SilkS")
+    (uuid "silk_dn")
+    (effects
+      (font
+        (size 0.8 0.8)
+        (thickness 0.12)
+      )
+      (justify left)
+    )
+  )
+  (gr_text "LT"
+    (at 103.5 110 0)
+    (layer "F.SilkS")
+    (uuid "silk_lt")
+    (effects
+      (font
+        (size 0.8 0.8)
+        (thickness 0.12)
+      )
+      (justify left)
+    )
+  )
+  (gr_text "RT"
+    (at 103.5 112 0)
+    (layer "F.SilkS")
+    (uuid "silk_rt")
+    (effects
+      (font
+        (size 0.8 0.8)
+        (thickness 0.12)
+      )
+      (justify left)
+    )
+  )
+  (gr_text "CT"
+    (at 103.5 114 0)
+    (layer "F.SilkS")
+    (uuid "silk_ct")
+    (effects
+      (font
+        (size 0.8 0.8)
+        (thickness 0.12)
+      )
+      (justify left)
+    )
+  )
+  (gr_text "GND"
+    (at 103.5 116 0)
+    (layer "F.SilkS")
+    (uuid "silk_gnd")
+    (effects
+      (font
+        (size 0.8 0.8)
+        (thickness 0.12)
+      )
+      (justify left)
+    )
+  )
+
+  ;; ─── SKRHABE010 footprint (SW1) ───
+  ;; Centered at (110.65, 110) — 0.65mm +X offset per enclosure spec
+  ;; Component is 7.4 x 7.5 mm, pads extend beyond body
+  (footprint "joystick-pcb:SKRHABE010"
+    (layer "F.Cu")
+    (uuid "fp_sw1")
+    (at 110.65 110)
+    (property "Reference" "SW1"
+      (at 0 -5.5 0)
+      (layer "F.SilkS")
+      (uuid "fp_sw1_ref")
+      (effects
+        (font
+          (size 1 1)
+          (thickness 0.15)
+        )
+      )
+    )
+    (property "Value" "SKRHABE010"
+      (at 0 5.5 0)
+      (layer "F.Fab")
+      (uuid "fp_sw1_val")
+      (effects
+        (font
+          (size 1 1)
+          (thickness 0.15)
+        )
+      )
+    )
+    (property "LCSC" "C139794"
+      (at 0 7 0)
+      (layer "F.Fab")
+      (uuid "fp_sw1_lcsc")
+      (effects
+        (font
+          (size 1 1)
+          (thickness 0.15)
+        )
+        (hide yes)
+      )
+    )
+    (attr smd)
+    ;; Fab layer outline (component body)
+    (fp_rect
+      (start -3.7 -3.75)
+      (end 3.7 3.75)
+      (stroke
+        (width 0.1)
+        (type default)
+      )
+      (fill none)
+      (layer "F.Fab")
+      (uuid "fp_sw1_fab")
+    )
+    ;; Silkscreen outline
+    (fp_rect
+      (start -3.9 -3.95)
+      (end 3.9 3.95)
+      (stroke
+        (width 0.15)
+        (type default)
+      )
+      (fill none)
+      (layer "F.SilkS")
+      (uuid "fp_sw1_silk")
+    )
+    ;; Courtyard
+    (fp_rect
+      (start -4.5 -4.5)
+      (end 4.5 4.5)
+      (stroke
+        (width 0.05)
+        (type default)
+      )
+      (fill none)
+      (layer "F.CrtYd")
+      (uuid "fp_sw1_crtyd")
+    )
+    ;; Pin 1 - UP (A) — top side
+    (pad "1" smd rect
+      (at -2.475 -3.55)
+      (size 0.7 1.2)
+      (layers "F.Cu" "F.Paste" "F.Mask")
+      (net 1 "JOY_UP")
+      (uuid "pad_sw1_1")
+    )
+    ;; Pin 2 - CENTER (CNTR) — top side
+    (pad "5" smd rect
+      (at 2.475 -3.55)
+      (size 0.7 1.2)
+      (layers "F.Cu" "F.Paste" "F.Mask")
+      (net 5 "JOY_CENTER")
+      (uuid "pad_sw1_5")
+    )
+    ;; Pin 3 - DOWN (C) — bottom side
+    (pad "2" smd rect
+      (at -2.475 3.55)
+      (size 0.7 1.2)
+      (layers "F.Cu" "F.Paste" "F.Mask")
+      (net 2 "JOY_DOWN")
+      (uuid "pad_sw1_2")
+    )
+    ;; Pin 4 - LEFT (B) — bottom side, left
+    (pad "3" smd rect
+      (at 0 3.55)
+      (size 0.7 1.2)
+      (layers "F.Cu" "F.Paste" "F.Mask")
+      (net 3 "JOY_LEFT")
+      (uuid "pad_sw1_3")
+    )
+    ;; Pin 5 - COMMON — bottom right
+    (pad "6" smd rect
+      (at 2.475 3.55)
+      (size 0.7 1.2)
+      (layers "F.Cu" "F.Paste" "F.Mask")
+      (net 6 "GND")
+      (uuid "pad_sw1_6")
+    )
+    ;; Pin 6 - RIGHT (D) — top side, center
+    (pad "4" smd rect
+      (at 0 -3.55)
+      (size 0.7 1.2)
+      (layers "F.Cu" "F.Paste" "F.Mask")
+      (net 4 "JOY_RIGHT")
+      (uuid "pad_sw1_4")
+    )
+    ;; Mounting pad 1 (mechanical anchor)
+    (pad "MP" smd rect
+      (at -3.85 0)
+      (size 1.0 1.6)
+      (layers "F.Cu" "F.Paste" "F.Mask")
+      (uuid "pad_sw1_mp1")
+    )
+    ;; Mounting pad 2 (mechanical anchor)
+    (pad "MP" smd rect
+      (at 3.85 0)
+      (size 1.0 1.6)
+      (layers "F.Cu" "F.Paste" "F.Mask")
+      (uuid "pad_sw1_mp2")
+    )
+  )
+
+  ;; ─── Wire pads connector (J1) ───
+  ;; 6 through-hole pads along left edge for hand-soldering wires
+  ;; Located at x=102, spaced 2mm apart vertically
+  (footprint "joystick-pcb:WirePads_1x06_P2.0mm"
+    (layer "F.Cu")
+    (uuid "fp_j1")
+    (at 102 111)
+    (property "Reference" "J1"
+      (at 0 -8 0)
+      (layer "F.SilkS")
+      (uuid "fp_j1_ref")
+      (effects
+        (font
+          (size 1 1)
+          (thickness 0.15)
+        )
+      )
+    )
+    (property "Value" "Wire_Pads"
+      (at 0 8 0)
+      (layer "F.Fab")
+      (uuid "fp_j1_val")
+      (effects
+        (font
+          (size 1 1)
+          (thickness 0.15)
+        )
+      )
+    )
+    ;; Courtyard
+    (fp_rect
+      (start -1.2 -6.2)
+      (end 1.2 6.2)
+      (stroke
+        (width 0.05)
+        (type default)
+      )
+      (fill none)
+      (layer "F.CrtYd")
+      (uuid "fp_j1_crtyd")
+    )
+    ;; Pin 1 - JOY_UP
+    (pad "1" thru_hole circle
+      (at 0 -5)
+      (size 1.6 1.6)
+      (drill 1.0)
+      (layers "*.Cu" "*.Mask")
+      (net 1 "JOY_UP")
+      (uuid "pad_j1_1")
+    )
+    ;; Pin 2 - JOY_DOWN
+    (pad "2" thru_hole circle
+      (at 0 -3)
+      (size 1.6 1.6)
+      (drill 1.0)
+      (layers "*.Cu" "*.Mask")
+      (net 2 "JOY_DOWN")
+      (uuid "pad_j1_2")
+    )
+    ;; Pin 3 - JOY_LEFT
+    (pad "3" thru_hole circle
+      (at 0 -1)
+      (size 1.6 1.6)
+      (drill 1.0)
+      (layers "*.Cu" "*.Mask")
+      (net 3 "JOY_LEFT")
+      (uuid "pad_j1_3")
+    )
+    ;; Pin 4 - JOY_RIGHT
+    (pad "4" thru_hole circle
+      (at 0 1)
+      (size 1.6 1.6)
+      (drill 1.0)
+      (layers "*.Cu" "*.Mask")
+      (net 4 "JOY_RIGHT")
+      (uuid "pad_j1_4")
+    )
+    ;; Pin 5 - JOY_CENTER
+    (pad "5" thru_hole circle
+      (at 0 3)
+      (size 1.6 1.6)
+      (drill 1.0)
+      (layers "*.Cu" "*.Mask")
+      (net 5 "JOY_CENTER")
+      (uuid "pad_j1_5")
+    )
+    ;; Pin 6 - GND
+    (pad "6" thru_hole circle
+      (at 0 5)
+      (size 1.6 1.6)
+      (drill 1.0)
+      (layers "*.Cu" "*.Mask")
+      (net 6 "GND")
+      (uuid "pad_j1_6")
+    )
+  )
+
+  ;; ─── Mounting holes ───
+  ;; 4x M3 (3.2mm drill), 2.5mm inset from board edges
+  ;; Board corners: (100,100), (120,100), (100,120), (120,120)
+  ;; Hole centers: 2.5mm inset → (102.5, 102.5), etc.
+
+  (footprint "MountingHole:MountingHole_3.2mm_M3"
+    (layer "F.Cu")
+    (uuid "fp_h1")
+    (at 102.5 102.5)
+    (property "Reference" "H1"
+      (at 0 -3 0)
+      (layer "F.SilkS")
+      (uuid "fp_h1_ref")
+      (effects
+        (font
+          (size 0.8 0.8)
+          (thickness 0.12)
+        )
+      )
+    )
+    (property "Value" "M3"
+      (at 0 3 0)
+      (layer "F.Fab")
+      (uuid "fp_h1_val")
+      (effects
+        (font
+          (size 0.8 0.8)
+          (thickness 0.12)
+        )
+      )
+    )
+    (pad "" np_thru_hole circle
+      (at 0 0)
+      (size 3.2 3.2)
+      (drill 3.2)
+      (layers "*.Cu" "*.Mask")
+      (uuid "pad_h1")
+    )
+  )
+
+  (footprint "MountingHole:MountingHole_3.2mm_M3"
+    (layer "F.Cu")
+    (uuid "fp_h2")
+    (at 117.5 102.5)
+    (property "Reference" "H2"
+      (at 0 -3 0)
+      (layer "F.SilkS")
+      (uuid "fp_h2_ref")
+      (effects
+        (font
+          (size 0.8 0.8)
+          (thickness 0.12)
+        )
+      )
+    )
+    (property "Value" "M3"
+      (at 0 3 0)
+      (layer "F.Fab")
+      (uuid "fp_h2_val")
+      (effects
+        (font
+          (size 0.8 0.8)
+          (thickness 0.12)
+        )
+      )
+    )
+    (pad "" np_thru_hole circle
+      (at 0 0)
+      (size 3.2 3.2)
+      (drill 3.2)
+      (layers "*.Cu" "*.Mask")
+      (uuid "pad_h2")
+    )
+  )
+
+  (footprint "MountingHole:MountingHole_3.2mm_M3"
+    (layer "F.Cu")
+    (uuid "fp_h3")
+    (at 102.5 117.5)
+    (property "Reference" "H3"
+      (at 0 -3 0)
+      (layer "F.SilkS")
+      (uuid "fp_h3_ref")
+      (effects
+        (font
+          (size 0.8 0.8)
+          (thickness 0.12)
+        )
+      )
+    )
+    (property "Value" "M3"
+      (at 0 3 0)
+      (layer "F.Fab")
+      (uuid "fp_h3_val")
+      (effects
+        (font
+          (size 0.8 0.8)
+          (thickness 0.12)
+        )
+      )
+    )
+    (pad "" np_thru_hole circle
+      (at 0 0)
+      (size 3.2 3.2)
+      (drill 3.2)
+      (layers "*.Cu" "*.Mask")
+      (uuid "pad_h3")
+    )
+  )
+
+  (footprint "MountingHole:MountingHole_3.2mm_M3"
+    (layer "F.Cu")
+    (uuid "fp_h4")
+    (at 117.5 117.5)
+    (property "Reference" "H4"
+      (at 0 -3 0)
+      (layer "F.SilkS")
+      (uuid "fp_h4_ref")
+      (effects
+        (font
+          (size 0.8 0.8)
+          (thickness 0.12)
+        )
+      )
+    )
+    (property "Value" "M3"
+      (at 0 3 0)
+      (layer "F.Fab")
+      (uuid "fp_h4_val")
+      (effects
+        (font
+          (size 0.8 0.8)
+          (thickness 0.12)
+        )
+      )
+    )
+    (pad "" np_thru_hole circle
+      (at 0 0)
+      (size 3.2 3.2)
+      (drill 3.2)
+      (layers "*.Cu" "*.Mask")
+      (uuid "pad_h4")
+    )
+  )
+
+  ;; ─── Traces (F.Cu) ───
+  ;; Route from SKRHABE010 pads to wire pads
+  ;; Using 0.3mm trace width
+
+  ;; JOY_UP: SW1 pin 1 (108.175, 106.45) → J1 pin 1 (102, 106)
+  (segment
+    (start 108.175 106.45)
+    (end 108.175 106)
+    (width 0.3)
+    (layer "F.Cu")
+    (net 1)
+    (uuid "tr001a")
+  )
+  (segment
+    (start 108.175 106)
+    (end 102 106)
+    (width 0.3)
+    (layer "F.Cu")
+    (net 1)
+    (uuid "tr001b")
+  )
+
+  ;; JOY_DOWN: SW1 pin 2 (108.175, 113.55) → J1 pin 2 (102, 108)
+  (segment
+    (start 108.175 113.55)
+    (end 108.175 114.5)
+    (width 0.3)
+    (layer "F.Cu")
+    (net 2)
+    (uuid "tr002a")
+  )
+  (segment
+    (start 108.175 114.5)
+    (end 106.5 114.5)
+    (width 0.3)
+    (layer "F.Cu")
+    (net 2)
+    (uuid "tr002b")
+  )
+  (segment
+    (start 106.5 114.5)
+    (end 106.5 108)
+    (width 0.3)
+    (layer "F.Cu")
+    (net 2)
+    (uuid "tr002c")
+  )
+  (segment
+    (start 106.5 108)
+    (end 102 108)
+    (width 0.3)
+    (layer "F.Cu")
+    (net 2)
+    (uuid "tr002d")
+  )
+
+  ;; JOY_LEFT: SW1 pin 3 (110.65, 113.55) → J1 pin 3 (102, 110)
+  (segment
+    (start 110.65 113.55)
+    (end 110.65 115.5)
+    (width 0.3)
+    (layer "F.Cu")
+    (net 3)
+    (uuid "tr003a")
+  )
+  (segment
+    (start 110.65 115.5)
+    (end 105.5 115.5)
+    (width 0.3)
+    (layer "F.Cu")
+    (net 3)
+    (uuid "tr003b")
+  )
+  (segment
+    (start 105.5 115.5)
+    (end 105.5 110)
+    (width 0.3)
+    (layer "F.Cu")
+    (net 3)
+    (uuid "tr003c")
+  )
+  (segment
+    (start 105.5 110)
+    (end 102 110)
+    (width 0.3)
+    (layer "F.Cu")
+    (net 3)
+    (uuid "tr003d")
+  )
+
+  ;; JOY_RIGHT: SW1 pin 4 (110.65, 106.45) → J1 pin 4 (102, 112)
+  (segment
+    (start 110.65 106.45)
+    (end 110.65 105)
+    (width 0.3)
+    (layer "F.Cu")
+    (net 4)
+    (uuid "tr004a")
+  )
+  (segment
+    (start 110.65 105)
+    (end 115 105)
+    (width 0.3)
+    (layer "F.Cu")
+    (net 4)
+    (uuid "tr004b")
+  )
+  (segment
+    (start 115 105)
+    (end 115 116.5)
+    (width 0.3)
+    (layer "F.Cu")
+    (net 4)
+    (uuid "tr004c")
+  )
+  (segment
+    (start 115 116.5)
+    (end 104.5 116.5)
+    (width 0.3)
+    (layer "F.Cu")
+    (net 4)
+    (uuid "tr004d")
+  )
+  (segment
+    (start 104.5 116.5)
+    (end 104.5 112)
+    (width 0.3)
+    (layer "F.Cu")
+    (net 4)
+    (uuid "tr004e")
+  )
+  (segment
+    (start 104.5 112)
+    (end 102 112)
+    (width 0.3)
+    (layer "F.Cu")
+    (net 4)
+    (uuid "tr004f")
+  )
+
+  ;; JOY_CENTER: SW1 pin 5 (113.125, 106.45) → J1 pin 5 (102, 114)
+  (segment
+    (start 113.125 106.45)
+    (end 113.125 104)
+    (width 0.3)
+    (layer "F.Cu")
+    (net 5)
+    (uuid "tr005a")
+  )
+  (segment
+    (start 113.125 104)
+    (end 116 104)
+    (width 0.3)
+    (layer "F.Cu")
+    (net 5)
+    (uuid "tr005b")
+  )
+  (segment
+    (start 116 104)
+    (end 116 117.5)
+    (width 0.3)
+    (layer "F.Cu")
+    (net 5)
+    (uuid "tr005c")
+  )
+  (segment
+    (start 116 117.5)
+    (end 103.5 117.5)
+    (width 0.3)
+    (layer "F.Cu")
+    (net 5)
+    (uuid "tr005d")
+  )
+  (segment
+    (start 103.5 117.5)
+    (end 103.5 114)
+    (width 0.3)
+    (layer "F.Cu")
+    (net 5)
+    (uuid "tr005e")
+  )
+  (segment
+    (start 103.5 114)
+    (end 102 114)
+    (width 0.3)
+    (layer "F.Cu")
+    (net 5)
+    (uuid "tr005f")
+  )
+
+  ;; GND: SW1 pin 6 (113.125, 113.55) → J1 pin 6 (102, 116)
+  (segment
+    (start 113.125 113.55)
+    (end 113.125 118.5)
+    (width 0.3)
+    (layer "F.Cu")
+    (net 6)
+    (uuid "tr006a")
+  )
+  (segment
+    (start 113.125 118.5)
+    (end 102.5 118.5)
+    (width 0.3)
+    (layer "F.Cu")
+    (net 6)
+    (uuid "tr006b")
+  )
+  (segment
+    (start 102.5 118.5)
+    (end 102.5 116)
+    (width 0.3)
+    (layer "F.Cu")
+    (net 6)
+    (uuid "tr006c")
+  )
+  (segment
+    (start 102.5 116)
+    (end 102 116)
+    (width 0.3)
+    (layer "F.Cu")
+    (net 6)
+    (uuid "tr006d")
+  )
+)
