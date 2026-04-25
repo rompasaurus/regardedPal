@@ -1635,3 +1635,13 @@ All 5 pieces exported cleanly (CGAL manifold) as 3MF for Bambu Studio: `base.3mf
 - **Input Tokens (est):** ~1,500 across the sequence
 - **Output Tokens (est):** ~25,000
 - **Summary:** Cradle rebuilt from yesterday's v1 base with battery bays shifted 20mm toward -X, Pico nest extended to 55mm, +X FPC cutout. Base plate: USB-C stadium notch on +X wall, troughs aligned to cradle, 4mm fillet, 11.5mm height/1.2mm floor. Cover: 5mm wall extension below mating plane. New Ansmann 1.5V Li-Ion AAA series wiring guide with Bauhaus sourcing tips. 3 print photos converted. scad-export.py updated with date-sorted file browser and "View today's models" menu.
+
+---
+
+## Prompt #249 — 2026-04-25
+
+**Prompt sequence:** Joystick breakout PCB design + base plate support block modifications (~8 turns).
+
+- **Input Tokens (est):** ~400 across the sequence
+- **Output Tokens (est):** ~20,000
+- **Summary:** New `hardware-design/joystick-pcb/` KiCad 8 project: 20x20mm SKRHABE010 breakout PCB with schematic, layout, BOM (LCSC C139794, ~$15.50 for 5 assembled via JLCPCB). Base plate v3: battery rails +5mm height (extend 2mm above plate top), two 5x15mm support blocks centered on USB-C Y axis for TP4056 board retention. Design evolution and version history updated.

@@ -93,7 +93,7 @@ aaa_bay_plus_y_center_y_mm                     = 38.15;  // from cradle insert
 aaa_bay_x_start_global_mm                      = 29.6;   // mirrored: 94.5 - 64.9
 aaa_bay_length_along_x_mm                      = 49.5;   // from cradle insert
 battery_cradle_extrusion_wall_mm               = 1.5;
-battery_rail_height_reduction_mm               = 3;       // shorten rail Z by 3 mm
+battery_rail_height_reduction_mm               = -2;      // was 3; now -2 → rails extend 2 mm above base plate (net +5 mm vs previous)
 battery_rail_depth_reduction_per_side_mm       = 2;       // shrink rail Y inward 2 mm each side (was 1)
 
 // USB-C port notch — on the +X wall (thin side), rounded to USB-C
@@ -297,6 +297,31 @@ module base_plate_v1() {
                                  r = inner_r);
             }
         }
+
+        // USB-C support block — 5 mm in from +X outer wall, dead center Y,
+        // 15 mm wide, rises from pocket floor to USB-C cutout bottom.
+        usb_support_block_inset_from_wall_mm = 5;
+        usb_support_block_width_y_mm         = 15;
+        usb_support_block_x_start =
+            enclosure_outer_width_along_x_axis_mm - usb_support_block_inset_from_wall_mm - 10;
+        usb_support_block_x_end =
+            usb_support_block_x_start + 5;
+        usb_support_block_y_start =
+            usb_c_cutout_center_y_mm - usb_support_block_width_y_mm / 2;
+        translate([usb_support_block_x_start,
+                   usb_support_block_y_start,
+                   cradle_pocket_floor_z_mm])
+            cube([usb_support_block_x_end - usb_support_block_x_start,
+                  usb_support_block_width_y_mm,
+                  usb_c_cutout_z_bottom_mm - cradle_pocket_floor_z_mm + 3]);
+
+        // Second block — 5 mm towards center (-X) from first block
+        translate([usb_support_block_x_start - 5 - (usb_support_block_x_end - usb_support_block_x_start),
+                   usb_support_block_y_start,
+                   cradle_pocket_floor_z_mm])
+            cube([usb_support_block_x_end - usb_support_block_x_start,
+                  usb_support_block_width_y_mm,
+                  usb_c_cutout_z_bottom_mm - cradle_pocket_floor_z_mm + 3]);
     }
 }
 

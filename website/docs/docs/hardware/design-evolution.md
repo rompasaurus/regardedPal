@@ -508,4 +508,6 @@ Provides a menu to browse .scad files, pick export format (3MF/STL), set output 
 | 2026-04-25 | Rev 2 top cover (screen inlay) | v3-2piece ext | Enclosure +3 mm on -X, 5 mm wall extension below mating plane, joystick position hardcoded at x=79.35 |
 | 2026-04-25 | Rev 2 cradle insert | v2 iteration | Battery bays shifted 20 mm toward -X, Pico nest extended to 55 mm clear length, stale comments fixed |
 | 2026-04-25 | Rev 2 base plate | v2 iteration | USB-C rounded notch moved to +X wall, battery troughs aligned to cradle (x=15.4), 4 mm bottom fillet, 11.5 mm total height with 1.2 mm floor, rail depth reduced 2 mm/side |
+| 2026-04-25 | Rev 2 base plate | v3 | Battery rails +5 mm height (extend 2 mm above plate top), two 5×15 mm support blocks centered on USB-C Y axis for TP4056 board retention |
+| 2026-04-25 | Joystick breakout PCB | v1 | KiCad 8 project for 20×20 mm SKRHABE010 breakout board — fits top cover PCB pocket, 4× M3 mounting holes, 6-pin wire pads, JLCPCB BOM (LCSC C139794) |
 | 2026-04-25 | Ansmann battery wiring | guide | Wiring guide for 2× Ansmann 1.5V Li-Ion AAA in series (3.0V → VSYS), battery contact recommendations, safety notes |

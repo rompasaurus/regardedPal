@@ -3181,3 +3181,25 @@ Every prompt entry below uses the following fields. Entries that don't yet list 
   - Blog post and design evolution updated with Ansmann battery photos and compatibility notes
 
 ---
+
+## Prompt #249 — 2026-04-25
+- **Prompt sequence:** Joystick breakout PCB design (KiCad schematic + layout + BOM for SKRHABE010 on 20x20mm board, JLCPCB/LCSC sourcing research), then base plate modifications: battery rails +5mm height, USB-C support block (15mm wide, dead center Y, 5mm deep), iterative repositioning (-10mm X transform, resize to 5mm depth, +3mm height), duplicate block placed 5mm adjacent.
+- **Input Tokens (est):** ~400 across the sequence
+- **Output Tokens (est):** ~20,000
+- **Files / interpretation:**
+  - `hardware-design/joystick-pcb/` (new directory) — complete KiCad 8 project for 20x20mm SKRHABE010 5-direction navigation switch breakout PCB:
+    - `joystick-pcb.kicad_pro` — project file
+    - `joystick-pcb.kicad_sch` — schematic (SW1 + J1 6-pin wire pads + 4x M3 mounting holes)
+    - `joystick-pcb.kicad_pcb` — PCB layout (all traces routed on F.Cu, 0.3mm width)
+    - `BOM.md` — bill of materials with JLCPCB pricing, alternatives (XKB TM-4175-B-A, SKRHADE010), cost estimate (~$15.50 for 5 assembled)
+    - `design-notes.md` — enclosure constraints, pin mapping, ordering instructions, JLCPCB BOM/CPL CSVs
+  - `04-25-design-alterations/base-plate-v1.scad` (modified — 3 changes):
+    - `battery_rail_height_reduction_mm`: 3 -> -2 (rails now extend 2mm above plate top, net +5mm)
+    - USB-C support block: 5x15mm, centered at Y=23, Z from pocket floor to USB-C cutout bottom +3mm, positioned 15mm in from +X wall
+    - Second identical block placed 5mm adjacent (toward -X) from first block
+  - `hardware-design/enclosure-prints/base-plate-v1.3mf` — re-rendered
+  - `website/docs/docs/hardware/design-evolution.md` — 2 new version history rows
+  - `website/docs/prompts/index.md` — synced with prompt #249
+  - `PromptProgression.md` — prompt #249 appended
+
+---
