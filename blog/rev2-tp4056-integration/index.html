@@ -12,31 +12,31 @@
         <meta name="author" content="rompasaurus">
       
       
-        <link rel="canonical" href="https://dilder.dev/blog/category/hardware/page/2/">
+        <link rel="canonical" href="https://dilder.dev/blog/rev2-tp4056-integration/">
       
       
-        <link rel="prev" href="../../../firmware/">
+        <link rel="prev" href="../rev2-dual-10440-case-redesign/">
       
       
-        <link rel="next" href="../../../manufacturing/">
+        <link rel="next" href="../rev2-aaa-cradle-and-base-plate/">
       
       
         
       
       
-      <link rel="icon" href="../../../../../assets/images/dilder-icon.svg">
+      <link rel="icon" href="../../assets/images/dilder-icon.svg">
       <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.6">
     
     
       
-        <title>Hardware - Dilder</title>
+        <title>TP4056 Charge Board Integration — Cradle v2, Base Plate v2, Cover Update - Dilder</title>
       
     
     
-      <link rel="stylesheet" href="../../../../../assets/stylesheets/main.484c7ddc.min.css">
+      <link rel="stylesheet" href="../../assets/stylesheets/main.484c7ddc.min.css">
       
         
-        <link rel="stylesheet" href="../../../../../assets/stylesheets/palette.ab4e12ef.min.css">
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.ab4e12ef.min.css">
       
       
 
@@ -55,9 +55,9 @@
       
     
     
-      <link rel="stylesheet" href="../../../../../stylesheets/extra.css">
+      <link rel="stylesheet" href="../../stylesheets/extra.css">
     
-    <script>__md_scope=new URL("../../../../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
     
       
   
@@ -92,7 +92,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#hardware" class="md-skip">
+        <a href="#tp4056-charge-board-integration-cradle-v2-base-plate-v2-cover-update" class="md-skip">
           Skip to content
         </a>
       
@@ -106,9 +106,9 @@
 
 <header class="md-header" data-md-component="header">
   <nav class="md-header__inner md-grid" aria-label="Header">
-    <a href="../../../../.." title="Dilder" class="md-header__button md-logo" aria-label="Dilder" data-md-component="logo">
+    <a href="../.." title="Dilder" class="md-header__button md-logo" aria-label="Dilder" data-md-component="logo">
       
-  <img src="../../../../../assets/images/dilder-icon.svg" alt="logo">
+  <img src="../../assets/images/dilder-icon.svg" alt="logo">
 
     </a>
     <label class="md-header__button md-icon" for="__drawer">
@@ -125,7 +125,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Hardware
+              TP4056 Charge Board Integration — Cradle v2, Base Plate v2, Cover Update
             
           </span>
         </div>
@@ -238,7 +238,7 @@
   
   
     <li class="md-tabs__item">
-      <a href="../../../../.." class="md-tabs__link">
+      <a href="../.." class="md-tabs__link">
         
   
   
@@ -261,7 +261,7 @@
     
     
       <li class="md-tabs__item md-tabs__item--active">
-        <a href="../../../../" class="md-tabs__link">
+        <a href="../" class="md-tabs__link">
           
   
   
@@ -281,7 +281,7 @@
     
     
       <li class="md-tabs__item">
-        <a href="../../../../../docs/" class="md-tabs__link">
+        <a href="../../docs/" class="md-tabs__link">
           
   
   
@@ -301,7 +301,7 @@
     
     
       <li class="md-tabs__item">
-        <a href="../../../../../community/" class="md-tabs__link">
+        <a href="../../community/" class="md-tabs__link">
           
   
   
@@ -321,7 +321,7 @@
     
     
       <li class="md-tabs__item">
-        <a href="../../../../../about/" class="md-tabs__link">
+        <a href="../../about/" class="md-tabs__link">
           
   
   
@@ -339,7 +339,7 @@
   
   
     <li class="md-tabs__item">
-      <a href="../../../../../prompts/" class="md-tabs__link">
+      <a href="../../prompts/" class="md-tabs__link">
         
   
   
@@ -363,7 +363,9 @@
           
             
               
-              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" hidden>
                 <div class="md-sidebar__scrollwrap">
                   <div class="md-sidebar__inner">
                     
@@ -374,9 +376,9 @@
 
 <nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Navigation" data-md-level="0">
   <label class="md-nav__title" for="__drawer">
-    <a href="../../../../.." title="Dilder" class="md-nav__button md-logo" aria-label="Dilder" data-md-component="logo">
+    <a href="../.." title="Dilder" class="md-nav__button md-logo" aria-label="Dilder" data-md-component="logo">
       
-  <img src="../../../../../assets/images/dilder-icon.svg" alt="logo">
+  <img src="../../assets/images/dilder-icon.svg" alt="logo">
 
     </a>
     Dilder
@@ -403,7 +405,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../../.." class="md-nav__link">
+      <a href="../.." class="md-nav__link">
         
   
   
@@ -484,12 +486,14 @@
                 
   
   
+    
+  
   
     
   
   
-    <li class="md-nav__item">
-      <a href="../../../../" class="md-nav__link">
+    <li class="md-nav__item md-nav__item--active">
+      <a href="../" class="md-nav__link">
         
   
   
@@ -574,7 +578,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../../archive/2026/" class="md-nav__link">
+      <a href="../archive/2026/" class="md-nav__link">
         
   
   
@@ -607,8 +611,6 @@
                 
   
   
-    
-  
   
   
     
@@ -624,11 +626,11 @@
       
     
     
-    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_3" checked>
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_3" >
         
           
           <label class="md-nav__link" for="__nav_2_3" id="__nav_2_3_label" tabindex="">
@@ -649,7 +651,7 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_3_label" aria-expanded="true">
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_3_label" aria-expanded="false">
           <label class="md-nav__title" for="__nav_2_3">
             <span class="md-nav__icon md-icon"></span>
             
@@ -669,7 +671,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../3d-printing/" class="md-nav__link">
+      <a href="../category/3d-printing/" class="md-nav__link">
         
   
   
@@ -699,7 +701,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../architecture/" class="md-nav__link">
+      <a href="../category/architecture/" class="md-nav__link">
         
   
   
@@ -729,7 +731,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../art/" class="md-nav__link">
+      <a href="../category/art/" class="md-nav__link">
         
   
   
@@ -759,7 +761,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../battery/" class="md-nav__link">
+      <a href="../category/battery/" class="md-nav__link">
         
   
   
@@ -789,7 +791,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../build-guide/" class="md-nav__link">
+      <a href="../category/build-guide/" class="md-nav__link">
         
   
   
@@ -819,7 +821,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../design/" class="md-nav__link">
+      <a href="../category/design/" class="md-nav__link">
         
   
   
@@ -849,7 +851,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../devtool/" class="md-nav__link">
+      <a href="../category/devtool/" class="md-nav__link">
         
   
   
@@ -879,7 +881,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../enclosure/" class="md-nav__link">
+      <a href="../category/enclosure/" class="md-nav__link">
         
   
   
@@ -909,7 +911,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../firmware/" class="md-nav__link">
+      <a href="../category/firmware/" class="md-nav__link">
         
   
   
@@ -936,19 +938,10 @@
   
   
     
-      
-    
   
   
     <li class="md-nav__item">
-      
-      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
-      
-      
-        
-      
-      
-      <a href="../../" class="md-nav__link md-nav__link--active">
+      <a href="../category/hardware/" class="md-nav__link">
         
   
   
@@ -964,7 +957,6 @@
   
 
       </a>
-      
     </li>
   
 
@@ -979,7 +971,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../manufacturing/" class="md-nav__link">
+      <a href="../category/manufacturing/" class="md-nav__link">
         
   
   
@@ -1009,7 +1001,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../pcb-design/" class="md-nav__link">
+      <a href="../category/pcb-design/" class="md-nav__link">
         
   
   
@@ -1039,7 +1031,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../planning/" class="md-nav__link">
+      <a href="../category/planning/" class="md-nav__link">
         
   
   
@@ -1069,7 +1061,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../software/" class="md-nav__link">
+      <a href="../category/software/" class="md-nav__link">
         
   
   
@@ -1099,7 +1091,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../tools/" class="md-nav__link">
+      <a href="../category/tools/" class="md-nav__link">
         
   
   
@@ -1194,7 +1186,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../../../docs/" class="md-nav__link">
+      <a href="../../docs/" class="md-nav__link">
         
   
   
@@ -1274,7 +1266,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../../../docs/hardware/materials-list/" class="md-nav__link">
+      <a href="../../docs/hardware/materials-list/" class="md-nav__link">
         
   
   
@@ -1302,7 +1294,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../../../docs/hardware/wiring-pinout/" class="md-nav__link">
+      <a href="../../docs/hardware/wiring-pinout/" class="md-nav__link">
         
   
   
@@ -1330,7 +1322,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../../../docs/hardware/joystick-wiring/" class="md-nav__link">
+      <a href="../../docs/hardware/joystick-wiring/" class="md-nav__link">
         
   
   
@@ -1358,7 +1350,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../../../docs/hardware/battery-wiring/" class="md-nav__link">
+      <a href="../../docs/hardware/battery-wiring/" class="md-nav__link">
         
   
   
@@ -1386,7 +1378,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../../../docs/hardware/enclosure-design/" class="md-nav__link">
+      <a href="../../docs/hardware/enclosure-design/" class="md-nav__link">
         
   
   
@@ -1414,7 +1406,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../../../docs/hardware/design-evolution/" class="md-nav__link">
+      <a href="../../docs/hardware/design-evolution/" class="md-nav__link">
         
   
   
@@ -1442,7 +1434,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../../../docs/hardware/esp32s3-enclosure-scad/" class="md-nav__link">
+      <a href="../../docs/hardware/esp32s3-enclosure-scad/" class="md-nav__link">
         
   
   
@@ -1470,7 +1462,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../../../docs/hardware/3d-printing-pipeline/" class="md-nav__link">
+      <a href="../../docs/hardware/3d-printing-pipeline/" class="md-nav__link">
         
   
   
@@ -1558,7 +1550,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../../../docs/setup/first-time-setup/" class="md-nav__link">
+      <a href="../../docs/setup/first-time-setup/" class="md-nav__link">
         
   
   
@@ -1586,7 +1578,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../../../docs/setup/pi-zero-setup/" class="md-nav__link">
+      <a href="../../docs/setup/pi-zero-setup/" class="md-nav__link">
         
   
   
@@ -1614,7 +1606,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../../../docs/setup/display-setup/" class="md-nav__link">
+      <a href="../../docs/setup/display-setup/" class="md-nav__link">
         
   
   
@@ -1642,7 +1634,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../../../docs/setup/dev-environment/" class="md-nav__link">
+      <a href="../../docs/setup/dev-environment/" class="md-nav__link">
         
   
   
@@ -1730,7 +1722,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../../../docs/design/kicad-schematic-pcb-guide/" class="md-nav__link">
+      <a href="../../docs/design/kicad-schematic-pcb-guide/" class="md-nav__link">
         
   
   
@@ -1758,7 +1750,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../../../docs/design/user-guide/" class="md-nav__link">
+      <a href="../../docs/design/user-guide/" class="md-nav__link">
         
   
   
@@ -1786,7 +1778,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../../../docs/design/user-engagement-plan/" class="md-nav__link">
+      <a href="../../docs/design/user-engagement-plan/" class="md-nav__link">
         
   
   
@@ -1814,7 +1806,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../../../docs/design/custom-pcb-design-research/" class="md-nav__link">
+      <a href="../../docs/design/custom-pcb-design-research/" class="md-nav__link">
         
   
   
@@ -1842,7 +1834,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../../../docs/design/board-design/" class="md-nav__link">
+      <a href="../../docs/design/board-design/" class="md-nav__link">
         
   
   
@@ -1870,7 +1862,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../../../docs/design/pcb-assembly-and-prototyping/" class="md-nav__link">
+      <a href="../../docs/design/pcb-assembly-and-prototyping/" class="md-nav__link">
         
   
   
@@ -1898,7 +1890,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../../../docs/design/open-board-designs/" class="md-nav__link">
+      <a href="../../docs/design/open-board-designs/" class="md-nav__link">
         
   
   
@@ -1926,7 +1918,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../../../docs/design/breadboard-prototype/" class="md-nav__link">
+      <a href="../../docs/design/breadboard-prototype/" class="md-nav__link">
         
   
   
@@ -1954,7 +1946,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../../../docs/design/motion-location-detection/" class="md-nav__link">
+      <a href="../../docs/design/motion-location-detection/" class="md-nav__link">
         
   
   
@@ -2042,7 +2034,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../../../docs/software/project-structure/" class="md-nav__link">
+      <a href="../../docs/software/project-structure/" class="md-nav__link">
         
   
   
@@ -2070,7 +2062,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../../../docs/software/firmware-engine/" class="md-nav__link">
+      <a href="../../docs/software/firmware-engine/" class="md-nav__link">
         
   
   
@@ -2098,7 +2090,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../../../docs/software/esp32-firmware/" class="md-nav__link">
+      <a href="../../docs/software/esp32-firmware/" class="md-nav__link">
         
   
   
@@ -2126,7 +2118,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../../../docs/software/emotion-states/" class="md-nav__link">
+      <a href="../../docs/software/emotion-states/" class="md-nav__link">
         
   
   
@@ -2214,7 +2206,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../../../docs/tools/devtool/" class="md-nav__link">
+      <a href="../../docs/tools/devtool/" class="md-nav__link">
         
   
   
@@ -2242,7 +2234,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../../../docs/tools/setup-cli/" class="md-nav__link">
+      <a href="../../docs/tools/setup-cli/" class="md-nav__link">
         
   
   
@@ -2270,7 +2262,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../../../docs/tools/website-dev/" class="md-nav__link">
+      <a href="../../docs/tools/website-dev/" class="md-nav__link">
         
   
   
@@ -2358,7 +2350,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../../../docs/reference/pico-w/" class="md-nav__link">
+      <a href="../../docs/reference/pico-w/" class="md-nav__link">
         
   
   
@@ -2386,7 +2378,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../../../docs/reference/pi-zero-wh/" class="md-nav__link">
+      <a href="../../docs/reference/pi-zero-wh/" class="md-nav__link">
         
   
   
@@ -2414,7 +2406,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../../../docs/reference/waveshare-eink/" class="md-nav__link">
+      <a href="../../docs/reference/waveshare-eink/" class="md-nav__link">
         
   
   
@@ -2442,7 +2434,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../../../docs/reference/esp32-s3-wroom1/" class="md-nav__link">
+      <a href="../../docs/reference/esp32-s3-wroom1/" class="md-nav__link">
         
   
   
@@ -2537,7 +2529,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../../../community/" class="md-nav__link">
+      <a href="../../community/" class="md-nav__link">
         
   
   
@@ -2565,7 +2557,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../../../community/discord/" class="md-nav__link">
+      <a href="../../community/discord/" class="md-nav__link">
         
   
   
@@ -2593,7 +2585,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../../../community/support/" class="md-nav__link">
+      <a href="../../community/support/" class="md-nav__link">
         
   
   
@@ -2680,7 +2672,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../../../about/" class="md-nav__link">
+      <a href="../../about/" class="md-nav__link">
         
   
   
@@ -2708,7 +2700,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../../../about/contact/" class="md-nav__link">
+      <a href="../../about/contact/" class="md-nav__link">
         
   
   
@@ -2743,7 +2735,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../../../prompts/" class="md-nav__link">
+      <a href="../../prompts/" class="md-nav__link">
         
   
   
@@ -2771,6 +2763,8 @@
             
             
               
+                
+              
               <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
                 <div class="md-sidebar__scrollwrap">
                   <div class="md-sidebar__inner">
@@ -2783,6 +2777,125 @@
     
   
   
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#the-problem" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The problem
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#what-changed" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What changed
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="What changed">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#all-three-parts-3-mm-x-extension" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        All three parts — 3 mm -X extension
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#cradle-insert-v2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Cradle insert v2
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#base-plate-v2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Base plate v2
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#top-cover-usb-c-cutout" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Top cover — USB-C cutout
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#files" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Files
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#second-print-ansmann-batteries" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Second print + Ansmann batteries
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Second print + Ansmann batteries">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#battery-compatibility-note" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Battery compatibility note
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
 </nav>
                   </div>
                 </div>
@@ -2790,523 +2903,173 @@
             
           
           
-  <div class="md-content" data-md-component="content">
-    <div class="md-content__inner">
-      <header class="md-typeset">
-        <h1 id="hardware">Hardware<a class="headerlink" href="#hardware" title="Permanent link">&para;</a></h1>
-      </header>
-      
-        <article class="md-post md-post--excerpt">
-  <header class="md-post__header">
-    
-      <nav class="md-post__authors md-typeset">
-        
-          <span class="md-author">
-            <img src="https://avatars.githubusercontent.com/u/600873?v=4" alt="rompasaurus">
-          </span>
-        
-      </nav>
-    
-    <div class="md-post__meta md-meta">
-      <ul class="md-meta__list">
-        <li class="md-meta__item">
-          <time datetime="2026-04-15 00:00:00+00:00">April 15, 2026</time></li>
-        
-          <li class="md-meta__item">
-            in
+  <div class="md-content md-content--post" data-md-component="content">
+    <div class="md-sidebar md-sidebar--post" data-md-component="sidebar" data-md-type="navigation">
+      <div class="md-sidebar__scrollwrap">
+        <div class="md-sidebar__inner md-post">
+          <nav class="md-nav md-nav--primary">
+            <div class="md-post__back">
+              <div class="md-nav__title md-nav__container">
+                <a href="../" class="md-nav__link">
+                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+                  <span class="md-ellipsis">
+                    Back to index
+                  </span>
+                </a>
+              </div>
+            </div>
             
-              <a href="../../" class="md-meta__link">Hardware</a>, 
-              <a href="../../../pcb-design/" class="md-meta__link">PCB Design</a></li>
-        
-        
+              <div class="md-post__authors md-typeset">
+                
+                  <div class="md-profile md-post__profile">
+                    <span class="md-author md-author--long">
+                      <img src="https://avatars.githubusercontent.com/u/600873?v=4" alt="rompasaurus">
+                    </span>
+                    <span class="md-profile__description">
+                      <strong>
+                        
+                          rompasaurus
+                        
+                      </strong>
+                      <br>
+                      Builder
+                    </span>
+                  </div>
+                
+              </div>
+            
+            <ul class="md-post__meta md-nav__list">
+              <li class="md-nav__item md-nav__item--section">
+                <div class="md-post__title">
+                  <span class="md-ellipsis">
+                    Metadata
+                  </span>
+                </div>
+                <nav class="md-nav">
+                  <ul class="md-nav__list">
+                    <li class="md-nav__item">
+                      <div class="md-nav__link">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 19H5V8h14m-3-7v2H8V1H6v2H5c-1.11 0-2 .89-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V5a2 2 0 0 0-2-2h-1V1m-1 11h-5v5h5z"/></svg>
+                        <time datetime="2026-04-25 00:00:00+00:00" class="md-ellipsis">April 25, 2026</time>
+                      </div>
+                    </li>
+                    
+                    
+                      <li class="md-nav__item">
+                        <div class="md-nav__link">
+                          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9 3v15h3V3zm3 2 4 13 3-1-4-13zM5 5v13h3V5zM3 19v2h18v-2z"/></svg>
+                          <span class="md-ellipsis">
+                            in
+                            
+                              <a href="../category/hardware/">Hardware</a>, 
+                              <a href="../category/enclosure/">Enclosure</a>, 
+                              <a href="../category/battery/">Battery</a></span>
+                        </div>
+                      </li>
+                    
+                    
+                      
+                      <li class="md-nav__item">
+                        <div class="md-nav__link">
+                          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 20a8 8 0 0 0 8-8 8 8 0 0 0-8-8 8 8 0 0 0-8 8 8 8 0 0 0 8 8m0-18a10 10 0 0 1 10 10 10 10 0 0 1-10 10C6.47 22 2 17.5 2 12A10 10 0 0 1 12 2m.5 5v5.25l4.5 2.67-.75 1.23L11 13V7z"/></svg>
+                          <span class="md-ellipsis">
+                            
+                              4 min read
+                            
+                          </span>
+                        </div>
+                      </li>
+                    
+                  </ul>
+                </nav>
+              </li>
+            </ul>
+            
+          </nav>
           
-          <li class="md-meta__item">
-            
-              6 min read
-            
-          </li>
-        
-        
-      </ul>
-      
+        </div>
+      </div>
     </div>
-  </header>
-  <div class="md-post__content md-typeset">
-    <h2 id="from-rp2040-to-esp32-s3-designing-the-dilder-pcb"><a class="toclink" href="../../../../esp32-s3-pcb-design/">From RP2040 to ESP32-S3 — Designing the Dilder PCB</a></h2>
-<p>The breadboard era is ending. After weeks of jumper wires, borrowed breakout boards, and firmware running on a Pico W, it's time to design a real PCB — a single board that holds everything the Dilder needs. And in the process, we swapped the entire MCU.</p>
-
-    
-      <nav class="md-post__action">
-        <a href="../../../../esp32-s3-pcb-design/">
-          Continue reading
-        </a>
-      </nav>
-    
-    
-  </div>
-</article>
-      
-        <article class="md-post md-post--excerpt">
-  <header class="md-post__header">
-    
-      <nav class="md-post__authors md-typeset">
-        
-          <span class="md-author">
-            <img src="https://avatars.githubusercontent.com/u/600873?v=4" alt="rompasaurus">
-          </span>
-        
-      </nav>
-    
-    <div class="md-post__meta md-meta">
-      <ul class="md-meta__list">
-        <li class="md-meta__item">
-          <time datetime="2026-04-15 00:00:00+00:00">April 15, 2026</time></li>
-        
-          <li class="md-meta__item">
-            in
-            
-              <a href="../../" class="md-meta__link">Hardware</a>, 
-              <a href="../../../pcb-design/" class="md-meta__link">PCB Design</a></li>
-        
-        
-          
-          <li class="md-meta__item">
-            
-              2 min read
-            
-          </li>
-        
-        
-      </ul>
-      
-    </div>
-  </header>
-  <div class="md-post__content md-typeset">
-    <h2 id="the-esp32-s3-schematic-is-fully-wired"><a class="toclink" href="../../../../esp32-schematic-complete/">The ESP32-S3 Schematic is Fully Wired</a></h2>
-<p>Today the Dilder schematic got its biggest overhaul yet. The RP2040 is officially gone, replaced by the ESP32-S3-WROOM-1-N16R8 module with every net wired and validated.</p>
-
-    
-      <nav class="md-post__action">
-        <a href="../../../../esp32-schematic-complete/">
-          Continue reading
-        </a>
-      </nav>
-    
-    
-  </div>
-</article>
-      
-        <article class="md-post md-post--excerpt">
-  <header class="md-post__header">
-    
-      <nav class="md-post__authors md-typeset">
-        
-          <span class="md-author">
-            <img src="https://avatars.githubusercontent.com/u/600873?v=4" alt="rompasaurus">
-          </span>
-        
-      </nav>
-    
-    <div class="md-post__meta md-meta">
-      <ul class="md-meta__list">
-        <li class="md-meta__item">
-          <time datetime="2026-04-15 00:00:00+00:00">April 15, 2026</time></li>
-        
-          <li class="md-meta__item">
-            in
-            
-              <a href="../../" class="md-meta__link">Hardware</a>, 
-              <a href="../../../design/" class="md-meta__link">Design</a></li>
-        
-        
-          
-          <li class="md-meta__item">
-            
-              3 min read
-            
-          </li>
-        
-        
-      </ul>
-      
-    </div>
-  </header>
-  <div class="md-post__content md-typeset">
-    <h2 id="teaching-the-octopus-to-feel-motion-location-without-gps"><a class="toclink" href="../../../../motion-location-detection/">Teaching the Octopus to Feel — Motion &amp; Location Without GPS</a></h2>
-<p>The Dilder just got a new sense. We swapped out the $6.88 MPU-6050 gyroscope for a $0.46 accelerometer that does <em>more</em> with <em>less</em> — and designed a location system that doesn't need GPS at all.</p>
-
-    
-      <nav class="md-post__action">
-        <a href="../../../../motion-location-detection/">
-          Continue reading
-        </a>
-      </nav>
-    
-    
-  </div>
-</article>
-      
-        <article class="md-post md-post--excerpt">
-  <header class="md-post__header">
-    
-      <nav class="md-post__authors md-typeset">
-        
-          <span class="md-author">
-            <img src="https://avatars.githubusercontent.com/u/600873?v=4" alt="rompasaurus">
-          </span>
-        
-      </nav>
-    
-    <div class="md-post__meta md-meta">
-      <ul class="md-meta__list">
-        <li class="md-meta__item">
-          <time datetime="2026-04-15 00:00:00+00:00">April 15, 2026</time></li>
-        
-          <li class="md-meta__item">
-            in
-            
-              <a href="../../" class="md-meta__link">Hardware</a>, 
-              <a href="../../../pcb-design/" class="md-meta__link">PCB Design</a>, 
-              <a href="../../../manufacturing/" class="md-meta__link">Manufacturing</a></li>
-        
-        
-          
-          <li class="md-meta__item">
-            
-              2 min read
-            
-          </li>
-        
-        
-      </ul>
-      
-    </div>
-  </header>
-  <div class="md-post__content md-typeset">
-    <h2 id="pcb-fabrication-pricing-where-to-build-the-board"><a class="toclink" href="../../../../pcb-fab-pricing-research/">PCB Fabrication Pricing — Where to Build the Board</a></h2>
-<p>With the Dilder PCB design taking shape, it was time to figure out where to actually get it made. I spent a session researching five different PCB fabrication and assembly houses, comparing pricing for our specific board (45x80mm, 4-layer, 27 components, SMT assembly).</p>
-
-    
-      <nav class="md-post__action">
-        <a href="../../../../pcb-fab-pricing-research/">
-          Continue reading
-        </a>
-      </nav>
-    
-    
-  </div>
-</article>
-      
-        <article class="md-post md-post--excerpt">
-  <header class="md-post__header">
-    
-      <nav class="md-post__authors md-typeset">
-        
-          <span class="md-author">
-            <img src="https://avatars.githubusercontent.com/u/600873?v=4" alt="rompasaurus">
-          </span>
-        
-      </nav>
-    
-    <div class="md-post__meta md-meta">
-      <ul class="md-meta__list">
-        <li class="md-meta__item">
-          <time datetime="2026-04-15 00:00:00+00:00">April 15, 2026</time></li>
-        
-          <li class="md-meta__item">
-            in
-            
-              <a href="../../" class="md-meta__link">Hardware</a>, 
-              <a href="../../../pcb-design/" class="md-meta__link">PCB Design</a></li>
-        
-        
-          
-          <li class="md-meta__item">
-            
-              3 min read
-            
-          </li>
-        
-        
-      </ul>
-      
-    </div>
-  </header>
-  <div class="md-post__content md-typeset">
-    <h2 id="pcb-v04-board-routed-gerbers-next"><a class="toclink" href="../../../../pcb-routing-complete/">PCB v0.4 — Board Routed, Gerbers Next</a></h2>
-<p>The Dilder PCB design hit a milestone: v0.4 is fully placed and routed. 30 components on a 30x70mm 4-layer board, 34 nets, 125 pad connections. The board is ready for design rule checks and Gerber export.</p>
-
-    
-      <nav class="md-post__action">
-        <a href="../../../../pcb-routing-complete/">
-          Continue reading
-        </a>
-      </nav>
-    
-    
-  </div>
-</article>
-      
-        <article class="md-post md-post--excerpt">
-  <header class="md-post__header">
-    
-      <nav class="md-post__authors md-typeset">
-        
-          <span class="md-author">
-            <img src="https://avatars.githubusercontent.com/u/600873?v=4" alt="rompasaurus">
-          </span>
-        
-      </nav>
-    
-    <div class="md-post__meta md-meta">
-      <ul class="md-meta__list">
-        <li class="md-meta__item">
-          <time datetime="2026-04-14 00:00:00+00:00">April 14, 2026</time></li>
-        
-          <li class="md-meta__item">
-            in
-            
-              <a href="../../" class="md-meta__link">Hardware</a>, 
-              <a href="../../../planning/" class="md-meta__link">Planning</a></li>
-        
-        
-          
-          <li class="md-meta__item">
-            
-              3 min read
-            
-          </li>
-        
-        
-      </ul>
-      
-    </div>
-  </header>
-  <div class="md-post__content md-typeset">
-    <h2 id="from-breadboard-to-custom-pcb-the-research"><a class="toclink" href="../../../../custom-pcb-research/">From Breadboard to Custom PCB — The Research</a></h2>
-<p>The breadboard prototype works. The e-ink display refreshes, the joystick clicks, the octopus emotes. But a pocket-sized virtual pet can't live on a breadboard forever. It's time to research what a purpose-built Dilder board looks like.</p>
-
-    
-      <nav class="md-post__action">
-        <a href="../../../../custom-pcb-research/">
-          Continue reading
-        </a>
-      </nav>
-    
-    
-  </div>
-</article>
-      
-        <article class="md-post md-post--excerpt">
-  <header class="md-post__header">
-    
-      <nav class="md-post__authors md-typeset">
-        
-          <span class="md-author">
-            <img src="https://avatars.githubusercontent.com/u/600873?v=4" alt="rompasaurus">
-          </span>
-        
-      </nav>
-    
-    <div class="md-post__meta md-meta">
-      <ul class="md-meta__list">
-        <li class="md-meta__item">
-          <time datetime="2026-04-14 00:00:00+00:00">April 14, 2026</time></li>
-        
-          <li class="md-meta__item">
-            in
-            
-              <a href="../../" class="md-meta__link">Hardware</a>, 
-              <a href="../../../firmware/" class="md-meta__link">Firmware</a></li>
-        
-        
-          
-          <li class="md-meta__item">
-            
-              4 min read
-            
-          </li>
-        
-        
-      </ul>
-      
-    </div>
-  </header>
-  <div class="md-post__content md-typeset">
-    <h2 id="first-real-input-joystick-wired-octopus-responds"><a class="toclink" href="../../../../joystick-first-input/">First Real Input — Joystick Wired, Octopus Responds</a></h2>
-<p>The octopus can finally hear us. For the first time, the Dilder responds to physical input — a 5-way joystick module wired to the Pico W's GPIO pins, driving mood changes on the e-ink display in real time.</p>
-
-    
-      <nav class="md-post__action">
-        <a href="../../../../joystick-first-input/">
-          Continue reading
-        </a>
-      </nav>
-    
-    
-  </div>
-</article>
-      
-        <article class="md-post md-post--excerpt">
-  <header class="md-post__header">
-    
-      <nav class="md-post__authors md-typeset">
-        
-          <span class="md-author">
-            <img src="https://avatars.githubusercontent.com/u/600873?v=4" alt="rompasaurus">
-          </span>
-        
-      </nav>
-    
-    <div class="md-post__meta md-meta">
-      <ul class="md-meta__list">
-        <li class="md-meta__item">
-          <time datetime="2026-04-13 00:00:00+00:00">April 13, 2026</time></li>
-        
-          <li class="md-meta__item">
-            in
-            
-              <a href="../../" class="md-meta__link">Hardware</a></li>
-        
-        
-          
-          <li class="md-meta__item">
-            
-              2 min read
-            
-          </li>
-        
-        
-      </ul>
-      
-    </div>
-  </header>
-  <div class="md-post__content md-typeset">
-    <h2 id="new-hardware-joystick-module-and-lipo-battery"><a class="toclink" href="../../../../hardware-arrives/">New Hardware: Joystick Module and LiPo Battery</a></h2>
-<p>Two new components arrived for the Dilder build — a 5-way navigation joystick and a 1000mAh LiPo battery. Both have been fully documented with wiring guides, test code, and integration plans.</p>
-
-    
-      <nav class="md-post__action">
-        <a href="../../../../hardware-arrives/">
-          Continue reading
-        </a>
-      </nav>
-    
-    
-  </div>
-</article>
-      
-        <article class="md-post md-post--excerpt">
-  <header class="md-post__header">
-    
-      <nav class="md-post__authors md-typeset">
-        
-          <span class="md-author">
-            <img src="https://avatars.githubusercontent.com/u/600873?v=4" alt="rompasaurus">
-          </span>
-        
-      </nav>
-    
-    <div class="md-post__meta md-meta">
-      <ul class="md-meta__list">
-        <li class="md-meta__item">
-          <time datetime="2026-04-10 00:00:00+00:00">April 10, 2026</time></li>
-        
-          <li class="md-meta__item">
-            in
-            
-              <a href="../../" class="md-meta__link">Hardware</a>, 
-              <a href="../../../firmware/" class="md-meta__link">Firmware</a></li>
-        
-        
-          
-          <li class="md-meta__item">
-            
-              2 min read
-            
-          </li>
-        
-        
-      </ul>
-      
-    </div>
-  </header>
-  <div class="md-post__content md-typeset">
-    <h2 id="first-pixels-hello-world-on-the-e-ink-display"><a class="toclink" href="../../../../phase-1-first-pixels/">First Pixels — Hello World on the E-Ink Display</a></h2>
-<p>We got pixels. Real, physical, black-on-white pixels on the Waveshare 2.13" e-ink display, driven by C firmware on the Pico W. Phase 1's proof-of-life is alive.</p>
-
-    
-      <nav class="md-post__action">
-        <a href="../../../../phase-1-first-pixels/">
-          Continue reading
-        </a>
-      </nav>
-    
-    
-  </div>
-</article>
-      
-        <article class="md-post md-post--excerpt">
-  <header class="md-post__header">
-    
-      <nav class="md-post__authors md-typeset">
-        
-          <span class="md-author">
-            <img src="https://avatars.githubusercontent.com/u/600873?v=4" alt="rompasaurus">
-          </span>
-        
-      </nav>
-    
-    <div class="md-post__meta md-meta">
-      <ul class="md-meta__list">
-        <li class="md-meta__item">
-          <time datetime="2026-04-09 00:00:00+00:00">April 9, 2026</time></li>
-        
-          <li class="md-meta__item">
-            in
-            
-              <a href="../../" class="md-meta__link">Hardware</a></li>
-        
-        
-          
-          <li class="md-meta__item">
-            
-              2 min read
-            
-          </li>
-        
-        
-      </ul>
-      
-    </div>
-  </header>
-  <div class="md-post__content md-typeset">
-    <h2 id="phase-1-hardware-pico-w-e-ink-lets-go"><a class="toclink" href="../../../../phase-1-hardware-begins/">Phase 1: Hardware — Pico W + E-Ink, Let's Go</a></h2>
-<p>The planning phase is done. We've got hardware on the bench. Phase 1 begins now.</p>
-
-    
-      <nav class="md-post__action">
-        <a href="../../../../phase-1-hardware-begins/">
-          Continue reading
-        </a>
-      </nav>
-    
-    
-  </div>
-</article>
-      
+    <article class="md-content__inner md-typeset">
       
         
-          
+  
 
 
 
-<nav class="md-pagination">
-  <a class="md-pagination__link" href="../../">1</a> <span class="md-pagination__current">2</span>
-</nav>
-        
+  
+  
+
+
+<h1 id="tp4056-charge-board-integration-cradle-v2-base-plate-v2-cover-update">TP4056 Charge Board Integration — Cradle v2, Base Plate v2, Cover Update<a class="headerlink" href="#tp4056-charge-board-integration-cradle-v2-base-plate-v2-cover-update" title="Permanent link">&para;</a></h1>
+<p>The AAA cradle insert and base plate from this morning's print session worked mechanically, but the TP4056 USB-C charge board had nowhere to live. This session extends the enclosure 3 mm on the -X side, redesigns the connecting block to hold the charge board, adds battery retention troughs to the base plate, and cuts a USB-C port hole through the cover.</p>
+<!-- more -->
+
+<h2 id="the-problem">The problem<a class="headerlink" href="#the-problem" title="Permanent link">&para;</a></h2>
+<p><img alt="TP4056 charge board placement reference — board sitting at the -X end between batteries" loading="lazy" src="../../assets/images/enclosure/rev2-cradle-insert-tp4056-placement.jpg" width="720" /></p>
+<p>The TP4056 USB-C charge board (blue PCB, ~28 mm x 17 mm) needs to sit at the -X end of the cradle insert between the two AAA cells, with its USB-C port accessible from outside. The previous cradle's connecting block was only 9.5 mm in X and 3 mm shorter than full height — far too small for the charge board.</p>
+<h2 id="what-changed">What changed<a class="headerlink" href="#what-changed" title="Permanent link">&para;</a></h2>
+<h3 id="all-three-parts-3-mm-x-extension">All three parts — 3 mm -X extension<a class="headerlink" href="#all-three-parts-3-mm-x-extension" title="Permanent link">&para;</a></h3>
+<p><code>enclosure_outer_width_along_x_axis_mm</code> increased from 91.5 to <strong>94.5 mm</strong>. The -X wall thickness stays 3.0 mm, so all the extra space lands inside the cavity at the -X end. The joystick through-hole center was hardcoded at x=79.35 to prevent it from shifting.</p>
+<h3 id="cradle-insert-v2">Cradle insert v2<a class="headerlink" href="#cradle-insert-v2" title="Permanent link">&para;</a></h3>
+<p><img alt="Cradle insert v2 — isometric" loading="lazy" src="../../assets/images/enclosure/rev2-cradle-insert-v2-iso.png" width="720" /></p>
+<p><img alt="Cradle insert v2 — top view" loading="lazy" src="../../assets/images/enclosure/rev2-cradle-insert-v2-top.png" width="720" /></p>
+<ul>
+<li><strong>Connecting block extended</strong> to 29 mm in X (accommodates the 28 mm TP4056 board) and full plug height (z=-5.1 to 7.0, was 3 mm shorter).</li>
+<li><strong>Concave battery curves</strong> on the connecting block's +/-Y faces — horizontal cylinder subtractions at each AAA bay center carve ~1.3 mm deep arcs that follow the battery profile.</li>
+<li><strong>1 mm TP4056 indent</strong> on the connecting block's top face (28.4 x 17.4 mm recess, centered in Y).</li>
+<li><strong>USB-C port cutout</strong> through the connecting block's -X face (10 x 5 mm slot).</li>
+<li><strong>AAA bay cuts restructured</strong> — moved to an outer <code>difference()</code> so they cut through both the plug body and the connecting block, eliminating residual walls at the junction.</li>
+<li><strong>+X display connector cutout</strong> — 3 mm pocket from the bottom face at the +X end for FPC connector/cable clearance.</li>
+</ul>
+<h3 id="base-plate-v2">Base plate v2<a class="headerlink" href="#base-plate-v2" title="Permanent link">&para;</a></h3>
+<p><img alt="Base plate v2 — isometric" loading="lazy" src="../../assets/images/enclosure/rev2-base-plate-v2-iso.png" width="720" /></p>
+<p><img alt="Base plate v2 — top view" loading="lazy" src="../../assets/images/enclosure/rev2-base-plate-v2-top.png" width="720" /></p>
+<ul>
+<li><strong>Square pillar bases</strong> (5 x 5 mm) replace bare cylindrical pegs. Pillars rise from pocket floor to plate top; 3 mm cylindrical pegs extend from the pillar tops into the cover's blind M3 bores.</li>
+<li><strong>Battery cradle troughs</strong> — solid fills along the +/-Y sides of the pocket (connected to the enclosure walls), with the AAA cylinder subtracted downward. The cells drop into concave channels carved into the plate body.</li>
+</ul>
+<h3 id="top-cover-usb-c-cutout">Top cover — USB-C cutout<a class="headerlink" href="#top-cover-usb-c-cutout" title="Permanent link">&para;</a></h3>
+<p><img alt="Top cover with USB-C cutout — isometric" loading="lazy" src="../../assets/images/enclosure/rev2-top-cover-v3-2piece-usbc-iso.png" width="720" /></p>
+<ul>
+<li><strong>USB-C port cutout</strong> through the -X wall (10 x 5 mm, centered at y=23, z=5.5 cover-local) so the TP4056's charge port is accessible from outside.</li>
+</ul>
+<h2 id="files">Files<a class="headerlink" href="#files" title="Permanent link">&para;</a></h2>
+<p>All in <code>hardware-design/scad Parts/Rev 2 extended with joystick/04-25-design-alterations/</code>:</p>
+<ul>
+<li><code>aaa-cradle-insert-v1.scad</code> — cradle insert v2 (TP4056 connecting block, battery curves, +X FPC cutout)</li>
+<li><code>base-plate-v1.scad</code> — base plate v2 (square pillars, battery troughs, USB-C notch on +X wall)</li>
+<li><code>top-cover-windowed-screen-inlay-v3-2piece.scad</code> — cover with 5 mm wall extension and hardcoded joystick position</li>
+</ul>
+<h2 id="second-print-ansmann-batteries">Second print + Ansmann batteries<a class="headerlink" href="#second-print-ansmann-batteries" title="Permanent link">&para;</a></h2>
+<p>The updated cradle and base plate printed while Ansmann 1.5V Li-Ion AAA batteries arrived. These cells have a built-in boost converter and USB-C charging port — they're self-contained 1.5V sources, not raw Li-Ion cells.</p>
+<p><img alt="Ansmann battery pack and cradle print overview" loading="lazy" src="../../assets/images/enclosure/rev2-ansmann-batteries-and-cradle-overview.jpg" width="720" /></p>
+<p><img alt="Cradle v2 top-down with Ansmann cell, Pico 2 W, and TP4056" loading="lazy" src="../../assets/images/enclosure/rev2-cradle-v2-topdown-ansmann-pico-tp4056.jpg" width="720" /></p>
+<p><img alt="Cradle v2 side profile with Ansmann cell" loading="lazy" src="../../assets/images/enclosure/rev2-cradle-v2-side-profile-ansmann.jpg" width="720" /></p>
+<h3 id="battery-compatibility-note">Battery compatibility note<a class="headerlink" href="#battery-compatibility-note" title="Permanent link">&para;</a></h3>
+<p>The Ansmann 1.5V Li-Ion AAAs <strong>cannot</strong> be charged by the TP4056 — the TP4056 expects raw 3.7V Li-Ion on its output, and the Ansmann's regulated 1.5V terminal would be damaged by 4.2V charge voltage. Instead, these cells wire in <strong>series</strong> (2 × 1.5V = 3.0V) directly to the Pico W's VSYS pin, and each cell charges individually via its built-in USB-C port.</p>
+<p>Full wiring guide: <a href="https://github.com/rompasaurus/dilder/blob/main/hardware-design/ansmann-1.5v-aaa-series-wiring-guide.md"><code>ansmann-1.5v-aaa-series-wiring-guide.md</code></a>.</p>
+
+
+
+
+
+
+
+  
+  
+
+
+
+  
+
+
+  
+
+
+
       
-    </div>
+    </article>
   </div>
 
           
@@ -3327,10 +3090,12 @@
   
     
       
+        
+      
       <nav class="md-footer__inner md-grid" aria-label="Footer" >
         
           
-          <a href="../../../firmware/" class="md-footer__link md-footer__link--prev" aria-label="Previous: Firmware">
+          <a href="../rev2-dual-10440-case-redesign/" class="md-footer__link md-footer__link--prev" aria-label="Previous: Dual 10440 Cells, Case Redesign, and a 2-Piece Stack">
             <div class="md-footer__button md-icon">
               
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
@@ -3340,20 +3105,20 @@
                 Previous
               </span>
               <div class="md-ellipsis">
-                Firmware
+                Dual 10440 Cells, Case Redesign, and a 2-Piece Stack
               </div>
             </div>
           </a>
         
         
           
-          <a href="../../../manufacturing/" class="md-footer__link md-footer__link--next" aria-label="Next: Manufacturing">
+          <a href="../rev2-aaa-cradle-and-base-plate/" class="md-footer__link md-footer__link--next" aria-label="Next: AAA Cradle Insert + Base Plate — Splitting the Stack into Three Parts">
             <div class="md-footer__title">
               <span class="md-footer__direction">
                 Next
               </span>
               <div class="md-ellipsis">
-                Manufacturing
+                AAA Cradle Insert + Base Plate — Splitting the Stack into Three Parts
               </div>
             </div>
             <div class="md-footer__button md-icon">
@@ -3427,12 +3192,12 @@
     
       
       
-      <script id="__config" type="application/json">{"annotate": null, "base": "../../../../..", "features": ["navigation.tabs", "navigation.sections", "navigation.top", "navigation.footer", "search.suggest", "search.highlight", "content.tabs.link", "content.code.annotation", "content.code.copy"], "search": "../../../../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.tabs", "navigation.sections", "navigation.top", "navigation.footer", "search.suggest", "search.highlight", "content.tabs.link", "content.code.annotation", "content.code.copy"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
     
     
-      <script src="../../../../../assets/javascripts/bundle.79ae519e.min.js"></script>
+      <script src="../../assets/javascripts/bundle.79ae519e.min.js"></script>
       
-        <script src="../../../../../javascripts/octopus-banner.js"></script>
+        <script src="../../javascripts/octopus-banner.js"></script>
       
     
   </body>
