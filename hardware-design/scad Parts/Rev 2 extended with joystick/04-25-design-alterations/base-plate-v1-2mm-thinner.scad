@@ -80,6 +80,24 @@ peg_height_above_pillar_mm                     = 3;    // was 4.0 above plate �
 peg_tip_chamfer_mm                             = 0.4;
 
 // ============================================================
+// Pillar inward extensions — each corner pillar can be extended
+// toward the board interior to act as a brace/shelf for the cradle
+// or PCB above. Direction is automatic: -X pillars extend toward +X,
+// +X pillars toward -X, etc. Set to 0 to disable each axis.
+//
+// Per-axis vs per-corner control: the *_uniform_mm knobs apply to
+// all 4 corners. The per-corner override list can be set non-empty
+// to override individual corners (4-element list, same order as
+// peg_xy_positions_list: [-X-Y, +X-Y, -X+Y, +X+Y]). Each entry is
+// [x_extension_mm, y_extension_mm].
+// ============================================================
+pillar_extension_x_inward_uniform_mm           = 5;     // all 4 pillars extend 5mm toward center along X
+pillar_extension_y_inward_uniform_mm           = 5;     // all 4 pillars also extend 5mm along Y, hugging the long side walls
+// Per-pillar overrides (4 entries, [x_inward, y_inward] each). Set to
+// [] to use the uniform values above. Order: [-X-Y, +X-Y, -X+Y, +X+Y]
+pillar_extension_per_corner_overrides          = [];    // e.g. [[5,0],[5,0],[5,0],[5,0]]
+
+// ============================================================
 // Battery cradle extrusions — curved shells along ±Y long sides
 // that follow the AAA cylinder profile, rising above the base
 // plate top to hold batteries flush from below when closed.
@@ -153,6 +171,29 @@ usb_support_block_x_gap_between_blocks_mm      = 5;       // -X gap between the 
 // Negative = blocks shorter (sit below the cutout, leave a gap under the connector).
 // Positive = blocks taller (poke into the USB-C cutout — only useful as alignment fingers).
 usb_support_block_height_above_cutout_bottom_mm = 1;
+
+// ============================================================
+// USB sidewall brace — a single block bonded to the inner face of
+// the +X end wall, sitting directly underneath the USB-C cutout.
+// Acts as a structural brace for the USB-C connector body and the
+// thin (1.2 mm) +X end wall. Y-centered on the USB-C cutout by
+// default; depth (X) extends inward from the wall into the pocket.
+//
+// Z range: from `usb_sidewall_block_z_bottom_mm` up to a top that's
+// `usb_sidewall_block_z_top_clearance_below_cutout_mm` below the
+// USB-C cutout bottom (a small clearance keeps it from fouling the
+// connector body — set to 0 to make the block flush against the
+// cutout floor).
+//
+// Set `usb_sidewall_block_enabled = false` to omit it entirely.
+// ============================================================
+usb_sidewall_block_enabled                      = true;
+usb_sidewall_block_width_y_mm                   = 10;     // Y extent of the block
+usb_sidewall_block_depth_x_mm                   = 5;      // how far the block protrudes from the wall into the pocket
+usb_sidewall_block_y_center_mm =
+    usb_c_cutout_center_y_mm;                              // = 23 (matches USB cutout Y center)
+usb_sidewall_block_z_bottom_mm                  = cradle_pocket_floor_z_mm; // pocket floor by default
+usb_sidewall_block_z_top_clearance_below_cutout_mm = 0.2; // air gap between block top and USB-C cutout bottom
 
 // ============================================================
 // Pico retention block — single rectangular block sitting in the
@@ -316,19 +357,55 @@ module base_plate_v1_unshaved() {
         }
 
         // 4 square pillar bases — rise from the pocket floor to the
-        // base plate top. Cylindrical pegs extend 3 mm above each
-        // pillar into the cover's blind M3 bore.
+        // base plate top. Each pillar can be extended INWARD (toward
+        // the board interior) along X and/or Y via the
+        // `pillar_extension_*_inward_*` knobs at the top of the file —
+        // useful as a brace/shelf for the cradle or PCB above.
+        // Cylindrical pegs extend 3 mm above each pillar's footprint
+        // CORNER (the original 5×5 mm pad) into the cover's blind M3
+        // bore — peg XY is unchanged regardless of pillar extension.
         pillar_base_side_mm = corner_pillar_square_side_length_mm;                 // = 5
         peg_z_bottom_mm = base_plate_total_height_z_mm;                            // pegs start at plate top
         peg_z_shank_top_mm =
             peg_z_bottom_mm + peg_height_above_pillar_mm - peg_tip_chamfer_mm;    // = 9.6
-        for (peg_xy = peg_xy_positions_list) {
-            // Square pillar base — from pocket floor to plate top
-            translate([peg_xy[0] - pillar_base_side_mm / 2,
-                       peg_xy[1] - pillar_base_side_mm / 2,
+        board_x_center_mm = enclosure_outer_width_along_x_axis_mm / 2;
+        board_y_center_mm = enclosure_outer_depth_along_y_axis_mm / 2;
+        for (i = [0 : len(peg_xy_positions_list) - 1]) {
+            peg_xy      = peg_xy_positions_list[i];
+            // Per-corner extension override — fall back to uniform values
+            // when the override list is empty or shorter than 4.
+            override_entry =
+                len(pillar_extension_per_corner_overrides) > i
+                  ? pillar_extension_per_corner_overrides[i]
+                  : [pillar_extension_x_inward_uniform_mm,
+                     pillar_extension_y_inward_uniform_mm];
+            ext_x = override_entry[0];
+            ext_y = override_entry[1];
+            // Direction: pillars on -X half extend in +X; +X half in -X.
+            // Same for Y.
+            is_minus_x_pillar = peg_xy[0] < board_x_center_mm;
+            is_minus_y_pillar = peg_xy[1] < board_y_center_mm;
+            // Footprint origin (smaller XY corner) and size after extension.
+            // For a -X pillar, the original 5x5 footprint stays anchored to
+            // the wall (smaller X), and ext_x is added to the +X side, so
+            // origin_x is unchanged and size_x = pillar_base + ext_x.
+            // For a +X pillar, origin_x shifts -X by ext_x and size_x grows.
+            pillar_origin_x = is_minus_x_pillar
+                ? peg_xy[0] - pillar_base_side_mm / 2
+                : peg_xy[0] - pillar_base_side_mm / 2 - ext_x;
+            pillar_origin_y = is_minus_y_pillar
+                ? peg_xy[1] - pillar_base_side_mm / 2
+                : peg_xy[1] - pillar_base_side_mm / 2 - ext_y;
+            pillar_size_x = pillar_base_side_mm + ext_x;
+            pillar_size_y = pillar_base_side_mm + ext_y;
+
+            // Pillar base — from pocket floor to plate top, with
+            // optional inward extension toward the board center.
+            translate([pillar_origin_x,
+                       pillar_origin_y,
                        cradle_pocket_floor_z_mm])
-                cube([pillar_base_side_mm,
-                      pillar_base_side_mm,
+                cube([pillar_size_x,
+                      pillar_size_y,
                       base_plate_total_height_z_mm - cradle_pocket_floor_z_mm]);   // 5.3 mm
 
             // Cylindrical peg shank — 3 mm above plate top
@@ -427,6 +504,36 @@ module base_plate_v1_unshaved() {
             cube([usb_support_block_x_size_mm,
                   usb_support_block_width_y_mm,
                   usb_support_block_z_height]);
+
+        // USB sidewall brace — single block bonded to the inner face of
+        // the +X end wall, sitting directly underneath the USB-C cutout.
+        // See top-of-file `usb_sidewall_block_*` for tunable knobs
+        // (width Y, depth X, Y center, Z bottom, clearance below cutout).
+        if (usb_sidewall_block_enabled) {
+            usb_sidewall_inner_x_face_mm =
+                enclosure_outer_width_along_x_axis_mm
+                  - plus_x_end_wall_thickness_mm;             // = 93.3
+            usb_sidewall_block_x_start =
+                usb_sidewall_inner_x_face_mm
+                  - usb_sidewall_block_depth_x_mm;
+            usb_sidewall_block_y_start =
+                usb_sidewall_block_y_center_mm
+                  - usb_sidewall_block_width_y_mm / 2;
+            usb_sidewall_block_z_top =
+                usb_c_cutout_z_bottom_mm
+                  - usb_sidewall_block_z_top_clearance_below_cutout_mm;
+            usb_sidewall_block_z_size =
+                usb_sidewall_block_z_top - usb_sidewall_block_z_bottom_mm;
+            // Guard against degenerate / inverted blocks (e.g. if
+            // someone sets z_bottom above the cutout bottom).
+            if (usb_sidewall_block_z_size > 0)
+                translate([usb_sidewall_block_x_start,
+                           usb_sidewall_block_y_start,
+                           usb_sidewall_block_z_bottom_mm])
+                    cube([usb_sidewall_block_depth_x_mm,
+                          usb_sidewall_block_width_y_mm,
+                          usb_sidewall_block_z_size]);
+        }
 
         // Pico retention block — single rectangular block in the pocket.
         // See top-of-file `pico_retention_block_*` for the tunable knobs
