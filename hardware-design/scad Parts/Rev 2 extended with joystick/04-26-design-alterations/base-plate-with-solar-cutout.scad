@@ -218,6 +218,11 @@ solar_hole_1_x_mm                            = 5.0;    // [0.0:0.1:62.0]
 solar_hole_1_y_mm                            = 15.0;   // [0.0:0.1:36.0]
 solar_hole_2_x_mm                            = 20.0;   // [0.0:0.1:62.0]
 solar_hole_2_y_mm                            = 30.0;   // [0.0:0.1:36.0]
+// Breakaway support ribs for the solar pit ceiling
+solar_support_enabled                         = true;
+solar_support_rib_thickness_mm                = 0.4;   // [0.2:0.1:1.0]  wall thickness (match nozzle width)
+solar_support_rib_spacing_mm                  = 5.0;   // [2.0:0.5:15.0] center-to-center spacing
+solar_support_z_gap_mm                        = 0.2;   // [0.1:0.05:0.5] air gap below pit ceiling for easy snap-off
 
 // Peg XY positions = cover screw-bore centers (pillar XY origin + pillar/2)
 peg_xy_positions_list = [
@@ -590,21 +595,6 @@ module base_plate_v1_unshaved() {
     }
     }  // close intersection (final Z clip at max_z_clip_mm)
 }
-
-// ============================================================
-// Breakaway supports for the solar pit ceiling.
-// A thin grid printed inside the pit recess so the printer has
-// something to bridge onto. Snap them out after printing.
-//
-// The supports are a series of thin walls (ribs) running along
-// the Y axis, spaced evenly across the pit X width. A single
-// perimeter-width wall (~0.4 mm) with a small Z gap from the
-// pit ceiling makes them easy to snap off.
-// ============================================================
-solar_support_enabled                         = true;
-solar_support_rib_thickness_mm                = 0.4;   // [0.2:0.1:1.0]  wall thickness (match nozzle width)
-solar_support_rib_spacing_mm                  = 5.0;   // [2.0:0.5:15.0] center-to-center spacing
-solar_support_z_gap_mm                        = 0.2;   // [0.1:0.05:0.5] air gap below pit ceiling for easy snap-off
 
 base_plate_v1();
 
