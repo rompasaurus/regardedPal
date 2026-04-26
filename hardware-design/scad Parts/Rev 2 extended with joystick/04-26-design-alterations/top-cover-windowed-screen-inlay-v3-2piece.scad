@@ -31,6 +31,11 @@ enclosure_outer_width_along_x_axis_mm          = 94.5;   // was 91.5 — +3 mm o
 enclosure_outer_depth_along_y_axis_mm          = 46;
 outer_case_top_view_corner_radius_mm           = 4;
 outer_case_top_edge_bullnose_radius_mm         = 4;
+// Sphere radius for the top-edge rollover. Controls how gently
+// the face plate curves into the side walls.
+// Larger = gentler, more gradual curve. Smaller = tighter curve.
+// Must be >= outer_case_top_view_corner_radius_mm or the corners gap.
+face_plate_outer_edge_curve_radius_mm          = 4.0; // [0.5:0.1:12]
 
 // ============================================================
 // Asymmetric ±X end walls — match base-v3
@@ -201,17 +206,26 @@ module pillar_one_round(w, l, h, r, round_x, round_y) {
     }
 }
 
-module shell_with_bullnose_top(w, l, h, case_r, top_r) {
+module shell_with_bullnose_top(w, l, h, case_r, top_r, edge_r = -1) {
+    // edge_r controls the roundover where the flat face meets the
+    // vertical walls. Smaller = flatter face, tighter edge radius.
+    // 0.01 = basically flat with sharp edges.
+    // case_r = original fully-domed top (sphere look).
+    er = (edge_r < 0) ? case_r : edge_r;
     intersection() {
-        hull() {
-            for (x = [case_r, w - case_r])
-                for (y = [case_r, l - case_r]) {
-                    translate([x, y, 0])
-                        cylinder(r = case_r, h = h - top_r, $fn = 48);
-                    translate([x, y, h - top_r])
-                        sphere(r = case_r, $fn = 24);
-                }
+        minkowski() {
+            // Core box: rounded XY corners, flat top, shrunk by er
+            // so the minkowski sphere brings it back to full size.
+            hull() {
+                for (x = [case_r, w - case_r])
+                    for (y = [case_r, l - case_r])
+                        translate([x, y, 0])
+                            cylinder(r = case_r - er, h = max(0.01, h - er), $fn = 48);
+            }
+            // Roundover sphere — only er radius, so only the edges curve.
+            sphere(r = er, $fn = 24);
         }
+        // Clip below z=0 (minkowski expands downward too)
         translate([-1, -1, 0])
             cube([w + 2, l + 2, h]);
     }
@@ -252,7 +266,8 @@ module top_cover_windowed_screen_inlay_v3_2piece() {
                 enclosure_outer_depth_along_y_axis_mm,
                 cover_total_height_z_mm + wall_extension_below_mating_mm,
                 outer_case_top_view_corner_radius_mm,
-                outer_case_top_edge_bullnose_radius_mm);
+                outer_case_top_edge_bullnose_radius_mm,
+                face_plate_outer_edge_curve_radius_mm);
 
             for (corner_pillar_origin_xy = corner_pillar_xy_origin_positions_list) {
                 pillar_rounds_positive_x_corner =

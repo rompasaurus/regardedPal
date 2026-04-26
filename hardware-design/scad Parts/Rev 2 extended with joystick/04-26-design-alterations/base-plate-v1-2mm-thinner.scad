@@ -96,6 +96,10 @@ pillar_extension_y_inward_uniform_mm           = 5;     // all 4 pillars also ex
 // Per-pillar overrides (4 entries, [x_inward, y_inward] each). Set to
 // [] to use the uniform values above. Order: [-X-Y, +X-Y, -X+Y, +X+Y]
 pillar_extension_per_corner_overrides          = [];    // e.g. [[5,0],[5,0],[5,0],[5,0]]
+// How far the extended pillar blocks rise above the plate top.
+// 0 = flush with plate top (default). Positive = blocks extend
+// upward into the cover cavity for deeper cradle bracing.
+pillar_extension_z_above_plate_mm             = 0.0;  // [-10.0:0.1:10.0]
 
 // ============================================================
 // Battery cradle extrusions — curved shells along ±Y long sides
@@ -354,6 +358,7 @@ module base_plate_v1_unshaved() {
                           usb_c_cutout_width_y_mm,
                           0.1]);
             }
+
         }
 
         // 4 square pillar bases — rise from the pocket floor to the
@@ -399,14 +404,22 @@ module base_plate_v1_unshaved() {
             pillar_size_x = pillar_base_side_mm + ext_x;
             pillar_size_y = pillar_base_side_mm + ext_y;
 
-            // Pillar base — from pocket floor to plate top, with
-            // optional inward extension toward the board center.
-            translate([pillar_origin_x,
-                       pillar_origin_y,
+            // Original 5×5 screw pillar — always pocket floor to plate top.
+            translate([peg_xy[0] - pillar_base_side_mm / 2,
+                       peg_xy[1] - pillar_base_side_mm / 2,
                        cradle_pocket_floor_z_mm])
-                cube([pillar_size_x,
-                      pillar_size_y,
-                      base_plate_total_height_z_mm - cradle_pocket_floor_z_mm]);   // 5.3 mm
+                cube([pillar_base_side_mm,
+                      pillar_base_side_mm,
+                      base_plate_total_height_z_mm - cradle_pocket_floor_z_mm]);
+
+            // Extension wings — height adjustable independently.
+            if (ext_x > 0 || ext_y > 0)
+                translate([pillar_origin_x,
+                           pillar_origin_y,
+                           cradle_pocket_floor_z_mm])
+                    cube([pillar_size_x,
+                          pillar_size_y,
+                          base_plate_total_height_z_mm + pillar_extension_z_above_plate_mm - cradle_pocket_floor_z_mm]);
 
             // Cylindrical peg shank — 3 mm above plate top
             translate([peg_xy[0], peg_xy[1], peg_z_bottom_mm])

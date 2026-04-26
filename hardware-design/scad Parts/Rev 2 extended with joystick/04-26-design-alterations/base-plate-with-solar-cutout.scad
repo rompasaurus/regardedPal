@@ -1,28 +1,15 @@
-// Dilder Rev 2 "extended with joystick" — BASE PLATE v1
+// Dilder Rev 2 "extended with joystick" — BASE PLATE WITH SOLAR CUTOUT
 //
-// Shallow tray that sits BELOW the aaa-cradle-insert-v1 + top-cover-
-// windowed-screen-inlay-v3-2piece stack. Holds the cradle from the
-// bottom (cradle drops into the pocket) and snaps up into the top
-// cover via 4 cylindrical pegs that slide into the cover's blind M3
-// bores.
+// Fork of base-plate-v1-2mm-thinner with a solar panel pit carved into
+// the bottom face. The AK 62x36 mm panel sits flush in the recess;
+// two wire pass-through holes connect the pit to the cradle pocket
+// above for routing power leads to the TP4056.
 //
-// Stack (global Z, base-plate-local Z shown in []; base plate top = cover mating bottom):
-//
-//   global 0      [0]      ────── base plate bottom (curved-bottom fillet)
-//   global 1.7    [1.7]    ────── pocket floor (cradle's -5.1 bottom rests here)
-//   global 7      [7]      ────── base plate top = cover mating bottom
-//                                  (pegs extend UP from here)
-//   global 11     [11]     ────── pegs tops (4 mm tall)
-//   global 14     [14]     ────── cover face-plate bottom (cradle top meets here)
-//   global 25.7   [25.7]   ────── cover top (bullnose peak)
-//
-// Outer footprint (91.5 × 46), corner radius, end-wall thicknesses, and
-// corner-pillar screw-hole pattern all match base-v3-2piece / top-cover-
-// windowed-screen-inlay-v3-2piece so the four outer sides print flush
-// with the cover above.
+// All other geometry (pocket, pillars, pegs, battery troughs, USB-C
+// notch, support blocks, shave) is identical to the thinner variant.
 //
 // Export:
-//   openscad -o base-plate-v1.3mf base-plate-v1.scad
+//   openscad -o base-plate-with-solar-cutout.3mf base-plate-with-solar-cutout.scad
 
 $fn = 48;
 
@@ -80,6 +67,28 @@ peg_height_above_pillar_mm                     = 3;    // was 4.0 above plate �
 peg_tip_chamfer_mm                             = 0.4;
 
 // ============================================================
+// Pillar inward extensions — each corner pillar can be extended
+// toward the board interior to act as a brace/shelf for the cradle
+// or PCB above. Direction is automatic: -X pillars extend toward +X,
+// +X pillars toward -X, etc. Set to 0 to disable each axis.
+//
+// Per-axis vs per-corner control: the *_uniform_mm knobs apply to
+// all 4 corners. The per-corner override list can be set non-empty
+// to override individual corners (4-element list, same order as
+// peg_xy_positions_list: [-X-Y, +X-Y, -X+Y, +X+Y]). Each entry is
+// [x_extension_mm, y_extension_mm].
+// ============================================================
+pillar_extension_x_inward_uniform_mm           = 5;     // all 4 pillars extend 5mm toward center along X
+pillar_extension_y_inward_uniform_mm           = 5;     // all 4 pillars also extend 5mm along Y, hugging the long side walls
+// Per-pillar overrides (4 entries, [x_inward, y_inward] each). Set to
+// [] to use the uniform values above. Order: [-X-Y, +X-Y, -X+Y, +X+Y]
+pillar_extension_per_corner_overrides          = [];    // e.g. [[5,0],[5,0],[5,0],[5,0]]
+// How far the extended pillar blocks rise above the plate top.
+// 0 = flush with plate top (default). Positive = blocks extend
+// upward into the cover cavity for deeper cradle bracing.
+pillar_extension_z_above_plate_mm             = 0.0;  // [-10.0:0.1:10.0]
+
+// ============================================================
 // Battery cradle extrusions — curved shells along ±Y long sides
 // that follow the AAA cylinder profile, rising above the base
 // plate top to hold batteries flush from below when closed.
@@ -107,6 +116,17 @@ battery_rail_z_lift_mm                         = 4;
 // Set to a very large number (e.g. 1000) to disable.
 // ============================================================
 max_z_clip_mm                                  = 14;
+
+// ============================================================
+// Height shave — keeps Z=0..shave_start_z untouched, deletes the
+// next `shave_height_mm` band, and drops everything above down by
+// the same amount. Net effect: total base height reduced by
+// `shave_height_mm` while the curved bottom + first few mm of
+// pocket walls are preserved exactly. Set shave_height_mm to 0 to
+// disable.
+// ============================================================
+base_plate_shave_start_z_mm                    = 3;
+base_plate_shave_height_mm                     = 2;
 
 // USB-C port notch — on the +X wall (thin side), rounded to USB-C
 // connector dimensions + 0.2 mm tolerance. Open on 3 sides (top + ±Y).
@@ -144,6 +164,29 @@ usb_support_block_x_gap_between_blocks_mm      = 5;       // -X gap between the 
 usb_support_block_height_above_cutout_bottom_mm = 1;
 
 // ============================================================
+// USB sidewall brace — a single block bonded to the inner face of
+// the +X end wall, sitting directly underneath the USB-C cutout.
+// Acts as a structural brace for the USB-C connector body and the
+// thin (1.2 mm) +X end wall. Y-centered on the USB-C cutout by
+// default; depth (X) extends inward from the wall into the pocket.
+//
+// Z range: from `usb_sidewall_block_z_bottom_mm` up to a top that's
+// `usb_sidewall_block_z_top_clearance_below_cutout_mm` below the
+// USB-C cutout bottom (a small clearance keeps it from fouling the
+// connector body — set to 0 to make the block flush against the
+// cutout floor).
+//
+// Set `usb_sidewall_block_enabled = false` to omit it entirely.
+// ============================================================
+usb_sidewall_block_enabled                      = true;
+usb_sidewall_block_width_y_mm                   = 10;     // Y extent of the block
+usb_sidewall_block_depth_x_mm                   = 5;      // how far the block protrudes from the wall into the pocket
+usb_sidewall_block_y_center_mm =
+    usb_c_cutout_center_y_mm;                              // = 23 (matches USB cutout Y center)
+usb_sidewall_block_z_bottom_mm                  = cradle_pocket_floor_z_mm; // pocket floor by default
+usb_sidewall_block_z_top_clearance_below_cutout_mm = 0.2; // air gap between block top and USB-C cutout bottom
+
+// ============================================================
 // Pico retention block — single rectangular block sitting in the
 // pocket to brace the Pico W from below. Positioned by the
 // inset-from-(-X)-wall knob; size and height tunable below.
@@ -156,6 +199,25 @@ pico_retention_block_y_center_mm =
     enclosure_outer_depth_along_y_axis_mm / 2;             // = 23 (dead-center Y by default)
 // Block top Z = cradle_pocket_floor_z_mm + this. 0 = no block, fully sunk into the floor.
 pico_retention_block_height_above_pocket_floor_mm = 8;
+
+// ============================================================
+// Solar panel pit — rectangular recess carved into the bottom
+// face of the base plate. Panel sits flush in the pit. Two wire
+// pass-through holes drilled from the pit floor into the pocket.
+// ============================================================
+solar_pit_width_x_mm                          = 62.0;  // [10.0:0.1:90.0]
+solar_pit_depth_y_mm                          = 36.0;  // [10.0:0.1:44.0]
+solar_pit_depth_z_mm                          = 2.0;   // [0.5:0.1:5.0]  pit depth into bottom face
+solar_pit_center_x_mm =
+    enclosure_outer_width_along_x_axis_mm / 2;          // centered by default
+solar_pit_center_y_mm =
+    enclosure_outer_depth_along_y_axis_mm / 2;          // centered by default
+// Wire pass-through holes (coordinates relative to pit origin corner)
+solar_hole_diameter_mm                        = 3.0;   // [1.0:0.1:5.0]
+solar_hole_1_x_mm                            = 5.0;    // [0.0:0.1:62.0]
+solar_hole_1_y_mm                            = 15.0;   // [0.0:0.1:36.0]
+solar_hole_2_x_mm                            = 20.0;   // [0.0:0.1:62.0]
+solar_hole_2_y_mm                            = 30.0;   // [0.0:0.1:36.0]
 
 // Peg XY positions = cover screw-bore centers (pillar XY origin + pillar/2)
 peg_xy_positions_list = [
@@ -213,6 +275,36 @@ module shell_with_curved_bottom(w, l, h, corner_r, fillet_r) {
 // ========== Base plate v1 ==========
 
 module base_plate_v1() {
+    if (base_plate_shave_height_mm <= 0) {
+        base_plate_v1_unshaved();
+    } else {
+        union() {
+            // Bottom slab — preserved exactly: Z = 0 .. shave_start
+            intersection() {
+                base_plate_v1_unshaved();
+                translate([-1, -1, -1])
+                    cube([enclosure_outer_width_along_x_axis_mm + 2,
+                          enclosure_outer_depth_along_y_axis_mm + 2,
+                          base_plate_shave_start_z_mm + 1]);
+            }
+            // Upper portion — shifted down so the deleted band closes up.
+            // 0.01 overlap into the bottom slab so the union seam is sealed.
+            translate([0, 0, -base_plate_shave_height_mm])
+                intersection() {
+                    base_plate_v1_unshaved();
+                    translate([-1, -1,
+                               base_plate_shave_start_z_mm
+                                 + base_plate_shave_height_mm
+                                 - 0.01])
+                        cube([enclosure_outer_width_along_x_axis_mm + 2,
+                              enclosure_outer_depth_along_y_axis_mm + 2,
+                              max_z_clip_mm + 10]);
+                }
+        }
+    }
+}
+
+module base_plate_v1_unshaved() {
     // Final Z clip — everything in the union below is intersected
     // with this slab so nothing renders above max_z_clip_mm.
     intersection() {
@@ -272,23 +364,86 @@ module base_plate_v1() {
                           usb_c_cutout_width_y_mm,
                           0.1]);
             }
+
+            // Solar panel pit — carved up into the bottom face
+            solar_pit_x_start = solar_pit_center_x_mm - solar_pit_width_x_mm / 2;
+            solar_pit_y_start = solar_pit_center_y_mm - solar_pit_depth_y_mm / 2;
+            translate([solar_pit_x_start,
+                       solar_pit_y_start,
+                       -0.1])
+                cube([solar_pit_width_x_mm,
+                      solar_pit_depth_y_mm,
+                      solar_pit_depth_z_mm + 0.1]);
+
+            // Wire pass-through holes (pit floor → pocket ceiling)
+            for (hole_xy = [[solar_hole_1_x_mm, solar_hole_1_y_mm],
+                            [solar_hole_2_x_mm, solar_hole_2_y_mm]])
+                translate([solar_pit_x_start + hole_xy[0],
+                           solar_pit_y_start + hole_xy[1],
+                           -0.1])
+                    cylinder(h = cradle_pocket_floor_z_mm + 0.2,
+                             d = solar_hole_diameter_mm, $fn = 24);
         }
 
         // 4 square pillar bases — rise from the pocket floor to the
-        // base plate top. Cylindrical pegs extend 3 mm above each
-        // pillar into the cover's blind M3 bore.
+        // base plate top. Each pillar can be extended INWARD (toward
+        // the board interior) along X and/or Y via the
+        // `pillar_extension_*_inward_*` knobs at the top of the file —
+        // useful as a brace/shelf for the cradle or PCB above.
+        // Cylindrical pegs extend 3 mm above each pillar's footprint
+        // CORNER (the original 5×5 mm pad) into the cover's blind M3
+        // bore — peg XY is unchanged regardless of pillar extension.
         pillar_base_side_mm = corner_pillar_square_side_length_mm;                 // = 5
         peg_z_bottom_mm = base_plate_total_height_z_mm;                            // pegs start at plate top
         peg_z_shank_top_mm =
             peg_z_bottom_mm + peg_height_above_pillar_mm - peg_tip_chamfer_mm;    // = 9.6
-        for (peg_xy = peg_xy_positions_list) {
-            // Square pillar base — from pocket floor to plate top
+        board_x_center_mm = enclosure_outer_width_along_x_axis_mm / 2;
+        board_y_center_mm = enclosure_outer_depth_along_y_axis_mm / 2;
+        for (i = [0 : len(peg_xy_positions_list) - 1]) {
+            peg_xy      = peg_xy_positions_list[i];
+            // Per-corner extension override — fall back to uniform values
+            // when the override list is empty or shorter than 4.
+            override_entry =
+                len(pillar_extension_per_corner_overrides) > i
+                  ? pillar_extension_per_corner_overrides[i]
+                  : [pillar_extension_x_inward_uniform_mm,
+                     pillar_extension_y_inward_uniform_mm];
+            ext_x = override_entry[0];
+            ext_y = override_entry[1];
+            // Direction: pillars on -X half extend in +X; +X half in -X.
+            // Same for Y.
+            is_minus_x_pillar = peg_xy[0] < board_x_center_mm;
+            is_minus_y_pillar = peg_xy[1] < board_y_center_mm;
+            // Footprint origin (smaller XY corner) and size after extension.
+            // For a -X pillar, the original 5x5 footprint stays anchored to
+            // the wall (smaller X), and ext_x is added to the +X side, so
+            // origin_x is unchanged and size_x = pillar_base + ext_x.
+            // For a +X pillar, origin_x shifts -X by ext_x and size_x grows.
+            pillar_origin_x = is_minus_x_pillar
+                ? peg_xy[0] - pillar_base_side_mm / 2
+                : peg_xy[0] - pillar_base_side_mm / 2 - ext_x;
+            pillar_origin_y = is_minus_y_pillar
+                ? peg_xy[1] - pillar_base_side_mm / 2
+                : peg_xy[1] - pillar_base_side_mm / 2 - ext_y;
+            pillar_size_x = pillar_base_side_mm + ext_x;
+            pillar_size_y = pillar_base_side_mm + ext_y;
+
+            // Original 5×5 screw pillar — always pocket floor to plate top.
             translate([peg_xy[0] - pillar_base_side_mm / 2,
                        peg_xy[1] - pillar_base_side_mm / 2,
                        cradle_pocket_floor_z_mm])
                 cube([pillar_base_side_mm,
                       pillar_base_side_mm,
-                      base_plate_total_height_z_mm - cradle_pocket_floor_z_mm]);   // 5.3 mm
+                      base_plate_total_height_z_mm - cradle_pocket_floor_z_mm]);
+
+            // Extension wings — height adjustable independently.
+            if (ext_x > 0 || ext_y > 0)
+                translate([pillar_origin_x,
+                           pillar_origin_y,
+                           cradle_pocket_floor_z_mm])
+                    cube([pillar_size_x,
+                          pillar_size_y,
+                          base_plate_total_height_z_mm + pillar_extension_z_above_plate_mm - cradle_pocket_floor_z_mm]);
 
             // Cylindrical peg shank — 3 mm above plate top
             translate([peg_xy[0], peg_xy[1], peg_z_bottom_mm])
@@ -387,6 +542,36 @@ module base_plate_v1() {
                   usb_support_block_width_y_mm,
                   usb_support_block_z_height]);
 
+        // USB sidewall brace — single block bonded to the inner face of
+        // the +X end wall, sitting directly underneath the USB-C cutout.
+        // See top-of-file `usb_sidewall_block_*` for tunable knobs
+        // (width Y, depth X, Y center, Z bottom, clearance below cutout).
+        if (usb_sidewall_block_enabled) {
+            usb_sidewall_inner_x_face_mm =
+                enclosure_outer_width_along_x_axis_mm
+                  - plus_x_end_wall_thickness_mm;             // = 93.3
+            usb_sidewall_block_x_start =
+                usb_sidewall_inner_x_face_mm
+                  - usb_sidewall_block_depth_x_mm;
+            usb_sidewall_block_y_start =
+                usb_sidewall_block_y_center_mm
+                  - usb_sidewall_block_width_y_mm / 2;
+            usb_sidewall_block_z_top =
+                usb_c_cutout_z_bottom_mm
+                  - usb_sidewall_block_z_top_clearance_below_cutout_mm;
+            usb_sidewall_block_z_size =
+                usb_sidewall_block_z_top - usb_sidewall_block_z_bottom_mm;
+            // Guard against degenerate / inverted blocks (e.g. if
+            // someone sets z_bottom above the cutout bottom).
+            if (usb_sidewall_block_z_size > 0)
+                translate([usb_sidewall_block_x_start,
+                           usb_sidewall_block_y_start,
+                           usb_sidewall_block_z_bottom_mm])
+                    cube([usb_sidewall_block_depth_x_mm,
+                          usb_sidewall_block_width_y_mm,
+                          usb_sidewall_block_z_size]);
+        }
+
         // Pico retention block — single rectangular block in the pocket.
         // See top-of-file `pico_retention_block_*` for the tunable knobs
         // (X position via inset, Y center, dimensions, height).
@@ -406,4 +591,48 @@ module base_plate_v1() {
     }  // close intersection (final Z clip at max_z_clip_mm)
 }
 
+// ============================================================
+// Breakaway supports for the solar pit ceiling.
+// A thin grid printed inside the pit recess so the printer has
+// something to bridge onto. Snap them out after printing.
+//
+// The supports are a series of thin walls (ribs) running along
+// the Y axis, spaced evenly across the pit X width. A single
+// perimeter-width wall (~0.4 mm) with a small Z gap from the
+// pit ceiling makes them easy to snap off.
+// ============================================================
+solar_support_enabled                         = true;
+solar_support_rib_thickness_mm                = 0.4;   // [0.2:0.1:1.0]  wall thickness (match nozzle width)
+solar_support_rib_spacing_mm                  = 5.0;   // [2.0:0.5:15.0] center-to-center spacing
+solar_support_z_gap_mm                        = 0.2;   // [0.1:0.05:0.5] air gap below pit ceiling for easy snap-off
+
 base_plate_v1();
+
+// Supports — rendered as a separate union so the slicer sees
+// them as part of the model but they snap off cleanly.
+if (solar_support_enabled) {
+    solar_pit_x_start = solar_pit_center_x_mm - solar_pit_width_x_mm / 2;
+    solar_pit_y_start = solar_pit_center_y_mm - solar_pit_depth_y_mm / 2;
+    support_z_top = solar_pit_depth_z_mm - solar_support_z_gap_mm;
+
+    if (support_z_top > 0)
+        intersection() {
+            // Clip to the pit volume (don't poke outside the recess)
+            translate([solar_pit_x_start, solar_pit_y_start, 0])
+                cube([solar_pit_width_x_mm, solar_pit_depth_y_mm, support_z_top]);
+
+            // Rib grid
+            union() {
+                num_ribs = floor(solar_pit_width_x_mm / solar_support_rib_spacing_mm);
+                for (i = [1 : num_ribs]) {
+                    rib_x = solar_pit_x_start
+                              + i * solar_pit_width_x_mm / (num_ribs + 1)
+                              - solar_support_rib_thickness_mm / 2;
+                    translate([rib_x, solar_pit_y_start, 0])
+                        cube([solar_support_rib_thickness_mm,
+                              solar_pit_depth_y_mm,
+                              support_z_top]);
+                }
+            }
+        }
+}

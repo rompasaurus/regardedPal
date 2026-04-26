@@ -3300,3 +3300,24 @@ Every prompt entry below uses the following fields. Entries that don't yet list 
   - `PromptProgression.md` (this file), `website/docs/prompts/index.md` — prompts #253 appended
 
 ---
+
+## Prompt #254 — 2026-04-26
+- **Prompt sequence:** Extended iterative SCAD session (~15 turns) covering top cover face plate curvature tuning, base plate pillar extension height adjustability, and solar panel integration. Key turns:
+  - Top cover: multiple attempts at a `face_plate_outer_edge_curve_radius_mm` parameter to independently control the face-to-wall rollover without bulging the sides or affecting the display window. Final approach uses `scale([1,1,zr/case_r])` on the top spheres to create an ellipsoid — flat face in Z, unchanged walls in XY.
+  - Base plate (thinner): `peg_height_above_pillar_mm` Customizer slider added (0–10mm, 0.1mm steps). `pillar_extension_z_above_plate_mm` parameter added to `base-plate-v1-2mm-thinner.scad` with negative range support (-10 to +10mm). Original 5x5 screw pillars kept at fixed height; only extension wings respond to the Z adjustment.
+  - Solar panel: new `base-plate-with-solar-cutout.scad` forked from the thinner variant. 62x36mm pit (AK 62X36 panel dimensions), 2mm deep, centered on bottom face. Two 3mm wire pass-through holes at adjustable coordinates. Breakaway support ribs added (0.4mm walls, 5mm spacing, 0.2mm Z gap) for printing the pit ceiling without slicer supports.
+  - Cleanup: joystick-pcb/ (autorouter version) deleted in favor of joystick-pcb-by-hand/. Solar params removed from thinner file after fork.
+- **Input Tokens (est):** ~600 across the sequence
+- **Output Tokens (est):** ~30,000
+- **Files / interpretation:**
+  - `04-26-design-alterations/top-cover-windowed-screen-inlay-v3-2piece.scad` — `face_plate_outer_edge_curve_radius_mm` parameter + ellipsoid sphere scaling in `shell_with_bullnose_top`
+  - `04-26-design-alterations/base-plate-v1-2mm-thinner.scad` — `peg_height_above_pillar_mm` slider, `pillar_extension_z_above_plate_mm` with negative range, split pillar/extension wing geometry
+  - `04-26-design-alterations/base-plate-with-solar-cutout.scad` (new) — fork of thinner with solar pit + wire holes + breakaway support ribs
+  - `04-26-design-alterations/base-plate-with-solar-cutout__with_supports.3mf` (new) — rendered with supports
+  - `hardware-design/joystick-pcb/` (deleted) — superseded by `joystick-pcb-by-hand/`
+  - Multiple `.json` preset files and `.3mf` renders updated
+  - `website/docs/docs/hardware/design-evolution.md` — 3 new version history rows
+  - `website/docs/prompts/index.md` — synced with prompt #254
+  - `PromptProgression.md` — prompt #254 appended
+
+---
