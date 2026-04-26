@@ -5559,6 +5559,24 @@
 <td>v1</td>
 <td>First PCB designed from scratch in KiCad 10 — K1-1506SN-01 5-way switch (LCSC C145910) on 19.6x19.6mm board, hand-routed, 6-pin solder-wire header with silkscreen labels (Com/L/D/UP/R/C), ground plane, gerbers + JLCPCB BOM exported</td>
 </tr>
+<tr>
+<td>2026-04-26</td>
+<td>Rev 2 top cover (screen inlay)</td>
+<td>v3-2piece curvature</td>
+<td>New <code>face_plate_outer_edge_curve_radius_mm</code> parameter — ellipsoid sphere scaling in <code>shell_with_bullnose_top</code> to independently control face-to-wall rollover without bulging the sides. Customizer slider 0.5–12mm in 0.1mm steps</td>
+</tr>
+<tr>
+<td>2026-04-26</td>
+<td>Rev 2 base plate (thinner)</td>
+<td>pillar tuning</td>
+<td><code>pillar_extension_z_above_plate_mm</code> (-10 to +10mm) — extension wings height adjustable independently of the 5x5 screw pillars. <code>peg_height_above_pillar_mm</code> slider added (0–10mm)</td>
+</tr>
+<tr>
+<td>2026-04-26</td>
+<td>Rev 2 base plate</td>
+<td>solar cutout</td>
+<td>New <code>base-plate-with-solar-cutout.scad</code> — fork of thinner with 62x36mm solar panel pit (AK 62X36), 2mm deep, centered on bottom face. Two 3mm wire pass-through holes at adjustable coordinates. Breakaway support ribs for FDM printing (0.4mm walls, 5mm spacing, 0.2mm Z gap)</td>
+</tr>
 </tbody>
 </table>
 

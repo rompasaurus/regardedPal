@@ -4674,6 +4674,17 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#prompt-254-2026-04-26" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Prompt #254 — 2026-04-26
+      
+    </span>
+  </a>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -6545,6 +6556,17 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#prompt-254-2026-04-26" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Prompt #254 — 2026-04-26
+      
+    </span>
+  </a>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -7913,6 +7935,14 @@
 <li><strong>Input Tokens (est):</strong> ~500 across the sequence</li>
 <li><strong>Output Tokens (est):</strong> ~8,000</li>
 <li><strong>Summary:</strong> First PCB designed entirely from scratch (no autorouter). KiCad workspace screenshot cropped into 4 labeled JPEGs (PCB layout, schematic, 3D viewer, full workspace). New blog post <code>joystick-hand-routed-pcb.md</code>. Design evolution updated with new section and version history row. Front page updated with joystick PCB 3D preview image and current progress. JLCPCB BOM reformatted in <code>production/bom.csv</code>. Layman summary: designed a postage-stamp-sized circuit board for a joystick controller from nothing, wired it up, labeled every connection, and exported the files to send to a factory for manufacturing.</li>
+</ul>
+<hr />
+<h2 id="prompt-254-2026-04-26">Prompt #254 — 2026-04-26<a class="headerlink" href="#prompt-254-2026-04-26" title="Permanent link">&para;</a></h2>
+<p><strong>Prompt sequence:</strong> Extended iterative SCAD session (~15 turns) — top cover face plate curvature tuning, base plate pillar extension height, and solar panel integration with breakaway supports.</p>
+<ul>
+<li><strong>Input Tokens (est):</strong> ~600 across the sequence</li>
+<li><strong>Output Tokens (est):</strong> ~30,000</li>
+<li><strong>Summary:</strong> Top cover gets <code>face_plate_outer_edge_curve_radius_mm</code> — ellipsoid sphere scaling to flatten the face without bulging the walls (multiple failed approaches before landing on <code>scale([1,1,zr/case_r])</code>). Base plate thinner gets <code>pillar_extension_z_above_plate_mm</code> (-10 to +10mm) with split geometry so the 5x5 screw pillars stay fixed while only the extension wings change height. New <code>base-plate-with-solar-cutout.scad</code> forked from thinner: 62x36mm solar panel pit (AK 62X36) on bottom face, two 3mm wire pass-through holes, and breakaway support ribs (0.4mm walls, 5mm spacing, 0.2mm Z gap) for FDM printing. Old autorouted joystick-pcb/ deleted in favor of hand-routed version.</li>
 </ul>
 
 
