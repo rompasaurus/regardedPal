@@ -3241,3 +3241,38 @@ Every prompt entry below uses the following fields. Entries that don't yet list 
   - `website/docs/blog/posts/joystick-pcb-rev2-autoroute.md` (new) — blog post
   - `website/docs/docs/hardware/design-evolution.md` — new section + 5 version-history rows
   - `PromptProgression.md` (this file), `website/docs/prompts/index.md` — prompts #250–#251 appended
+
+---
+
+## Prompt #252 — 2026-04-26
+- **Prompt:** "ok I added more images to the root folder lets analyse and rename the files with a detailed description convert to jpeg and delete originals then update the docs with the pictures and the design evolution as well this is last nights print with the assemble next plan is to wire in the batteries to the board and design a joystick board also lets take all the jpegs in the root folder and put them in a proper directory then update the blog and site and commit and push then update the prompts"
+- **Input Tokens (est):** ~100
+- **Output Tokens (est):** ~15,000
+- **Files / interpretation:**
+  - 17 HEIC photos from 2026-04-26 print session analysed, converted to JPEG, renamed with descriptive names, placed in `website/docs/assets/images/enclosure/`:
+    - `rev2-v3-assembly-exploded-topcover-and-baseplate.jpg` — full assembly side by side
+    - `rev2-baseplate-v3-topdown-support-blocks.jpg` — base plate top-down showing blocks
+    - `rev2-baseplate-v3-bottom-fillet.jpg` — smooth curved underside
+    - `rev2-cradle-v3-topdown-pico-tp4056-batteries.jpg` — all components in cradle
+    - `rev2-v3-exploded-all-three-parts.jpg` — full exploded layout
+    - `rev2-cradle-v3-closeup-tp4056-batteries-topdown.jpg` — TP4056 close-up
+    - `rev2-cradle-v3-side-profile-battery-trough.jpg` — side profile
+    - `rev2-cradle-v3-angled-tp4056-usbc-end.jpg` — USB-C end angled
+    - `rev2-topcover-v3-interior-pico2w-seated.jpg` — Pico 2 W in cover
+    - `rev2-topcover-v3-interior-joystick-hole-portrait.jpg` — joystick hole portrait
+    - `rev2-topcover-v3-interior-display-inlay-recess.jpg` — display inlay cavity
+    - `rev2-topcover-v3-interior-angled-waveshare.jpg` — angled with Waveshare
+    - `rev2-v3-assembled-stack-side-profile.jpg` — mated stack side view
+    - `rev2-solar-panel-pcb-back-ak62x36.jpg` — solar panel back
+    - `rev2-solar-panel-pcb-front-cells.jpg` — solar panel front
+    - `rev2-baseplate-v3-topdown-blocks-troughs.jpg` — blocks and troughs
+    - `rev2-baseplate-v3-side-profile-pegs-fillet.jpg` — pegs and fillet side
+  - 12 stale root JPEGs (older layout/battery/base photos) moved to `website/docs/assets/images/enclosure/`
+  - `docs/solar-charging-research.md` — fixed broken image path after move
+  - `website/docs/docs/hardware/design-evolution.md` — new "Rev 2 — v3 Print Session Photos" section with 14 annotated images + 1 version history row
+  - `website/docs/blog/posts/rev2-v3-print-session-assembly.md` (new) — blog post with all assembly photos and next-steps roadmap
+  - `website/docs/prompts/index.md` — synced with prompt #252
+  - `PromptProgression.md` — prompt #252 appended
+  - HEIC originals deleted
+
+---

@@ -1668,3 +1668,13 @@ All 5 pieces exported cleanly (CGAL manifold) as 3MF for Bambu Studio: `base.3mf
 - **Output Tokens (est):** ~25,000
 - **Commit:** `6d3bbe2` (substantive work) + a follow-up commit for the prompt-log entry
 - **Summary:** Documentation and process consolidation pass. New `hardware-design/scad Parts/README.md` documents the three SCAD helper scripts (`scad-export.py`, `bake-preset.py`, `export-preset.py`). New `hardware-design/HARDWARE-DESIGN-PROCESS.md` — retrospective on the SCAD→print and PCB→fab loops with concrete print-waste-reduction strategies (calibration coupons, SVG cross-sections, OpenSCAD presets for A/B testing, mandatory dimension comment blocks, machine-checkable clearance gates). Three high-quality PCB renders (top, bottom, iso) added to website assets. New blog post covering the Rev 2 redesign and the headless autoroute pipeline. `design-evolution.md` got a new section plus five new version-history rows.
+
+---
+
+## Prompt #252 — 2026-04-26
+
+**Prompt:** "ok I added more images to the root folder lets analyse and rename the files with a detailed description convert to jpeg and delete originals then update the docs with the pictures and the design evolution as well this is last nights print with the assemble next plan is to wire in the batteries to the board and design a joystick board also lets take all the jpegs in the root folder and put them in a proper directory then update the blog and site and commit and push then update the prompts"
+
+- **Input Tokens (est):** ~100
+- **Output Tokens (est):** ~15,000
+- **Summary:** 17 HEIC photos from the 2026-04-26 overnight print session analysed, converted to JPEG with descriptive names, and placed in the website enclosure images directory. Coverage: assembled stack, exploded layout, cradle with Pico 2 W + TP4056 + AAA batteries, top cover interior (Pico seated, display inlay, joystick pocket), base plate v3 (support blocks, battery troughs, corner pegs, bottom fillet), and a 62x36mm solar panel (AK 62X36) for future charging research. 12 stale root JPEGs also relocated. New blog post `rev2-v3-print-session-assembly.md`. Design evolution updated with photo section and version history row. Broken image path in `docs/solar-charging-research.md` fixed after move.

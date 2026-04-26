@@ -361,6 +361,88 @@ Source: [`hardware-design/joystick-pcb/`](https://github.com/rompasaurus/dilder/
 
 ---
 
+## Rev 2 — v3 Print Session Photos (2026-04-26)
+
+Overnight print of the latest base plate v3 (with support blocks and raised battery rails) and updated cradle/top cover. All three parts photographed during fit-check with Pico 2 W, TP4056 charge board, Ansmann AAA batteries, and Waveshare e-ink display. Also pictured: a small 62x36mm solar panel (AK 62X36) for future solar charging integration.
+
+### Full exploded layout — all three parts
+
+Top cover (with Pico 2 W and Waveshare display), cradle insert (with TP4056 and AAA battery), and base plate v3 laid out side by side.
+
+![Rev 2 v3 exploded layout — all three parts](../../assets/images/enclosure/rev2-v3-exploded-all-three-parts.jpg)
+
+### Assembly exploded — top cover and base plate
+
+Top cover with components installed next to the empty base plate, showing the two-piece stack before mating.
+
+![Rev 2 v3 assembly exploded](../../assets/images/enclosure/rev2-v3-assembly-exploded-topcover-and-baseplate.jpg)
+
+### Cradle insert — Pico 2 W, TP4056, and batteries top-down
+
+All components seated in the cradle: Pico 2 W in the center nest, TP4056 charge board at the +X end, two Ansmann AAA Li-Ion batteries in the flanking bays.
+
+![Cradle v3 top-down with all components](../../assets/images/enclosure/rev2-cradle-v3-topdown-pico-tp4056-batteries.jpg)
+
+### Cradle insert — TP4056 and batteries close-up
+
+Close-up of the TP4056 board seated on the connecting block with batteries in the troughs. USB-C port aligned with the +X wall cutout.
+
+![Cradle v3 TP4056 close-up](../../assets/images/enclosure/rev2-cradle-v3-closeup-tp4056-batteries-topdown.jpg)
+
+### Cradle insert — side profile
+
+Side view showing the battery sitting in the concave trough, rail height, and TP4056 USB-C connector position.
+
+![Cradle v3 side profile](../../assets/images/enclosure/rev2-cradle-v3-side-profile-battery-trough.jpg)
+
+### Cradle insert — angled view of USB-C end
+
+Angled shot of the TP4056 end showing the USB-C port, support blocks, and battery bay wall geometry.
+
+![Cradle v3 angled USB-C end](../../assets/images/enclosure/rev2-cradle-v3-angled-tp4056-usbc-end.jpg)
+
+### Top cover interior — Pico 2 W seated
+
+The Pico 2 W board sitting in the cover's nest cavity with the Waveshare FPC ribbon cable visible. Joystick hole on the left, display window in the center.
+
+![Top cover interior with Pico 2 W](../../assets/images/enclosure/rev2-topcover-v3-interior-pico2w-seated.jpg)
+
+### Top cover interior — display inlay recess
+
+The screen inlay recess and joystick PCB pocket visible from inside, showing the 3mm display cavity and tapered joystick through-hole.
+
+![Top cover interior — display inlay](../../assets/images/enclosure/rev2-topcover-v3-interior-display-inlay-recess.jpg)
+
+### Base plate v3 — top-down with support blocks
+
+The v3 base plate showing the two support blocks (for TP4056 retention), battery troughs along the long sides, four corner peg pillars, and the USB-C stadium notch on the +X wall.
+
+![Base plate v3 top-down](../../assets/images/enclosure/rev2-baseplate-v3-topdown-blocks-troughs.jpg)
+
+### Base plate v3 — side profile
+
+Low-angle side view showing the curved bottom fillet, corner pegs extending above the plate top, and the slim profile.
+
+![Base plate v3 side profile](../../assets/images/enclosure/rev2-baseplate-v3-side-profile-pegs-fillet.jpg)
+
+### Assembled stack — side profile
+
+The two-piece stack mated together, side view. Pico 2 W board edge visible above the base plate rim.
+
+![Assembled stack side profile](../../assets/images/enclosure/rev2-v3-assembled-stack-side-profile.jpg)
+
+### Solar panel — AK 62x36mm
+
+A small 62x36mm solar panel (marked "AK 62X36") with pre-soldered red/black leads. Back side shows the PCB contact pads; front side shows the photovoltaic cells. Being evaluated for future solar charging via the TP4056's input.
+
+![Solar panel PCB — back](../../assets/images/enclosure/rev2-solar-panel-pcb-back-ak62x36.jpg)
+
+![Solar panel PCB — front](../../assets/images/enclosure/rev2-solar-panel-pcb-front-cells.jpg)
+
+Source: Photos from 2026-04-26 print session. Parts from [`04-25-design-alterations/`](https://github.com/rompasaurus/dilder/tree/main/hardware-design/scad%20Parts/Rev%202%20extended%20with%20joystick/04-25-design-alterations).
+
+---
+
 ## Current Assembly (ESP32-S3 Enclosure)
 
 The enclosure is a stacked shell design housing an Olimex ESP32-S3-DevKit-Lipo, Waveshare 2.13" e-ink display, and 1000mAh LiPo battery. Five parts print flat without supports and assemble with 4 corner screw posts.
@@ -569,3 +651,4 @@ Provides a menu to browse .scad files, pick export format (3MF/STL), set output 
 | 2026-04-26 | Joystick breakout PCB | v2.0 autoroute | Routed headlessly via Freerouting v2 in Docker (`ghcr.io/freerouting/freerouting`) — DSN exported from KiCad via `pcbnew.ExportSpecctraDSN`, SES imported back via `pcbnew.ImportSpecctraSES`. Result: 23 trace segments + 1 through-hole via, 534 mm total length, **8 bends all at 45°** (zero 90° corners), 0 clearance violations, 0 unconnected, 0 schematic-parity issues. Full pipeline reproducible from a single bash script — see `joystick-pcb/design-notes.md` |
 | 2026-04-26 | SCAD tooling | docs | New `hardware-design/scad Parts/README.md` documenting `scad-export.py` (interactive 3MF/STL exporter with date-sorted file browser), `bake-preset.py` (writes a customizer preset back into the SCAD source as the new default), and `export-preset.py` (renders a preset to 3MF without modifying the source — for A/B variant testing) |
 | 2026-04-26 | Hardware process | doc | New `hardware-design/HARDWARE-DESIGN-PROCESS.md` — retrospective on the SCAD→print and PCB→fab loops with concrete improvements to cut wasted prints (calibration coupons, SVG cross-sections, presets-instead-of-prints, mandatory dimension comment blocks, machine-checkable clearance gates) |
+| 2026-04-26 | Rev 2 v3 print session | photos | 17 photos from overnight print: assembled stack, exploded layout, cradle with Pico 2 W + TP4056 + AAA batteries, top cover interior (Pico seated, display inlay, joystick pocket), base plate v3 (support blocks, troughs, pegs, fillet), solar panel AK 62x36mm for future charging |

@@ -12,7 +12,7 @@ Four components were photographed and identified:
 
 ### 1.1 Solar Panel — AK 62x36mm
 
-![Solar panel photo](../IMG20260424112601.jpg)
+![Solar panel photo](../website/docs/assets/images/enclosure/rev2-solar-panel-closeup-20260424.jpg)
 
 | Attribute | Value |
 |-----------|-------|
