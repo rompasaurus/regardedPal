@@ -1698,3 +1698,13 @@ All 5 pieces exported cleanly (CGAL manifold) as 3MF for Bambu Studio: `base.3mf
 - **Input Tokens (est):** ~600 across the sequence
 - **Output Tokens (est):** ~30,000
 - **Summary:** Top cover gets `face_plate_outer_edge_curve_radius_mm` — ellipsoid sphere scaling to flatten the face without bulging the walls (multiple failed approaches before landing on `scale([1,1,zr/case_r])`). Base plate thinner gets `pillar_extension_z_above_plate_mm` (-10 to +10mm) with split geometry so the 5x5 screw pillars stay fixed while only the extension wings change height. New `base-plate-with-solar-cutout.scad` forked from thinner: 62x36mm solar panel pit (AK 62X36) on bottom face, two 3mm wire pass-through holes, and breakaway support ribs (0.4mm walls, 5mm spacing, 0.2mm Z gap) for FDM printing. Old autorouted joystick-pcb/ deleted in favor of hand-routed version.
+
+---
+
+## Prompt #255 — 2026-04-26
+
+**Prompt sequence:** Multi-turn session adding Raspberry Pi Pico 2 W (RP2350) as a third target board alongside Pico W and ESP32-S3. Iterative effort covering board support, GUI adaptation, build system porting, and resolving RP2350 platform incompatibilities.
+
+- **Input Tokens (est):** ~800 across the sequence
+- **Output Tokens (est):** ~45,000
+- **Summary:** Full Pico 2 W board support added. `BOARD_PICO2_W` in `board_config.h` (same 40-pin header, 4MB flash). DevTool board dropdown + all UI text dynamically adapts (FlashUtility, ConnectionUtility, PinViewer, DocumentationTab, ProgramsTab). BOOTSEL mount detection updated for `RP2350` drive label. Dockerfile `PICO_BOARD` env var made configurable. CMake cache auto-detection wipes stale `build/` when `PICO_PLATFORM` mismatches. New `rtc_compat.h` provides software RTC fallback on RP2350 (no hardware RTC) with `datetime_t` definition and `time_us_64()` timekeeping. All 18 program files and CMakeLists updated. New Pico 2 W reference doc with specs comparison and critical migration gotchas.

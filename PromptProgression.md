@@ -3321,3 +3321,31 @@ Every prompt entry below uses the following fields. Entries that don't yet list 
   - `PromptProgression.md` — prompt #254 appended
 
 ---
+
+## Prompt #255 — 2026-04-26
+
+- **Prompt sequence:** Multi-turn session adding Raspberry Pi Pico 2 W (RP2350) as a third target board alongside Pico W and ESP32-S3. Major iterative effort covering board support, GUI adaptation, build system porting, and resolving RP2350 platform incompatibilities. Key turns:
+  - Board support: added `BOARD_PICO2_W` to `board_config.h` (same pins, 4MB flash), `firmware/CMakeLists.txt`, DevTool board selector dropdown, `setup.py` CLI (`--board pico2`).
+  - DevTool GUI: full sweep of all user-visible strings — FlashUtility, ConnectionUtility, PinViewer, DocumentationTab, ProgramsTab — all now dynamically show "Pico 2 W (RP2350)" or "Pico W (RP2040)" based on dropdown selection. BOOTSEL drive label shows "RP2350" vs "RPI-RP2". Documentation tab refreshes on board change.
+  - Dockerfile: `PICO_BOARD` env var made configurable (was hardcoded `pico_w`).
+  - BOOTSEL detection: `find_rpi_rp2_mount()` updated in both `devtool.py` and `setup.py` to search for both `RPI-RP2` (Pico W) and `RP2350` (Pico 2 W) drive labels.
+  - CMake cache poisoning: stale `PICO_PLATFORM=rp2040` in build dirs caused failures when switching to `pico2_w`. Added cache detection logic that checks both `PICO_BOARD` and `PICO_PLATFORM` and auto-wipes `build/` on mismatch.
+  - RTC compat: RP2350 has no hardware RTC — `hardware/rtc.h` and `pico/util/datetime.h` (which defines `datetime_t`) don't exist. Created `rtc_compat.h` that defines `datetime_t` and software `rtc_init()`/`rtc_set_datetime()`/`rtc_get_datetime()` using `time_us_64()` on RP2350, passes through to real hardware on RP2040. Updated all 18 program `main.c` files and CMakeLists.txt files (conditional `hardware_rtc` linking).
+  - Docs: new `website/docs/docs/reference/pico-2-w.md` with specs comparison, critical gotchas, and migration guide. Added to mkdocs nav.
+- **Input Tokens (est):** ~800 across the sequence
+- **Output Tokens (est):** ~45,000
+- **Files:**
+  - `firmware/include/platform/board_config.h` — `BOARD_PICO2_W` section (RP2350, 4MB flash, same pins)
+  - `firmware/CMakeLists.txt` — `PICO2_W` target board option
+  - `DevTool/devtool.py` — board selector, dynamic UI text, BOOTSEL detection, Docker/CMake build flags, pin viewer, docs refresh
+  - `setup.py` — `--board pico2`, interactive menu, cache detection, dynamic step text
+  - `dev-setup/Dockerfile` — `PICO_BOARD` env var
+  - `dev-setup/hello-world/lib/Config/rtc_compat.h` (new) — cross-platform RTC compat header
+  - `dev-setup/*/main.c` (18 files) — `rtc_compat.h` replaces `hardware/rtc.h` + `pico/util/datetime.h`
+  - `dev-setup/*/CMakeLists.txt` (18 files) — conditional `hardware_rtc` linking
+  - `website/docs/docs/reference/pico-2-w.md` (new) — Pico 2 W reference and migration guide
+  - `website/mkdocs.yml` — nav entry for Pico 2 W reference
+  - `website/docs/prompts/index.md` — synced with prompt #255
+  - `PromptProgression.md` — prompt #255 appended
+
+---
