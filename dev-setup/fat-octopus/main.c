@@ -19,8 +19,7 @@
 #include <math.h>
 #include "pico/stdlib.h"
 #include "hardware/adc.h"
-#include "hardware/rtc.h"
-#include "pico/util/datetime.h"
+#include "rtc_compat.h"
 #include "DEV_Config.h"
 
 /* Display variant selection */

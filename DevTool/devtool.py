@@ -132,12 +132,17 @@ APP_VERSION = "1.1.0"
 
 # ── Target boards ──────────────────────────────────────────────────────────
 BOARD_PICO_W = "pico_w"
+BOARD_PICO2_W = "pico2_w"
 BOARD_ESP32S3 = "esp32s3"
 
 BOARD_LABELS = {
     BOARD_PICO_W:  "Pico W (RP2040)",
+    BOARD_PICO2_W: "Pico 2 W (RP2350)",
     BOARD_ESP32S3: "ESP32-S3 (Olimex)",
 }
+
+# Boards that use the Pico SDK (UF2/BOOTSEL workflow)
+PICO_BOARDS = {BOARD_PICO_W, BOARD_PICO2_W}
 
 # ESP32-S3 flash size (Olimex DevKit-Lipo N8R8)
 ESP32_FLASH_KB = 8192  # 8 MB
@@ -231,28 +236,36 @@ def find_serial_for_board(board):
 
 
 def find_rpi_rp2_mount():
-    """Find the RPI-RP2 USB drive for flashing."""
+    """Find the Pico BOOTSEL USB drive for flashing.
+
+    Pico W (RP2040) mounts as 'RPI-RP2'.
+    Pico 2 W (RP2350) mounts as 'RP2350'.
+    """
     user = os.environ.get("USER", "")
-    paths = [
-        Path(f"/run/media/{user}/RPI-RP2"),
-        Path(f"/media/{user}/RPI-RP2"),
-        Path("/mnt/RPI-RP2"),
-    ]
-    for p in paths:
-        if p.exists() and p.is_dir():
-            return p
-    # Fallback: findmnt
-    try:
-        result = subprocess.run(
-            ["findmnt", "-rno", "TARGET", "-S", "LABEL=RPI-RP2"],
-            capture_output=True, text=True, timeout=3
-        )
-        if result.returncode == 0 and result.stdout.strip():
-            p = Path(result.stdout.strip().splitlines()[0])
-            if p.exists():
+    # Labels for both Pico W and Pico 2 W BOOTSEL modes
+    labels = ["RPI-RP2", "RP2350"]
+    for label in labels:
+        paths = [
+            Path(f"/run/media/{user}/{label}"),
+            Path(f"/media/{user}/{label}"),
+            Path(f"/mnt/{label}"),
+        ]
+        for p in paths:
+            if p.exists() and p.is_dir():
                 return p
-    except (FileNotFoundError, subprocess.TimeoutExpired):
-        pass
+    # Fallback: findmnt
+    for label in labels:
+        try:
+            result = subprocess.run(
+                ["findmnt", "-rno", "TARGET", "-S", f"LABEL={label}"],
+                capture_output=True, text=True, timeout=3
+            )
+            if result.returncode == 0 and result.stdout.strip():
+                p = Path(result.stdout.strip().splitlines()[0])
+                if p.exists():
+                    return p
+        except (FileNotFoundError, subprocess.TimeoutExpired):
+            pass
     return None
 
 
@@ -724,10 +737,11 @@ class DisplayEmulator(ttk.Frame):
             messagebox.showerror("Error", "Pillow is required for PNG support.\n\npip install Pillow")
 
     def _send_to_pico(self):
-        """Send the current image to the Pico W via serial (non-blocking)."""
+        """Send the current image to the board via serial (non-blocking)."""
+        bn = BOARD_LABELS.get(self.app.target_board, "Pico")
         port = find_pico_serial()
         if not port:
-            messagebox.showwarning("No Pico", "No Pico W detected on USB serial.")
+            messagebox.showwarning("No Board", f"No {bn} detected on USB serial.")
             return
 
         data = self._pixels_to_bytes()
@@ -741,15 +755,15 @@ class DisplayEmulator(ttk.Frame):
                     ser.write(struct.pack("<HH", DISPLAY_W, DISPLAY_H))
                     ser.write(data)
                     ser.flush()
-                self.app.log(f"Image sent to Pico W ({len(data)} bytes)")
+                self.app.log(f"Image sent to {bn} ({len(data)} bytes)")
             except serial.SerialTimeoutException:
                 self.after(0, lambda: messagebox.showwarning(
                     "Send Timed Out",
-                    "Pico needs IMG-receiver firmware to display images.\n\n"
+                    f"{bn} needs IMG-receiver firmware to display images.\n\n"
                     "Steps:\n"
                     "1) Go to the Programs tab\n"
-                    "2) Put Pico in BOOTSEL mode (hold BOOTSEL + plug in)\n"
-                    "3) Click 'Build & Flash to Pico'\n"
+                    "2) Put board in BOOTSEL mode (hold BOOTSEL + plug in)\n"
+                    "3) Click 'Build & Flash'\n"
                     "4) Wait for reboot, then retry Send to Pico"))
             except serial.SerialException as e:
                 self.after(0, lambda: messagebox.showerror("Serial Error", str(e)))
@@ -960,18 +974,21 @@ class SerialMonitor(ttk.Frame):
 class FlashUtility(ttk.Frame):
     """Flash firmware to the target board (Pico W via BOOTSEL, ESP32-S3 via esptool)."""
 
-    _PICO_INSTRUCTIONS = """\
-To flash the Pico W:
-
-1. Unplug the Pico W from USB
-2. Hold down the BOOTSEL button (small white button)
-3. While holding BOOTSEL, plug in the USB cable
-4. Release BOOTSEL after 1 second
-5. Click "Detect RPI-RP2" above
-6. Click "Flash" to copy the firmware
-
-The Pico W will reboot automatically after flashing.
-The RPI-RP2 drive will disappear — this is normal."""
+    @staticmethod
+    def _pico_instructions(board=None):
+        board_name = BOARD_LABELS.get(board, "Pico W (RP2040)")
+        drive = "RP2350" if board == BOARD_PICO2_W else "RPI-RP2"
+        return (
+            f"To flash the {board_name}:\n\n"
+            f"1. Unplug the board from USB\n"
+            f"2. Hold down the BOOTSEL button (small white button)\n"
+            f"3. While holding BOOTSEL, plug in the USB cable\n"
+            f"4. Release BOOTSEL after 1 second\n"
+            f'5. Click "Detect {drive}" above\n'
+            f"6. Click \"Flash\" to copy the firmware\n\n"
+            f"The board will reboot automatically after flashing.\n"
+            f"The {drive} drive will disappear — this is normal."
+        )
 
     _ESP32_INSTRUCTIONS = """\
 To flash the ESP32-S3 (Olimex DevKit-Lipo):
@@ -1011,16 +1028,18 @@ If auto-reset fails:
         self._populate_quick_picks()
 
         # ── Flash control ──
-        self.flash_frame = ttk.LabelFrame(self, text="Flash to Pico W", padding=10)
+        init_label = BOARD_LABELS.get(self._current_board, "Pico W")
+        init_drive = "RP2350" if self._current_board == BOARD_PICO2_W else "RPI-RP2"
+        self.flash_frame = ttk.LabelFrame(self, text=f"Flash to {init_label}", padding=10)
         self.flash_frame.pack(fill=tk.X, padx=10, pady=(0, 10))
 
-        self.mount_label = ttk.Label(self.flash_frame, text="RPI-RP2: not detected")
+        self.mount_label = ttk.Label(self.flash_frame, text=f"{init_drive}: not detected")
         self.mount_label.pack(anchor=tk.W)
 
         btn_row = ttk.Frame(self.flash_frame)
         btn_row.pack(fill=tk.X, pady=(8, 0))
 
-        self.detect_btn = ttk.Button(btn_row, text="Detect RPI-RP2", command=self._detect_mount)
+        self.detect_btn = ttk.Button(btn_row, text=f"Detect {init_drive}", command=self._detect_mount)
         self.detect_btn.pack(side=tk.LEFT, padx=5)
         self.flash_btn_main = ttk.Button(btn_row, text="Flash", command=self._flash)
         self.flash_btn_main.pack(side=tk.LEFT, padx=5)
@@ -1037,7 +1056,7 @@ If auto-reset fails:
         self.instructions = tk.Text(inst_frame, height=8, wrap=tk.WORD, bg=BG_DARK, fg=FG_TEXT,
                                     font=("JetBrains Mono", 10), state=tk.DISABLED)
         self.instructions.pack(fill=tk.BOTH, expand=True)
-        self._set_instructions(self._PICO_INSTRUCTIONS)
+        self._set_instructions(self._pico_instructions(self._current_board))
 
     def _set_instructions(self, text):
         self.instructions.configure(state=tk.NORMAL)
@@ -1106,11 +1125,13 @@ If auto-reset fails:
             self.mount_label.config(text="ESP32: not detected")
             self._set_instructions(self._ESP32_INSTRUCTIONS)
         else:
-            self.flash_frame.config(text="Flash to Pico W")
-            self.detect_btn.config(text="Detect RPI-RP2", command=self._detect_mount)
+            board_label = BOARD_LABELS.get(board, "Pico W")
+            bootsel_label = "RP2350" if board == BOARD_PICO2_W else "RPI-RP2"
+            self.flash_frame.config(text=f"Flash to {board_label}")
+            self.detect_btn.config(text=f"Detect {bootsel_label}", command=self._detect_mount)
             self.flash_btn_main.config(command=self._flash)
-            self.mount_label.config(text="RPI-RP2: not detected")
-            self._set_instructions(self._PICO_INSTRUCTIONS)
+            self.mount_label.config(text=f"{bootsel_label}: not detected")
+            self._set_instructions(self._pico_instructions(board))
 
     def _size_str(self, path):
         try:
@@ -1136,13 +1157,15 @@ If auto-reset fails:
     # ── Pico W flash methods ──
 
     def _detect_mount(self):
+        bootsel_label = "RP2350" if self._current_board == BOARD_PICO2_W else "RPI-RP2"
         mount = find_rpi_rp2_mount()
         if mount:
-            self.mount_label.config(text=f"RPI-RP2: {mount}", foreground=FG_GREEN)
-            self.app.log(f"RPI-RP2 found at {mount}")
+            self.mount_label.config(text=f"{bootsel_label}: {mount}", foreground=FG_GREEN)
+            self.app.log(f"{bootsel_label} found at {mount}")
         else:
-            self.mount_label.config(text="RPI-RP2: not detected — is Pico in BOOTSEL mode?",
-                                    foreground=FG_RED)
+            self.mount_label.config(
+                text=f"{bootsel_label}: not detected — is board in BOOTSEL mode?",
+                foreground=FG_RED)
 
     def _flash(self):
         fw = self.fw_var.get()
@@ -1150,9 +1173,11 @@ If auto-reset fails:
             messagebox.showwarning("No File", "Select a .uf2 file first.")
             return
 
+        board_label = BOARD_LABELS.get(self._current_board, "Pico")
         mount = find_rpi_rp2_mount()
         if not mount:
-            messagebox.showwarning("No Pico", "RPI-RP2 not detected.\n\nPut the Pico W in BOOTSEL mode first.")
+            messagebox.showwarning("No Pico",
+                f"BOOTSEL drive not detected.\n\nPut the {board_label} in BOOTSEL mode first.")
             return
 
         try:
@@ -1164,6 +1189,21 @@ If auto-reset fails:
 
     def _build_project(self, proj_dir):
         build_dir = proj_dir / "build"
+        pico_board = "pico2_w" if self._current_board == BOARD_PICO2_W else "pico_w"
+
+        # Detect stale CMake cache from a different board/platform and clean
+        expected_platform = "rp2350" if self._current_board == BOARD_PICO2_W else "rp2040"
+        cmake_cache = build_dir / "CMakeCache.txt"
+        if cmake_cache.exists():
+            try:
+                cache_text = cmake_cache.read_text(errors="replace")
+                if (f"PICO_BOARD:STRING={pico_board}" not in cache_text
+                        or f"PICO_PLATFORM:STRING={expected_platform}" not in cache_text):
+                    self.app.log(f"Stale build cache (different platform) — cleaning {build_dir.name}/")
+                    shutil.rmtree(build_dir)
+            except OSError:
+                pass
+
         build_dir.mkdir(exist_ok=True)
 
         sdk = os.environ.get("PICO_SDK_PATH", str(Path.home() / "pico" / "pico-sdk"))
@@ -1175,12 +1215,12 @@ If auto-reset fails:
             if src.exists():
                 shutil.copy2(src, cmake_helper)
 
-        self.app.log(f"Building {proj_dir.name}...")
+        self.app.log(f"Building {proj_dir.name} for {pico_board}...")
 
         def _run():
             try:
                 result = subprocess.run(
-                    ["cmake", "-G", "Ninja", f"-DPICO_SDK_PATH={sdk}", "-DPICO_BOARD=pico_w", ".."],
+                    ["cmake", "-G", "Ninja", f"-DPICO_SDK_PATH={sdk}", f"-DPICO_BOARD={pico_board}", ".."],
                     cwd=build_dir, capture_output=True, text=True
                 )
                 if result.returncode != 0:
@@ -1574,10 +1614,26 @@ Bit order:   MSB first
         self.pin_text.insert(tk.END, text)
         self.pin_text.configure(state=tk.DISABLED)
 
+    _PICO2_W_PINOUT = _PICO_W_PINOUT.replace(
+        "Pico W GPIO Pin Assignments",
+        "Pico 2 W GPIO Pin Assignments"
+    ).replace(
+        "│  PICO   │",
+        "│ PICO 2  │"
+    ).replace(
+        "│    W    │",
+        "│    W    │"
+    ).replace(
+        "BOARD_FLASH_KB       2048",
+        "BOARD_FLASH_KB       4096"
+    )
+
     def refresh_for_board(self, board):
         """Switch the displayed pinout for the selected board."""
         if board == BOARD_ESP32S3:
             self._show_pinout(self._ESP32S3_PINOUT)
+        elif board == BOARD_PICO2_W:
+            self._show_pinout(self._PICO2_W_PINOUT)
         else:
             self._show_pinout(self._PICO_W_PINOUT)
 
@@ -1665,17 +1721,20 @@ class ConnectionUtility(ttk.Frame):
         canvas.bind_all("<Button-5>", lambda e: canvas.yview_scroll(3, "units"))
 
         f = scroll_frame
+        board = self.app.target_board
+        bn = BOARD_LABELS.get(board, "Pico W (RP2040)")
+        drive = "RP2350" if board == BOARD_PICO2_W else "RPI-RP2"
 
         # Step 1
-        self._step_header(f, "Step 1", "Plug in the Pico W via USB")
-        self._step_body(f, """\
-Connect the Pico W to your computer using a micro-USB cable.
+        self._step_header(f, "Step 1", f"Plug in the {bn} via USB")
+        self._step_body(f, f"""\
+Connect the {bn} to your computer using a micro-USB cable.
 
 IMPORTANT: The cable must be a data cable, not a charge-only cable.
 Charge-only cables have no data wires — they physically cannot
 communicate. If in doubt, try a different cable.
 
-The Pico W should NOT be in BOOTSEL mode for serial communication.
+The board should NOT be in BOOTSEL mode for serial communication.
 Just plug it in normally with firmware already flashed.""")
 
         self._step_check_btn(f, "Check: Is a USB device detected?", self._check_usb_device)
@@ -1684,12 +1743,12 @@ Just plug it in normally with firmware already flashed.""")
 
         # Step 2
         self._step_header(f, "Step 2", "Verify the serial port exists")
-        self._step_body(f, """\
-When the Pico W is running firmware with USB serial enabled
+        self._step_body(f, f"""\
+When the {bn} is running firmware with USB serial enabled
 (stdio_init_all() in C code), it appears as /dev/ttyACM0.
 
-If it does not appear, the Pico W may be:
-  - In BOOTSEL mode (shows as RPI-RP2 drive instead)
+If it does not appear, the board may be:
+  - In BOOTSEL mode (shows as {drive} drive instead)
   - Running firmware without USB serial enabled
   - Connected with a charge-only cable""")
 
@@ -1729,7 +1788,7 @@ Everything looks good — switch to the Serial Monitor tab to connect.
   3. Baud rate: 115200
   4. Click "Connect"
 
-You should see printf output from your Pico W firmware.""")
+You should see printf output from your board's firmware.""")
 
         ttk.Button(f, text="Go to Serial Monitor",
                    command=lambda: self.app.notebook.select(self.app.serial_tab)).pack(
@@ -1753,13 +1812,15 @@ You should see printf output from your Pico W firmware.""")
         canvas.bind_all("<Button-5>", lambda e: canvas.yview_scroll(3, "units"))
 
         f = scroll_frame
+        board = self.app.target_board
+        bn = BOARD_LABELS.get(board, "Pico W (RP2040)")
 
         # Overview
-        self._step_header(f, "Overview", "Pico W Wi-Fi Connection")
-        self._step_body(f, """\
-The Pico W has an onboard Infineon CYW43439 Wi-Fi chip
-(802.11n, 2.4 GHz). You can use it to connect the Pico W to
-your local network and communicate with it wirelessly —
+        self._step_header(f, "Overview", f"{bn} Wi-Fi Connection")
+        self._step_body(f, f"""\
+The {bn} has an onboard Infineon CYW43439 Wi-Fi chip
+(802.11n, 2.4 GHz). You can use it to connect to
+your local network and communicate wirelessly —
 no USB cable needed after initial setup.
 
 This requires firmware that initialises Wi-Fi. The hello world
@@ -1819,9 +1880,9 @@ target_link_libraries(your_project
         cmake_text.configure(state=tk.DISABLED)
 
         # Step 3
-        self._step_header(f, "Step 3", "Find the Pico W on your network")
-        self._step_body(f, """\
-After the Pico W connects to Wi-Fi, it gets an IP address via DHCP.
+        self._step_header(f, "Step 3", f"Find the {bn} on your network")
+        self._step_body(f, f"""\
+After the {bn} connects to Wi-Fi, it gets an IP address via DHCP.
 Your firmware should print it:
 
     printf("IP: %s\\n", ip4addr_ntoa(
@@ -1829,7 +1890,7 @@ Your firmware should print it:
 
 Then you can ping it from your computer:""")
 
-        self._step_check_btn(f, "Scan: Find Pico W on local network", self._scan_network)
+        self._step_check_btn(f, f"Scan: Find {bn} on local network", self._scan_network)
         self.wifi_scan_label = ttk.Label(f, text="")
         self.wifi_scan_label.pack(anchor=tk.W, padx=20)
 
@@ -1838,17 +1899,17 @@ Then you can ping it from your computer:""")
         self._step_body(f, """\
 With Wi-Fi working, you have several options:
 
-TCP Socket Server — Run a TCP listener on the Pico W.
+TCP Socket Server — Run a TCP listener on the board.
   Your DevTool or any script can connect and send commands
   or image data over the network instead of USB serial.
 
-HTTP Server — Serve a simple web page from the Pico W.
+HTTP Server — Serve a simple web page from the board.
   Useful for status dashboards or remote control.
 
-UDP Broadcast — The Pico W can announce itself on the
+UDP Broadcast — The board can announce itself on the
   network so the DevTool can auto-discover it.
 
-mDNS — Advertise the Pico W as "dilder.local" on the
+mDNS — Advertise the board as "dilder.local" on the
   network so you don't need to know the IP address.
 
 These are firmware features you build in C. The Pico SDK
@@ -1856,7 +1917,7 @@ includes lwIP (lightweight IP stack) which supports all
 of the above.""")
 
         # Wi-Fi connection test
-        self._step_header(f, "Quick Connect", "Test a TCP connection to the Pico W")
+        self._step_header(f, "Quick Connect", f"Test a TCP connection to the {bn}")
         self._step_body(f, """\
 If your firmware is running a TCP server, enter the IP and
 port below to test the connection.""")
@@ -1898,26 +1959,28 @@ port below to test the connection.""")
     # ── USB Checks ───────────────────────────────────────────────────────────
 
     def _check_usb_device(self):
+        bn = BOARD_LABELS.get(self.app.target_board, "Pico")
         try:
             result = subprocess.run(["lsusb"], capture_output=True, text=True, timeout=5)
             pico_lines = [l for l in result.stdout.splitlines()
                           if "2e8a" in l.lower() or "raspberry pi" in l.lower() or "rpi" in l.lower()]
             if pico_lines:
-                self.usb_step1_label.config(text=f"  ✓ Pico W detected: {pico_lines[0].strip()}",
+                self.usb_step1_label.config(text=f"  ✓ {bn} detected: {pico_lines[0].strip()}",
                                             foreground=FG_GREEN)
-                self.app.log("USB check: Pico W detected")
+                self.app.log(f"USB check: {bn} detected")
             else:
-                self.usb_step1_label.config(text="  ✗ No Pico W found on USB. Check cable and connection.",
+                self.usb_step1_label.config(text=f"  ✗ No {bn} found on USB. Check cable and connection.",
                                             foreground=FG_RED)
         except (FileNotFoundError, subprocess.TimeoutExpired):
             self.usb_step1_label.config(text="  ? lsusb not available — check manually with: lsusb",
                                         foreground=FG_YELLOW)
 
     def _check_serial_port(self):
+        bn = BOARD_LABELS.get(self.app.target_board, "Pico")
         port = find_pico_serial()
         if port:
             self.usb_step2_label.config(
-                text=f"  ✓ {port} detected — Pico W serial is ready",
+                text=f"  ✓ {port} detected — {bn} serial is ready",
                 foreground=FG_GREEN)
             self.app.log(f"Serial port check: {port} found")
         else:
@@ -1926,11 +1989,11 @@ port below to test the connection.""")
             others = _glob.glob("/dev/ttyACM*")
             if others:
                 self.usb_step2_label.config(
-                    text=f"  ~ Pico not auto-detected, but found: {', '.join(others)}",
+                    text=f"  ~ Board not auto-detected, but found: {', '.join(others)}",
                     foreground=FG_YELLOW)
             else:
                 self.usb_step2_label.config(
-                    text="  ✗ No serial devices found. Is the Pico W plugged in with firmware?",
+                    text=f"  ✗ No serial devices found. Is the {bn} plugged in with firmware?",
                     foreground=FG_RED)
 
     def _check_serial_perms(self):
@@ -2321,13 +2384,15 @@ and TCP/HTTP servers just like the Pico W.""")
 
             def _update():
                 if found:
+                    bn = BOARD_LABELS.get(self.app.target_board, "Pico")
                     self.wifi_scan_label.config(
                         text=f"  Found {len(found)} devices on local network. "
-                             f"Check serial output for Pico W's IP address.",
+                             f"Check serial output for {bn}'s IP address.",
                         foreground=FG_GREEN)
                 else:
+                    bn = BOARD_LABELS.get(self.app.target_board, "Pico")
                     self.wifi_scan_label.config(
-                        text="  No devices found. Check that Pico W firmware has Wi-Fi enabled.",
+                        text=f"  No devices found. Check that {bn} firmware has Wi-Fi enabled.",
                         foreground=FG_YELLOW)
 
             self.winfo_toplevel().after(0, _update)
@@ -2352,14 +2417,17 @@ and TCP/HTTP servers just like the Pico W.""")
                 sock.settimeout(3)
                 sock.connect((ip, port))
                 sock.close()
-                msg = f"  ✓ Connected to {ip}:{port} — Pico W is reachable"
+                bn = BOARD_LABELS.get(self.app.target_board, "Pico")
+                msg = f"  ✓ Connected to {ip}:{port} — {bn} is reachable"
                 colour = FG_GREEN
                 self.app.log(f"Wi-Fi test: connected to {ip}:{port}")
             except socket.timeout:
-                msg = f"  ✗ Connection timed out. Is the Pico W running a TCP server on port {port}?"
+                bn = BOARD_LABELS.get(self.app.target_board, "Pico")
+                msg = f"  ✗ Connection timed out. Is the {bn} running a TCP server on port {port}?"
                 colour = FG_RED
             except ConnectionRefusedError:
-                msg = f"  ✗ Connection refused. The Pico W is reachable but no server on port {port}."
+                bn = BOARD_LABELS.get(self.app.target_board, "Pico")
+                msg = f"  ✗ Connection refused. The {bn} is reachable but no server on port {port}."
                 colour = FG_YELLOW
             except OSError as e:
                 msg = f"  ✗ Connection failed: {e}"
@@ -2445,6 +2513,11 @@ class DocumentationTab(ttk.Frame):
 
         self._load_docs()
 
+    def refresh_for_board(self, board_key=None):
+        """Rebuild documentation when the target board changes."""
+        self.toc_list.delete(0, tk.END)
+        self._load_docs()
+
     def _load_docs(self):
         self.sections = []
         self.section_indices = {}
@@ -2512,14 +2585,17 @@ class DocumentationTab(ttk.Frame):
         self.doc_text.tag_remove("highlight", "1.0", tk.END)
 
     def _get_documentation(self):
-        """Return structured documentation content."""
+        """Return structured documentation content (adapts to selected board)."""
+        board = self.app.target_board
+        bn = BOARD_LABELS.get(board, "Pico W (RP2040)")
+        drive = "RP2350" if board == BOARD_PICO2_W else "RPI-RP2"
         return [
             {
                 "title": "Dilder DevTool",
                 "level": 1,
                 "content": [
                     {"type": "text", "text": (
-                        "A development companion for the Pico W + Waveshare 2.13\" "
+                        f"A development companion for the {bn} + Waveshare 2.13\" "
                         "e-ink display. Provides tools for drawing display images, "
                         "monitoring serial output, flashing firmware, managing assets, "
                         "and connecting over USB or Wi-Fi."
@@ -2554,7 +2630,7 @@ class DocumentationTab(ttk.Frame):
                     )},
                     {"type": "text", "text": (
                         "Send to Pico:\n"
-                        "Transmits the current image to the Pico W over USB serial. "
+                        f"Transmits the current image to the {bn} over USB serial. "
                         "Requires firmware that listens for the IMG: protocol."
                     )},
                 ],
@@ -2564,7 +2640,7 @@ class DocumentationTab(ttk.Frame):
                 "level": 2,
                 "content": [
                     {"type": "text", "text": (
-                        "Live serial terminal for the Pico W USB connection.\n\n"
+                        f"Live serial terminal for the {bn} USB connection.\n\n"
                         "1. Select the port (auto-detects /dev/ttyACM0)\n"
                         "2. Set baud rate to 115200\n"
                         "3. Click Connect\n"
@@ -2575,7 +2651,7 @@ class DocumentationTab(ttk.Frame):
                         "Type in the input bar and press Enter. Text is sent with \\r\\n.\n\n"
                         "Special buttons:\n"
                         "  Ctrl+C — interrupt running code\n"
-                        "  Reset — soft-reset the Pico W (Ctrl+D)\n\n"
+                        f"  Reset — soft-reset the {bn} (Ctrl+D)\n\n"
                         "Save Log saves the full output history to a text file."
                     )},
                 ],
@@ -2585,17 +2661,17 @@ class DocumentationTab(ttk.Frame):
                 "level": 2,
                 "content": [
                     {"type": "text", "text": (
-                        "Flash .uf2 firmware files to the Pico W.\n\n"
+                        f"Flash .uf2 firmware files to the {bn}.\n\n"
                         "Steps:\n"
                         "1. Select a .uf2 file (Browse or Quick Flash buttons)\n"
-                        "2. Put Pico W in BOOTSEL mode:\n"
+                        f"2. Put {bn} in BOOTSEL mode:\n"
                         "   - Unplug USB\n"
                         "   - Hold BOOTSEL button\n"
                         "   - Plug in USB while holding\n"
                         "   - Release after 1 second\n"
-                        "3. Click Detect RPI-RP2\n"
+                        f"3. Click Detect {drive}\n"
                         "4. Click Flash\n\n"
-                        "The Pico W reboots automatically after flashing."
+                        f"The {bn} reboots automatically after flashing."
                     )},
                     {"type": "text", "text": (
                         "Build buttons:\n"
@@ -2624,7 +2700,7 @@ class DocumentationTab(ttk.Frame):
                 "level": 2,
                 "content": [
                     {"type": "text", "text": (
-                        "Visual reference of the Pico W 40-pin header with all Dilder "
+                        f"Visual reference of the {bn} 40-pin header with all Dilder "
                         "project assignments. Shows display SPI1 pins, button pins, "
                         "power connections, and SPI configuration."
                     )},
@@ -2635,7 +2711,7 @@ class DocumentationTab(ttk.Frame):
                 "level": 2,
                 "content": [
                     {"type": "text", "text": (
-                        "Step-by-step walkthrough for connecting the Pico W.\n\n"
+                        f"Step-by-step walkthrough for connecting the {bn}.\n\n"
                         "USB Serial:\n"
                         "Guides you through plugging in, verifying the serial port, "
                         "checking permissions, and opening the serial monitor. "
@@ -2643,7 +2719,7 @@ class DocumentationTab(ttk.Frame):
                         "Wi-Fi:\n"
                         "Explains how to add Wi-Fi to your firmware, provides the C "
                         "code and CMake config, and includes a TCP connection tester. "
-                        "The Pico W supports 802.11n on 2.4 GHz."
+                        f"The {bn} supports 802.11n on 2.4 GHz."
                     )},
                 ],
             },
@@ -2711,7 +2787,7 @@ class DocumentationTab(ttk.Frame):
                         "  Check serial group: groups | grep uucp\n"
                         "  Check device exists: ls /dev/ttyACM*\n\n"
                         "Flash button says not detected:\n"
-                        "  Put Pico W in BOOTSEL mode first\n"
+                        f"  Put {bn} in BOOTSEL mode first\n"
                         "  (Hold BOOTSEL, plug in USB, release)\n\n"
                         "Canvas is slow with large fills:\n"
                         "  Tkinter draws individual rectangles per pixel.\n"
@@ -5474,8 +5550,9 @@ class ProgramsTab(ttk.Frame):
                      "   No BOOTSEL needed — auto-resets via DTR",
                 foreground=FG_DIM)
         else:
+            board_label = BOARD_LABELS.get(board, "Pico W (RP2040)")
             self.flash_status.config(
-                text="Pico W (RP2040)\n"
+                text=f"{board_label}\n"
                      "Flash IMG Receiver: stream frames from PC\n"
                      "  1) Hold BOOTSEL, plug USB, release\n"
                      "  2) Click Flash → copies .uf2\n"
@@ -5488,8 +5565,9 @@ class ProgramsTab(ttk.Frame):
         self.app.log(f"[programs] Display variant set to: {variant}")
 
     # Flash sizes by board
-    PICO_FLASH_KB = 2048   # 2 MB total flash
-    ESP32_FLASH_KB = 8192  # 8 MB total flash
+    PICO_FLASH_KB = 2048    # 2 MB total flash
+    PICO2_FLASH_KB = 4096   # 4 MB total flash
+    ESP32_FLASH_KB = 8192   # 8 MB total flash
 
     # Base firmware size in KB (SDK runtime + SPI driver + display driver +
     # rendering code + font + body RLE). Measured from compiled .uf2 files:
@@ -5525,7 +5603,9 @@ class ProgramsTab(ttk.Frame):
         # Estimate firmware size
         est_kb = self._estimate_firmware_kb(key)
         board = self.app.target_board
-        flash_kb = self.ESP32_FLASH_KB if board == BOARD_ESP32S3 else self.PICO_FLASH_KB
+        flash_kb = (self.ESP32_FLASH_KB if board == BOARD_ESP32S3
+                    else self.PICO2_FLASH_KB if board == BOARD_PICO2_W
+                    else self.PICO_FLASH_KB)
         board_label = BOARD_LABELS.get(board, "Board")
         free_kb = flash_kb - est_kb
         pct_used = (est_kb / flash_kb) * 100
@@ -5739,11 +5819,12 @@ class ProgramsTab(ttk.Frame):
             return
 
         # Pico path: check for BOOTSEL mount first
+        bn = BOARD_LABELS.get(board, "Pico")
         mount = find_rpi_rp2_mount()
         if not mount:
             self.flash_status.config(
-                text="Pico not in BOOTSEL mode.\n"
-                     "1) Unplug Pico\n"
+                text=f"{bn} not in BOOTSEL mode.\n"
+                     f"1) Unplug {bn}\n"
                      "2) Hold BOOTSEL button\n"
                      "3) Plug in USB (keep holding)\n"
                      "4) Release BOOTSEL\n"
@@ -5890,11 +5971,15 @@ class ProgramsTab(ttk.Frame):
             self._log_build("Docker image ready.")
 
             # Step 3: Run cmake + ninja inside container
-            self._log_build("Compiling img-receiver firmware...\n"
+            pico_board = "pico2_w" if self.app.target_board == BOARD_PICO2_W else "pico_w"
+            self._log_build(f"Compiling img-receiver firmware ({pico_board})...\n"
                             "Running cmake + ninja in container.")
 
+            env = {**os.environ, "PICO_BOARD": pico_board}
             proc = subprocess.Popen(
-                ["docker", "compose", "run", "--rm", "build-img-receiver"],
+                ["docker", "compose", "run", "--rm",
+                 "-e", f"PICO_BOARD={pico_board}",
+                 "build-img-receiver"],
                 cwd=str(DEV_SETUP),
                 stdout=subprocess.PIPE, stderr=subprocess.STDOUT,
                 text=True,
@@ -5934,14 +6019,15 @@ class ProgramsTab(ttk.Frame):
             uf2_size = uf2_path.stat().st_size
             self._log_build(f"Firmware ready: img_receiver.uf2 ({uf2_size:,} bytes)")
 
-            # Step 4: Flash to Pico
-            self._log_build("Copying .uf2 to Pico BOOTSEL mount...")
+            # Step 4: Flash to board
+            bn = BOARD_LABELS.get(self.app.target_board, "Pico")
+            self._log_build(f"Copying .uf2 to {bn} BOOTSEL mount...")
 
             # Re-check mount (user might have unplugged)
             mount = find_rpi_rp2_mount()
             if not mount:
                 self.after(0, lambda: self.flash_status.config(
-                    text="Pico left BOOTSEL mode.\n"
+                    text=f"{bn} left BOOTSEL mode.\n"
                          "Put it back in BOOTSEL and try again.\n"
                          "(firmware is built, just needs flashing)",
                     foreground=FG_YELLOW))
@@ -5952,7 +6038,7 @@ class ProgramsTab(ttk.Frame):
 
             self._log_build(f"Flashed img_receiver.uf2 to {mount}")
             self.after(0, lambda: self.flash_status.config(
-                text="Flashed! Pico will reboot.\n"
+                text=f"Flashed! {bn} will reboot.\n"
                      "Wait 3 seconds, then Deploy.",
                 foreground=FG_GREEN))
 
@@ -5992,11 +6078,12 @@ class ProgramsTab(ttk.Frame):
             return
 
         # Pico path
+        bn = BOARD_LABELS.get(board, "Pico")
         mount = find_rpi_rp2_mount()
         if not mount:
             self.flash_status.config(
-                text="Pico not in BOOTSEL mode.\n"
-                     "1) Unplug Pico\n"
+                text=f"{bn} not in BOOTSEL mode.\n"
+                     f"1) Unplug {bn}\n"
                      "2) Hold BOOTSEL button\n"
                      "3) Plug in USB (keep holding)\n"
                      "4) Release BOOTSEL\n"
@@ -6243,11 +6330,13 @@ class ProgramsTab(ttk.Frame):
                 return
 
             # Step 4: Compile firmware
-            self._log_build(f"Compiling standalone firmware (display: {variant})...")
+            pico_board = "pico2_w" if self.app.target_board == BOARD_PICO2_W else "pico_w"
+            self._log_build(f"Compiling standalone firmware ({pico_board}, display: {variant})...")
 
             proc = subprocess.Popen(
                 ["docker", "compose", "run", "--rm",
                  "-e", f"DISPLAY_VARIANT={variant}",
+                 "-e", f"PICO_BOARD={pico_board}",
                  docker_svc],
                 cwd=str(DEV_SETUP),
                 stdout=subprocess.PIPE, stderr=subprocess.STDOUT,
@@ -6282,11 +6371,12 @@ class ProgramsTab(ttk.Frame):
             self._log_build(f"Firmware ready: {fw_name}.uf2 ({uf2_size:,} bytes)")
 
             # Step 5: Flash
+            bn = BOARD_LABELS.get(self.app.target_board, "Pico")
             mount = find_rpi_rp2_mount()
             if not mount:
                 self.after(0, lambda: self.flash_status.config(
-                    text="Pico left BOOTSEL mode.\n"
-                         "Firmware is built — put Pico\n"
+                    text=f"{bn} left BOOTSEL mode.\n"
+                         f"Firmware is built — put {bn}\n"
                          "back in BOOTSEL and retry.",
                     foreground=FG_YELLOW))
                 return
@@ -6297,7 +6387,7 @@ class ProgramsTab(ttk.Frame):
             self._log_build("Standalone firmware flashed!")
             self.after(0, lambda pn=prog_name: self.flash_status.config(
                 text=f"Standalone flashed!\n"
-                     f"Pico will reboot and run\n"
+                     f"{bn} will reboot and run\n"
                      f"{pn} on its own.",
                 foreground=FG_GREEN))
 
@@ -6868,7 +6958,7 @@ class DilderDevTool(tk.Tk):
 
     @property
     def target_board(self):
-        """Return the current target board key (BOARD_PICO_W or BOARD_ESP32S3)."""
+        """Return the current target board key (BOARD_PICO_W, BOARD_PICO2_W, or BOARD_ESP32S3)."""
         val = self._target_board.get()
         # The combobox may write the display label into the StringVar;
         # reverse-lookup to always return the key.
@@ -7088,6 +7178,10 @@ class DilderDevTool(tk.Tk):
         # Refresh connect tab
         if hasattr(self, "conn_tab"):
             self.conn_tab.refresh_for_board(board_key)
+
+        # Refresh documentation tab
+        if hasattr(self, "docs_tab"):
+            self.docs_tab.refresh_for_board(board_key)
 
 
 # ─────────────────────────────────────────────────────────────────────────────

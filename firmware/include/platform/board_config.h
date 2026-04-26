@@ -7,10 +7,12 @@
  *
  * Currently supported boards:
  *   - BOARD_PICO_W       Raspberry Pi Pico W  (RP2040, SPI1)
+ *   - BOARD_PICO2_W      Raspberry Pi Pico 2 W  (RP2350, SPI1)
  *   - BOARD_ESP32S3      Olimex ESP32-S3-DevKit-Lipo  (ESP32-S3, FSPI)
  *
  * Set the target board at build time:
  *   cmake  -DTARGET_BOARD=PICO_W ..
+ *   cmake  -DTARGET_BOARD=PICO2_W ..
  *   cmake  -DTARGET_BOARD=ESP32S3 ..
  * Or in platformio.ini:
  *   build_flags = -DBOARD_ESP32S3
@@ -56,6 +58,9 @@
  *
  *    #if defined(BOARD_PICO_W)        // Is BOARD_PICO_W defined?
  *      ... Pico W pin definitions ... // YES: use these
+ *
+ *    #elif defined(BOARD_PICO2_W)    // Otherwise, is BOARD_PICO2_W defined?
+ *      ... Pico 2 W pin definitions  // YES: use these (same pins, more flash)
  *
  *    #elif defined(BOARD_ESP32S3)     // Otherwise, is BOARD_ESP32S3 defined?
  *      ... ESP32-S3 pin definitions . // YES: use these
@@ -194,6 +199,43 @@
 #define BOARD_FLASH_KB       2048  /* 2 MB */
 
 /* ================================================================
+ *  Pico 2 W  (RP2350)
+ * ================================================================
+ *
+ * The Pico 2 W uses the RP2350 chip (dual ARM Cortex-M33 cores) and
+ * has 4 MB of flash instead of 2 MB.  The 40-pin header is identical
+ * to the original Pico W, so all pin assignments are the same.
+ *
+ * The Pico SDK (2.0+) uses PICO_BOARD=pico2_w to select this board.
+ * Build with:  cmake -DPICO_BOARD=pico2_w -DTARGET_BOARD=PICO2_W ..
+ */
+#elif defined(BOARD_PICO2_W)
+
+#define BOARD_NAME          "Pico 2 W"
+
+/* e-Paper display — SPI1 (same pins as Pico W) */
+#define PIN_EPD_CLK         10   /* GP10  SPI1 SCK   pin 14 */
+#define PIN_EPD_DIN         11   /* GP11  SPI1 TX    pin 15 */
+#define PIN_EPD_CS           9   /* GP9              pin 12 */
+#define PIN_EPD_DC           8   /* GP8              pin 11 */
+#define PIN_EPD_RST         12   /* GP12             pin 16 */
+#define PIN_EPD_BUSY        13   /* GP13             pin 17 */
+
+/* 5-way joystick / buttons (same pins as Pico W) */
+#define PIN_BTN_UP           2   /* GP2   pin 4  */
+#define PIN_BTN_DOWN         3   /* GP3   pin 5  */
+#define PIN_BTN_LEFT         4   /* GP4   pin 6  */
+#define PIN_BTN_RIGHT        5   /* GP5   pin 7  */
+#define PIN_BTN_CENTER       6   /* GP6   pin 9  */
+
+/* SPI controller — same as Pico W (SPI1). */
+#define EPD_SPI_CONTROLLER   1   /* SPI1 */
+#define EPD_SPI_FREQ_HZ      4000000  /* 4 MHz */
+
+/* Flash size — the Pico 2 W has 4 MB of onboard flash (2x Pico W). */
+#define BOARD_FLASH_KB       4096  /* 4 MB */
+
+/* ================================================================
  *  Olimex ESP32-S3-DevKit-Lipo
  * ================================================================
  *
@@ -289,17 +331,17 @@
  *  Desktop / Simulation  (no real pins)
  * ================================================================
  *
- * #elif defined(BOARD_DESKTOP) || !defined(BOARD_PICO_W)
+ * #elif defined(BOARD_DESKTOP) || (!defined(BOARD_PICO_W) && !defined(BOARD_PICO2_W))
  *
  * This is the fallback.  It activates if:
  *   - BOARD_DESKTOP is explicitly defined, OR
- *   - Neither BOARD_PICO_W nor BOARD_ESP32S3 was defined
+ *   - None of BOARD_PICO_W, BOARD_PICO2_W, or BOARD_ESP32S3 was defined
  *     (catches the case where someone builds without setting a board)
  *
  * The "!" means "not" — so !defined(BOARD_PICO_W) is true when
  * BOARD_PICO_W is NOT defined.
  */
-#elif defined(BOARD_DESKTOP) || !defined(BOARD_PICO_W)
+#elif defined(BOARD_DESKTOP) || (!defined(BOARD_PICO_W) && !defined(BOARD_PICO2_W))
 
 #define BOARD_NAME          "Desktop"
 

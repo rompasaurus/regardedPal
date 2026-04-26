@@ -54,9 +54,13 @@ target_link_libraries(sassy_octopus
     hardware_spi
     hardware_gpio
     hardware_adc
-    hardware_rtc
     m
 )
+
+# hardware_rtc only exists on RP2040 — RP2350 uses software fallback in rtc_compat.h
+if(PICO_PLATFORM STREQUAL "rp2040")
+    target_link_libraries(sassy_octopus hardware_rtc)
+endif()
 
 pico_enable_stdio_usb(sassy_octopus 1)
 pico_enable_stdio_uart(sassy_octopus 0)

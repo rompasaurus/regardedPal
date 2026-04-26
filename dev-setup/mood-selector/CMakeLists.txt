@@ -54,10 +54,14 @@ target_link_libraries(mood_selector
     hardware_spi
     hardware_gpio
     hardware_adc
-    hardware_rtc
     m
 )
 
+
+# hardware_rtc only exists on RP2040 — RP2350 uses software fallback in rtc_compat.h
+if(PICO_PLATFORM STREQUAL "rp2040")
+    target_link_libraries(mood_selector hardware_rtc)
+endif()
 pico_enable_stdio_usb(mood_selector 1)
 pico_enable_stdio_uart(mood_selector 0)
 

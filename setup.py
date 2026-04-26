@@ -10,6 +10,7 @@ setting up the ESP32-S3 (Olimex) PlatformIO toolchain.
 Usage:
   python3 setup.py                   # interactive walkthrough (all boards)
   python3 setup.py --board pico      # only Pico W steps
+  python3 setup.py --board pico2     # only Pico 2 W steps
   python3 setup.py --board esp32     # only ESP32-S3 steps
   python3 setup.py --status          # show current setup state
   python3 setup.py --step N          # jump to step N (1-16)
@@ -229,11 +230,13 @@ def _install_python_app(package: str, binaries: "list[str]") -> bool:
 
 # ── Board identifiers for step filtering ─────────────────────────────────────
 BOARD_PICO  = "pico"
+BOARD_PICO2 = "pico2"
 BOARD_ESP32 = "esp32"
 BOARD_BOTH  = "both"
 
 BOARD_LABELS_CLI = {
     BOARD_PICO:  "Pico W",
+    BOARD_PICO2: "Pico 2 W",
     BOARD_ESP32: "ESP32-S3",
     BOARD_BOTH:  "Both",
 }
@@ -304,13 +307,21 @@ def cmd_exists(name: str) -> bool:
 
 
 def find_rpi_rp2_mount() -> "Path | None":
-    """Find the RPI-RP2 USB drive mount point, with retries for automount delay."""
+    """Find the Pico BOOTSEL USB drive mount point, with retries for automount delay.
+
+    Pico W (RP2040) mounts as 'RPI-RP2'.
+    Pico 2 W (RP2350) mounts as 'RP2350'.
+    """
     user = os.environ.get("USER", "")
-    static_paths = [
-        Path(f"/run/media/{user}/RPI-RP2"),
-        Path(f"/media/{user}/RPI-RP2"),
-        Path("/mnt/RPI-RP2"),
-    ]
+    # Labels for both Pico W and Pico 2 W BOOTSEL modes
+    labels = ["RPI-RP2", "RP2350"]
+    static_paths = []
+    for label in labels:
+        static_paths += [
+            Path(f"/run/media/{user}/{label}"),
+            Path(f"/media/{user}/{label}"),
+            Path(f"/mnt/{label}"),
+        ]
 
     # Try static paths first
     for p in static_paths:
@@ -318,18 +329,19 @@ def find_rpi_rp2_mount() -> "Path | None":
             return p
 
     # Fallback: ask findmnt / lsblk for the actual mount
-    for cmd in (
-        ["findmnt", "-rno", "TARGET", "-S", "LABEL=RPI-RP2"],
-        ["lsblk", "-rno", "MOUNTPOINT", "-l", "/dev/sda1"],
-    ):
-        try:
-            result = subprocess.run(cmd, capture_output=True, text=True, timeout=5)
-            if result.returncode == 0 and result.stdout.strip():
-                p = Path(result.stdout.strip().splitlines()[0])
-                if p.exists():
-                    return p
-        except (FileNotFoundError, subprocess.TimeoutExpired):
-            continue
+    for label in labels:
+        for cmd in (
+            ["findmnt", "-rno", "TARGET", "-S", f"LABEL={label}"],
+            ["lsblk", "-rno", "MOUNTPOINT", "-l", "/dev/sda1"],
+        ):
+            try:
+                result = subprocess.run(cmd, capture_output=True, text=True, timeout=5)
+                if result.returncode == 0 and result.stdout.strip():
+                    p = Path(result.stdout.strip().splitlines()[0])
+                    if p.exists():
+                        return p
+            except (FileNotFoundError, subprocess.TimeoutExpired):
+                continue
 
     # Retry static paths once more (automount may have finished)
     time.sleep(1)
@@ -399,6 +411,9 @@ def step_matches_board(s: dict) -> bool:
     if _board_filter is None:
         return True
     if s["board"] == BOARD_BOTH:
+        return True
+    # Pico 2 W uses the same setup steps as Pico W
+    if _board_filter == BOARD_PICO2 and s["board"] == BOARD_PICO:
         return True
     return s["board"] == _board_filter
 
@@ -913,17 +928,29 @@ def step_build_serial():
 
     # Build
     build_dir = HELLO_SERIAL / "build"
+    pico_board = "pico2_w" if _board_filter == BOARD_PICO2 else "pico_w"
+    expected_platform = "rp2350" if _board_filter == BOARD_PICO2 else "rp2040"
+
+    # Detect stale CMake cache from a different board/platform
+    cmake_cache = build_dir / "CMakeCache.txt"
+    if cmake_cache.exists():
+        cache_text = cmake_cache.read_text(errors="replace")
+        if (f"PICO_BOARD:STRING={pico_board}" not in cache_text
+                or f"PICO_PLATFORM:STRING={expected_platform}" not in cache_text):
+            log_warn("Build directory has cache for a different board/platform — cleaning.")
+            shutil.rmtree(build_dir)
+
     build_dir.mkdir(exist_ok=True)
 
     log_step("Configuring with CMake...")
-    log_cmd(f"cmake -G Ninja -DPICO_SDK_PATH={sdk_path} -DPICO_BOARD=pico_w ..")
+    log_cmd(f"cmake -G Ninja -DPICO_SDK_PATH={sdk_path} -DPICO_BOARD={pico_board} ..")
     print()
 
     with Spinner("Running CMake configure"):
         result = run_cmd(
             ["cmake", "-G", "Ninja",
              f"-DPICO_SDK_PATH={sdk_path}",
-             "-DPICO_BOARD=pico_w",
+             f"-DPICO_BOARD={pico_board}",
              ".."],
             cwd=build_dir
         )
@@ -962,54 +989,59 @@ def step_build_serial():
 
 # ── Step 8: Flash Hello Serial ────────────────────────────────────────────────
 
-@step(8, "Flash Hello World (Serial)", "Put the Pico W in BOOTSEL mode and flash the firmware", board=BOARD_PICO)
+@step(8, "Flash Hello World (Serial)", "Put the Pico in BOOTSEL mode and flash the firmware", board=BOARD_PICO)
 def step_flash_serial():
-    log_header("Step 8 — Flash Hello World (Serial) to the Pico W")
+    # Determine board-specific names
+    is_pico2 = _board_filter == BOARD_PICO2
+    board_name = "Pico 2 W" if is_pico2 else "Pico W"
+    drive_label = "RP2350" if is_pico2 else "RPI-RP2"
+
+    log_header(f"Step 8 — Flash Hello World (Serial) to the {board_name}")
 
     uf2 = HELLO_SERIAL / "build" / "hello_serial.uf2"
     if not uf2.exists():
         log_error("hello_serial.uf2 not found. Run Step 7 first (build).")
         return False
 
-    log_explain("""
-        Flashing means copying the compiled firmware onto the Pico W's
-        internal flash memory. The Pico W has a special mode called BOOTSEL
+    log_explain(f"""
+        Flashing means copying the compiled firmware onto the {board_name}'s
+        internal flash memory. The {board_name} has a special mode called BOOTSEL
         that makes it appear as a USB drive — you just drag and drop the
         .uf2 file onto it.
     """)
 
-    log_manual("""\
-1. UNPLUG the Pico W from USB.
+    log_manual(f"""\
+1. UNPLUG the {board_name} from USB.
 2. HOLD DOWN the BOOTSEL button (small white button on the board).
 3. While holding BOOTSEL, PLUG IN the USB cable.
 4. RELEASE BOOTSEL after 1 second.
 
-The Pico W should now appear as a USB drive called "RPI-RP2".""")
+The {board_name} should now appear as a USB drive called "{drive_label}".""")
 
     # Retry loop — automount can take a few seconds
     while True:
-        action = prompt_continue("Press Enter when RPI-RP2 drive appears (or 's' to skip)")
+        action = prompt_continue(f"Press Enter when {drive_label} drive appears (or 's' to skip)")
         if action == "quit":
             return False
         if action == "skip":
             return True
 
-        log_step("Searching for RPI-RP2 mount point...")
+        log_step(f"Searching for {drive_label} mount point...")
         mount = find_rpi_rp2_mount()
 
         if mount is not None:
             break
 
-        log_warn("Could not find the RPI-RP2 drive yet.")
+        log_warn(f"Could not find the {drive_label} drive yet.")
         log_info("The drive may still be mounting. Tips:")
         log_info("  - Wait a few seconds after plugging in, then press Enter again")
         log_info("  - Check that BOOTSEL was held while plugging in USB")
         log_info("  - Try a different USB cable (must be data, not charge-only)")
         log_info("")
         log_info("Or copy manually:")
-        log_code_block(f"cp {uf2} /run/media/$USER/RPI-RP2/")
+        log_code_block(f"cp {uf2} /run/media/$USER/{drive_label}/")
 
-    log_ok(f"Found RPI-RP2 at {mount}")
+    log_ok(f"Found {drive_label} at {mount}")
     log_step("Copying hello_serial.uf2...")
     log_cmd(f"cp {uf2} {mount}/")
 
@@ -1019,8 +1051,8 @@ The Pico W should now appear as a USB drive called "RPI-RP2".""")
         log_error(f"Copy failed: {e}")
         return False
 
-    log_ok("Firmware copied! The Pico W will reboot automatically.")
-    log_info("The RPI-RP2 drive will disappear — this is normal.")
+    log_ok(f"Firmware copied! The {board_name} will reboot automatically.")
+    log_info(f"The {drive_label} drive will disappear — this is normal.")
 
     return True
 
@@ -1287,6 +1319,18 @@ def step_build_display():
             return False
 
     build_dir = HELLO_DISPLAY / "build"
+    pico_board = "pico2_w" if _board_filter == BOARD_PICO2 else "pico_w"
+    expected_platform = "rp2350" if _board_filter == BOARD_PICO2 else "rp2040"
+
+    # Detect stale CMake cache from a different board/platform
+    cmake_cache = build_dir / "CMakeCache.txt"
+    if cmake_cache.exists():
+        cache_text = cmake_cache.read_text(errors="replace")
+        if (f"PICO_BOARD:STRING={pico_board}" not in cache_text
+                or f"PICO_PLATFORM:STRING={expected_platform}" not in cache_text):
+            log_warn("Build directory has cache for a different board/platform — cleaning.")
+            shutil.rmtree(build_dir)
+
     build_dir.mkdir(exist_ok=True)
 
     log_step("Configuring with CMake...")
@@ -1296,7 +1340,7 @@ def step_build_display():
         result = run_cmd(
             ["cmake", "-G", "Ninja",
              f"-DPICO_SDK_PATH={sdk_path}",
-             "-DPICO_BOARD=pico_w",
+             f"-DPICO_BOARD={pico_board}",
              ".."],
             cwd=build_dir
         )
@@ -1334,8 +1378,12 @@ def step_build_display():
 
 # ── Step 13: Flash Hello Display ──────────────────────────────────────────────
 
-@step(13, "Flash Hello World (Display)", "Flash the display firmware to the Pico W", board=BOARD_PICO)
+@step(13, "Flash Hello World (Display)", "Flash the display firmware to the Pico", board=BOARD_PICO)
 def step_flash_display():
+    is_pico2 = _board_filter == BOARD_PICO2
+    board_name = "Pico 2 W" if is_pico2 else "Pico W"
+    drive_label = "RP2350" if is_pico2 else "RPI-RP2"
+
     log_header("Step 13 — Flash Hello World (Display)")
 
     uf2 = HELLO_DISPLAY / "build" / "hello_dilder.uf2"
@@ -1343,38 +1391,38 @@ def step_flash_display():
         log_error("hello_dilder.uf2 not found. Run Step 12 first.")
         return False
 
-    log_manual("""\
-1. UNPLUG the Pico W from USB.
+    log_manual(f"""\
+1. UNPLUG the {board_name} from USB.
    (The display stays attached — that's fine.)
 
 2. HOLD DOWN the BOOTSEL button.
-   The button is on the Pico W — you may need to reach
+   The button is on the {board_name} — you may need to reach
    under or around the display HAT to press it.
 
 3. While holding BOOTSEL, PLUG IN the USB cable.
 
 4. RELEASE BOOTSEL after 1 second.
 
-The RPI-RP2 USB drive should appear.""")
+The {drive_label} USB drive should appear.""")
 
     while True:
-        action = prompt_continue("Press Enter when RPI-RP2 drive appears (or 's' to skip)")
+        action = prompt_continue(f"Press Enter when {drive_label} drive appears (or 's' to skip)")
         if action == "quit":
             return False
         if action == "skip":
             return True
 
-        log_step("Searching for RPI-RP2 mount point...")
+        log_step(f"Searching for {drive_label} mount point...")
         mount = find_rpi_rp2_mount()
 
         if mount is not None:
             break
 
-        log_warn("Could not find the RPI-RP2 drive yet.")
+        log_warn(f"Could not find the {drive_label} drive yet.")
         log_info("Wait a few seconds and press Enter again, or copy manually:")
-        log_code_block(f"cp {uf2} /run/media/$USER/RPI-RP2/")
+        log_code_block(f"cp {uf2} /run/media/$USER/{drive_label}/")
 
-    log_ok(f"Found RPI-RP2 at {mount}")
+    log_ok(f"Found {drive_label} at {mount}")
     log_step("Copying hello_dilder.uf2...")
 
     try:
@@ -1383,7 +1431,7 @@ The RPI-RP2 USB drive should appear.""")
         log_error(f"Copy failed: {e}")
         return False
 
-    log_ok("Firmware flashed! Pico W will reboot with the display program.")
+    log_ok(f"Firmware flashed! {board_name} will reboot with the display program.")
 
     return True
 
@@ -2495,12 +2543,13 @@ BANNER = """\
 def main():
     parser = argparse.ArgumentParser(
         prog="setup.py",
-        description="Dilder — Multi-Board First-Time Setup CLI (Pico W + ESP32-S3)",
+        description="Dilder — Multi-Board First-Time Setup CLI (Pico W / Pico 2 W + ESP32-S3)",
         formatter_class=argparse.RawDescriptionHelpFormatter,
         epilog="""\
 examples:
   python3 setup.py                    # full interactive walkthrough (all boards)
   python3 setup.py --board pico       # only Pico W steps
+  python3 setup.py --board pico2      # only Pico 2 W steps
   python3 setup.py --board esp32      # only ESP32-S3 steps
   python3 setup.py --status           # check what's installed
   python3 setup.py --step 7           # jump to step 7
@@ -2508,8 +2557,8 @@ examples:
   python3 setup.py --test-setup       # install testing dependencies
 """,
     )
-    parser.add_argument("--board", choices=["pico", "esp32"],
-                        help="Filter steps for a specific board (pico or esp32)")
+    parser.add_argument("--board", choices=["pico", "pico2", "esp32"],
+                        help="Filter steps for a specific board (pico, pico2, or esp32)")
     parser.add_argument("--status", action="store_true",
                         help="Show current setup state")
     parser.add_argument("--step", type=int, metavar="N",
@@ -2532,10 +2581,10 @@ examples:
         for i, line in enumerate(BANNER.splitlines()):
             color = FG_CYAN if i % 2 == 0 else FG_BLUE
             print(c(line, color, BOLD))
-        print(c(f"  Pico W & ESP32-S3 — First-Time Setup{board_hint}", FG_GREY))
+        print(c(f"  Pico W / Pico 2 W & ESP32-S3 — First-Time Setup{board_hint}", FG_GREY))
         print(c(f"  Project: {PROJECT_ROOT}", FG_GREY, DIM))
     else:
-        print(f"\nDILDER — Pico W & ESP32-S3 First-Time Setup{board_hint}\n")
+        print(f"\nDILDER — Pico W / Pico 2 W & ESP32-S3 First-Time Setup{board_hint}\n")
 
     if args.test_setup:
         setup_testing()
@@ -2556,19 +2605,23 @@ examples:
         print()
         print(c("    1) ", FG_CYAN, BOLD) + c("Pico W (RP2040)", FG_WHITE)
               + c("          — ARM GCC, CMake, UF2 flash", FG_GREY))
-        print(c("    2) ", FG_CYAN, BOLD) + c("ESP32-S3 (Olimex)", FG_WHITE)
+        print(c("    2) ", FG_CYAN, BOLD) + c("Pico 2 W (RP2350)", FG_WHITE)
+              + c("        — ARM GCC, CMake, UF2 flash (4MB)", FG_GREY))
+        print(c("    3) ", FG_CYAN, BOLD) + c("ESP32-S3 (Olimex)", FG_WHITE)
               + c("        — PlatformIO, esptool flash", FG_GREY))
-        print(c("    3) ", FG_CYAN, BOLD) + c("Both", FG_WHITE)
-              + c("                     — full walkthrough for both boards", FG_GREY))
+        print(c("    4) ", FG_CYAN, BOLD) + c("All", FG_WHITE)
+              + c("                      — full walkthrough for all boards", FG_GREY))
         print()
         try:
-            choice = input(c("  → Enter 1, 2, or 3 [3]: ", FG_CYAN)).strip()
+            choice = input(c("  → Enter 1, 2, 3, or 4 [4]: ", FG_CYAN)).strip()
         except (KeyboardInterrupt, EOFError):
             print()
             return
         if choice == "1":
             _board_filter = BOARD_PICO
         elif choice == "2":
+            _board_filter = BOARD_PICO2
+        elif choice == "3":
             _board_filter = BOARD_ESP32
         # else: keep None (all steps)
         if _board_filter:
@@ -2589,9 +2642,10 @@ examples:
         log_info("Run with --list to see available steps.")
         return
 
-    if _board_filter == BOARD_PICO:
-        overview = """\
-        Setting up for Pico W (RP2040) development:
+    if _board_filter in (BOARD_PICO, BOARD_PICO2):
+        board_name = "Pico 2 W (RP2350)" if _board_filter == BOARD_PICO2 else "Pico W (RP2040)"
+        overview = f"""\
+        Setting up for {board_name} development:
 
           - Install the ARM cross-compilation toolchain
           - Clone the Pico SDK and configure your shell
@@ -2620,8 +2674,8 @@ examples:
           7. Set up Docker for DevTool firmware builds (Checkpoint 3)
           8. Install PlatformIO + ESP-IDF for ESP32-S3 (Step 16)
 
-        Tip: Use --board pico or --board esp32 to run only the steps
-        for a specific board."""
+        Tip: Use --board pico, --board pico2, or --board esp32 to run
+        only the steps for a specific board."""
 
     log_explain(f"""
         {overview}
