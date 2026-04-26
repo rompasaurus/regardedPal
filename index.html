@@ -3172,13 +3172,13 @@
 <p class="admonition-title">Phase 2 — Firmware Foundation (C on Pico W)</p>
 <p>Phase 1 (hardware + tooling) is complete. The octopus has 16 emotional states, 18 standalone firmware programs, custom body shapes, and runtime math-based rendering — all in ~100KB. GPIO joystick input is now live.</p>
 <p><strong>Done:</strong> Runtime rendering engine | 16 emotions | Body animations | Custom fat/lazy bodies | 823 quotes | C-faithful preview renderer | DevTool with firmware size estimation | <strong>GPIO joystick input</strong> | On-screen input indicator</p>
-<p><strong>In Progress:</strong> Custom PCB design — switched from RP2040 to <strong>ESP32-S3-WROOM-1-N16R8</strong> (WiFi+BLE, 16MB flash, 8MB PSRAM). 4-layer board (45x80mm, 27 components) designed in KiCad, ready for interactive routing and JLCPCB fabrication.</p>
-<p><strong>Next:</strong> Complete PCB routing and order boards | Battery power (LiPo on VSYS) | Game loop with state machine</p>
+<p><strong>In Progress:</strong> Custom PCB design — switched from RP2040 to <strong>ESP32-S3-WROOM-1-N16R8</strong> (WiFi+BLE, 16MB flash, 8MB PSRAM). 4-layer board (45x80mm, 27 components) designed in KiCad, ready for interactive routing and JLCPCB fabrication. <strong>Hand-routed joystick breakout PCB</strong> (K1-1506SN-01, 19.6x19.6mm) designed from scratch in KiCad 10 with gerbers and BOM ready for JLCPCB.</p>
+<p><strong>Next:</strong> Order joystick PCB from JLCPCB | Complete ESP32 PCB routing and order boards | Wire batteries to board | Game loop with state machine</p>
 </div>
 <figure>
-  <img alt="Joystick mood selector running on real hardware" loading="lazy" src="assets/images/hardware/build-session/joystick-selector-tired-mood.jpg" width="500" />
+  <img alt="Hand-routed joystick breakout PCB — 3D preview" loading="lazy" src="assets/images/hardware/pcb/joystick-hand-3d-viewer.jpg" width="500" />
 <br />
-<figcaption>Joystick Mood Selector running on real hardware — TIRED mood, triggered by joystick UP input</figcaption>
+<figcaption>First PCB from scratch — hand-routed K1-1506SN-01 joystick breakout board in KiCad 10</figcaption>
 </figure>
 <hr />
 <h2 id="quick-links">Quick Links<a class="headerlink" href="#quick-links" title="Permanent link">&para;</a></h2>
