@@ -1678,3 +1678,13 @@ All 5 pieces exported cleanly (CGAL manifold) as 3MF for Bambu Studio: `base.3mf
 - **Input Tokens (est):** ~100
 - **Output Tokens (est):** ~15,000
 - **Summary:** 17 HEIC photos from the 2026-04-26 overnight print session analysed, converted to JPEG with descriptive names, and placed in the website enclosure images directory. Coverage: assembled stack, exploded layout, cradle with Pico 2 W + TP4056 + AAA batteries, top cover interior (Pico seated, display inlay, joystick pocket), base plate v3 (support blocks, battery troughs, corner pegs, bottom fillet), and a 62x36mm solar panel (AK 62X36) for future charging research. 12 stale root JPEGs also relocated. New blog post `rev2-v3-print-session-assembly.md`. Design evolution updated with photo section and version history row. Broken image path in `docs/solar-charging-research.md` fixed after move.
+
+---
+
+## Prompt #253 — 2026-04-26
+
+**Prompt sequence:** Hand-routed joystick breakout PCB design session in KiCad 10 (~20 turns). Started with missing symbol libraries, installed `kicad-library`, pulled the K1-1506SN-01 5-way switch from JLCPCB via `easyeda2kicad`, designed the schematic and PCB from scratch, exported gerbers and BOM, then documented everything.
+
+- **Input Tokens (est):** ~500 across the sequence
+- **Output Tokens (est):** ~8,000
+- **Summary:** First PCB designed entirely from scratch (no autorouter). KiCad workspace screenshot cropped into 4 labeled JPEGs (PCB layout, schematic, 3D viewer, full workspace). New blog post `joystick-hand-routed-pcb.md`. Design evolution updated with new section and version history row. Front page updated with joystick PCB 3D preview image and current progress. JLCPCB BOM reformatted in `production/bom.csv`. Layman summary: designed a postage-stamp-sized circuit board for a joystick controller from nothing, wired it up, labeled every connection, and exported the files to send to a factory for manufacturing.

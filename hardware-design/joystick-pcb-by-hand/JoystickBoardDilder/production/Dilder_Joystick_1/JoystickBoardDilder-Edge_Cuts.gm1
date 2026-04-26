@@ -1,0 +1,23 @@
+G04 #@! TF.GenerationSoftware,KiCad,Pcbnew,10.0.1*
+G04 #@! TF.CreationDate,2026-04-26T13:57:47+02:00*
+G04 #@! TF.ProjectId,JoystickBoardDilder,4a6f7973-7469-4636-9b42-6f6172644469,1*
+G04 #@! TF.SameCoordinates,Original*
+G04 #@! TF.FileFunction,Profile,NP*
+%FSLAX46Y46*%
+G04 Gerber Fmt 4.6, Leading zero omitted, Abs format (unit mm)*
+G04 Created by KiCad (PCBNEW 10.0.1) date 2026-04-26 13:57:47*
+%MOMM*%
+%LPD*%
+G01*
+G04 APERTURE LIST*
+G04 #@! TA.AperFunction,Profile*
+%ADD10C,0.050000*%
+G04 #@! TD*
+G04 APERTURE END LIST*
+D10*
+X95230000Y-42770000D02*
+X114830000Y-42770000D01*
+X114830000Y-62370000D01*
+X95230000Y-62370000D01*
+X95230000Y-42770000D01*
+M02*

@@ -3276,3 +3276,27 @@ Every prompt entry below uses the following fields. Entries that don't yet list 
   - HEIC originals deleted
 
 ---
+
+## Prompt #253 — 2026-04-26
+
+**Prompt sequence:** Hand-routed joystick breakout PCB design session in KiCad 10 (~20 turns). Started with missing symbol libraries ("I have no symbols available in KiCad how do I get a symbol lib"), installed `kicad-library`, pulled the K1-1506SN-01 5-way switch from JLCPCB via `easyeda2kicad` (LCSC C145910), added a 6-pin connector header, wired the schematic (COM to ground, 5 direction signals to GPIOs via internal pull-ups), annotated components, assigned footprints, drew a 19.6x19.6mm edge cut, centered the joystick, added silkscreen labels (Com/L/D/UP/R/C), fixed ERC errors, exported gerbers and JLCPCB-compatible BOM. Then cropped the KiCad workspace screenshot into labeled sections and updated docs/blog/website/prompts.
+
+- **Input Tokens (est):** ~500 across the sequence
+- **Output Tokens (est):** ~8,000
+- **Summary:** First PCB designed entirely from scratch (no autorouter). KiCad workspace screenshot cropped into 4 labeled JPEGs (PCB layout, schematic, 3D viewer, full workspace). New blog post `joystick-hand-routed-pcb.md`. Design evolution updated with new section and version history row. Front page updated with joystick PCB 3D preview image and current progress. JLCPCB BOM reformatted in `production/bom.csv`.
+- **Layman summary:** Designed a tiny circuit board (about the size of a postage stamp) for a joystick controller. Started from nothing — installed the parts catalog, downloaded the joystick component from an online supplier, drew the wiring diagram, laid out where every wire goes on the board, added labels so you know which wire is which direction, and exported the manufacturing files to send to a factory in China that will make the real board.
+- **Files:**
+  - `hardware-design/joystick-pcb-by-hand/JoystickBoardDilder/JoystickBoardDilder.kicad_sch` — schematic with K1-1506SN-01 + Conn_01x06_Pin
+  - `hardware-design/joystick-pcb-by-hand/JoystickBoardDilder/JoystickBoardDilder.kicad_pcb` — hand-routed PCB layout
+  - `hardware-design/joystick-pcb-by-hand/JoystickBoardDilder/JoystickBoardDilder.kicad_sym` — project-local symbol library (easyeda2kicad import)
+  - `hardware-design/joystick-pcb-by-hand/JoystickBoardDilder/production/bom.csv` — JLCPCB-format BOM
+  - `website/docs/assets/images/hardware/pcb/joystick-hand-pcb-layout-editor.jpg` (new) — cropped PCB layout
+  - `website/docs/assets/images/hardware/pcb/joystick-hand-schematic-editor.jpg` (new) — cropped schematic
+  - `website/docs/assets/images/hardware/pcb/joystick-hand-3d-viewer.jpg` (new) — cropped 3D viewer
+  - `website/docs/assets/images/hardware/pcb/joystick-hand-pcb-full-workspace.jpg` (new) — full workspace screenshot
+  - `website/docs/blog/posts/joystick-hand-routed-pcb.md` (new) — blog post
+  - `website/docs/docs/hardware/design-evolution.md` — new section + version history row
+  - `website/docs/index.md` — front page updated with PCB image and progress
+  - `PromptProgression.md` (this file), `website/docs/prompts/index.md` — prompts #253 appended
+
+---

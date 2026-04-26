@@ -603,6 +603,30 @@ Provides a menu to browse .scad files, pick export format (3MF/STL), set output 
 
 ---
 
+## Hand-Routed Joystick Breakout PCB (K1-1506SN-01)
+
+First PCB designed from scratch in KiCad 10, hand-routed. Uses the Korean Hroparts K1-1506SN-01 5-way navigation switch (LCSC C145910) on a 19.6x19.6mm board that drops into the Rev 2 top cover's 20x20mm joystick pocket.
+
+### Full workspace — PCB, schematic, and 3D viewer
+
+All three KiCad editors open: PCB layout with the joystick switch centered and 6-pin solder-wire header at the bottom edge, schematic showing the switch-to-header wiring, and 3D preview with the imported LCSC model.
+
+![Full KiCad workspace](../../assets/images/hardware/pcb/joystick-hand-pcb-full-workspace.jpg)
+
+### PCB layout — top copper
+
+Switch footprint centered on the board, six labeled solder pads (Com, L, D, UP, R, C) along the bottom edge for wire connections to the Pico W. Ground plane on the back copper.
+
+![PCB layout](../../assets/images/hardware/pcb/joystick-hand-pcb-layout-editor.jpg)
+
+### 3D model preview
+
+Imported 3D model from LCSC showing the joystick knob mounted on the green PCB. Header pads visible along the bottom edge.
+
+![3D viewer](../../assets/images/hardware/pcb/joystick-hand-3d-viewer.jpg)
+
+---
+
 ## Version History
 
 | Date | Part | Version | Changes |
@@ -652,3 +676,4 @@ Provides a menu to browse .scad files, pick export format (3MF/STL), set output 
 | 2026-04-26 | SCAD tooling | docs | New `hardware-design/scad Parts/README.md` documenting `scad-export.py` (interactive 3MF/STL exporter with date-sorted file browser), `bake-preset.py` (writes a customizer preset back into the SCAD source as the new default), and `export-preset.py` (renders a preset to 3MF without modifying the source — for A/B variant testing) |
 | 2026-04-26 | Hardware process | doc | New `hardware-design/HARDWARE-DESIGN-PROCESS.md` — retrospective on the SCAD→print and PCB→fab loops with concrete improvements to cut wasted prints (calibration coupons, SVG cross-sections, presets-instead-of-prints, mandatory dimension comment blocks, machine-checkable clearance gates) |
 | 2026-04-26 | Rev 2 v3 print session | photos | 17 photos from overnight print: assembled stack, exploded layout, cradle with Pico 2 W + TP4056 + AAA batteries, top cover interior (Pico seated, display inlay, joystick pocket), base plate v3 (support blocks, troughs, pegs, fillet), solar panel AK 62x36mm for future charging |
+| 2026-04-26 | Joystick hand-routed PCB | v1 | First PCB designed from scratch in KiCad 10 — K1-1506SN-01 5-way switch (LCSC C145910) on 19.6x19.6mm board, hand-routed, 6-pin solder-wire header with silkscreen labels (Com/L/D/UP/R/C), ground plane, gerbers + JLCPCB BOM exported |

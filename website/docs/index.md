@@ -124,13 +124,13 @@ Select a program and you get a live preview, estimated firmware size (~100KB), h
 
     **Done:** Runtime rendering engine | 16 emotions | Body animations | Custom fat/lazy bodies | 823 quotes | C-faithful preview renderer | DevTool with firmware size estimation | **GPIO joystick input** | On-screen input indicator
 
-    **In Progress:** Custom PCB design — switched from RP2040 to **ESP32-S3-WROOM-1-N16R8** (WiFi+BLE, 16MB flash, 8MB PSRAM). 4-layer board (45x80mm, 27 components) designed in KiCad, ready for interactive routing and JLCPCB fabrication.
+    **In Progress:** Custom PCB design — switched from RP2040 to **ESP32-S3-WROOM-1-N16R8** (WiFi+BLE, 16MB flash, 8MB PSRAM). 4-layer board (45x80mm, 27 components) designed in KiCad, ready for interactive routing and JLCPCB fabrication. **Hand-routed joystick breakout PCB** (K1-1506SN-01, 19.6x19.6mm) designed from scratch in KiCad 10 with gerbers and BOM ready for JLCPCB.
 
-    **Next:** Complete PCB routing and order boards | Battery power (LiPo on VSYS) | Game loop with state machine
+    **Next:** Order joystick PCB from JLCPCB | Complete ESP32 PCB routing and order boards | Wire batteries to board | Game loop with state machine
 
 <figure markdown="span">
-  ![Joystick mood selector running on real hardware](assets/images/hardware/build-session/joystick-selector-tired-mood.jpg){ width="500" loading=lazy }
-  <figcaption>Joystick Mood Selector running on real hardware — TIRED mood, triggered by joystick UP input</figcaption>
+  ![Hand-routed joystick breakout PCB — 3D preview](assets/images/hardware/pcb/joystick-hand-3d-viewer.jpg){ width="500" loading=lazy }
+  <figcaption>First PCB from scratch — hand-routed K1-1506SN-01 joystick breakout board in KiCad 10</figcaption>
 </figure>
 
 ---

@@ -1,0 +1,21 @@
+ERC report (2026-04-26T12:56:23, Encoding UTF8)
+Report includes: Errors, Warnings
+
+***** Sheet /
+[power_pin_not_driven]: Input Power pin not driven by any Output Power pins
+    ; error
+    @(3400 mils, 3250 mils): Symbol SW1 Pin 1 [COM, Power input, Line]
+[lib_symbol_mismatch]: Symbol 'K1-1506SN-01' doesn't match copy in library 'JoystickBoardDilder'
+    ; warning
+    @(3900 mils, 3350 mils): Symbol SW1 [K1-1506SN-01]
+[lib_symbol_mismatch]: Symbol 'Conn_01x06_Pin' doesn't match copy in library 'Connector'
+    ; warning
+    @(6050 mils, 3250 mils): Symbol SW1Header1 [Conn_01x06_Pin]
+
+ ** ERC messages: 3  Errors 1  Warnings 2
+
+ ** Ignored checks:
+    - Global label only appears once in the schematic
+    - Four connection points are joined together
+    - SPICE model issue
+    - Assigned footprint doesn't match footprint filters

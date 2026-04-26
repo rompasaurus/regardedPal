@@ -1,0 +1,42 @@
+G04 #@! TF.GenerationSoftware,KiCad,Pcbnew,10.0.1*
+G04 #@! TF.CreationDate,2026-04-26T13:57:47+02:00*
+G04 #@! TF.ProjectId,JoystickBoardDilder,4a6f7973-7469-4636-9b42-6f6172644469,1*
+G04 #@! TF.SameCoordinates,Original*
+G04 #@! TF.FileFunction,Copper,L2,Bot*
+G04 #@! TF.FilePolarity,Positive*
+%FSLAX46Y46*%
+G04 Gerber Fmt 4.6, Leading zero omitted, Abs format (unit mm)*
+G04 Created by KiCad (PCBNEW 10.0.1) date 2026-04-26 13:57:47*
+%MOMM*%
+%LPD*%
+G01*
+G04 APERTURE LIST*
+G04 #@! TA.AperFunction,ComponentPad*
+%ADD10C,1.700000*%
+G04 #@! TD*
+G04 #@! TA.AperFunction,ComponentPad*
+%ADD11R,1.700000X1.700000*%
+G04 #@! TD*
+G04 APERTURE END LIST*
+D10*
+G04 #@! TO.P,SW1Header1,6,CENTER_6*
+G04 #@! TO.N,Net-(SW1-CENTER)*
+X111380000Y-60600000D03*
+G04 #@! TO.P,SW1Header1,5,RIGHT_5*
+G04 #@! TO.N,Net-(SW1-RIGHT)*
+X108840000Y-60600000D03*
+G04 #@! TO.P,SW1Header1,4,UP_4*
+G04 #@! TO.N,Net-(SW1-UP)*
+X106300000Y-60600000D03*
+G04 #@! TO.P,SW1Header1,3,DOWN_3*
+G04 #@! TO.N,Net-(SW1-DOWN)*
+X103760000Y-60600000D03*
+G04 #@! TO.P,SW1Header1,2,LEFT_2*
+G04 #@! TO.N,Net-(SW1-LEFT)*
+X101220000Y-60600000D03*
+D11*
+G04 #@! TO.P,SW1Header1,1,COM_1*
+G04 #@! TO.N,Net-(SW1-COM)*
+X98680000Y-60600000D03*
+G04 #@! TD*
+M02*
