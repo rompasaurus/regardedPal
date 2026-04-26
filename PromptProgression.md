@@ -3349,3 +3349,22 @@ Every prompt entry below uses the following fields. Entries that don't yet list 
   - `PromptProgression.md` — prompt #255 appended
 
 ---
+
+## Prompt #256 — 2026-04-26
+
+- **Prompt:** "ok new heic images added analyse and describe and rename them descriptively and put them on the front page after converting to jpeg and put em in a proper folder delete the heic files and update the blog and hardware evolution pull the renders for the latest scad and this is going to be the current design so update the website and hard design to reflect that then commit and push update prompts and push"
+- **Input Tokens (est):** ~80
+- **Output Tokens (est):** ~8,000
+- **Files:**
+  - `website/docs/assets/images/enclosure/rev2-current/rev2-assembled-front-view.jpg` (new) — converted from HEIC, Pico 2 W running Sassy Octopus front view
+  - `website/docs/assets/images/enclosure/rev2-current/rev2-assembled-three-quarter-view.jpg` (new) — three-quarter angle showing case depth
+  - `website/docs/assets/images/enclosure/rev2-current/rev2-display-closeup-sassy-octopus.jpg` (new) — e-ink display close-up with clock header and quote
+  - `website/docs/assets/images/enclosure/rev2-current/rev2-case-parts-disassembled.jpg` (new) — top cover, base plate, cradle laid out
+  - `*.heic` (6 deleted) — original camera files removed
+  - `website/docs/index.md` — front page redesigned with current build gallery, updated hardware table for Pico 2 W as default
+  - `website/docs/blog/posts/pico2w-board-support-current-design.md` (new) — blog post covering Pico 2 W support and current design photos
+  - `website/docs/docs/hardware/design-evolution.md` — Pico 2 W and current design photo entries
+  - `website/docs/prompts/index.md` — synced with prompt #256
+  - `PromptProgression.md` — prompt #256 appended
+
+---

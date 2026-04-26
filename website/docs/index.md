@@ -33,46 +33,56 @@ Jamal still sits in the armchair. He still wears the hat. He watches us build hi
 
 ---
 
-## Meet the Octopus
+## The Current Build
 
 <div class="grid" markdown>
 
 <figure markdown="span">
-  ![Sassy Octopus running on e-ink](assets/images/hardware/sassy-octopus-running.jpg){ width="400" loading=lazy }
-  <figcaption>"MATTRESSES ARE BODY SHELVES." — actual device output</figcaption>
+  ![Dilder Rev 2 — assembled front view showing Sassy Octopus on e-ink display](assets/images/enclosure/rev2-current/rev2-assembled-front-view.jpg){ width="420" loading=lazy }
+  <figcaption>"COFFEE IS JUST BEAN BROTH FOR PEOPLE WHO HATE THEMSELVES." — Sassy Octopus, running on Pico 2 W</figcaption>
 </figure>
 
-A tiny octopus lives on a 250x122 pixel e-ink display. It has **16 emotional states**, each with unique eyes, mouth expressions, body animations, and themed quotes. It's sassy. It's opinionated. It runs on 100KB of firmware and a coin cell's worth of ambition.
+<figure markdown="span">
+  ![Dilder Rev 2 — three-quarter angle showing case depth and profile](assets/images/enclosure/rev2-current/rev2-assembled-three-quarter-view.jpg){ width="420" loading=lazy }
+  <figcaption>Rev 2 enclosure — 3D-printed case with bullnose top edge, joystick port, and display window inlay</figcaption>
+</figure>
 
-Pick a personality, flash it to the Pico W, and you've got a desk companion that judges your life choices in ALL CAPS.
+</div>
+
+<div class="grid" markdown>
+
+<figure markdown="span">
+  ![Dilder Rev 2 — e-ink display close-up with Sassy Octopus and clock header](assets/images/enclosure/rev2-current/rev2-display-closeup-sassy-octopus.jpg){ width="420" loading=lazy }
+  <figcaption>Close-up — 250x122 e-ink display with RTC clock header, animated octopus, and speech bubble</figcaption>
+</figure>
+
+<figure markdown="span">
+  ![Dilder Rev 2 — case parts disassembled showing top cover, base plate, and cradle](assets/images/enclosure/rev2-current/rev2-case-parts-disassembled.jpg){ width="420" loading=lazy }
+  <figcaption>Disassembled — top cover with display inlay, base plate with solar cutout, battery cradle insert</figcaption>
+</figure>
 
 </div>
 
 ---
 
+## Meet the Octopus
+
+A tiny octopus lives on a 250x122 pixel e-ink display. It has **16 emotional states**, each with unique eyes, mouth expressions, body animations, and themed quotes. It's sassy. It's opinionated. It runs on 100KB of firmware and a coin cell's worth of ambition.
+
+Pick a personality, flash it to the board, and you've got a desk companion that judges your life choices in ALL CAPS.
+
+---
+
 ## The Hardware
 
-Two components. Eight wires. Under $25.
-
-<div class="grid" markdown>
-
-<figure markdown="span">
-  ![Pico W and e-ink display](assets/images/hardware/pico-w-and-display-separated.jpg){ width="380" loading=lazy }
-  <figcaption>Raspberry Pi Pico W + Waveshare 2.13" e-Paper V3</figcaption>
-</figure>
-
-<figure markdown="span">
-  ![Hello Dilder — first pixels](assets/images/hardware/hello-dilder-running.jpg){ width="380" loading=lazy }
-  <figcaption>First boot — "Hello, Dilder!" on real e-ink</figcaption>
-</figure>
-
-</div>
+Three supported boards. Same firmware. Under $25 to get started.
 
 | Component | Price | Why |
 |-----------|-------|-----|
-| Raspberry Pi Pico W | ~$6 | 2MB flash, WiFi + BLE, boots instantly, no OS needed |
+| Raspberry Pi Pico 2 W | ~$7 | 4MB flash, WiFi + BLE, RP2350 dual Cortex-M33, current default |
+| Raspberry Pi Pico W | ~$6 | 2MB flash, WiFi + BLE, RP2040, original dev board |
 | Waveshare 2.13" e-Paper V3 | ~$15 | 250x122px, paper-like readability, near-zero standby current |
-| Jumper wires + breadboard | ~$3 | No soldering required for prototyping |
+| 3D-printed enclosure | ~$2 filament | Two-piece snap-fit case, SCAD source files included |
 
 ---
 

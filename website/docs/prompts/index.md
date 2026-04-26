@@ -1708,3 +1708,13 @@ All 5 pieces exported cleanly (CGAL manifold) as 3MF for Bambu Studio: `base.3mf
 - **Input Tokens (est):** ~800 across the sequence
 - **Output Tokens (est):** ~45,000
 - **Summary:** Full Pico 2 W board support added. `BOARD_PICO2_W` in `board_config.h` (same 40-pin header, 4MB flash). DevTool board dropdown + all UI text dynamically adapts (FlashUtility, ConnectionUtility, PinViewer, DocumentationTab, ProgramsTab). BOOTSEL mount detection updated for `RP2350` drive label. Dockerfile `PICO_BOARD` env var made configurable. CMake cache auto-detection wipes stale `build/` when `PICO_PLATFORM` mismatches. New `rtc_compat.h` provides software RTC fallback on RP2350 (no hardware RTC) with `datetime_t` definition and `time_us_64()` timekeeping. All 18 program files and CMakeLists updated. New Pico 2 W reference doc with specs comparison and critical migration gotchas.
+
+---
+
+## Prompt #256 — 2026-04-26
+
+**Prompt:** Convert 6 HEIC photos to JPEG, rename descriptively, update front page with current design gallery, write blog post, update design evolution, commit and push.
+
+- **Input Tokens (est):** ~80
+- **Output Tokens (est):** ~8,000
+- **Summary:** Six HEIC camera files converted to JPEG (4 kept, 1 duplicate and 1 blurry discarded). Front page redesigned with four-photo current build gallery replacing the old single-photo "Meet the Octopus" section. Hardware table updated to list Pico 2 W as the current default board. New blog post covering Pico 2 W board support and current design photos. Design evolution table updated with Pico 2 W and photo entries.
