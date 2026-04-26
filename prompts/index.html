@@ -2421,6 +2421,34 @@
   
   
     <li class="md-nav__item">
+      <a href="../docs/reference/pico-2-w/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Pico 2 W
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../docs/reference/pi-zero-wh/" class="md-nav__link">
         
   
@@ -4685,6 +4713,17 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#prompt-255-2026-04-26" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Prompt #255 — 2026-04-26
+      
+    </span>
+  </a>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -6567,6 +6606,17 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#prompt-255-2026-04-26" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Prompt #255 — 2026-04-26
+      
+    </span>
+  </a>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -7943,6 +7993,14 @@
 <li><strong>Input Tokens (est):</strong> ~600 across the sequence</li>
 <li><strong>Output Tokens (est):</strong> ~30,000</li>
 <li><strong>Summary:</strong> Top cover gets <code>face_plate_outer_edge_curve_radius_mm</code> — ellipsoid sphere scaling to flatten the face without bulging the walls (multiple failed approaches before landing on <code>scale([1,1,zr/case_r])</code>). Base plate thinner gets <code>pillar_extension_z_above_plate_mm</code> (-10 to +10mm) with split geometry so the 5x5 screw pillars stay fixed while only the extension wings change height. New <code>base-plate-with-solar-cutout.scad</code> forked from thinner: 62x36mm solar panel pit (AK 62X36) on bottom face, two 3mm wire pass-through holes, and breakaway support ribs (0.4mm walls, 5mm spacing, 0.2mm Z gap) for FDM printing. Old autorouted joystick-pcb/ deleted in favor of hand-routed version.</li>
+</ul>
+<hr />
+<h2 id="prompt-255-2026-04-26">Prompt #255 — 2026-04-26<a class="headerlink" href="#prompt-255-2026-04-26" title="Permanent link">&para;</a></h2>
+<p><strong>Prompt sequence:</strong> Multi-turn session adding Raspberry Pi Pico 2 W (RP2350) as a third target board alongside Pico W and ESP32-S3. Iterative effort covering board support, GUI adaptation, build system porting, and resolving RP2350 platform incompatibilities.</p>
+<ul>
+<li><strong>Input Tokens (est):</strong> ~800 across the sequence</li>
+<li><strong>Output Tokens (est):</strong> ~45,000</li>
+<li><strong>Summary:</strong> Full Pico 2 W board support added. <code>BOARD_PICO2_W</code> in <code>board_config.h</code> (same 40-pin header, 4MB flash). DevTool board dropdown + all UI text dynamically adapts (FlashUtility, ConnectionUtility, PinViewer, DocumentationTab, ProgramsTab). BOOTSEL mount detection updated for <code>RP2350</code> drive label. Dockerfile <code>PICO_BOARD</code> env var made configurable. CMake cache auto-detection wipes stale <code>build/</code> when <code>PICO_PLATFORM</code> mismatches. New <code>rtc_compat.h</code> provides software RTC fallback on RP2350 (no hardware RTC) with <code>datetime_t</code> definition and <code>time_us_64()</code> timekeeping. All 18 program files and CMakeLists updated. New Pico 2 W reference doc with specs comparison and critical migration gotchas.</li>
 </ul>
 
 
