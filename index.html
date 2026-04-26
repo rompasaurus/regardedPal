@@ -472,6 +472,17 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#the-current-build" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The Current Build
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#meet-the-octopus" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -2999,6 +3010,17 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#the-current-build" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The Current Build
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#meet-the-octopus" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -3118,31 +3140,38 @@
 <p>That's how Dilder was born. Not from a grand engineering vision or a product roadmap — from a plush octopus in a discount bin and two people who couldn't stop giving him a backstory on the walk home.</p>
 <p>Jamal still sits in the armchair. He still wears the hat. He watches us build his digital self from across the room, and honestly? He looks unimpressed. Which tracks.</p>
 <hr />
-<h2 id="meet-the-octopus">Meet the Octopus<a class="headerlink" href="#meet-the-octopus" title="Permanent link">&para;</a></h2>
+<h2 id="the-current-build">The Current Build<a class="headerlink" href="#the-current-build" title="Permanent link">&para;</a></h2>
 <div class="grid">
 <figure>
-  <img alt="Sassy Octopus running on e-ink" loading="lazy" src="assets/images/hardware/sassy-octopus-running.jpg" width="400" />
+  <img alt="Dilder Rev 2 — assembled front view showing Sassy Octopus on e-ink display" loading="lazy" src="assets/images/enclosure/rev2-current/rev2-assembled-front-view.jpg" width="420" />
 <br />
-<figcaption>"MATTRESSES ARE BODY SHELVES." — actual device output</figcaption>
+<figcaption>"COFFEE IS JUST BEAN BROTH FOR PEOPLE WHO HATE THEMSELVES." — Sassy Octopus, running on Pico 2 W</figcaption>
 </figure>
-<p>A tiny octopus lives on a 250x122 pixel e-ink display. It has <strong>16 emotional states</strong>, each with unique eyes, mouth expressions, body animations, and themed quotes. It's sassy. It's opinionated. It runs on 100KB of firmware and a coin cell's worth of ambition.</p>
-<p>Pick a personality, flash it to the Pico W, and you've got a desk companion that judges your life choices in ALL CAPS.</p>
+<figure>
+  <img alt="Dilder Rev 2 — three-quarter angle showing case depth and profile" loading="lazy" src="assets/images/enclosure/rev2-current/rev2-assembled-three-quarter-view.jpg" width="420" />
+<br />
+<figcaption>Rev 2 enclosure — 3D-printed case with bullnose top edge, joystick port, and display window inlay</figcaption>
+</figure>
+</div>
+<div class="grid">
+<figure>
+  <img alt="Dilder Rev 2 — e-ink display close-up with Sassy Octopus and clock header" loading="lazy" src="assets/images/enclosure/rev2-current/rev2-display-closeup-sassy-octopus.jpg" width="420" />
+<br />
+<figcaption>Close-up — 250x122 e-ink display with RTC clock header, animated octopus, and speech bubble</figcaption>
+</figure>
+<figure>
+  <img alt="Dilder Rev 2 — case parts disassembled showing top cover, base plate, and cradle" loading="lazy" src="assets/images/enclosure/rev2-current/rev2-case-parts-disassembled.jpg" width="420" />
+<br />
+<figcaption>Disassembled — top cover with display inlay, base plate with solar cutout, battery cradle insert</figcaption>
+</figure>
 </div>
 <hr />
+<h2 id="meet-the-octopus">Meet the Octopus<a class="headerlink" href="#meet-the-octopus" title="Permanent link">&para;</a></h2>
+<p>A tiny octopus lives on a 250x122 pixel e-ink display. It has <strong>16 emotional states</strong>, each with unique eyes, mouth expressions, body animations, and themed quotes. It's sassy. It's opinionated. It runs on 100KB of firmware and a coin cell's worth of ambition.</p>
+<p>Pick a personality, flash it to the board, and you've got a desk companion that judges your life choices in ALL CAPS.</p>
+<hr />
 <h2 id="the-hardware">The Hardware<a class="headerlink" href="#the-hardware" title="Permanent link">&para;</a></h2>
-<p>Two components. Eight wires. Under $25.</p>
-<div class="grid">
-<figure>
-  <img alt="Pico W and e-ink display" loading="lazy" src="assets/images/hardware/pico-w-and-display-separated.jpg" width="380" />
-<br />
-<figcaption>Raspberry Pi Pico W + Waveshare 2.13" e-Paper V3</figcaption>
-</figure>
-<figure>
-  <img alt="Hello Dilder — first pixels" loading="lazy" src="assets/images/hardware/hello-dilder-running.jpg" width="380" />
-<br />
-<figcaption>First boot — "Hello, Dilder!" on real e-ink</figcaption>
-</figure>
-</div>
+<p>Three supported boards. Same firmware. Under $25 to get started.</p>
 <table>
 <thead>
 <tr>
@@ -3153,9 +3182,14 @@
 </thead>
 <tbody>
 <tr>
+<td>Raspberry Pi Pico 2 W</td>
+<td>~$7</td>
+<td>4MB flash, WiFi + BLE, RP2350 dual Cortex-M33, current default</td>
+</tr>
+<tr>
 <td>Raspberry Pi Pico W</td>
 <td>~$6</td>
-<td>2MB flash, WiFi + BLE, boots instantly, no OS needed</td>
+<td>2MB flash, WiFi + BLE, RP2040, original dev board</td>
 </tr>
 <tr>
 <td>Waveshare 2.13" e-Paper V3</td>
@@ -3163,9 +3197,9 @@
 <td>250x122px, paper-like readability, near-zero standby current</td>
 </tr>
 <tr>
-<td>Jumper wires + breadboard</td>
-<td>~$3</td>
-<td>No soldering required for prototyping</td>
+<td>3D-printed enclosure</td>
+<td>~$2 filament</td>
+<td>Two-piece snap-fit case, SCAD source files included</td>
 </tr>
 </tbody>
 </table>
