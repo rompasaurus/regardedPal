@@ -131,6 +131,27 @@ batt_clip_slot_z_bottom_mm =
 batt_clip_slot_z_top_mm                        = plug_top_z_mm + 0.1;            // = 7.1
 
 // ============================================================
+// Battery clip retainer wall — keeps the contact plate from
+// sliding INTO the bay (toward the cell). Thin wall sits on the
+// cell side of each clip slot, with a smaller central window so
+// the plate's edges are caught but the contact face stays exposed.
+//
+// Implementation: the slot is pulled back from the bay end by
+// `batt_clip_retainer_thickness_x_mm`, leaving body material as
+// the wall. A rectangular window is then cut through that wall.
+// Window must be smaller than the plate (Y/Z) so the wall catches
+// the plate's perimeter — defaults give a 1 mm ring of engagement
+// on all sides of a 7 × 7 mm plate.
+//
+// Set `batt_clip_retainer_enabled = false` to fall back to the
+// original through-slot (no wall, plate can slide into bay).
+// ============================================================
+batt_clip_retainer_enabled                     = true;
+batt_clip_retainer_thickness_x_mm              = 1.0;
+batt_clip_retainer_window_size_y_mm            = 5.0;     // < plate Y so wall catches edges
+batt_clip_retainer_window_size_z_mm            = 5.0;     // < plate Z
+
+// ============================================================
 // FPC gap
 // ============================================================
 fpc_gap_width_along_x_mm                       = 3;
@@ -251,16 +272,42 @@ corner_pillar_cutout_xy_positions = [
 // unipolar contact plate. is_plus_x_end = true puts the slot just
 // outside the bay on the +X side; false on the -X side. The slot
 // extends upward to plug_top so plates drop in from above.
+//
+// When `batt_clip_retainer_enabled` is true, the slot is pulled
+// further from the bay by `batt_clip_retainer_thickness_x_mm` to
+// leave a wall of body material between slot and bay; a smaller
+// rectangular contact window is then cut through that wall.
 module batt_clip_slot(bay_y_center_mm, bay_x_end_mm, is_plus_x_end) {
+    retainer_thickness_mm =
+        batt_clip_retainer_enabled ? batt_clip_retainer_thickness_x_mm : 0;
+
     slot_x_start =
         is_plus_x_end
-          ? bay_x_end_mm
-          : bay_x_end_mm - batt_clip_slot_x_size_mm;
+          ? bay_x_end_mm + retainer_thickness_mm
+          : bay_x_end_mm - batt_clip_slot_x_size_mm - retainer_thickness_mm;
     slot_y_start = bay_y_center_mm - batt_clip_slot_y_size_mm / 2;
     translate([slot_x_start, slot_y_start, batt_clip_slot_z_bottom_mm])
         cube([batt_clip_slot_x_size_mm,
               batt_clip_slot_y_size_mm,
               batt_clip_slot_z_top_mm - batt_clip_slot_z_bottom_mm]);
+
+    // Contact window through the retainer wall. Window punches from
+    // the slot's bay-facing side through to the bay cylinder, smaller
+    // than the plate so a perimeter ring of wall remains to catch it.
+    if (batt_clip_retainer_enabled) {
+        window_x_start =
+            is_plus_x_end
+              ? bay_x_end_mm - 0.1
+              : bay_x_end_mm - retainer_thickness_mm - 0.1;
+        window_y_start =
+            bay_y_center_mm - batt_clip_retainer_window_size_y_mm / 2;
+        window_z_start =
+            aaa_bay_center_z_mm - batt_clip_retainer_window_size_z_mm / 2;
+        translate([window_x_start, window_y_start, window_z_start])
+            cube([retainer_thickness_mm + 0.2,
+                  batt_clip_retainer_window_size_y_mm,
+                  batt_clip_retainer_window_size_z_mm]);
+    }
 }
 
 
