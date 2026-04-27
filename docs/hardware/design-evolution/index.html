@@ -5641,6 +5641,12 @@
 <td>research</td>
 <td>New <code>solar-panel-bonding-adhesives.md</code> — outdoor-adhesive option matrix for bonding the AK 62×36 solar panel to PETG base plate. Recommends Sikaflex 252 / 295 UV / DOWSIL 795 (15–20 yr outdoor life) or 3M VHB 4945 (10+ yr); avoids hot glue / CA / rigid epoxy (UV-embrittlement and thermal-cycling failures within a season)</td>
 </tr>
+<tr>
+<td>2026-04-27</td>
+<td>Rev 2 AAA cradle</td>
+<td>retainer wall</td>
+<td><code>aaa-cradle-with-batt-clips.scad</code> gets a 1 mm retainer wall on the cell side of each of the 4 clip slots. Each slot is offset back from its bay end by <code>batt_clip_retainer_thickness_x_mm</code>, naturally leaving body material as the wall; a 5 × 5 mm contact window is cut through the wall (centered on the bay axis) so the spring/contact face passes through unobstructed while a 1 mm perimeter ring catches the 7 × 7 mm Swpeet plate's edges. 4 new parametric knobs (<code>batt_clip_retainer_enabled</code>, <code>_thickness_x_mm</code>, <code>_window_size_y_mm</code>, <code>_window_size_z_mm</code>). New customizer preset <code>battery clips forst print 04-27</code> for the first print pass with the retainer wall enabled</td>
+</tr>
 </tbody>
 </table>
 
