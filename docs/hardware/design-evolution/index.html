@@ -5617,6 +5617,30 @@
 <td>photos</td>
 <td>Four photos of the current Rev 2 build: assembled front view, three-quarter angle, display close-up with Sassy Octopus running, and disassembled case parts. Running on Pico 2 W with e-ink display, joystick, and 3D-printed enclosure</td>
 </tr>
+<tr>
+<td>2026-04-27</td>
+<td>Rev 2 base plate (solar)</td>
+<td>thin-af-27-04 fork</td>
+<td>New <code>base-plate-solar-thin-af-27-04.scad</code> — fork of <code>base-plate-with-solar-cutout</code> with the <code>with supports</code> preset values (17 deltas: solar pit/holes, AAA bay X range, battery rail lift, floor thickness, fillet radius, pico retention height, pillar Y/Z, USB sidewall block width, support flag) baked as defaults. Starting point for the thinner-pass refinement. JSON preset <code>thick floo reduce negative space</code> reduces total height 11.5 → 8 mm, floor 2.5 → 2.6 mm, pico retention 7 → 3 mm</td>
+</tr>
+<tr>
+<td>2026-04-27</td>
+<td>Rev 2 AAA cradle</td>
+<td>with-batt-clips fork</td>
+<td>New <code>aaa-cradle-with-batt-clips.scad</code> — fork of <code>aaa-cradle-insert-v1</code> adding 4 vertical drop-in slots (one at each X-end of each bay, 7.4 × 7.4 × 0.9 mm) sized for the smallest Swpeet 1.5V AAA battery-spring kit's unipolar plate (7 × 7 mm stamped sheet metal). Slots open upward to the plug top so plates drop in from above and wires exit through the same opening. Cells wire in <strong>parallel</strong> (not series — 2S 10440 exceeds Pico W's 5.5 V VSYS max)</td>
+</tr>
+<tr>
+<td>2026-04-27</td>
+<td>Battery procurement</td>
+<td>research</td>
+<td>Settled on <strong>PKCELL ICR10440</strong> (3.7 V raw Li-Ion, 350 mAh, AAA form factor, ~€16 for 4-pack) for the TP4056 + solar charging path. Distinct from the regulated 1.5 V Li-Ion AAA cells (Ansmann) which look identical but would be wrong for a TP4056 — that path requires raw 3.7 V cells</td>
+</tr>
+<tr>
+<td>2026-04-27</td>
+<td>Solar panel bonding</td>
+<td>research</td>
+<td>New <code>solar-panel-bonding-adhesives.md</code> — outdoor-adhesive option matrix for bonding the AK 62×36 solar panel to PETG base plate. Recommends Sikaflex 252 / 295 UV / DOWSIL 795 (15–20 yr outdoor life) or 3M VHB 4945 (10+ yr); avoids hot glue / CA / rigid epoxy (UV-embrittlement and thermal-cycling failures within a season)</td>
+</tr>
 </tbody>
 </table>
 

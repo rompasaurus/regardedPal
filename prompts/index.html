@@ -4735,6 +4735,17 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#prompt-257-2026-04-27" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Prompt #257 — 2026-04-27
+      
+    </span>
+  </a>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -6639,6 +6650,17 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#prompt-257-2026-04-27" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Prompt #257 — 2026-04-27
+      
+    </span>
+  </a>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -8031,6 +8053,14 @@
 <li><strong>Input Tokens (est):</strong> ~80</li>
 <li><strong>Output Tokens (est):</strong> ~8,000</li>
 <li><strong>Summary:</strong> Six HEIC camera files converted to JPEG (4 kept, 1 duplicate and 1 blurry discarded). Front page redesigned with four-photo current build gallery replacing the old single-photo "Meet the Octopus" section. Hardware table updated to list Pico 2 W as the current default board. New blog post covering Pico 2 W board support and current design photos. Design evolution table updated with Pico 2 W and photo entries.</li>
+</ul>
+<hr />
+<h2 id="prompt-257-2026-04-27">Prompt #257 — 2026-04-27<a class="headerlink" href="#prompt-257-2026-04-27" title="Permanent link">&para;</a></h2>
+<p><strong>Prompt sequence:</strong> Multi-turn SCAD session forking two design files for the next print pass, plus battery-procurement research.</p>
+<ul>
+<li><strong>Input Tokens (est):</strong> ~400 across the sequence</li>
+<li><strong>Output Tokens (est):</strong> ~25,000</li>
+<li><strong>Summary:</strong> Two new SCAD forks in <code>04-26-design-alterations/</code>. (1) <code>base-plate-solar-thin-af-27-04.scad</code> — fork of <code>base-plate-with-solar-cutout</code> with the <code>with supports</code> preset (17 deltas) baked as defaults; user then hand-edited the JSON to a <code>thick floo reduce negative space</code> preset (total height 11.5 → 8 mm, floor 2.5 → 2.6 mm, pico retention 7 → 3 mm) for the next thinner-pass print. (2) <code>aaa-cradle-with-batt-clips.scad</code> — fork of <code>aaa-cradle-insert-v1</code> adding 4 vertical drop-in slots (one per bay-end, 7.4 × 7.4 × 0.9 mm) sized for the smallest <strong>Swpeet 1.5V AAA battery contact spring</strong> kit's unipolar plate (7 × 7 mm stamped sheet metal). Slots open upward to the plug top so plates drop in post-print and wires exit through the same opening. Battery procurement: settled on <strong>PKCELL ICR10440</strong> (raw 3.7 V Li-Ion, 350 mAh, AAA form factor) — distinct from the deceptively similar 1.5 V regulated AAA cells (Ansmann) which would be wrong for a TP4056. Wire two cells in <strong>parallel</strong>, not series (2S 10440 = 7.4 V, exceeds the Pico W's 5.5 V VSYS max). New research note <code>solar-panel-bonding-adhesives.md</code> covering outdoor adhesive options (Sikaflex 252 / 295 UV / DOWSIL 795 / 3M VHB) for bonding the AK 62×36 solar panel to a PETG base plate.</li>
 </ul>
 
 
