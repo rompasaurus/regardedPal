@@ -151,16 +151,19 @@ base_plate_shave_height_mm                     = 2;
 usb_c_connector_width_mm                       = 8.94;
 usb_c_connector_height_mm                      = 3.26;
 usb_c_tolerance_mm                             = 0.2;
+usb_c_extra_width_per_side_mm                  = 1.0;   // [0:0.1:3.0] widen cutout beyond connector+tolerance (per side)
 usb_c_cutout_width_y_mm =
-    usb_c_connector_width_mm + usb_c_tolerance_mm;         // = 9.14
+    usb_c_connector_width_mm + usb_c_tolerance_mm
+      + 2 * usb_c_extra_width_per_side_mm;                // = 11.14 at 1.0/side
 usb_c_cutout_height_z_mm =
     usb_c_connector_height_mm + usb_c_tolerance_mm;        // = 3.46
 usb_c_cutout_corner_r_mm =
     (usb_c_connector_height_mm + usb_c_tolerance_mm) / 2;  // = 1.73 (fully rounded ends)
 usb_c_cutout_center_y_mm =
     enclosure_outer_depth_along_y_axis_mm / 2;              // = 23
+usb_c_z_drop_mm                               = 0.5;   // [0:0.1:2.0] shift cutout down (more clearance below connector)
 usb_c_cutout_z_bottom_mm =
-    base_plate_total_height_z_mm - usb_c_cutout_height_z_mm; // notch from top edge down
+    base_plate_total_height_z_mm - usb_c_cutout_height_z_mm - usb_c_z_drop_mm; // notch from top edge down, shifted
 usb_c_wall_x_start_mm =
     enclosure_outer_width_along_x_axis_mm
       - plus_x_end_wall_thickness_mm;                       // +X wall inner face
@@ -329,6 +332,12 @@ module base_plate_v1() {
 module base_plate_v1_unshaved() {
     // Final Z clip — everything in the union below is intersected
     // with this slab so nothing renders above max_z_clip_mm.
+    // Outer difference re-subtracts the solar wire holes AFTER all
+    // positive geometry (pillars, braces, retention blocks) so they
+    // always cut all the way through regardless of extensions.
+    solar_pit_x_start_final = solar_pit_center_x_mm - solar_pit_width_x_mm / 2;
+    solar_pit_y_start_final = solar_pit_center_y_mm - solar_pit_depth_y_mm / 2;
+    difference() {
     intersection() {
     translate([-1, -1, -1])
         cube([enclosure_outer_width_along_x_axis_mm + 2,
@@ -397,13 +406,15 @@ module base_plate_v1_unshaved() {
                       solar_pit_depth_y_mm,
                       solar_pit_depth_z_mm + 0.1]);
 
-            // Wire pass-through holes (pit floor → pocket ceiling)
+            // Wire pass-through holes — cut ALL the way through the
+            // plate (bottom face → pocket ceiling) regardless of floor
+            // thickness, pit depth, or total plate height.
             for (hole_xy = [[solar_hole_1_x_mm, solar_hole_1_y_mm],
                             [solar_hole_2_x_mm, solar_hole_2_y_mm]])
                 translate([solar_pit_x_start + hole_xy[0],
                            solar_pit_y_start + hole_xy[1],
                            -0.1])
-                    cylinder(h = cradle_pocket_floor_z_mm + 0.2,
+                    cylinder(h = base_plate_total_height_z_mm + 0.2,
                              d = solar_hole_diameter_mm, $fn = 24);
         }
 
@@ -611,6 +622,18 @@ module base_plate_v1_unshaved() {
                   pico_retention_block_height_above_pocket_floor_mm]);
     }
     }  // close intersection (final Z clip at max_z_clip_mm)
+
+    // Re-subtract solar wire holes through ALL geometry (pillars,
+    // braces, retention blocks — anything that might have filled
+    // them back in). These always punch fully through.
+    for (hole_xy = [[solar_hole_1_x_mm, solar_hole_1_y_mm],
+                    [solar_hole_2_x_mm, solar_hole_2_y_mm]])
+        translate([solar_pit_x_start_final + hole_xy[0],
+                   solar_pit_y_start_final + hole_xy[1],
+                   -0.1])
+            cylinder(h = base_plate_total_height_z_mm + 0.2,
+                     d = solar_hole_diameter_mm, $fn = 24);
+    }  // close outer difference (solar holes always cut through)
 }
 
 base_plate_v1();

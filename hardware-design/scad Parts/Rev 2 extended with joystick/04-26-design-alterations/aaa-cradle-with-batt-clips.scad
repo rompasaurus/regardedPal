@@ -150,6 +150,7 @@ batt_clip_retainer_enabled                     = true;
 batt_clip_retainer_thickness_x_mm              = 1.0;
 batt_clip_retainer_window_size_y_mm            = 5.0;     // < plate Y so wall catches edges
 batt_clip_retainer_window_size_z_mm            = 5.0;     // < plate Z
+batt_clip_retainer_window_z_extend_up_mm       = 0.0;     // [0:0.5:10.0] extra height added above the centered window (opens toward plug top)
 
 // ============================================================
 // FPC gap
@@ -303,10 +304,12 @@ module batt_clip_slot(bay_y_center_mm, bay_x_end_mm, is_plus_x_end) {
             bay_y_center_mm - batt_clip_retainer_window_size_y_mm / 2;
         window_z_start =
             aaa_bay_center_z_mm - batt_clip_retainer_window_size_z_mm / 2;
+        window_z_total =
+            batt_clip_retainer_window_size_z_mm + batt_clip_retainer_window_z_extend_up_mm;
         translate([window_x_start, window_y_start, window_z_start])
             cube([retainer_thickness_mm + 0.2,
                   batt_clip_retainer_window_size_y_mm,
-                  batt_clip_retainer_window_size_z_mm]);
+                  window_z_total]);
     }
 }
 

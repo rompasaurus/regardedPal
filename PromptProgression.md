@@ -3414,3 +3414,18 @@ Every prompt entry below uses the following fields. Entries that don't yet list 
   - `PromptProgression.md` — prompt #258 appended
 
 ---
+
+## Prompt #259 — 2026-04-27
+- **Prompt:** "ok I designed the board and sent it to JLCPCB got this email... help me understand what they are asking... make a md note of this exchange in the hardware design and give a summary of the design process and status so far update the website with a progression blog page and update the design evolution and running summary of everything"
+- **Input Tokens (est):** ~200
+- **Output Tokens (est):** ~8,000
+- **Summary:** Analysed the JLCPCB placement verification email for the joystick PCB order. The factory flagged SW1 (K1-1506SN-01) because the near-symmetric package makes automated rotation detection unreliable. "Polarity" in this context means component orientation, not electrical polarity — the switch is passive. Confirmed the placement image shows the correct rotation (pin A/up arrow away from header). Documented the exchange, the full PCB design journey (autorouted Rev 1 failure through hand-routed Rev 2 success), current build status, and lesson learned (add pin 1 silkscreen dot). New blog post with build status table and next steps.
+- **Files:**
+  - `hardware-design/jlcpcb-joystick-pcb-order-notes.md` (new) — JLCPCB order notes, placement verification analysis, PCB design journey, current status
+  - `website/docs/assets/images/hardware/pcb/jlcpcb-sw1-placement-verification.png` — moved from root `unnamed.png`
+  - `website/docs/blog/posts/joystick-pcb-jlcpcb-order.md` (new) — blog post with order details, design history, and build status table
+  - `website/docs/docs/hardware/design-evolution.md` — JLCPCB order version history row
+  - `website/docs/prompts/index.md` — synced with prompt #259
+  - `PromptProgression.md` — prompt #259 appended
+
+---

@@ -1738,3 +1738,13 @@ All 5 pieces exported cleanly (CGAL manifold) as 3MF for Bambu Studio: `base.3mf
 - **Input Tokens (est):** ~80
 - **Output Tokens (est):** ~3,500
 - **Summary:** 1 mm retainer wall added on the cell-facing side of each of the 4 battery-clip slots. Implemented subtractively: each slot is pulled back from its bay end by `batt_clip_retainer_thickness_x_mm`, naturally leaving body material as the wall, then a smaller central window (default 5 × 5 mm via `batt_clip_retainer_window_size_y/z_mm`) is cut through that wall to expose the plate's contact face to the cell. The 7 × 7 mm Swpeet plate is now caught by a 1 mm-wide perimeter ring on all sides while the spring/contact face still passes through the window unobstructed. Four new parametric knobs (`batt_clip_retainer_enabled`, `_thickness_x_mm`, `_window_size_y_mm`, `_window_size_z_mm`) — set `enabled = false` to revert to the original through-slot. User added a new customizer preset `battery clips forst print 04-27` carrying these values and rendered it for the next print run.
+
+---
+
+## Prompt #259 — 2026-04-27
+
+**Prompt:** Analyse the JLCPCB placement verification email for the joystick PCB order. Document the exchange, summarize the full design process and current status, update website with a blog post and design evolution.
+
+- **Input Tokens (est):** ~200
+- **Output Tokens (est):** ~8,000
+- **Summary:** JLCPCB flagged SW1 (K1-1506SN-01) for placement verification because the near-symmetric package makes automated rotation detection unreliable. "Polarity" means component orientation, not electrical polarity. Confirmed the placement is correct (pin A/up arrow away from header). Documented the full PCB design journey: autorouted Rev 1 (SKRHABE010, abandoned due to wrong footprint/pinout) through hand-routed Rev 2 (K1-1506SN-01, now in production). New blog post with build status table covering all subsystems. Lesson learned: add pin 1 silkscreen dot for future orders.
