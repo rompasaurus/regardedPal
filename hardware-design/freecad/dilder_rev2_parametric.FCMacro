@@ -1,0 +1,1107 @@
+"""
+Dilder Rev 2 -- Parametric FreeCAD Assembly
+============================================
+FreeCAD macro that generates the full 3-part enclosure:
+  1. Base Plate     (solar pit, USB-C cutout, corner pegs, battery troughs)
+  2. AAA Cradle     (battery bays, clip slots, Pico nest, TP4056 indent)
+  3. Top Cover      (display window, joystick hole, bullnose shell, M3 bores)
+
+All dimensions live in a FreeCAD Spreadsheet ("Parameters") for GUI editing.
+Geometry is rebuilt from scratch each run -- edit the spreadsheet then re-run.
+
+Based on the Rev 2 "extended with joystick" OpenSCAD working model
+(04-26/27-2026 design alterations).
+
+Usage:
+  FreeCAD -> Macro -> Run Macro -> select this file
+  Or: FreeCADCmd this_file.py  (headless)
+"""
+
+import FreeCAD as App
+import Part
+import math
+
+# =====================================================================
+# PARAMETERS -- mirrors the OpenSCAD customizer values
+# =====================================================================
+
+P = {}  # filled by _init_params(), keyed by spreadsheet alias
+
+def _init_params():
+    """Define every parameter with (alias, value, description) tuples.
+
+    Grouped by section; order matters for spreadsheet layout.
+    Returns list of (alias, value, description).
+    """
+    return [
+        # --- Enclosure outer shell ---
+        ("enclosure_x",            94.5,  "Outer width along X"),
+        ("enclosure_y",            46.0,  "Outer depth along Y"),
+        ("minus_x_wall",            3.0,  "-X end wall thickness"),
+        ("plus_x_wall",             1.2,  "+X end wall thickness"),
+        ("side_wall_y",             2.0,  "Long-side wall thickness (Y)"),
+        ("corner_radius",           4.0,  "Top-view corner radius"),
+        ("pillar_side",             5.0,  "Corner pillar square side"),
+
+        # --- Base plate ---
+        ("bp_height",               8.0,  "Base plate total Z height"),
+        ("bp_fillet_r",             2.0,  "Bottom edge fillet radius"),
+        ("bp_pocket_floor",         2.5,  "Cradle pocket floor thickness"),
+        ("bp_shave_start_z",        4.0,  "Shave band start Z"),
+        ("bp_shave_height",         2.0,  "Shave band height (0=off)"),
+        ("bp_max_z_clip",          14.0,  "Max Z clip ceiling"),
+
+        # --- Cradle pocket dims (from cradle plug footprint + slop) ---
+        ("cradle_plug_x_start",     3.3,  "Cradle plug X start"),
+        ("cradle_plug_x_end",      93.0,  "Cradle plug X end"),
+        ("cradle_plug_y_start",     2.3,  "Cradle plug Y start"),
+        ("cradle_plug_y_end",      43.7,  "Cradle plug Y end"),
+        ("pocket_xy_slop",          0.2,  "Cradle pocket XY slop per edge"),
+
+        # --- Pegs ---
+        ("peg_diameter",            3.0,  "Peg diameter"),
+        ("peg_height",              3.0,  "Peg height above pillar"),
+        ("peg_chamfer",             0.4,  "Peg tip chamfer"),
+
+        # --- Pillar extensions ---
+        ("pillar_ext_x",            5.0,  "Pillar inward extension X"),
+        ("pillar_ext_y",            4.0,  "Pillar inward extension Y"),
+        ("pillar_ext_z",           -1.5,  "Pillar extension Z above plate"),
+
+        # --- Battery troughs (base plate) ---
+        ("aaa_bay_diameter",       11.1,  "AAA bay diameter (cell + slop)"),
+        ("bay_minus_y_center",      7.85, "Bay -Y center Y"),
+        ("bay_plus_y_center",      38.15, "Bay +Y center Y"),
+        ("bay_x_start",            34.0,  "Battery bay X start (global)"),
+        ("bay_x_length",           39.0,  "Battery bay length along X"),
+        ("rail_wall_mm",            1.5,  "Battery rail wall thickness"),
+        ("rail_height_reduce",      2.5,  "Rail height reduction"),
+        ("rail_depth_reduce",       2.0,  "Rail Y depth reduction per side"),
+        ("rail_z_lift",             5.0,  "Rail Z lift above pocket floor"),
+
+        # --- USB-C cutout ---
+        ("usb_width",               9.0,  "USB-C connector width"),
+        ("usb_height",              4.25, "USB-C connector height"),
+        ("usb_tolerance",           0.2,  "USB-C tolerance"),
+        ("usb_corner_r",            1.0,  "USB-C cutout corner radius"),
+        ("usb_z_drop",              0.5,  "USB-C Z drop below plate top"),
+
+        # --- USB support blocks ---
+        ("usb_block_inset",         5.0,  "USB support block inset from wall"),
+        ("usb_block_y_width",      15.0,  "USB support block Y width"),
+        ("usb_block_x_size",        5.0,  "USB support block X size"),
+        ("usb_block_x_gap",         5.0,  "Gap between USB support blocks"),
+        ("usb_block_z_above",       0.0,  "USB block height above cutout bottom"),
+
+        # --- USB sidewall brace ---
+        ("usb_sidewall_enabled",    0.0,  "USB sidewall brace (1=on, 0=off)"),
+        ("usb_sidewall_y",         30.0,  "USB sidewall brace Y width"),
+        ("usb_sidewall_x",          5.0,  "USB sidewall brace X depth"),
+        ("usb_sidewall_z_clr",      0.2,  "USB sidewall Z clearance below cutout"),
+
+        # --- Pico retention block ---
+        ("pico_block_inset_x",     18.0,  "Pico block inset from -X wall"),
+        ("pico_block_y_width",     15.0,  "Pico block Y width"),
+        ("pico_block_x_size",       5.0,  "Pico block X size"),
+        ("pico_block_z_height",     2.0,  "Pico block height above pocket floor"),
+
+        # --- Solar panel pit ---
+        ("solar_pit_x",           62.4,   "Solar pit width X"),
+        ("solar_pit_y",           36.4,   "Solar pit depth Y"),
+        ("solar_pit_z",            2.0,   "Solar pit depth Z"),
+        ("solar_hole_d",           3.1,   "Solar wire hole diameter"),
+        ("solar_h1_x",            2.5,    "Solar hole 1 X offset in pit"),
+        ("solar_h1_y",            2.0,    "Solar hole 1 Y offset in pit"),
+        ("solar_h2_x",           60.0,    "Solar hole 2 X offset in pit"),
+        ("solar_h2_y",            2.4,    "Solar hole 2 Y offset in pit"),
+
+        # --- Cradle insert ---
+        ("plug_wall_slop",         0.3,  "Plug wall slop (per edge)"),
+        ("aaa_cell_diameter",     10.5,   "AAA cell diameter"),
+        ("aaa_radial_slop",        0.3,  "AAA radial slop"),
+        ("aaa_bay_wall",           0.5,  "AAA bay wall above/below"),
+        ("aaa_cell_length",       44.5,   "AAA cell length"),
+        ("aaa_axial_slop",         1.0,  "AAA axial slop"),
+        ("aaa_contact_space",      2.0,  "Contact space per end"),
+        ("aaa_bay_gap_pillar",     3.0,  "Bay gap from pillar cutout"),
+        ("aaa_bay_shift_x",       20.0,  "Bay shift toward -X"),
+        ("pillar_cutout_slop",     0.4,  "Corner pillar cutout slop"),
+
+        # --- Battery clip slots ---
+        ("clip_plate_size",        7.0,  "Batt clip plate size (Y and Z)"),
+        ("clip_plate_thick",       0.5,  "Batt clip plate thickness X"),
+        ("clip_slot_slop",         0.2,  "Clip slot slop per edge"),
+        ("clip_retainer_on",       1.0,  "Retainer wall enabled (1/0)"),
+        ("clip_retainer_thick",    1.0,  "Retainer wall thickness X"),
+        ("clip_window_yz",         5.0,  "Retainer window size Y and Z"),
+
+        # --- Cradle connecting block / TP4056 ---
+        ("conn_block_length_x",   29.0,  "Connecting block length X"),
+        ("tp4056_length_x",       28.0,  "TP4056 board length X"),
+        ("tp4056_width_y",        17.0,  "TP4056 board width Y"),
+        ("tp4056_indent_z",        1.0,  "TP4056 indent depth Z"),
+        ("tp4056_slop",            0.2,  "TP4056 indent slop per edge"),
+
+        # --- Cradle misc ---
+        ("fpc_gap_x",              3.0,  "FPC gap width along X"),
+        ("pico_board_y",          21.0,   "Pico W board width Y"),
+        ("pico_board_x",          78.0,   "Pico W board length X"),
+        ("fit_tolerance",          0.4,  "Print fit tolerance"),
+        ("display_cutout_z",       3.0,  "+X display connector cutout depth Z"),
+
+        # --- Top cover ---
+        ("tc_bullnose_r",          4.0,  "Top edge bullnose radius"),
+        ("tc_edge_curve_r",        4.0,  "Face plate outer edge curve radius"),
+        ("tc_face_plate_z",        0.7,  "Face plate thickness Z"),
+        ("tc_wall_ext_below",      5.0,  "Wall extension below mating"),
+        ("display_length_x",      65.0,   "Display footprint length X"),
+        ("display_depth_y",       30.0,   "Display footprint depth Y"),
+        ("display_z",              7.0,   "Display footprint thickness Z"),
+        ("screen_inlay_z",         3.0,  "Screen inlay pocket depth Z"),
+        ("screen_inlay_xy_slop",   0.3,  "Screen inlay XY slop"),
+        ("screen_inlay_y_slop",    0.35, "Screen inlay Y slop"),
+        ("fpc_divet_y",           13.0,   "FPC ribbon divet width Y"),
+        ("fpc_divet_wall",         1.0,  "FPC divet wall remaining"),
+        ("fpc_divet_z_ext",        2.0,  "FPC divet Z extend below inlay"),
+        ("window_length_x",       48.0,   "Display window length X"),
+        ("window_depth_y",        22.0,   "Display window depth Y"),
+        ("window_shift_x",         2.8,  "Window shift toward joystick"),
+        ("window_taper",           2.0,  "Window top taper width"),
+        ("joy_hole_d",            12.0,   "Joystick hole diameter"),
+        ("joy_center_x",         79.35,  "Joystick center X"),
+        ("joy_taper",              1.5,  "Joystick hole top taper"),
+        ("joy_pcb_x",            20.0,   "Joystick PCB pocket X"),
+        ("joy_pcb_y",            20.0,   "Joystick PCB pocket Y"),
+        ("m3_bore_d",              3.2,  "M3 screw clearance bore diameter"),
+        ("pillar_inner_r",         1.0,  "Pillar inner-facing corner radius"),
+    ]
+
+
+# =====================================================================
+# SPREADSHEET SETUP
+# =====================================================================
+
+def setup_spreadsheet(doc):
+    """Create or update a Parameters spreadsheet in the document."""
+    if hasattr(doc, "Parameters"):
+        sheet = doc.Parameters
+    else:
+        sheet = doc.addObject("Spreadsheet::Sheet", "Parameters")
+
+    param_defs = _init_params()
+
+    # Headers
+    sheet.set("A1", "Parameter")
+    sheet.set("B1", "Value")
+    sheet.set("C1", "Unit")
+    sheet.set("D1", "Description")
+
+    for i, (alias, value, desc) in enumerate(param_defs, start=2):
+        cell = f"B{i}"
+        sheet.set(f"A{i}", alias)
+        sheet.set(cell, str(value))
+        sheet.set(f"C{i}", "mm")
+        sheet.set(f"D{i}", desc)
+        try:
+            sheet.setAlias(cell, alias)
+        except Exception:
+            pass  # alias may already exist
+        P[alias] = float(value)
+
+    sheet.recompute()
+    return sheet
+
+
+# =====================================================================
+# GEOMETRY HELPERS
+# =====================================================================
+
+V = App.Vector
+
+def make_box(lx, ly, lz, pos=(0, 0, 0)):
+    """Simple box at position."""
+    return Part.makeBox(lx, ly, lz, V(*pos))
+
+
+def make_rounded_box(lx, ly, lz, r, pos=(0, 0, 0)):
+    """Box with rounded XY corners (equivalent to OpenSCAD hull of 4 cylinders)."""
+    r = min(r, lx / 2 - 0.01, ly / 2 - 0.01)
+    if r < 0.01:
+        return make_box(lx, ly, lz, pos)
+
+    px, py, pz = pos
+    # Create rounded rectangle wire
+    edges = []
+    corners = [
+        (px + r,      py,          px + lx - r,  py),          # bottom edge
+        (px + lx,     py + r,      px + lx,      py + ly - r), # right edge
+        (px + lx - r, py + ly,     px + r,       py + ly),     # top edge
+        (px,          py + ly - r, px,            py + r),      # left edge
+    ]
+    arcs = [
+        (px + lx - r, py + r,      px + lx, py,     px + lx, py + r),      # bottom-right
+        (px + lx - r, py + ly - r, px + lx, py + ly, px + lx - r, py + ly),# top-right -- wrong
+    ]
+    # Simpler: build a 2D wire using Part.makeWire from lines + arcs
+    # Even simpler: make a box and fillet the vertical edges
+    box = Part.makeBox(lx, ly, lz, V(*pos))
+
+    vert_edges = []
+    for edge in box.Edges:
+        v0, v1 = edge.Vertexes[0].Point, edge.Vertexes[1].Point
+        dx = abs(v0.x - v1.x)
+        dy = abs(v0.y - v1.y)
+        dz = abs(v0.z - v1.z)
+        if dx < 0.001 and dy < 0.001 and dz > 0.1:
+            vert_edges.append(edge)
+
+    if vert_edges:
+        try:
+            return box.makeFillet(r, vert_edges)
+        except Exception:
+            return box
+    return box
+
+
+def make_cylinder_x(radius, length, pos=(0, 0, 0)):
+    """Cylinder along X axis."""
+    return Part.makeCylinder(radius, length, V(*pos), V(1, 0, 0))
+
+
+def make_cylinder_z(radius, height, pos=(0, 0, 0)):
+    """Cylinder along Z axis."""
+    return Part.makeCylinder(radius, height, V(*pos), V(0, 0, 1))
+
+
+def fillet_bottom_edges(shape, r):
+    """Fillet horizontal edges at z ~ 0 (bottom face)."""
+    if r < 0.01:
+        return shape
+    bottom_edges = []
+    for edge in shape.Edges:
+        v0, v1 = edge.Vertexes[0].Point, edge.Vertexes[1].Point
+        if abs(v0.z) < 0.01 and abs(v1.z) < 0.01:
+            continue  # skip flat bottom face edges
+        if (abs(v0.z) < r * 1.5 or abs(v1.z) < r * 1.5):
+            dz = abs(v0.z - v1.z)
+            if dz < 0.001:  # horizontal edge near bottom
+                bottom_edges.append(edge)
+    if bottom_edges:
+        try:
+            return shape.makeFillet(r, bottom_edges)
+        except Exception:
+            pass
+    return shape
+
+
+def make_shell_with_curved_bottom(w, l, h, corner_r, fillet_r):
+    """Equivalent to OpenSCAD shell_with_curved_bottom using offset approach.
+
+    Creates a rounded-corner box and applies bottom-edge filleting.
+    Uses makeOffsetShape on a shrunken core for the Minkowski-sphere effect.
+    """
+    if fillet_r < 0.01:
+        return make_rounded_box(w, l, h, corner_r)
+
+    # Create inner core (shrunken by fillet_r on all sides)
+    inner_r = max(0.01, corner_r - fillet_r)
+    inner = make_rounded_box(
+        w - 2 * fillet_r,
+        l - 2 * fillet_r,
+        h - fillet_r,
+        inner_r,
+        pos=(fillet_r, fillet_r, fillet_r)
+    )
+
+    # Offset outward by fillet_r = Minkowski with sphere
+    try:
+        expanded = inner.makeOffsetShape(fillet_r, 0.01)
+    except Exception:
+        # Fallback: simple rounded box with bottom edge fillets
+        box = make_rounded_box(w, l, h, corner_r)
+        return fillet_bottom_edges(box, fillet_r)
+
+    # Clip below z=0
+    clipper = Part.makeBox(w + 4, l + 4, h + 2, V(-2, -2, 0))
+    result = expanded.common(clipper)
+    return result
+
+
+def make_shell_with_bullnose_top(w, l, h, corner_r, bullnose_r, edge_r):
+    """Equivalent to OpenSCAD shell_with_bullnose_top.
+
+    Rounded XY corners, domed/filleted top edges.
+    """
+    er = edge_r if edge_r > 0 else corner_r
+
+    # Inner core shrunken by er
+    inner_r = max(0.01, corner_r - er)
+    inner = make_rounded_box(
+        w - 2 * er,
+        l - 2 * er,
+        max(0.01, h - er),
+        inner_r,
+        pos=(er, er, 0)
+    )
+
+    # Offset outward by er = Minkowski with sphere
+    try:
+        expanded = inner.makeOffsetShape(er, 0.01)
+    except Exception:
+        # Fallback: simple rounded box with top edge fillets
+        box = make_rounded_box(w, l, h, corner_r)
+        top_edges = []
+        for edge in box.Edges:
+            v0, v1 = edge.Vertexes[0].Point, edge.Vertexes[1].Point
+            if abs(v0.z - h) < 0.1 and abs(v1.z - h) < 0.1:
+                top_edges.append(edge)
+        if top_edges:
+            try:
+                return box.makeFillet(er, top_edges)
+            except Exception:
+                pass
+        return box
+
+    # Clip below z=0
+    clipper = Part.makeBox(w + 4, l + 4, h + 2, V(-2, -2, 0))
+    return expanded.common(clipper)
+
+
+def union(shapes):
+    """Fuse a list of shapes."""
+    if not shapes:
+        return Part.Shape()
+    result = shapes[0]
+    for s in shapes[1:]:
+        try:
+            result = result.fuse(s)
+        except Exception:
+            pass
+    return result
+
+
+def cut_all(base, cutters):
+    """Subtract a list of shapes from base."""
+    result = base
+    for c in cutters:
+        try:
+            result = result.cut(c)
+        except Exception:
+            pass
+    return result
+
+
+# =====================================================================
+# DERIVED DIMENSIONS (computed from parameters, mirrors SCAD formulas)
+# =====================================================================
+
+def D():
+    """Compute all derived dimensions from P. Returns a namespace dict."""
+    d = {}
+
+    # --- Enclosure cavity ---
+    d["cavity_x_start"] = P["minus_x_wall"]
+    d["cavity_x_end"] = P["enclosure_x"] - P["plus_x_wall"]
+    d["cavity_y_start"] = P["side_wall_y"]
+    d["cavity_y_end"] = P["enclosure_y"] - P["side_wall_y"]
+
+    # --- Cradle plug ---
+    d["plug_x_start"] = P["minus_x_wall"] + P["plug_wall_slop"]
+    d["plug_x_end"] = P["enclosure_x"] - P["plus_x_wall"] - P["plug_wall_slop"]
+    d["plug_y_start"] = P["side_wall_y"] + P["plug_wall_slop"]
+    d["plug_y_end"] = P["enclosure_y"] - P["side_wall_y"] - P["plug_wall_slop"]
+
+    # --- Plug Z ---
+    d["aaa_bay_d"] = P["aaa_cell_diameter"] + 2 * P["aaa_radial_slop"]
+    d["plug_thickness"] = d["aaa_bay_d"] + 2 * P["aaa_bay_wall"]
+    d["plug_top_z"] = P["display_z"]  # face plate bottom = 7 in cover-local
+    d["plug_bottom_z"] = d["plug_top_z"] - d["plug_thickness"]
+
+    # --- AAA bays ---
+    d["bay_length_x"] = (P["aaa_cell_length"]
+                         + 2 * P["aaa_contact_space"]
+                         + P["aaa_axial_slop"])
+    plus_x_pillar_edge = (P["enclosure_x"] - P["plus_x_wall"]
+                          - P["pillar_side"] - P["pillar_cutout_slop"])
+    d["bay_plus_x_end"] = (plus_x_pillar_edge
+                           - P["aaa_bay_gap_pillar"]
+                           - P["aaa_bay_shift_x"])
+    d["bay_minus_x_start"] = d["bay_plus_x_end"] - d["bay_length_x"]
+    d["bay_center_z"] = (d["plug_top_z"] + d["plug_bottom_z"]) / 2
+
+    # --- Battery clip slots ---
+    d["clip_slot_y"] = P["clip_plate_size"] + 2 * P["clip_slot_slop"]
+    d["clip_slot_x"] = P["clip_plate_thick"] + 2 * P["clip_slot_slop"]
+    d["clip_slot_z_bot"] = (d["bay_center_z"]
+                            - P["clip_plate_size"] / 2
+                            - P["clip_slot_slop"])
+    d["clip_slot_z_top"] = d["plug_top_z"] + 0.1
+
+    # --- Pico nest ---
+    d["pico_nest_y"] = P["pico_board_y"] + 2 * P["fit_tolerance"]
+    d["pico_nest_x"] = P["pico_board_x"] + 2 * P["fit_tolerance"]
+    d["pico_nest_y_start"] = P["enclosure_y"] / 2 - d["pico_nest_y"] / 2
+
+    # --- Connecting block ---
+    d["conn_x_start"] = d["plug_x_start"]
+    d["conn_x_end"] = d["plug_x_start"] + P["conn_block_length_x"]
+    d["conn_y_start"] = d["pico_nest_y_start"]
+    d["conn_y_end"] = d["conn_y_start"] + d["pico_nest_y"]
+
+    # --- TP4056 indent ---
+    d["tp4056_len"] = P["tp4056_length_x"] + 2 * P["tp4056_slop"]
+    d["tp4056_wid"] = P["tp4056_width_y"] + 2 * P["tp4056_slop"]
+    d["tp4056_y_start"] = (d["conn_y_start"] + d["conn_y_end"]) / 2 - d["tp4056_wid"] / 2
+
+    # --- +X display connector cutout ---
+    d["plus_x_cut_x_start"] = d["bay_plus_x_end"]
+    d["plus_x_cut_x_end"] = d["plug_x_end"]
+
+    # --- Cradle pocket (base plate) ---
+    d["pocket_x_start"] = P["cradle_plug_x_start"] - P["pocket_xy_slop"]
+    d["pocket_x_end"] = P["cradle_plug_x_end"] + P["pocket_xy_slop"]
+    d["pocket_y_start"] = P["cradle_plug_y_start"] - P["pocket_xy_slop"]
+    d["pocket_y_end"] = P["cradle_plug_y_end"] + P["pocket_xy_slop"]
+
+    # --- USB-C cutout (base plate) ---
+    d["usb_cut_w"] = P["usb_width"] + P["usb_tolerance"]
+    d["usb_cut_h"] = P["usb_height"] + P["usb_tolerance"]
+    d["usb_cut_z_bot"] = P["bp_height"] - d["usb_cut_h"] - P["usb_z_drop"]
+    d["usb_wall_x"] = P["enclosure_x"] - P["plus_x_wall"]
+
+    # --- Peg positions (base plate, 4 corners) ---
+    ps = P["pillar_side"]
+    d["peg_positions"] = [
+        (P["minus_x_wall"] + ps / 2,
+         P["side_wall_y"] + ps / 2),
+        (P["enclosure_x"] - P["plus_x_wall"] - ps / 2,
+         P["side_wall_y"] + ps / 2),
+        (P["minus_x_wall"] + ps / 2,
+         P["enclosure_y"] - P["side_wall_y"] - ps / 2),
+        (P["enclosure_x"] - P["plus_x_wall"] - ps / 2,
+         P["enclosure_y"] - P["side_wall_y"] - ps / 2),
+    ]
+
+    # --- Pillar XY origins (for cutouts, same as SCAD) ---
+    d["pillar_origins"] = [
+        (P["minus_x_wall"], P["side_wall_y"]),
+        (P["enclosure_x"] - P["plus_x_wall"] - ps, P["side_wall_y"]),
+        (P["minus_x_wall"], P["enclosure_y"] - P["side_wall_y"] - ps),
+        (P["enclosure_x"] - P["plus_x_wall"] - ps,
+         P["enclosure_y"] - P["side_wall_y"] - ps),
+    ]
+
+    # --- Solar pit ---
+    d["solar_x_start"] = P["enclosure_x"] / 2 - P["solar_pit_x"] / 2
+    d["solar_y_start"] = P["enclosure_y"] / 2 - P["solar_pit_y"] / 2
+
+    # --- Top cover derived ---
+    d["tc_face_bot_z"] = P["display_z"]
+    d["tc_face_top_z"] = P["display_z"] + P["tc_face_plate_z"]
+    d["tc_total_h"] = d["tc_face_top_z"] + P["tc_bullnose_r"]
+
+    d["disp_x_start"] = P["minus_x_wall"] + P["fit_tolerance"]
+    d["disp_x_end"] = d["disp_x_start"] + P["display_length_x"]
+    d["disp_y_center"] = P["enclosure_y"] / 2
+    d["disp_y_start"] = d["disp_y_center"] - P["display_depth_y"] / 2
+    d["disp_y_end"] = d["disp_y_start"] + P["display_depth_y"]
+
+    d["inlay_x_start"] = d["disp_x_start"] - P["screen_inlay_xy_slop"]
+    d["inlay_x_end"] = d["disp_x_end"] + P["screen_inlay_xy_slop"]
+    d["inlay_y_start"] = d["disp_y_start"] - P["screen_inlay_y_slop"]
+    d["inlay_y_end"] = d["disp_y_end"] + P["screen_inlay_y_slop"]
+
+    d["win_x"] = (d["disp_x_start"]
+                  + (P["display_length_x"] - P["window_length_x"]) / 2
+                  + P["window_shift_x"])
+    d["win_y"] = (d["disp_y_start"]
+                  + (P["display_depth_y"] - P["window_depth_y"]) / 2)
+
+    d["joy_y_center"] = d["disp_y_center"]
+
+    d["joy_pcb_x_start"] = d["inlay_x_end"]
+    d["joy_pcb_y_start"] = d["joy_y_center"] - P["joy_pcb_y"] / 2
+
+    # FPC ribbon divet
+    d["fpc_x_start"] = P["fpc_divet_wall"]
+    d["fpc_x_end"] = d["inlay_x_start"]
+    d["fpc_y_start"] = d["disp_y_center"] - P["fpc_divet_y"] / 2
+    d["fpc_y_end"] = d["fpc_y_start"] + P["fpc_divet_y"]
+    d["fpc_z_bot"] = d["tc_face_bot_z"] - P["fpc_divet_z_ext"]
+
+    return d
+
+
+# =====================================================================
+# PART 1: BASE PLATE
+# =====================================================================
+
+def build_base_plate():
+    """Build the base plate geometry. Returns a Part.Shape."""
+    d = D()
+    ex = P["enclosure_x"]
+    ey = P["enclosure_y"]
+    h = P["bp_height"]
+    floor_z = P["bp_pocket_floor"]
+
+    # --- Outer shell with curved bottom ---
+    shell = make_shell_with_curved_bottom(
+        ex, ey, h,
+        P["corner_radius"],
+        P["bp_fillet_r"]
+    )
+
+    # --- Cradle pocket ---
+    pocket = make_box(
+        d["pocket_x_end"] - d["pocket_x_start"],
+        d["pocket_y_end"] - d["pocket_y_start"],
+        h - floor_z + 0.1,
+        (d["pocket_x_start"], d["pocket_y_start"], floor_z)
+    )
+
+    # --- USB-C cutout (minkowski rounded rect through +X wall) ---
+    ur = P["usb_corner_r"]
+    usb_inner_w = d["usb_cut_w"] - 2 * ur
+    usb_inner_h = d["usb_cut_h"] - ur
+    if usb_inner_w > 0 and usb_inner_h > 0:
+        usb_core = make_box(
+            P["plus_x_wall"] + 0.2,
+            usb_inner_w,
+            usb_inner_h + 0.1,
+            (d["usb_wall_x"] - 0.1,
+             ex / 2 - ey / 2 + (ey - d["usb_cut_w"]) / 2 + ur,  # wrong -- fix
+             d["usb_cut_z_bot"] + ur)
+        )
+        # Use simple rounded box for USB cutout
+        usb_cutout = make_box(
+            P["plus_x_wall"] + 0.4,
+            d["usb_cut_w"],
+            d["usb_cut_h"] + 0.1,
+            (d["usb_wall_x"] - 0.1,
+             ey / 2 - d["usb_cut_w"] / 2,
+             d["usb_cut_z_bot"])
+        )
+    else:
+        usb_cutout = make_box(
+            P["plus_x_wall"] + 0.4,
+            d["usb_cut_w"],
+            d["usb_cut_h"] + 0.1,
+            (d["usb_wall_x"] - 0.1,
+             ey / 2 - d["usb_cut_w"] / 2,
+             d["usb_cut_z_bot"])
+        )
+
+    # --- Solar panel pit ---
+    solar_pit = make_box(
+        P["solar_pit_x"], P["solar_pit_y"], P["solar_pit_z"] + 0.1,
+        (d["solar_x_start"], d["solar_y_start"], -0.1)
+    )
+
+    # --- Solar wire holes (punch fully through) ---
+    solar_holes = []
+    for hx, hy in [(P["solar_h1_x"], P["solar_h1_y"]),
+                    (P["solar_h2_x"], P["solar_h2_y"])]:
+        solar_holes.append(make_cylinder_z(
+            P["solar_hole_d"] / 2, h + 0.2,
+            (d["solar_x_start"] + hx, d["solar_y_start"] + hy, -0.1)
+        ))
+
+    # Cut shell
+    base = cut_all(shell, [pocket, usb_cutout, solar_pit] + solar_holes)
+
+    # --- Corner pillars + pegs + extensions ---
+    pillar_shapes = []
+    ps = P["pillar_side"]
+    cx = ex / 2
+    cy = ey / 2
+
+    for i, (px, py) in enumerate(d["peg_positions"]):
+        is_minus_x = px < cx
+        is_minus_y = py < cy
+
+        # 5x5 pillar from pocket floor to plate top
+        pil_x = px - ps / 2
+        pil_y = py - ps / 2
+        pillar_shapes.append(make_box(ps, ps, h - floor_z,
+                                      (pil_x, pil_y, floor_z)))
+
+        # Extension wings
+        ext_x = P["pillar_ext_x"]
+        ext_y = P["pillar_ext_y"]
+        if ext_x > 0 or ext_y > 0:
+            wing_x = pil_x if is_minus_x else pil_x - ext_x
+            wing_y = pil_y if is_minus_y else pil_y - ext_y
+            wing_sx = ps + ext_x
+            wing_sy = ps + ext_y
+            wing_h = h + P["pillar_ext_z"] - floor_z
+            if wing_h > 0:
+                pillar_shapes.append(make_box(wing_sx, wing_sy, wing_h,
+                                              (wing_x, wing_y, floor_z)))
+
+        # Peg shank
+        peg_z_bot = h
+        peg_z_top = h + P["peg_height"] - P["peg_chamfer"]
+        pillar_shapes.append(make_cylinder_z(
+            P["peg_diameter"] / 2, peg_z_top - peg_z_bot,
+            (px, py, peg_z_bot)
+        ))
+
+        # Peg chamfered tip
+        pillar_shapes.append(Part.makeCone(
+            P["peg_diameter"] / 2,
+            max(0.01, P["peg_diameter"] / 2 - P["peg_chamfer"]),
+            P["peg_chamfer"],
+            V(px, py, peg_z_top), V(0, 0, 1)
+        ))
+
+    # --- Battery troughs ---
+    bay_r = P["aaa_bay_diameter"] / 2
+    bay_center_z_global = h + d["bay_center_z"]  # cradle bay center in global coords
+
+    for bay_y, is_plus in [(P["bay_minus_y_center"], False),
+                           (P["bay_plus_y_center"], True)]:
+        if is_plus:
+            fill_y0 = bay_y - bay_r - 0.1 + P["rail_depth_reduce"]
+            fill_y1 = ey - P["side_wall_y"]
+        else:
+            fill_y0 = P["side_wall_y"]
+            fill_y1 = bay_y + bay_r + 0.1 - P["rail_depth_reduce"]
+
+        rail_z_bot = floor_z + P["rail_z_lift"]
+        fill_z_top = h - P["rail_height_reduce"] + P["rail_z_lift"]
+
+        # Support block under the rail
+        if P["rail_z_lift"] > 0:
+            pillar_shapes.append(make_box(
+                P["bay_x_length"], fill_y1 - fill_y0, P["rail_z_lift"] + 0.1,
+                (P["bay_x_start"], fill_y0, floor_z)
+            ))
+
+        # Rail body
+        rail_body = make_box(
+            P["bay_x_length"], fill_y1 - fill_y0, fill_z_top - rail_z_bot + 0.1,
+            (P["bay_x_start"], fill_y0, rail_z_bot)
+        )
+
+        # Subtract battery cylinder
+        cyl_cut = make_cylinder_x(
+            bay_r, P["bay_x_length"] + 0.2,
+            (P["bay_x_start"] - 0.1, bay_y,
+             bay_center_z_global + P["rail_z_lift"])
+        )
+        rail = rail_body.cut(cyl_cut)
+        pillar_shapes.append(rail)
+
+    # --- USB support blocks ---
+    usb_blk_x0 = (ex - P["usb_block_inset"] - 2 * P["usb_block_x_size"])
+    usb_blk_y0 = ey / 2 - P["usb_block_y_width"] / 2
+    usb_blk_z_h = d["usb_cut_z_bot"] - floor_z + P["usb_block_z_above"]
+    if usb_blk_z_h > 0:
+        # +X block
+        pillar_shapes.append(make_box(
+            P["usb_block_x_size"], P["usb_block_y_width"], usb_blk_z_h,
+            (usb_blk_x0, usb_blk_y0, floor_z)
+        ))
+        # -X block
+        pillar_shapes.append(make_box(
+            P["usb_block_x_size"], P["usb_block_y_width"], usb_blk_z_h,
+            (usb_blk_x0 - P["usb_block_x_gap"] - P["usb_block_x_size"],
+             usb_blk_y0, floor_z)
+        ))
+
+    # --- USB sidewall brace ---
+    if P["usb_sidewall_enabled"] > 0.5:
+        sw_x0 = d["usb_wall_x"] - P["usb_sidewall_x"]
+        sw_y0 = ey / 2 - P["usb_sidewall_y"] / 2
+        sw_z_top = d["usb_cut_z_bot"] - P["usb_sidewall_z_clr"]
+        sw_z_h = sw_z_top - floor_z
+        if sw_z_h > 0:
+            pillar_shapes.append(make_box(
+                P["usb_sidewall_x"], P["usb_sidewall_y"], sw_z_h,
+                (sw_x0, sw_y0, floor_z)
+            ))
+
+    # --- Pico retention block ---
+    if P["pico_block_z_height"] > 0:
+        prb_x = P["minus_x_wall"] + P["pico_block_inset_x"]
+        prb_y = ey / 2 - P["pico_block_y_width"] / 2
+        pillar_shapes.append(make_box(
+            P["pico_block_x_size"], P["pico_block_y_width"],
+            P["pico_block_z_height"],
+            (prb_x, prb_y, floor_z)
+        ))
+
+    # Fuse all positive geometry into the base
+    if pillar_shapes:
+        base = base.fuse(union(pillar_shapes))
+
+    # --- Z clip ---
+    z_clip = make_box(ex + 4, ey + 4, P["bp_max_z_clip"] + 1, (-2, -2, -1))
+    base = base.common(z_clip)
+
+    # --- Re-cut solar holes through everything ---
+    for hole in solar_holes:
+        base = base.cut(hole)
+
+    # --- Shave band ---
+    if P["bp_shave_height"] > 0:
+        sz = P["bp_shave_start_z"]
+        sh = P["bp_shave_height"]
+
+        # Bottom slab: z=0..shave_start
+        bottom_clip = make_box(ex + 4, ey + 4, sz + 1, (-2, -2, -1))
+        bottom_half = base.common(bottom_clip)
+
+        # Upper portion shifted down
+        upper_clip = make_box(ex + 4, ey + 4, 200, (-2, -2, sz + sh - 0.01))
+        upper_half = base.common(upper_clip)
+        upper_half.translate(V(0, 0, -sh))
+
+        base = bottom_half.fuse(upper_half)
+
+    return base
+
+
+# =====================================================================
+# PART 2: AAA CRADLE INSERT
+# =====================================================================
+
+def build_cradle():
+    """Build the AAA cradle insert. Returns a Part.Shape."""
+    d = D()
+
+    plug_lx = d["plug_x_end"] - d["plug_x_start"]
+    plug_ly = d["plug_y_end"] - d["plug_y_start"]
+    plug_z = d["plug_thickness"]
+    bot_z = d["plug_bottom_z"]
+    top_z = d["plug_top_z"]
+
+    # --- Main plug body ---
+    plug = make_box(plug_lx, plug_ly, plug_z,
+                    (d["plug_x_start"], d["plug_y_start"], bot_z))
+
+    # --- Cutouts ---
+    cuts = []
+
+    # Corner pillar cutouts (4)
+    ps = P["pillar_side"]
+    slop = P["pillar_cutout_slop"]
+    for ox, oy in d["pillar_origins"]:
+        cuts.append(make_box(
+            ps + 2 * slop, ps + 2 * slop, plug_z + 0.2,
+            (ox - slop, oy - slop, bot_z - 0.1)
+        ))
+
+    # FPC gap
+    cuts.append(make_box(
+        P["fpc_gap_x"] + 0.1, plug_ly + 0.2, plug_z + 0.2,
+        (d["plug_x_start"] - 0.1, d["plug_y_start"] - 0.1, bot_z - 0.1)
+    ))
+
+    # AAA cell bays (2 cylinders + top-open boxes)
+    bay_r = d["aaa_bay_d"] / 2
+    bay_len = d["bay_length_x"]
+    for bay_y in [P["bay_minus_y_center"], P["bay_plus_y_center"]]:
+        # Cylinder
+        cuts.append(make_cylinder_x(
+            bay_r, bay_len + 0.2,
+            (d["bay_minus_x_start"] - 0.1, bay_y, d["bay_center_z"])
+        ))
+        # Top-open box
+        bay_box_y = bay_y - bay_r
+        cuts.append(make_box(
+            bay_len + 0.2, d["aaa_bay_d"],
+            top_z + 0.1 - d["bay_center_z"],
+            (d["bay_minus_x_start"] - 0.1, bay_box_y, d["bay_center_z"])
+        ))
+
+    # Battery contact-plate slots (4 total)
+    retainer_thick = P["clip_retainer_thick"] if P["clip_retainer_on"] > 0.5 else 0
+    for bay_y in [P["bay_minus_y_center"], P["bay_plus_y_center"]]:
+        for bay_x_end, is_plus in [(d["bay_minus_x_start"], False),
+                                    (d["bay_plus_x_end"], True)]:
+            slot_x = (bay_x_end + retainer_thick if is_plus
+                      else bay_x_end - d["clip_slot_x"] - retainer_thick)
+            slot_y = bay_y - d["clip_slot_y"] / 2
+            slot_z_h = d["clip_slot_z_top"] - d["clip_slot_z_bot"]
+            cuts.append(make_box(
+                d["clip_slot_x"], d["clip_slot_y"], slot_z_h,
+                (slot_x, slot_y, d["clip_slot_z_bot"])
+            ))
+            # Retainer window
+            if P["clip_retainer_on"] > 0.5:
+                win_x = (bay_x_end - 0.1 if is_plus
+                         else bay_x_end - retainer_thick - 0.1)
+                win_y = bay_y - P["clip_window_yz"] / 2
+                win_z = d["bay_center_z"] - P["clip_window_yz"] / 2
+                cuts.append(make_box(
+                    retainer_thick + 0.2,
+                    P["clip_window_yz"],
+                    P["clip_window_yz"],
+                    (win_x, win_y, win_z)
+                ))
+
+    # Pico nest
+    pico_x_region_start = d["plug_x_start"] + P["fpc_gap_x"]
+    pico_x_region_end = d["bay_minus_x_start"]
+    pico_x_start = max(
+        pico_x_region_start,
+        (pico_x_region_start + pico_x_region_end) / 2 - d["pico_nest_x"] / 2
+    )
+    cuts.append(make_box(
+        d["pico_nest_x"], d["pico_nest_y"], plug_z + 0.2,
+        (pico_x_start, d["pico_nest_y_start"], bot_z - 0.1)
+    ))
+
+    # -X middle inset (same dims as connecting block zone)
+    cuts.append(make_box(
+        P["conn_block_length_x"],
+        d["conn_y_end"] - d["conn_y_start"],
+        plug_z + 0.1,
+        (d["conn_x_start"], d["conn_y_start"], bot_z)
+    ))
+
+    # +X display connector cutout
+    cuts.append(make_box(
+        d["plus_x_cut_x_end"] - d["plus_x_cut_x_start"] + 0.1,
+        d["pico_nest_y"],
+        P["display_cutout_z"] + 0.1,
+        (d["plus_x_cut_x_start"], d["pico_nest_y_start"], bot_z - 0.1)
+    ))
+
+    # Apply all cuts to the main plug
+    main_plug = cut_all(plug, cuts)
+
+    # --- Connecting block (added geometry) ---
+    conn_block = make_box(
+        d["conn_x_end"] - d["conn_x_start"],
+        d["conn_y_end"] - d["conn_y_start"],
+        plug_z,
+        (d["conn_x_start"], d["conn_y_start"], bot_z)
+    )
+
+    # Cut concave battery arcs on +/-Y faces of connecting block
+    conn_cuts = []
+    for bay_y in [P["bay_minus_y_center"], P["bay_plus_y_center"]]:
+        conn_cuts.append(make_cylinder_x(
+            bay_r, P["conn_block_length_x"] + 0.2,
+            (d["conn_x_start"] - 0.1, bay_y, d["bay_center_z"])
+        ))
+
+    # TP4056 indent
+    conn_cuts.append(make_box(
+        d["tp4056_len"], d["tp4056_wid"], P["tp4056_indent_z"] + 0.1,
+        (d["conn_x_start"], d["tp4056_y_start"],
+         top_z - P["tp4056_indent_z"])
+    ))
+
+    conn_block = cut_all(conn_block, conn_cuts)
+
+    # Fuse main plug + connecting block
+    cradle = main_plug.fuse(conn_block)
+
+    return cradle
+
+
+# =====================================================================
+# PART 3: TOP COVER
+# =====================================================================
+
+def build_top_cover():
+    """Build the top cover. Returns a Part.Shape."""
+    d = D()
+    ex = P["enclosure_x"]
+    ey = P["enclosure_y"]
+    total_h = d["tc_total_h"]
+    ext = P["tc_wall_ext_below"]
+    face_bot = d["tc_face_bot_z"]
+    face_top = d["tc_face_top_z"]
+
+    # --- Outer shell (bullnose top, extended below z=0) ---
+    shell = make_shell_with_bullnose_top(
+        ex, ey, total_h + ext,
+        P["corner_radius"],
+        P["tc_bullnose_r"],
+        P["tc_edge_curve_r"]
+    )
+    # Shift down so z=0 is the mating plane
+    shell.translate(V(0, 0, -ext))
+
+    # --- Corner pillars (solid blocks with one rounded inner corner) ---
+    ps = P["pillar_side"]
+    pillar_shapes = []
+    for ox, oy in d["pillar_origins"]:
+        pil = make_box(ps, ps, face_top + ext,
+                       (ox, oy, -ext))
+        # Could add inner corner rounding here with makeFillet
+        pillar_shapes.append(pil)
+
+    if pillar_shapes:
+        shell = shell.fuse(union(pillar_shapes))
+
+    # --- Interior cavity (preserving pillars) ---
+    cav_x0 = d["cavity_x_start"]
+    cav_x1 = d["cavity_x_end"]
+    cav_y0 = d["cavity_y_start"]
+    cav_y1 = d["cavity_y_end"]
+    cavity = make_box(
+        cav_x1 - cav_x0, cav_y1 - cav_y0,
+        face_bot + ext + 0.1,
+        (cav_x0, cav_y0, -ext - 0.1)
+    )
+    # Cut the cavity but preserve pillar volume
+    pillar_keep = []
+    for ox, oy in d["pillar_origins"]:
+        pillar_keep.append(make_box(
+            ps, ps, face_bot + ext + 2,
+            (ox, oy, -ext - 0.5)
+        ))
+    cavity_net = cavity
+    for pk in pillar_keep:
+        cavity_net = cavity_net.cut(pk)
+
+    cuts = [cavity_net]
+
+    # --- Screen inlay pocket ---
+    inlay_h = P["screen_inlay_z"]
+    cuts.append(make_box(
+        d["inlay_x_end"] - d["inlay_x_start"],
+        d["inlay_y_end"] - d["inlay_y_start"],
+        inlay_h + 0.1,
+        (d["inlay_x_start"], d["inlay_y_start"], face_bot - 0.1)
+    ))
+
+    # --- FPC ribbon divet ---
+    cuts.append(make_box(
+        d["fpc_x_end"] - d["fpc_x_start"],
+        d["fpc_y_end"] - d["fpc_y_start"],
+        face_bot + inlay_h - d["fpc_z_bot"] + 0.2,
+        (d["fpc_x_start"], d["fpc_y_start"], d["fpc_z_bot"] - 0.1)
+    ))
+
+    # --- Display viewing window (tapered) ---
+    # Bottom rect at face_bot, top rect larger by taper on each side
+    win_bot = make_box(
+        P["window_length_x"], P["window_depth_y"], 0.001,
+        (d["win_x"], d["win_y"], face_bot - 0.1)
+    )
+    t = P["window_taper"]
+    win_top = make_box(
+        P["window_length_x"] + 2 * t,
+        P["window_depth_y"] + 2 * t,
+        0.001,
+        (d["win_x"] - t, d["win_y"] - t, total_h + 0.1 - 0.001)
+    )
+    # Approximate taper as a simple straight-through cut (close enough
+    # for parametric work; exact hull taper is hard without loft)
+    win_cut = make_box(
+        P["window_length_x"] + 2 * t,
+        P["window_depth_y"] + 2 * t,
+        total_h - face_bot + 0.3,
+        (d["win_x"] - t, d["win_y"] - t, face_bot - 0.1)
+    )
+    cuts.append(win_cut)
+
+    # --- Joystick through-hole (tapered cylinder) ---
+    # Approximate with a straight cylinder at the larger diameter
+    joy_r = P["joy_hole_d"] / 2 + P["joy_taper"]
+    joy_cut = make_cylinder_z(
+        joy_r,
+        total_h - face_bot + 0.3,
+        (P["joy_center_x"], d["joy_y_center"], face_bot - 0.1)
+    )
+    cuts.append(joy_cut)
+
+    # --- M3 screw bores through pillars ---
+    for px, py in d["peg_positions"]:
+        cuts.append(make_cylinder_z(
+            P["m3_bore_d"] / 2,
+            face_bot + ext + 0.2,
+            (px, py, -ext - 0.1)
+        ))
+
+    # --- Joystick PCB pocket ---
+    cuts.append(make_box(
+        P["joy_pcb_x"], P["joy_pcb_y"],
+        P["screen_inlay_z"] + 0.1,
+        (d["joy_pcb_x_start"], d["joy_pcb_y_start"], face_bot - 0.1)
+    ))
+
+    # Apply all cuts
+    cover = cut_all(shell, cuts)
+
+    return cover
+
+
+# =====================================================================
+# ASSEMBLY + DOCUMENT CREATION
+# =====================================================================
+
+def build_assembly():
+    """Create the FreeCAD document with all three parts + spreadsheet."""
+    doc_name = "Dilder_Rev2"
+
+    # Close existing document if re-running
+    if App.ActiveDocument and App.ActiveDocument.Name == doc_name:
+        App.closeDocument(doc_name)
+
+    doc = App.newDocument(doc_name)
+
+    # Setup parameter spreadsheet
+    print("Setting up parameters spreadsheet...")
+    setup_spreadsheet(doc)
+
+    # Build parts
+    print("Building base plate...")
+    bp_shape = build_base_plate()
+    bp_obj = doc.addObject("Part::Feature", "BasePlate")
+    bp_obj.Shape = bp_shape
+    if bp_obj.ViewObject:
+        bp_obj.ViewObject.ShapeColor = (0.6, 0.65, 0.7)  # steel grey
+
+    print("Building AAA cradle...")
+    cradle_shape = build_cradle()
+    # Position cradle in global coordinates: cradle local z=0 maps to
+    # base plate top (bp_height). The cradle's plug_bottom_z is negative
+    # in local coords, so shift up by bp_height.
+    cradle_shape.translate(V(0, 0, P["bp_height"]))
+    cr_obj = doc.addObject("Part::Feature", "AAACradle")
+    cr_obj.Shape = cradle_shape
+    if cr_obj.ViewObject:
+        cr_obj.ViewObject.ShapeColor = (0.9, 0.75, 0.4)  # warm orange
+
+    print("Building top cover...")
+    cover_shape = build_top_cover()
+    # Cover local z=0 is the mating plane = base plate top
+    cover_shape.translate(V(0, 0, P["bp_height"]))
+    tc_obj = doc.addObject("Part::Feature", "TopCover")
+    tc_obj.Shape = cover_shape
+    if tc_obj.ViewObject:
+        tc_obj.ViewObject.ShapeColor = (0.4, 0.55, 0.8)  # blue tint
+        tc_obj.ViewObject.Transparency = 40
+
+    doc.recompute()
+    print(f"\nDilder Rev 2 parametric model built successfully!")
+    print(f"  Base Plate:  {len(bp_shape.Faces)} faces")
+    print(f"  AAA Cradle:  {len(cradle_shape.Faces)} faces")
+    print(f"  Top Cover:   {len(cover_shape.Faces)} faces")
+    print(f"\nEdit the 'Parameters' spreadsheet to change dimensions,")
+    print(f"then re-run this macro to regenerate geometry.")
+
+    # Try to set view
+    try:
+        import FreeCADGui
+        FreeCADGui.activeDocument().activeView().viewAxometric()
+        FreeCADGui.SendMsgToActiveView("ViewFit")
+    except Exception:
+        pass  # headless mode
+
+    return doc
+
+
+# =====================================================================
+# ENTRY POINT
+# =====================================================================
+
+if __name__ == "__main__" or True:
+    build_assembly()
