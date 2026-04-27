@@ -1733,11 +1733,11 @@ All 5 pieces exported cleanly (CGAL manifold) as 3MF for Bambu Studio: `base.3mf
 
 ## Prompt #258 — 2026-04-27
 
-**Prompt:** "put a a small 1mm thick retaining side in front of the batter clip holder to it will hold the battery clip in and and only surround the periment so that contact point are exposed to the battery"
+**Prompt:** "put a small 1mm thick retaining side in front of the battery clip holder so it will hold the battery clip in and only surround the perimeter so that contact points are exposed to the battery"
 
 - **Input Tokens (est):** ~80
 - **Output Tokens (est):** ~3,500
-- **Summary:** 1 mm retainer wall added on the cell-facing side of each of the 4 battery-clip slots. Implemented subtractively: each slot is pulled back from its bay end by `batt_clip_retainer_thickness_x_mm`, naturally leaving body material as the wall, then a smaller central window (default 5 × 5 mm via `batt_clip_retainer_window_size_y/z_mm`) is cut through that wall to expose the plate's contact face to the cell. The 7 × 7 mm Swpeet plate is now caught by a 1 mm-wide perimeter ring on all sides while the spring/contact face still passes through the window unobstructed. Four new parametric knobs (`batt_clip_retainer_enabled`, `_thickness_x_mm`, `_window_size_y_mm`, `_window_size_z_mm`) — set `enabled = false` to revert to the original through-slot. User added a new customizer preset `battery clips forst print 04-27` carrying these values and rendered it for the next print run.
+- **Summary:** 1 mm retainer wall added on the cell-facing side of each of the 4 battery-clip slots. Implemented subtractively: each slot is pulled back from its bay end by `batt_clip_retainer_thickness_x_mm`, naturally leaving body material as the wall, then a smaller central window (default 5 × 5 mm via `batt_clip_retainer_window_size_y/z_mm`) is cut through that wall to expose the plate's contact face to the cell. The 7 × 7 mm Swpeet plate is now caught by a 1 mm-wide perimeter ring on all sides while the spring/contact face still passes through the window unobstructed. Four new parametric knobs (`batt_clip_retainer_enabled`, `_thickness_x_mm`, `_window_size_y_mm`, `_window_size_z_mm`) — set `enabled = false` to revert to the original through-slot. User added a new customizer preset `battery clips first print 04-27` carrying these values and rendered it for the next print run.
 
 ---
 
