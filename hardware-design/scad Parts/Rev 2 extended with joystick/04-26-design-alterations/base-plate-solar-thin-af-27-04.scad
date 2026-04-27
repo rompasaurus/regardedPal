@@ -1,15 +1,32 @@
-// Dilder Rev 2 "extended with joystick" — BASE PLATE WITH SOLAR CUTOUT
+// Dilder Rev 2 "extended with joystick" — BASE PLATE SOLAR THIN-AF (2026-04-27)
 //
-// Fork of base-plate-v1-2mm-thinner with a solar panel pit carved into
-// the bottom face. The AK 62x36 mm panel sits flush in the recess;
-// two wire pass-through holes connect the pit to the cradle pocket
-// above for routing power leads to the TP4056.
+// Fork of base-plate-with-solar-cutout.scad. Defaults are baked from
+// the "with supports" preset (the geometry that produced the
+// `__with_supports.3mf` export) so this file is a drop-in starting
+// point for further thinning / refinement on 2026-04-27.
 //
-// All other geometry (pocket, pillars, pegs, battery troughs, USB-C
-// notch, support blocks, shave) is identical to the thinner variant.
+// Changes vs. parent SCAD defaults (all values match the "with
+// supports" parameter set):
+//   - aaa_bay_x_start_global_mm                        30.5 -> 34
+//   - aaa_bay_length_along_x_mm                          47 -> 39
+//   - battery_rail_z_lift_mm                              4 -> 5
+//   - cradle_pocket_floor_thickness_mm                  1.2 -> 2.5
+//   - outer_case_bottom_edge_fillet_radius_mm             4 -> 2
+//   - pico_retention_block_height_above_pocket_floor_mm 8.0 -> 7
+//   - pillar_extension_y_inward_uniform_mm                5 -> 4
+//   - pillar_extension_z_above_plate_mm                 0.0 -> -0.2
+//   - solar_hole_1_x_mm                                 5.0 -> 2.5
+//   - solar_hole_1_y_mm                                15.0 -> 2.0
+//   - solar_hole_2_x_mm                                20.0 -> 60.0
+//   - solar_hole_2_y_mm                                30.0 -> 2.4
+//   - solar_hole_diameter_mm                            3.0 -> 3.1
+//   - solar_pit_depth_y_mm                             36.0 -> 36.4
+//   - solar_pit_width_x_mm                             62.0 -> 62.4
+//   - solar_support_enabled                            true -> false
+//   - usb_sidewall_block_width_y_mm                      10 -> 30
 //
 // Export:
-//   openscad -o base-plate-with-solar-cutout.3mf base-plate-with-solar-cutout.scad
+//   openscad -o base-plate-solar-thin-af-27-04.3mf base-plate-solar-thin-af-27-04.scad
 
 $fn = 48;
 
@@ -23,16 +40,16 @@ minus_x_end_wall_thickness_mm                  = 3;
 plus_x_end_wall_thickness_mm                   = 1.2;
 perimeter_long_side_wall_thickness_y_mm_base   = 2;
 outer_case_top_view_corner_radius_mm           = 4;
-outer_case_bottom_edge_fillet_radius_mm        = 4;       // was 2 — matches top cover bullnose for symmetry
+outer_case_bottom_edge_fillet_radius_mm        = 2;       // baked from "with supports" preset
 
 // Plate Z: top flush with cover mating bottom. Pocket depth = cradle's
 // below-cover-mating extension (5.1 mm) + 0.2 mm slop so the cradle
 // settles cleanly on the pocket floor.
 base_plate_total_height_z_mm                   = 11.5;   // 6.5 base + 5 mm raised mating edge
-cradle_pocket_floor_thickness_mm                = 1.2;    // minimum printable floor
-cradle_pocket_floor_z_mm                       = cradle_pocket_floor_thickness_mm; // = 1.2
+cradle_pocket_floor_thickness_mm                = 2.5;    // baked from "with supports" preset
+cradle_pocket_floor_z_mm                       = cradle_pocket_floor_thickness_mm;
 cradle_pocket_depth_z_mm =
-    base_plate_total_height_z_mm - cradle_pocket_floor_z_mm;                      // = 10.3
+    base_plate_total_height_z_mm - cradle_pocket_floor_z_mm;
 
 // ============================================================
 // Cradle pocket — rectangle matching the cradle's outer footprint
@@ -79,14 +96,14 @@ peg_tip_chamfer_mm                             = 0.4;
 // [x_extension_mm, y_extension_mm].
 // ============================================================
 pillar_extension_x_inward_uniform_mm           = 5;     // all 4 pillars extend 5mm toward center along X
-pillar_extension_y_inward_uniform_mm           = 5;     // all 4 pillars also extend 5mm along Y, hugging the long side walls
+pillar_extension_y_inward_uniform_mm           = 4;     // baked from "with supports" preset
 // Per-pillar overrides (4 entries, [x_inward, y_inward] each). Set to
 // [] to use the uniform values above. Order: [-X-Y, +X-Y, -X+Y, +X+Y]
 pillar_extension_per_corner_overrides          = [];    // e.g. [[5,0],[5,0],[5,0],[5,0]]
 // How far the extended pillar blocks rise above the plate top.
 // 0 = flush with plate top (default). Positive = blocks extend
 // upward into the cover cavity for deeper cradle bracing.
-pillar_extension_z_above_plate_mm             = 0.0;  // [-10.0:0.1:10.0]
+pillar_extension_z_above_plate_mm             = -0.2;  // baked from "with supports" preset
 
 // ============================================================
 // Battery cradle extrusions — curved shells along ±Y long sides
@@ -98,9 +115,9 @@ aaa_bay_center_z_global_mm =
     base_plate_total_height_z_mm + 0.95;                  // = 7.95 (cradle bay center z=0.95 + base top)
 aaa_bay_minus_y_center_y_mm                    = 7.85;   // from cradle insert
 aaa_bay_plus_y_center_y_mm                     = 38.15;  // from cradle insert
-// AAA bay X range — mirrored to +X side
-aaa_bay_x_start_global_mm                      = 30.5;   // mirrored: 94.5 - 64.9
-aaa_bay_length_along_x_mm                      = 47;   // from cradle insert
+// AAA bay X range — baked from "with supports" preset
+aaa_bay_x_start_global_mm                      = 34;
+aaa_bay_length_along_x_mm                      = 39;
 battery_cradle_extrusion_wall_mm               = 1.5;
 battery_rail_height_reduction_mm               = 2.5;     // rails stop at Z = pocket_top - 2.5
 battery_rail_depth_reduction_per_side_mm       = 2;       // shrink rail Y inward 2 mm each side (was 1)
@@ -108,7 +125,7 @@ battery_rail_depth_reduction_per_side_mm       = 2;       // shrink rail Y inwar
 // A solid support block fills the gap from pocket floor to lifted rail
 // bottom, so the rail doesn't float. Increase to push the trough higher
 // up the cylinder; set 0 to drop the rail back to the pocket floor.
-battery_rail_z_lift_mm                         = 4;
+battery_rail_z_lift_mm                         = 5;      // baked from "with supports" preset
 
 // ============================================================
 // Final Z clip — anything drawn above this Z gets sliced off.
@@ -179,7 +196,7 @@ usb_support_block_height_above_cutout_bottom_mm = 1;
 // Set `usb_sidewall_block_enabled = false` to omit it entirely.
 // ============================================================
 usb_sidewall_block_enabled                      = true;
-usb_sidewall_block_width_y_mm                   = 10;     // Y extent of the block
+usb_sidewall_block_width_y_mm                   = 30;     // baked from "with supports" preset
 usb_sidewall_block_depth_x_mm                   = 5;      // how far the block protrudes from the wall into the pocket
 usb_sidewall_block_y_center_mm =
     usb_c_cutout_center_y_mm;                              // = 23 (matches USB cutout Y center)
@@ -198,28 +215,28 @@ pico_retention_block_x_size_mm                  = 5;      // X depth
 pico_retention_block_y_center_mm =
     enclosure_outer_depth_along_y_axis_mm / 2;             // = 23 (dead-center Y by default)
 // Block top Z = cradle_pocket_floor_z_mm + this. 0 = no block, fully sunk into the floor.
-pico_retention_block_height_above_pocket_floor_mm = 8.0;
+pico_retention_block_height_above_pocket_floor_mm = 7;    // baked from "with supports" preset
 
 // ============================================================
 // Solar panel pit — rectangular recess carved into the bottom
 // face of the base plate. Panel sits flush in the pit. Two wire
 // pass-through holes drilled from the pit floor into the pocket.
 // ============================================================
-solar_pit_width_x_mm                          = 62.0;  // [10.0:0.1:90.0]
-solar_pit_depth_y_mm                          = 36.0;  // [10.0:0.1:44.0]
+solar_pit_width_x_mm                          = 62.4;  // baked from "with supports" preset
+solar_pit_depth_y_mm                          = 36.4;  // baked from "with supports" preset
 solar_pit_depth_z_mm                          = 2.0;   // [0.5:0.1:5.0]  pit depth into bottom face
 solar_pit_center_x_mm =
     enclosure_outer_width_along_x_axis_mm / 2;          // centered by default
 solar_pit_center_y_mm =
     enclosure_outer_depth_along_y_axis_mm / 2;          // centered by default
 // Wire pass-through holes (coordinates relative to pit origin corner)
-solar_hole_diameter_mm                        = 3.0;   // [1.0:0.1:5.0]
-solar_hole_1_x_mm                            = 5.0;    // [0.0:0.1:62.0]
-solar_hole_1_y_mm                            = 15.0;   // [0.0:0.1:36.0]
-solar_hole_2_x_mm                            = 20.0;   // [0.0:0.1:62.0]
-solar_hole_2_y_mm                            = 30.0;   // [0.0:0.1:36.0]
+solar_hole_diameter_mm                        = 3.1;   // baked from "with supports" preset
+solar_hole_1_x_mm                            = 2.5;    // baked from "with supports" preset
+solar_hole_1_y_mm                            = 2.0;    // baked from "with supports" preset
+solar_hole_2_x_mm                            = 60.0;   // baked from "with supports" preset
+solar_hole_2_y_mm                            = 2.4;    // baked from "with supports" preset
 // Breakaway support ribs for the solar pit ceiling
-solar_support_enabled                         = true;
+solar_support_enabled                         = false; // baked from "with supports" preset
 solar_support_rib_thickness_mm                = 0.4;   // [0.2:0.1:1.0]  wall thickness (match nozzle width)
 solar_support_rib_spacing_mm                  = 5.0;   // [2.0:0.5:15.0] center-to-center spacing
 solar_support_z_gap_mm                        = 0.2;   // [0.1:0.05:0.5] air gap below pit ceiling for easy snap-off

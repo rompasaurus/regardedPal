@@ -1718,3 +1718,13 @@ All 5 pieces exported cleanly (CGAL manifold) as 3MF for Bambu Studio: `base.3mf
 - **Input Tokens (est):** ~80
 - **Output Tokens (est):** ~8,000
 - **Summary:** Six HEIC camera files converted to JPEG (4 kept, 1 duplicate and 1 blurry discarded). Front page redesigned with four-photo current build gallery replacing the old single-photo "Meet the Octopus" section. Hardware table updated to list Pico 2 W as the current default board. New blog post covering Pico 2 W board support and current design photos. Design evolution table updated with Pico 2 W and photo entries.
+
+---
+
+## Prompt #257 — 2026-04-27
+
+**Prompt sequence:** Multi-turn SCAD session forking two design files for the next print pass, plus battery-procurement research.
+
+- **Input Tokens (est):** ~400 across the sequence
+- **Output Tokens (est):** ~25,000
+- **Summary:** Two new SCAD forks in `04-26-design-alterations/`. (1) `base-plate-solar-thin-af-27-04.scad` — fork of `base-plate-with-solar-cutout` with the `with supports` preset (17 deltas) baked as defaults; user then hand-edited the JSON to a `thick floo reduce negative space` preset (total height 11.5 → 8 mm, floor 2.5 → 2.6 mm, pico retention 7 → 3 mm) for the next thinner-pass print. (2) `aaa-cradle-with-batt-clips.scad` — fork of `aaa-cradle-insert-v1` adding 4 vertical drop-in slots (one per bay-end, 7.4 × 7.4 × 0.9 mm) sized for the smallest **Swpeet 1.5V AAA battery contact spring** kit's unipolar plate (7 × 7 mm stamped sheet metal). Slots open upward to the plug top so plates drop in post-print and wires exit through the same opening. Battery procurement: settled on **PKCELL ICR10440** (raw 3.7 V Li-Ion, 350 mAh, AAA form factor) — distinct from the deceptively similar 1.5 V regulated AAA cells (Ansmann) which would be wrong for a TP4056. Wire two cells in **parallel**, not series (2S 10440 = 7.4 V, exceeds the Pico W's 5.5 V VSYS max). New research note `solar-panel-bonding-adhesives.md` covering outdoor adhesive options (Sikaflex 252 / 295 UV / DOWSIL 795 / 3M VHB) for bonding the AK 62×36 solar panel to a PETG base plate.

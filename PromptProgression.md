@@ -3368,3 +3368,31 @@ Every prompt entry below uses the following fields. Entries that don't yet list 
   - `PromptProgression.md` — prompt #256 appended
 
 ---
+
+## Prompt #257 — 2026-04-27
+
+- **Prompt sequence:** Multi-turn SCAD session forking two design files for the next print pass, plus a battery-procurement research thread. Key turns:
+  - Fork the solar-cutout base plate using the `with supports` preset values as baked defaults — name it `base-plate-solar-thin-af-27-04`. (Preset deltas: `solar_pit_*`, `solar_hole_*`, `aaa_bay_x_start/length`, `battery_rail_z_lift`, `cradle_pocket_floor_thickness`, `outer_case_bottom_edge_fillet_radius`, `pico_retention_block_height`, `pillar_extension_y/z`, `usb_sidewall_block_width_y`, `solar_support_enabled false` — 17 knobs in total.)
+  - User then hand-edited the new `.json` to a "thick floo reduce negative space" preset (total height 11.5 → 8 mm, floor 2.5 → 2.6 mm, pico retention 7 → 3 mm) and rendered with that preset.
+  - Battery procurement: confirmed PKCELL ICR10440 (3.7 V, 350 mAh, 4-pack, ~€16 on Amazon DE) as the correct cell for the TP4056 + solar charging path — verified against the listing's `3.7 V Lithium Ion / ICR10440` spec, distinguished from regulated 1.5 V AAA-form-factor cells (the Ansmanns) which would be wrong for a TP4056.
+  - Fork the AAA cradle insert using the `working insert 4-26-26` preset values — name it `aaa-cradle-with-batt-clips`. Preset values matched parent SCAD constants exactly (no value bake), so the fork only adds the new feature: 4 vertical drop-in slots sized for the **smallest Swpeet 1.5V AAA battery contact plate** (7×7 mm stamped sheet metal), one at each X-end of each AAA bay. Slot dimensions: 7.4 × 7.4 × 0.9 mm (size + 0.2 slop per edge, plate ~0.5 mm thick + tolerance), centered on cell axis, opening upward to plug top so plates drop in post-print and wires exit through the top.
+  - Render both new files to 3MF; commit and push the design evolution; update prompts.
+- **Input Tokens (est):** ~400 across the sequence
+- **Output Tokens (est):** ~25,000
+- **Summary:** Two new SCAD forks for the 2026-04-27 design pass: a thinner solar-cutout base plate (`base-plate-solar-thin-af-27-04`) carrying the with-supports preset as defaults, and an AAA cradle with battery-clip slots (`aaa-cradle-with-batt-clips`) sized for the cheapest Swpeet 7×7 mm unipolar contact plates. The cradle slots are oriented in YZ, opening to the plug top — 0.9 mm friction-fit thickness, plates drop in from above, wires exit upward. Battery-of-record settled: PKCELL ICR10440 raw 3.7 V Li-Ion AAA, wired in **parallel** (not series — 2S = 7.4 V exceeds the Pico W's 5.5 V VSYS max). Adhesive research note added (`solar-panel-bonding-adhesives.md`) covering Sikaflex / VHB / DOWSIL options for bonding the AK 62×36 panel to a PETG base plate outdoors.
+- **Layman summary:** Cloned two 3D-print files to start the next iteration. The base plate gets a name based on its goal — make it really thin. The battery cradle gets a new feature — four little slots at the ends of each battery cylinder, sized to hold the metal contact tabs from a cheap multi-pack of battery springs. Also nailed down which rechargeable AAA-shaped batteries to actually buy (the 3.7 V "raw lithium" kind — not the deceptively similar 1.5 V "smart" kind — because the charger board on the device only knows how to charge the raw kind), and wrote up which glues survive years of sun for sticking the solar panel down.
+- **Files:**
+  - `hardware-design/scad Parts/Rev 2 extended with joystick/04-26-design-alterations/base-plate-solar-thin-af-27-04.scad` (new) — fork of `base-plate-with-solar-cutout` with `with supports` preset values baked as defaults
+  - `hardware-design/scad Parts/Rev 2 extended with joystick/04-26-design-alterations/base-plate-solar-thin-af-27-04.json` (new) — customizer params; user-edited preset `thick floo reduce negative space` for the 8 mm thinner pass
+  - `hardware-design/scad Parts/Rev 2 extended with joystick/04-26-design-alterations/base-plate-solar-thin-af-27-04.3mf` (new) — render at default values
+  - `hardware-design/scad Parts/Rev 2 extended with joystick/04-26-design-alterations/base-plate-solar-thin-af-27-04__thick_floo_reduce_negative_space.3mf` (new) — render with the user's thinner preset
+  - `hardware-design/scad Parts/Rev 2 extended with joystick/04-26-design-alterations/aaa-cradle-with-batt-clips.scad` (new) — fork of `aaa-cradle-insert-v1` with 4 contact-plate slots for the Swpeet 7×7 mm unipolar plate
+  - `hardware-design/scad Parts/Rev 2 extended with joystick/04-26-design-alterations/aaa-cradle-with-batt-clips.json` (new) — customizer params with new `batt_clip_*` knobs
+  - `hardware-design/scad Parts/Rev 2 extended with joystick/04-26-design-alterations/aaa-cradle-with-batt-clips.3mf` (new) — render at default values
+  - `hardware-design/scad Parts/Rev 2 extended with joystick/04-26-design-alterations/solar-panel-bonding-adhesives.md` (new) — outdoor-adhesive option matrix for bonding the AK 62×36 panel to PETG (Sikaflex 252 / 295 UV / DOWSIL 795 / 3M VHB 4945)
+  - `hardware-design/scad Parts/Rev 2 extended with joystick/04-26-design-alterations/base-plate-with-solar-cutout.{scad,json,__with_supports.3mf}` — minor cleanup (8 → 8.0 default, json key sort)
+  - `website/docs/docs/hardware/design-evolution.md` — version history rows for the two new forks
+  - `website/docs/prompts/index.md` — synced with prompt #257
+  - `PromptProgression.md` — prompt #257 appended
+
+---
