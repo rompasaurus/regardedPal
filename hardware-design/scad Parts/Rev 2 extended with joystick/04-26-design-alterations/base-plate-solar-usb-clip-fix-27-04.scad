@@ -1,9 +1,8 @@
-// Dilder Rev 2 "extended with joystick" — BASE PLATE SOLAR THIN-AF (2026-04-27)
+// Dilder Rev 2 — BASE PLATE SOLAR USB-CLIP-FIX (2026-04-27)
 //
-// Fork of base-plate-with-solar-cutout.scad. Defaults are baked from
-// the "with supports" preset (the geometry that produced the
-// `__with_supports.3mf` export) so this file is a drop-in starting
-// point for further thinning / refinement on 2026-04-27.
+// Fork of base-plate-solar-thin-af-27-04.scad with the "thick floo
+// reduce negative space" preset baked in + USB-C cutout fix
+// (minkowski rounded rectangle instead of tapered hull).
 //
 // Changes vs. parent SCAD defaults (all values match the "with
 // supports" parameter set):
@@ -45,7 +44,7 @@ outer_case_bottom_edge_fillet_radius_mm        = 2;       // baked from "with su
 // Plate Z: top flush with cover mating bottom. Pocket depth = cradle's
 // below-cover-mating extension (5.1 mm) + 0.2 mm slop so the cradle
 // settles cleanly on the pocket floor.
-base_plate_total_height_z_mm                   = 11.5;   // 6.5 base + 5 mm raised mating edge
+base_plate_total_height_z_mm                   = 8;       // baked: thick floo reduce negative space
 cradle_pocket_floor_thickness_mm                = 2.5;    // baked from "with supports" preset
 cradle_pocket_floor_z_mm                       = cradle_pocket_floor_thickness_mm;
 cradle_pocket_depth_z_mm =
@@ -103,7 +102,7 @@ pillar_extension_per_corner_overrides          = [];    // e.g. [[5,0],[5,0],[5,
 // How far the extended pillar blocks rise above the plate top.
 // 0 = flush with plate top (default). Positive = blocks extend
 // upward into the cover cavity for deeper cradle bracing.
-pillar_extension_z_above_plate_mm             = -0.2;  // baked from "with supports" preset
+pillar_extension_z_above_plate_mm             = -1.5;  // baked: thick floo reduce negative space
 
 // ============================================================
 // Battery cradle extrusions — curved shells along ±Y long sides
@@ -142,16 +141,16 @@ max_z_clip_mm                                  = 14;
 // pocket walls are preserved exactly. Set shave_height_mm to 0 to
 // disable.
 // ============================================================
-base_plate_shave_start_z_mm                    = 3;
+base_plate_shave_start_z_mm                    = 4;       // baked: thick floo reduce negative space
 base_plate_shave_height_mm                     = 2;
 
 // USB-C port notch — on the +X wall (thin side), rounded to USB-C
 // connector dimensions + 0.2 mm tolerance. Open on 3 sides (top + ±Y).
 // Standard USB-C receptacle: 8.94 mm wide × 3.26 mm tall.
-usb_c_connector_width_mm                       = 8.94;
-usb_c_connector_height_mm                      = 3.26;
+usb_c_connector_width_mm                       = 9;       // baked: thick floo preset
+usb_c_connector_height_mm                      = 4.25;    // baked: thick floo preset
 usb_c_tolerance_mm                             = 0.2;
-usb_c_extra_width_per_side_mm                  = 1.0;   // [0:0.1:3.0] widen cutout beyond connector+tolerance (per side)
+usb_c_extra_width_per_side_mm                  = 0;     // baked: thick floo preset (no extra width)
 usb_c_cutout_width_y_mm =
     usb_c_connector_width_mm + usb_c_tolerance_mm
       + 2 * usb_c_extra_width_per_side_mm;                // = 11.14 at 1.0/side
@@ -180,7 +179,7 @@ usb_support_block_x_gap_between_blocks_mm      = 5;       // -X gap between the 
 // 0 = block tops flush with USB-C cutout bottom (just supports the connector).
 // Negative = blocks shorter (sit below the cutout, leave a gap under the connector).
 // Positive = blocks taller (poke into the USB-C cutout — only useful as alignment fingers).
-usb_support_block_height_above_cutout_bottom_mm = 1;
+usb_support_block_height_above_cutout_bottom_mm = 0;     // baked: thick floo preset
 
 // ============================================================
 // USB sidewall brace — a single block bonded to the inner face of
@@ -197,7 +196,7 @@ usb_support_block_height_above_cutout_bottom_mm = 1;
 //
 // Set `usb_sidewall_block_enabled = false` to omit it entirely.
 // ============================================================
-usb_sidewall_block_enabled                      = true;
+usb_sidewall_block_enabled                      = false;  // baked: thick floo preset
 usb_sidewall_block_width_y_mm                   = 30;     // baked from "with supports" preset
 usb_sidewall_block_depth_x_mm                   = 5;      // how far the block protrudes from the wall into the pocket
 usb_sidewall_block_y_center_mm =
@@ -217,7 +216,7 @@ pico_retention_block_x_size_mm                  = 5;      // X depth
 pico_retention_block_y_center_mm =
     enclosure_outer_depth_along_y_axis_mm / 2;             // = 23 (dead-center Y by default)
 // Block top Z = cradle_pocket_floor_z_mm + this. 0 = no block, fully sunk into the floor.
-pico_retention_block_height_above_pocket_floor_mm = 7;    // baked from "with supports" preset
+pico_retention_block_height_above_pocket_floor_mm = 2;    // baked: thick floo reduce negative space
 
 // ============================================================
 // Solar panel pit — rectangular recess carved into the bottom

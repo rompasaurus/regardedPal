@@ -118,8 +118,7 @@ usb_c_cutout_width_y_mm =
     usb_c_connector_width_mm + usb_c_tolerance_mm;         // = 9.14
 usb_c_cutout_height_z_mm =
     usb_c_connector_height_mm + usb_c_tolerance_mm;        // = 3.46
-usb_c_cutout_corner_r_mm =
-    (usb_c_connector_height_mm + usb_c_tolerance_mm) / 2;  // = 1.73 (fully rounded ends)
+usb_c_cutout_corner_r_mm                       = 1.0;     // actual ~0.8 mm + print tolerance (was 1.73 stadium)
 usb_c_cutout_center_y_mm =
     enclosure_outer_depth_along_y_axis_mm / 2;              // = 23
 usb_c_cutout_z_bottom_mm =
@@ -242,35 +241,36 @@ module base_plate_v1() {
                       base_plate_total_height_z_mm
                         - cradle_pocket_floor_z_mm + 0.1]);
 
-            // USB-C port notch on +X wall — rounded to connector shape,
-            // open on top, cut from the mating surface down.
+            // USB-C port notch on +X wall — 2D rounded rectangle
+            // profile extruded through the wall. Bottom two corners
+            // rounded at 1 mm radius, top open at mating surface.
+            // Straight vertical side walls, no taper.
             translate([usb_c_wall_x_start_mm - 0.1, 0, 0])
+            rotate([0, 90, 0])
+            linear_extrude(height = plus_x_end_wall_thickness_mm + 0.2)
             hull() {
-                // -Y rounded end
-                translate([0,
+                // Bottom-left circle (in Y-Z plane: Y→Y, Z→-X)
+                translate([-(usb_c_cutout_z_bottom_mm + usb_c_cutout_corner_r_mm),
                            usb_c_cutout_center_y_mm
                              - usb_c_cutout_width_y_mm / 2
-                             + usb_c_cutout_corner_r_mm,
-                           usb_c_cutout_z_bottom_mm + usb_c_cutout_corner_r_mm])
-                    rotate([0, 90, 0])
-                        cylinder(h = plus_x_end_wall_thickness_mm + 0.2,
-                                 r = usb_c_cutout_corner_r_mm, $fn = 48);
-                // +Y rounded end
-                translate([0,
+                             + usb_c_cutout_corner_r_mm])
+                    circle(r = usb_c_cutout_corner_r_mm, $fn = 48);
+                // Bottom-right circle
+                translate([-(usb_c_cutout_z_bottom_mm + usb_c_cutout_corner_r_mm),
                            usb_c_cutout_center_y_mm
                              + usb_c_cutout_width_y_mm / 2
-                             - usb_c_cutout_corner_r_mm,
-                           usb_c_cutout_z_bottom_mm + usb_c_cutout_corner_r_mm])
-                    rotate([0, 90, 0])
-                        cylinder(h = plus_x_end_wall_thickness_mm + 0.2,
-                                 r = usb_c_cutout_corner_r_mm, $fn = 48);
-                // Top edge — extends past mating surface
-                translate([0,
-                           usb_c_cutout_center_y_mm - usb_c_cutout_width_y_mm / 2,
-                           base_plate_total_height_z_mm])
-                    cube([plus_x_end_wall_thickness_mm + 0.2,
-                          usb_c_cutout_width_y_mm,
-                          0.1]);
+                             - usb_c_cutout_corner_r_mm])
+                    circle(r = usb_c_cutout_corner_r_mm, $fn = 48);
+                // Top-left point (square corner at mating surface)
+                translate([-(base_plate_total_height_z_mm + 0.1),
+                           usb_c_cutout_center_y_mm
+                             - usb_c_cutout_width_y_mm / 2])
+                    square([0.1, 0.01]);
+                // Top-right point
+                translate([-(base_plate_total_height_z_mm + 0.1),
+                           usb_c_cutout_center_y_mm
+                             + usb_c_cutout_width_y_mm / 2 - 0.01])
+                    square([0.1, 0.01]);
             }
         }
 
