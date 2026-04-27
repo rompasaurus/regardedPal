@@ -806,6 +806,36 @@
   
   
     <li class="md-nav__item">
+      <a href="../../../blog/category/cad/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    CAD
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    
+  
+  
+    <li class="md-nav__item">
       <a href="../../../blog/category/design/" class="md-nav__link">
         
   
@@ -5652,6 +5682,30 @@
 <td>Rev 2 AAA cradle</td>
 <td>retainer wall</td>
 <td><code>aaa-cradle-with-batt-clips.scad</code> gets a 1 mm retainer wall on the cell side of each of the 4 clip slots. Each slot is offset back from its bay end by <code>batt_clip_retainer_thickness_x_mm</code>, naturally leaving body material as the wall; a 5 × 5 mm contact window is cut through the wall (centered on the bay axis) so the spring/contact face passes through unobstructed while a 1 mm perimeter ring catches the 7 × 7 mm Swpeet plate's edges. 4 new parametric knobs (<code>batt_clip_retainer_enabled</code>, <code>_thickness_x_mm</code>, <code>_window_size_y_mm</code>, <code>_window_size_z_mm</code>). New customizer preset <code>battery clips forst print 04-27</code> for the first print pass with the retainer wall enabled</td>
+</tr>
+<tr>
+<td>2026-04-27</td>
+<td>Rev 2 base plate</td>
+<td>USB-clip-fix fork</td>
+<td>New <code>base-plate-solar-usb-clip-fix-27-04.scad</code> — fork of thin-af with minkowski-rounded USB-C cutout (uniform 1 mm corner radius via <code>minkowski(cube + sphere)</code> instead of tapered hull), <code>thick floor reduce negative space</code> preset baked as defaults</td>
+</tr>
+<tr>
+<td>2026-04-27</td>
+<td>DesignTool</td>
+<td>label embedding</td>
+<td>New export option: embed a text label (filename or custom string) onto any vertical face of the model. Recessed or raised, configurable font size (default 3 mm), depth (default 0.4 mm = 1 layer), and face selection. Uses a two-pass STL workflow — plain export, then OpenSCAD wrapper with text boolean</td>
+</tr>
+<tr>
+<td>2026-04-27</td>
+<td>FreeCAD PartDesign model</td>
+<td>v1</td>
+<td>Full translation of all three Rev 2 enclosure parts (base plate, AAA cradle, top cover) from OpenSCAD to FreeCAD PartDesign. 81 features across 3 Bodies, 90-parameter spreadsheet with expression links. Proper editable feature tree — double-click any Sketch/Pad/Pocket to change dimensions in the GUI. USB-C cutout uses stadium shape (rounded bottom corners, open top). Exported as <code>.FCStd</code> + per-part STLs</td>
+</tr>
+<tr>
+<td>2026-04-27</td>
+<td>Working Model Rev 1</td>
+<td>snapshot</td>
+<td>Organized working design into named part folders (Base Plate, AAA Cradle, Top Cover) with SCAD source, JSON presets, STL, 3MF, and description for each. First formal "frozen" working model checkpoint</td>
 </tr>
 </tbody>
 </table>

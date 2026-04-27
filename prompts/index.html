@@ -804,6 +804,36 @@
   
   
     <li class="md-nav__item">
+      <a href="../blog/category/cad/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    CAD
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    
+  
+  
+    <li class="md-nav__item">
       <a href="../blog/category/design/" class="md-nav__link">
         
   
@@ -4768,6 +4798,28 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#prompt-260-2026-04-27" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Prompt #260 — 2026-04-27
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#prompt-261-2026-04-27" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Prompt #261 — 2026-04-27
+      
+    </span>
+  </a>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -6705,6 +6757,28 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#prompt-260-2026-04-27" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Prompt #260 — 2026-04-27
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#prompt-261-2026-04-27" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Prompt #261 — 2026-04-27
+      
+    </span>
+  </a>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -8121,6 +8195,22 @@
 <li><strong>Input Tokens (est):</strong> ~200</li>
 <li><strong>Output Tokens (est):</strong> ~8,000</li>
 <li><strong>Summary:</strong> JLCPCB flagged SW1 (K1-1506SN-01) for placement verification because the near-symmetric package makes automated rotation detection unreliable. "Polarity" means component orientation, not electrical polarity. Confirmed the placement is correct (pin A/up arrow away from header). Documented the full PCB design journey: autorouted Rev 1 (SKRHABE010, abandoned due to wrong footprint/pinout) through hand-routed Rev 2 (K1-1506SN-01, now in production). New blog post with build status table covering all subsystems. Lesson learned: add pin 1 silkscreen dot for future orders.</li>
+</ul>
+<hr />
+<h2 id="prompt-260-2026-04-27">Prompt #260 — 2026-04-27<a class="headerlink" href="#prompt-260-2026-04-27" title="Permanent link">&para;</a></h2>
+<p><strong>Prompt:</strong> Can we embed the filename into the model print? Have that as an option in the export, find a flat bit that won't be on the printer bed and put a file or product number.</p>
+<ul>
+<li><strong>Input Tokens (est):</strong> ~40</li>
+<li><strong>Output Tokens (est):</strong> ~4,500</li>
+<li><strong>Summary:</strong> Added label-embedding option to the DesignTool Export tab. Recessed or raised text on any vertical face, configurable font size/depth/position. Two-pass STL workflow using an OpenSCAD wrapper with text boolean operations.</li>
+</ul>
+<hr />
+<h2 id="prompt-261-2026-04-27">Prompt #261 — 2026-04-27<a class="headerlink" href="#prompt-261-2026-04-27" title="Permanent link">&para;</a></h2>
+<p><strong>Prompt:</strong> Take the models in the Dilder Pico Prototype Working Model Rev 1 and create a proper parametric FreeCAD design based on the SCAD and parameters setup.</p>
+<ul>
+<li><strong>Input Tokens (est):</strong> ~60</li>
+<li><strong>Output Tokens (est):</strong> ~25,000</li>
+<li><strong>Summary:</strong> Translated all three Rev 2 enclosure parts from OpenSCAD to FreeCAD PartDesign. 81 features across 3 Bodies with a 90-parameter spreadsheet. First attempt used static Part::Feature shapes (not editable); rebuilt with real PartDesign operations (Sketches, Pads, Pockets, Fillets, AdditiveBox, SubtractiveCylinder) linked to spreadsheet via expressions. Fixed face-coordinate-system issues by using SubtractiveBox with explicit placement instead of sketch-on-face. Added USB-C stadium cutout (rounded corners, open top).</li>
 </ul>
 
 

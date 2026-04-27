@@ -12,13 +12,11 @@
         <meta name="author" content="rompasaurus">
       
       
-        <link rel="canonical" href="https://dilder.dev/blog/joystick-pcb-jlcpcb-order/">
+        <link rel="canonical" href="https://dilder.dev/blog/freecad-parametric-model/">
       
       
-        <link rel="prev" href="../joystick-hand-routed-pcb/">
+        <link rel="prev" href="../joystick-pcb-jlcpcb-order/">
       
-      
-        <link rel="next" href="../freecad-parametric-model/">
       
       
         
@@ -29,7 +27,7 @@
     
     
       
-        <title>Joystick PCB Sent to JLCPCB — First Custom Board in Production - Dilder</title>
+        <title>OpenSCAD to FreeCAD — Full Parametric Enclosure in PartDesign - Dilder</title>
       
     
     
@@ -92,7 +90,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#joystick-pcb-sent-to-jlcpcb-first-custom-board-in-production" class="md-skip">
+        <a href="#openscad-to-freecad-full-parametric-enclosure-in-partdesign" class="md-skip">
           Skip to content
         </a>
       
@@ -125,7 +123,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Joystick PCB Sent to JLCPCB — First Custom Board in Production
+              OpenSCAD to FreeCAD — Full Parametric Enclosure in PartDesign
             
           </span>
         </div>
@@ -2902,10 +2900,10 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#the-order" class="md-nav__link">
+  <a href="#why-freecad" class="md-nav__link">
     <span class="md-ellipsis">
       
-        The order
+        Why FreeCAD?
       
     </span>
   </a>
@@ -2913,10 +2911,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#placement-verification" class="md-nav__link">
+  <a href="#what-was-built" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Placement verification
+        What Was Built
       
     </span>
   </a>
@@ -2924,10 +2922,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#how-we-got-here" class="md-nav__link">
+  <a href="#the-translation-process" class="md-nav__link">
     <span class="md-ellipsis">
       
-        How we got here
+        The Translation Process
       
     </span>
   </a>
@@ -2935,10 +2933,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#current-build-status" class="md-nav__link">
+  <a href="#editing-workflow" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Current build status
+        Editing Workflow
       
     </span>
   </a>
@@ -2946,10 +2944,21 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#next-steps" class="md-nav__link">
+  <a href="#files" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Next steps
+        Files
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#lessons-learned" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Lessons Learned
       
     </span>
   </a>
@@ -3024,7 +3033,7 @@
                             in
                             
                               <a href="../category/hardware/">Hardware</a>, 
-                              <a href="../category/pcb/">PCB</a></span>
+                              <a href="../category/cad/">CAD</a></span>
                         </div>
                       </li>
                     
@@ -3035,7 +3044,7 @@
                           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 20a8 8 0 0 0 8-8 8 8 0 0 0-8-8 8 8 0 0 0-8 8 8 8 0 0 0 8 8m0-18a10 10 0 0 1 10 10 10 10 0 0 1-10 10C6.47 22 2 17.5 2 12A10 10 0 0 1 12 2m.5 5v5.25l4.5 2.67-.75 1.23L11 13V7z"/></svg>
                           <span class="md-ellipsis">
                             
-                              2 min read
+                              3 min read
                             
                           </span>
                         </div>
@@ -3062,74 +3071,79 @@
   
 
 
-<h1 id="joystick-pcb-sent-to-jlcpcb-first-custom-board-in-production">Joystick PCB Sent to JLCPCB — First Custom Board in Production<a class="headerlink" href="#joystick-pcb-sent-to-jlcpcb-first-custom-board-in-production" title="Permanent link">&para;</a></h1>
-<p>The hand-routed joystick breakout PCB is now in production at JLCPCB. This is the first custom PCB for the Dilder project — a 19.6 x 19.6 mm board carrying a K1-1506SN-01 5-way navigation switch that drops into the top cover's joystick pocket.</p>
+<h1 id="openscad-to-freecad-full-parametric-enclosure-in-partdesign">OpenSCAD to FreeCAD — Full Parametric Enclosure in PartDesign<a class="headerlink" href="#openscad-to-freecad-full-parametric-enclosure-in-partdesign" title="Permanent link">&para;</a></h1>
+<p>Translated the entire Dilder Rev 2 three-part enclosure from OpenSCAD into a proper FreeCAD PartDesign model with an editable feature tree and spreadsheet-driven parameters.</p>
 <!-- more -->
 
-<h2 id="the-order">The order<a class="headerlink" href="#the-order" title="Permanent link">&para;</a></h2>
-<p>Gerbers, BOM, and pick-and-place files exported from KiCad 10 and uploaded to JLCPCB for their Economic PCBA service. The switch (LCSC C145910) is soldered by their pick-and-place line; the 6-pin wire header is hand-soldered after the boards arrive.</p>
-<h2 id="placement-verification">Placement verification<a class="headerlink" href="#placement-verification" title="Permanent link">&para;</a></h2>
-<p>JLCPCB emailed a placement check before proceeding — they wanted to confirm the "polarity" (really the rotation) of SW1 was correct. This is standard for near-symmetric components like joystick switches where the automated system can't confidently determine orientation.</p>
-<p><img alt="JLCPCB placement verification" src="../../assets/images/hardware/pcb/jlcpcb-sw1-placement-verification.png" /></p>
-<p>The image shows pin A (up arrow) pointing away from the header pins, which matches the intended wiring. Confirmed and approved.</p>
-<p><strong>Lesson learned:</strong> Add a pin 1 dot on the silkscreen next to pin A in future revisions. This gives the JLCPCB engineer a visual reference and skips the email round-trip.</p>
-<h2 id="how-we-got-here">How we got here<a class="headerlink" href="#how-we-got-here" title="Permanent link">&para;</a></h2>
-<p>The joystick PCB went through two complete design iterations:</p>
-<ol>
-<li>
-<p><strong>Rev 1 (autorouted, SKRHABE010)</strong> — AI-generated schematic with a hand-drawn footprint that had incorrect pad geometry, an overlapping mounting hole, and wrong pin assignments. Attempted repair with a cloned footprint and Freerouting autorouter. Technically functional files but too patched to trust.</p>
-</li>
-<li>
-<p><strong>Rev 2 (hand-routed, K1-1506SN-01)</strong> — designed from scratch in KiCad 10. Switched to a different 5-way switch that was in stock on JLCPCB. Symbol and footprint imported via <code>easyeda2kicad</code>. All traces hand-routed. Silkscreen labels on every wire pad. Ground plane on back copper. This is the version in production.</p>
-</li>
-</ol>
-<h2 id="current-build-status">Current build status<a class="headerlink" href="#current-build-status" title="Permanent link">&para;</a></h2>
+<h2 id="why-freecad">Why FreeCAD?<a class="headerlink" href="#why-freecad" title="Permanent link">&para;</a></h2>
+<p>OpenSCAD is great for scripted CAD — every dimension is a variable, presets let you swap configurations, and the text-based workflow plays nicely with Git. But it has limits:</p>
+<ul>
+<li>No GUI editing — you can't click a wall and drag it thicker</li>
+<li>No feature tree — the entire model recomputes from scratch every time</li>
+<li>No visual dimension feedback — you're working blind until you render</li>
+<li>Export to FreeCAD/STEP for manufacturing requires manual translation</li>
+</ul>
+<p>FreeCAD's PartDesign workbench solves all of these: double-click a feature, change a number, see the result instantly. The model has a proper feature history you can step through, and every dimension can be linked to a spreadsheet.</p>
+<h2 id="what-was-built">What Was Built<a class="headerlink" href="#what-was-built" title="Permanent link">&para;</a></h2>
+<p>Three <code>PartDesign::Body</code> objects with <strong>81 total features</strong> across the three parts:</p>
 <table>
 <thead>
 <tr>
-<th>Component</th>
-<th>Status</th>
+<th>Part</th>
+<th>Features</th>
+<th>Key Operations</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td><strong>Joystick PCB</strong></td>
-<td>In production at JLCPCB</td>
+<td><strong>Base Plate</strong></td>
+<td>33</td>
+<td>Sketch+Pad shell, 2 fillets (corners + bottom), SubtractiveBox pocket, USB-C stadium cutout (3 features), solar pit, wire holes, 4 pillars + 4 extension wings + 4 pegs, 2 battery troughs with cylinder cuts, USB support blocks, Pico retention block</td>
 </tr>
 <tr>
-<td><strong>Enclosure top cover</strong></td>
-<td>Printed, face plate curvature tuned</td>
+<td><strong>AAA Cradle</strong></td>
+<td>26</td>
+<td>Sketch+Pad plug, 4 pillar cutouts, FPC gap, 2 battery bays (cylinder + top-open slot), Pico nest, connecting block with battery arcs + TP4056 indent, 4 clip slots + 4 retainer windows</td>
 </tr>
 <tr>
-<td><strong>Enclosure base plate</strong></td>
-<td>Multiple variants: thinner, solar cutout with breakaway supports</td>
-</tr>
-<tr>
-<td><strong>AAA cradle insert</strong></td>
-<td>Battery clip slots added for Swpeet spring contacts</td>
-</tr>
-<tr>
-<td><strong>Batteries</strong></td>
-<td>PKCELL ICR10440 (3.7V raw Li-Ion AAA) selected for TP4056 charging</td>
-</tr>
-<tr>
-<td><strong>Solar panel</strong></td>
-<td>AK 62x36 mm, base plate pit designed, bonding adhesive researched</td>
-</tr>
-<tr>
-<td><strong>Firmware</strong></td>
-<td>Pico 2 W (RP2350) support added, Sassy Octopus running on e-ink display</td>
+<td><strong>Top Cover</strong></td>
+<td>22</td>
+<td>Sketch+Pad shell, corner + bullnose fillets, interior cavity, 4 corner pillars, screen inlay, display window, joystick hole, 4 M3 bores, joystick PCB pocket, FPC divet</td>
 </tr>
 </tbody>
 </table>
-<h2 id="next-steps">Next steps<a class="headerlink" href="#next-steps" title="Permanent link">&para;</a></h2>
+<p>All linked to a <strong>90-parameter spreadsheet</strong> — change a cell value, recompute, and the model updates.</p>
+<h2 id="the-translation-process">The Translation Process<a class="headerlink" href="#the-translation-process" title="Permanent link">&para;</a></h2>
+<p>The original OpenSCAD models use CSG (Constructive Solid Geometry) — union, difference, intersection of primitives. FreeCAD's PartDesign is sequential: each feature modifies the solid in order.</p>
+<p>The initial approach used <code>Part::Feature</code> (frozen shapes) which looked right but couldn't be edited. The final version uses real PartDesign operations:</p>
+<ul>
+<li><strong>Sketch + Pad</strong> for the outer shells (constrained rectangle on XY plane)</li>
+<li><strong>SubtractiveBox / SubtractiveCylinder</strong> for all cuts (avoids face-coordinate-system headaches when cutting on non-XY faces)</li>
+<li><strong>AdditiveBox / AdditiveCylinder</strong> for pillars, pegs, support blocks</li>
+<li><strong>Fillet</strong> for corner rounding and bottom edge curves</li>
+<li><strong>Expressions</strong> linking feature dimensions to spreadsheet cells</li>
+</ul>
+<h2 id="editing-workflow">Editing Workflow<a class="headerlink" href="#editing-workflow" title="Permanent link">&para;</a></h2>
 <ol>
-<li>Wire batteries to Pico VSYS and TP4056 B+/B-</li>
-<li>Test solar charging through TP4056 input</li>
-<li>Assemble with joystick PCB when boards arrive from JLCPCB</li>
-<li>First fully wired integration test</li>
+<li>Open <code>Dilder_Rev2_PartDesign.FCStd</code> in FreeCAD</li>
+<li>Expand a Body in the tree — see every feature in build order</li>
+<li>Click a feature → <strong>Data tab</strong> at bottom-left shows all dimensions</li>
+<li>Change a value directly, or edit the Parameters spreadsheet + <strong>Ctrl+Shift+R</strong></li>
+<li>Export to STL/3MF for printing</li>
 </ol>
-<p>Source: <a href="https://github.com/rompasaurus/dilder/blob/main/hardware-design/jlcpcb-joystick-pcb-order-notes.md"><code>hardware-design/jlcpcb-joystick-pcb-order-notes.md</code></a></p>
+<h2 id="files">Files<a class="headerlink" href="#files" title="Permanent link">&para;</a></h2>
+<ul>
+<li><code>hardware-design/freecad/dilder_rev2_partdesign.FCMacro</code> — the macro that generates everything</li>
+<li><code>hardware-design/freecad/Dilder_Rev2_PartDesign.FCStd</code> — pre-built model (open directly)</li>
+<li><code>hardware-design/freecad/*_PD.stl</code> — exported meshes for each part</li>
+</ul>
+<h2 id="lessons-learned">Lessons Learned<a class="headerlink" href="#lessons-learned" title="Permanent link">&para;</a></h2>
+<ul>
+<li><strong>Sketch-on-face coordinate systems</strong> are different for each face orientation — SubtractiveBox/AdditiveCylinder with explicit Placement coordinates is far more reliable for non-XY-plane features</li>
+<li><strong>Pocket direction</strong> defaults to face normal — bottom-face pockets cut into empty space unless reversed</li>
+<li><strong>Expression-linked fields</strong> in the Data tab are read-only — you change them in the spreadsheet, not by clicking the feature</li>
+<li>The <strong>PartDesign golden pattern</strong> applies to every feature: Select face → New Sketch → Draw → Constrain → Close → Pad/Pocket → Set depth → OK</li>
+</ul>
 
 
 
@@ -3176,7 +3190,7 @@
       <nav class="md-footer__inner md-grid" aria-label="Footer" >
         
           
-          <a href="../joystick-hand-routed-pcb/" class="md-footer__link md-footer__link--prev" aria-label="Previous: Hand-Routed Joystick Breakout PCB — First Board From Scratch">
+          <a href="../joystick-pcb-jlcpcb-order/" class="md-footer__link md-footer__link--prev" aria-label="Previous: Joystick PCB Sent to JLCPCB — First Custom Board in Production">
             <div class="md-footer__button md-icon">
               
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
@@ -3186,27 +3200,11 @@
                 Previous
               </span>
               <div class="md-ellipsis">
-                Hand-Routed Joystick Breakout PCB — First Board From Scratch
+                Joystick PCB Sent to JLCPCB — First Custom Board in Production
               </div>
             </div>
           </a>
         
-        
-          
-          <a href="../freecad-parametric-model/" class="md-footer__link md-footer__link--next" aria-label="Next: OpenSCAD to FreeCAD — Full Parametric Enclosure in PartDesign">
-            <div class="md-footer__title">
-              <span class="md-footer__direction">
-                Next
-              </span>
-              <div class="md-ellipsis">
-                OpenSCAD to FreeCAD — Full Parametric Enclosure in PartDesign
-              </div>
-            </div>
-            <div class="md-footer__button md-icon">
-              
-              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11z"/></svg>
-            </div>
-          </a>
         
       </nav>
     
