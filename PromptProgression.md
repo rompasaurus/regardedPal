@@ -3429,3 +3429,29 @@ Every prompt entry below uses the following fields. Entries that don't yet list 
   - `PromptProgression.md` — prompt #259 appended
 
 ---
+
+## Prompt #260 — 2026-04-27
+- **Prompt:** "can we embedded the filename into the model print have that as an option in the export find a flatbit that wont be on the printer bed and put a file or product number?"
+- **Input Tokens (est):** ~40
+- **Output Tokens (est):** ~4,500
+- **Summary:** Added a label-embedding option to the DesignTool's Export tab. Recessed or raised text on any vertical face (front/back/left/right), configurable font size, depth, and position. Uses a two-pass STL workflow: plain export first, then a wrapper SCAD that `import()`s the STL and applies `difference()` (recessed) or `union()` (raised) with a `linear_extrude`d `text()` block. Label details recorded in description.md and history.json for each export.
+- **Layman summary:** Added a feature to stamp a filename or product number onto the side of your 3D-printed part — like a tiny engraved label that won't interfere with the flat bottom sitting on the print bed.
+- **Files:**
+  - `hardware-design/DesignTool/designtool.py` — label UI controls (checkbox, text, size, depth, face, offsets) + two-pass export workflow + wrapper SCAD generation
+
+---
+
+## Prompt #261 — 2026-04-27
+- **Prompt:** "take the models in the Dilder Pico Prototype with joystick cutout aaa battery holder and clip cutouts Working Model Rev 1 and create a proper parametric FreeCAD design based on the SCAD and parameters setup"
+- **Input Tokens (est):** ~60
+- **Output Tokens (est):** ~25,000
+- **Summary:** Translated all three Rev 2 enclosure parts (base plate, AAA cradle, top cover) from OpenSCAD to FreeCAD. First attempt used `Part::Feature` (frozen CSG shapes) — looked correct but had no editable feature tree. Rebuilt from scratch using real PartDesign API: `Sketcher::SketchObject` with constraints, `PartDesign::Pad`, `PartDesign::Pocket`, `PartDesign::Fillet`, `AdditiveBox`, `AdditiveCylinder`, `SubtractiveCylinder`. 81 features across 3 Bodies, 90-parameter spreadsheet with expression links. Fixed face-coordinate-system issues by replacing sketch-on-face pockets with `SubtractiveBox`/`SubtractiveCylinder` using explicit placement coordinates. Added USB-C stadium-shaped cutout (rounded bottom corners, open top) using 3 subtractive features. Comprehensive FreeCAD guide written with step-by-step tutorial panels showing 2D sketch diagrams alongside 3D results.
+- **Layman summary:** Converted the entire Tamagotchi case design from a text-based CAD tool (OpenSCAD) into a visual CAD tool (FreeCAD) where you can click on any part of the model and change its dimensions by typing new numbers. Like going from editing code to using a graphical editor.
+- **Files:**
+  - `hardware-design/freecad/dilder_rev2_partdesign.FCMacro` — PartDesign macro (81 features, 90 params)
+  - `hardware-design/freecad/Dilder_Rev2_PartDesign.FCStd` — pre-built FreeCAD document
+  - `hardware-design/freecad/dilder_rev2_parametric.FCMacro` — legacy static CSG version
+  - `hardware-design/freecad/*_PD.stl` — exported meshes for each part
+  - `hardware-design/Working Designs/` — organized working model snapshot with all exports
+
+---

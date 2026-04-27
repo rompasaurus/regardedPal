@@ -1748,3 +1748,23 @@ All 5 pieces exported cleanly (CGAL manifold) as 3MF for Bambu Studio: `base.3mf
 - **Input Tokens (est):** ~200
 - **Output Tokens (est):** ~8,000
 - **Summary:** JLCPCB flagged SW1 (K1-1506SN-01) for placement verification because the near-symmetric package makes automated rotation detection unreliable. "Polarity" means component orientation, not electrical polarity. Confirmed the placement is correct (pin A/up arrow away from header). Documented the full PCB design journey: autorouted Rev 1 (SKRHABE010, abandoned due to wrong footprint/pinout) through hand-routed Rev 2 (K1-1506SN-01, now in production). New blog post with build status table covering all subsystems. Lesson learned: add pin 1 silkscreen dot for future orders.
+
+---
+
+## Prompt #260 — 2026-04-27
+
+**Prompt:** Can we embed the filename into the model print? Have that as an option in the export, find a flat bit that won't be on the printer bed and put a file or product number.
+
+- **Input Tokens (est):** ~40
+- **Output Tokens (est):** ~4,500
+- **Summary:** Added label-embedding option to the DesignTool Export tab. Recessed or raised text on any vertical face, configurable font size/depth/position. Two-pass STL workflow using an OpenSCAD wrapper with text boolean operations.
+
+---
+
+## Prompt #261 — 2026-04-27
+
+**Prompt:** Take the models in the Dilder Pico Prototype Working Model Rev 1 and create a proper parametric FreeCAD design based on the SCAD and parameters setup.
+
+- **Input Tokens (est):** ~60
+- **Output Tokens (est):** ~25,000
+- **Summary:** Translated all three Rev 2 enclosure parts from OpenSCAD to FreeCAD PartDesign. 81 features across 3 Bodies with a 90-parameter spreadsheet. First attempt used static Part::Feature shapes (not editable); rebuilt with real PartDesign operations (Sketches, Pads, Pockets, Fillets, AdditiveBox, SubtractiveCylinder) linked to spreadsheet via expressions. Fixed face-coordinate-system issues by using SubtractiveBox with explicit placement instead of sketch-on-face. Added USB-C stadium cutout (rounded corners, open top).
