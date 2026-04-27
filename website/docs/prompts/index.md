@@ -1728,3 +1728,13 @@ All 5 pieces exported cleanly (CGAL manifold) as 3MF for Bambu Studio: `base.3mf
 - **Input Tokens (est):** ~400 across the sequence
 - **Output Tokens (est):** ~25,000
 - **Summary:** Two new SCAD forks in `04-26-design-alterations/`. (1) `base-plate-solar-thin-af-27-04.scad` — fork of `base-plate-with-solar-cutout` with the `with supports` preset (17 deltas) baked as defaults; user then hand-edited the JSON to a `thick floo reduce negative space` preset (total height 11.5 → 8 mm, floor 2.5 → 2.6 mm, pico retention 7 → 3 mm) for the next thinner-pass print. (2) `aaa-cradle-with-batt-clips.scad` — fork of `aaa-cradle-insert-v1` adding 4 vertical drop-in slots (one per bay-end, 7.4 × 7.4 × 0.9 mm) sized for the smallest **Swpeet 1.5V AAA battery contact spring** kit's unipolar plate (7 × 7 mm stamped sheet metal). Slots open upward to the plug top so plates drop in post-print and wires exit through the same opening. Battery procurement: settled on **PKCELL ICR10440** (raw 3.7 V Li-Ion, 350 mAh, AAA form factor) — distinct from the deceptively similar 1.5 V regulated AAA cells (Ansmann) which would be wrong for a TP4056. Wire two cells in **parallel**, not series (2S 10440 = 7.4 V, exceeds the Pico W's 5.5 V VSYS max). New research note `solar-panel-bonding-adhesives.md` covering outdoor adhesive options (Sikaflex 252 / 295 UV / DOWSIL 795 / 3M VHB) for bonding the AK 62×36 solar panel to a PETG base plate.
+
+---
+
+## Prompt #258 — 2026-04-27
+
+**Prompt:** "put a a small 1mm thick retaining side in front of the batter clip holder to it will hold the battery clip in and and only surround the periment so that contact point are exposed to the battery"
+
+- **Input Tokens (est):** ~80
+- **Output Tokens (est):** ~3,500
+- **Summary:** 1 mm retainer wall added on the cell-facing side of each of the 4 battery-clip slots. Implemented subtractively: each slot is pulled back from its bay end by `batt_clip_retainer_thickness_x_mm`, naturally leaving body material as the wall, then a smaller central window (default 5 × 5 mm via `batt_clip_retainer_window_size_y/z_mm`) is cut through that wall to expose the plate's contact face to the cell. The 7 × 7 mm Swpeet plate is now caught by a 1 mm-wide perimeter ring on all sides while the spring/contact face still passes through the window unobstructed. Four new parametric knobs (`batt_clip_retainer_enabled`, `_thickness_x_mm`, `_window_size_y_mm`, `_window_size_z_mm`) — set `enabled = false` to revert to the original through-slot. User added a new customizer preset `battery clips forst print 04-27` carrying these values and rendered it for the next print run.

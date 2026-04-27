@@ -3396,3 +3396,21 @@ Every prompt entry below uses the following fields. Entries that don't yet list 
   - `PromptProgression.md` — prompt #257 appended
 
 ---
+
+## Prompt #258 — 2026-04-27
+
+- **Prompt:** "put a a small 1mm thick retaining side in front of the batter clip holder to it will hold the battery clip in and and only surround the periment so that contact point are exposed to the battery" — followed by a render-and-push pass after a user-named preset was added.
+- **Input Tokens (est):** ~80
+- **Output Tokens (est):** ~3,500
+- **Summary:** Added a 1 mm retainer wall on the cell side of each of the 4 battery-clip slots in `aaa-cradle-with-batt-clips.scad`. Implementation uses SUBTRACTIVE geometry (no floating add-ons): each slot is pulled back from its bay end by `batt_clip_retainer_thickness_x_mm`, leaving body material as the wall, and a smaller central window (`batt_clip_retainer_window_size_y/z_mm`, default 5 × 5 mm) is cut through the wall to expose the plate's contact face to the cell. The wall catches the 7 × 7 mm Swpeet plate's perimeter with 1 mm of edge engagement on all sides. Cylinder cut shaves ~0.1 mm off the wall on the bay side, so effective wall thickness is ~0.9 mm (close enough to spec). Four new tunable knobs: `batt_clip_retainer_enabled` (true), `_thickness_x_mm` (1.0), `_window_size_y_mm` / `_window_size_z_mm` (5.0). Set enabled=false to revert to the original through-slot. User then added a new customizer preset `battery clips forst print 04-27` capturing these values for the next print run, and rendered it.
+- **Layman summary:** Each battery contact tab now has a tiny picture-frame in front of it — a 1 mm wall with a 5 mm hole cut in the middle. The frame catches the edge of the metal contact tab so it can't fall sideways into the battery hole, but the hole in the frame's middle lets the contact still touch the battery's terminal. Like a window screen: the screen catches the bug, the air gets through.
+- **Files:**
+  - `hardware-design/scad Parts/Rev 2 extended with joystick/04-26-design-alterations/aaa-cradle-with-batt-clips.scad` — retainer params + revised `batt_clip_slot` module (slot offset + window cut)
+  - `hardware-design/scad Parts/Rev 2 extended with joystick/04-26-design-alterations/aaa-cradle-with-batt-clips.json` — new `battery clips forst print 04-27` preset for the first-print pass
+  - `hardware-design/scad Parts/Rev 2 extended with joystick/04-26-design-alterations/aaa-cradle-with-batt-clips.3mf` — re-render with retainer walls present
+  - `hardware-design/scad Parts/Rev 2 extended with joystick/04-26-design-alterations/aaa-cradle-with-batt-clips__battery_clips_forst_print_04-27.3mf` (new) — render of the named first-print preset
+  - `website/docs/docs/hardware/design-evolution.md` — version history row for the retainer wall
+  - `website/docs/prompts/index.md` — synced with prompt #258
+  - `PromptProgression.md` — prompt #258 appended
+
+---
