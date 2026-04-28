@@ -1,0 +1,781 @@
+"""
+Dilder Rev 2 — TopCover with Master Sketch (parametric, full constraints)
+=========================================================================
+Rebuilds ONLY the TopCover body in a copy of Dilder_Rev2_PartDesign.FCStd.
+
+Architecture:
+  - Spreadsheet "TC_Params" holds every named dimension as an alias.
+  - Sk_Master_Plan: a single XY-plane sketch containing every plan-view
+    outline (outer shell, cavity, 4 pillars, inlay, window, joystick,
+    joystick PCB pocket, FPC divet, 4 M3 bores) as normal closed geometry,
+    each fully constrained to spreadsheet aliases.
+  - Per-feature sketches: each Pad/Pocket has its own minimal sketch on
+    the appropriate datum plane. Dimensions reference the same aliases
+    as the master, so editing the spreadsheet (or the master) cascades
+    everywhere on recompute.
+
+Run:
+  freecadcmd /path/to/topcover_master_sketch.FCMacro
+"""
+
+import os
+import sys
+import math
+import FreeCAD as App
+import Part
+import Sketcher
+
+V = App.Vector
+ROT0 = App.Rotation()
+
+HERE = os.path.dirname(os.path.abspath(__file__)) if "__file__" in globals() \
+    else "/home/rompasaurus/CodingProjects/Dilder/hardware-design/freecad"
+SRC_FCSTD = os.path.join(HERE, "Dilder_Rev2_PartDesign.FCStd")
+OUT_FCSTD = os.path.join(HERE, "Dilder_Rev2_PartDesign_MasterSketch.FCStd")
+
+# =====================================================================
+# Parameter table — single source of truth
+# =====================================================================
+PARAMS = [
+    # Enclosure
+    ("enc_x",        94.5,  "Enclosure outer width X"),
+    ("enc_y",        46.0,  "Enclosure outer depth Y"),
+    ("wall_mx",       3.0,  "-X end wall thickness"),
+    ("wall_px",       1.2,  "+X end wall thickness"),
+    ("wall_y",        2.0,  "Side wall thickness Y"),
+    ("corner_r",      4.0,  "Outer XY corner radius"),
+    ("bull_r",        4.0,  "Top edge bullnose radius"),
+    # Z layout (cover-local; z=0 = mating face)
+    ("ext",           5.0,  "Wall extension below mating Z"),
+    ("face_bot",      7.0,  "Inside face plate Z (display top)"),
+    ("fp_z",          0.7,  "Face plate thickness Z"),
+    # Pillars
+    ("pillar",        5.0,  "Corner pillar side"),
+    # Display + screen inlay
+    ("disp_x",       65.0,  "Display footprint X"),
+    ("disp_y",       30.0,  "Display footprint Y"),
+    ("disp_slop",     0.4,  "Display fit tolerance"),
+    ("inlay_sx",      0.3,  "Inlay XY slop per edge X"),
+    ("inlay_sy",     0.35,  "Inlay slop per edge Y"),
+    ("inlay_z",       3.0,  "Screen inlay depth Z"),
+    # Display window
+    ("win_x",        48.0,  "Display window X"),
+    ("win_y",        22.0,  "Display window Y"),
+    ("win_shift",     2.8,  "Window shift toward joystick"),
+    ("win_taper",     2.0,  "Window taper width per edge"),
+    # Joystick
+    ("joy_d",        12.0,  "Joystick through-hole diameter"),
+    ("joy_cx",      79.35,  "Joystick center X"),
+    ("joy_taper",     1.5,  "Joystick top taper width"),
+    # Joystick PCB pocket
+    ("joy_pcb_x",    20.0,  "Joystick PCB pocket X"),
+    ("joy_pcb_y",    20.0,  "Joystick PCB pocket Y"),
+    # M3 bores
+    ("m3_d",          3.2,  "M3 clearance hole diameter"),
+    # FPC ribbon divet
+    ("fpc_y",        13.0,  "FPC divet width Y"),
+    ("fpc_wall",      1.0,  "FPC divet -X wall remaining"),
+    ("fpc_dze",       2.0,  "FPC divet Z extension below inlay"),
+]
+
+# Spreadsheet alias accessor — formula string for setExpression
+def SP(alias):
+    return f"<<TC_Params>>.{alias}"
+
+
+# =====================================================================
+# Spreadsheet
+# =====================================================================
+def setup_spreadsheet(doc):
+    name = "TC_Params"
+    sheet = doc.getObject(name)
+    if sheet is not None:
+        doc.removeObject(name)
+    sheet = doc.addObject("Spreadsheet::Sheet", name)
+    sheet.Label = "TC_Params"
+    sheet.set("A1", "alias")
+    sheet.set("B1", "value")
+    sheet.set("C1", "description")
+    for i, (alias, value, desc) in enumerate(PARAMS):
+        row = i + 2
+        sheet.set(f"A{row}", alias)
+        sheet.set(f"B{row}", str(value))
+        sheet.set(f"C{row}", desc)
+        sheet.setAlias(f"B{row}", alias)
+    doc.recompute()
+    return sheet
+
+
+# =====================================================================
+# Helpers
+# =====================================================================
+def remove_object_recursive(doc, obj_name):
+    """Delete an object and any object that depends only on it."""
+    if doc.getObject(obj_name) is None:
+        return
+    # Walk tree of contained features for a Body
+    obj = doc.getObject(obj_name)
+    children = []
+    if hasattr(obj, "Group"):
+        children = list(obj.Group)
+    for c in children:
+        try:
+            doc.removeObject(c.Name)
+        except Exception:
+            pass
+    try:
+        doc.removeObject(obj_name)
+    except Exception:
+        pass
+
+
+def find_edges_by_axis(feature, axis="vertical", z_min=None, z_max=None):
+    """Return Edge labels (e.g. 'Edge3') for edges matching axis/Z criteria."""
+    out = []
+    for i, e in enumerate(feature.Shape.Edges):
+        verts = e.Vertexes
+        if len(verts) != 2:
+            continue
+        p1, p2 = verts[0].Point, verts[1].Point
+        mid_z = (p1.z + p2.z) / 2
+        if axis == "vertical":
+            if abs(p1.x - p2.x) < 1e-3 and abs(p1.y - p2.y) < 1e-3 \
+                    and abs(p1.z - p2.z) > 0.5:
+                out.append(f"Edge{i + 1}")
+        elif axis == "horizontal_top":
+            if abs(p1.z - p2.z) < 1e-3 \
+                    and (z_min is None or mid_z >= z_min) \
+                    and (z_max is None or mid_z <= z_max):
+                out.append(f"Edge{i + 1}")
+    return out
+
+
+def add_rect_constrained(sk, x0, y0, w, h,
+                         x0_expr=None, y0_expr=None,
+                         w_expr=None, h_expr=None,
+                         label=None, construction=False):
+    """
+    Add a 4-line closed rectangle, fully constrained, anchored to origin.
+    Returns (line_indices, dim_constraint_indices_dict).
+    Distance constraints get spreadsheet expressions if given.
+    """
+    g0 = sk.GeometryCount
+    sk.addGeometry(Part.LineSegment(V(x0, y0, 0),     V(x0 + w, y0, 0)),     construction)
+    sk.addGeometry(Part.LineSegment(V(x0 + w, y0, 0), V(x0 + w, y0 + h, 0)), construction)
+    sk.addGeometry(Part.LineSegment(V(x0 + w, y0 + h, 0), V(x0, y0 + h, 0)), construction)
+    sk.addGeometry(Part.LineSegment(V(x0, y0 + h, 0), V(x0, y0, 0)),         construction)
+    a, b, c, d = g0, g0 + 1, g0 + 2, g0 + 3
+    sk.addConstraint(Sketcher.Constraint("Coincident", a, 2, b, 1))
+    sk.addConstraint(Sketcher.Constraint("Coincident", b, 2, c, 1))
+    sk.addConstraint(Sketcher.Constraint("Coincident", c, 2, d, 1))
+    sk.addConstraint(Sketcher.Constraint("Coincident", d, 2, a, 1))
+    sk.addConstraint(Sketcher.Constraint("Horizontal", a))
+    sk.addConstraint(Sketcher.Constraint("Horizontal", c))
+    sk.addConstraint(Sketcher.Constraint("Vertical",   b))
+    sk.addConstraint(Sketcher.Constraint("Vertical",   d))
+    # Anchor lower-left to origin via DistanceX/Y from origin point (-1,1)
+    cx = sk.addConstraint(Sketcher.Constraint("DistanceX", -1, 1, a, 1, x0))
+    cy = sk.addConstraint(Sketcher.Constraint("DistanceY", -1, 1, a, 1, y0))
+    cw = sk.addConstraint(Sketcher.Constraint("DistanceX", a, 1, a, 2, w))
+    ch = sk.addConstraint(Sketcher.Constraint("DistanceY", b, 1, b, 2, h))
+    if label is not None:
+        sk.renameConstraint(cx, f"{label}_x0")
+        sk.renameConstraint(cy, f"{label}_y0")
+        sk.renameConstraint(cw, f"{label}_w")
+        sk.renameConstraint(ch, f"{label}_h")
+    if x0_expr is not None:
+        sk.setExpression(f"Constraints[{cx}]", x0_expr)
+    if y0_expr is not None:
+        sk.setExpression(f"Constraints[{cy}]", y0_expr)
+    if w_expr is not None:
+        sk.setExpression(f"Constraints[{cw}]", w_expr)
+    if h_expr is not None:
+        sk.setExpression(f"Constraints[{ch}]", h_expr)
+    return (a, b, c, d), {"x0": cx, "y0": cy, "w": cw, "h": ch}
+
+
+def add_circle_constrained(sk, cx, cy, d,
+                           cx_expr=None, cy_expr=None, d_expr=None,
+                           label=None, construction=False):
+    g0 = sk.GeometryCount
+    sk.addGeometry(Part.Circle(V(cx, cy, 0), V(0, 0, 1), d / 2.0), construction)
+    idx = g0
+    cdx = sk.addConstraint(Sketcher.Constraint("DistanceX", -1, 1, idx, 3, cx))
+    cdy = sk.addConstraint(Sketcher.Constraint("DistanceY", -1, 1, idx, 3, cy))
+    cdd = sk.addConstraint(Sketcher.Constraint("Diameter",  idx, d))
+    if label is not None:
+        sk.renameConstraint(cdx, f"{label}_cx")
+        sk.renameConstraint(cdy, f"{label}_cy")
+        sk.renameConstraint(cdd, f"{label}_d")
+    if cx_expr is not None:
+        sk.setExpression(f"Constraints[{cdx}]", cx_expr)
+    if cy_expr is not None:
+        sk.setExpression(f"Constraints[{cdy}]", cy_expr)
+    if d_expr is not None:
+        sk.setExpression(f"Constraints[{cdd}]", d_expr)
+    return idx, {"cx": cdx, "cy": cdy, "d": cdd}
+
+
+def make_datum_plane_at_z(body, name, z_value, z_expr=None):
+    dp = body.newObject("PartDesign::Plane", name)
+    dp.AttachmentSupport = [(body.Origin.OriginFeatures[3], "")]   # XY plane
+    dp.MapMode = "FlatFace"
+    dp.AttachmentOffset = App.Placement(V(0, 0, z_value), ROT0)
+    if z_expr is not None:
+        dp.setExpression(".AttachmentOffset.Base.z", z_expr)
+    dp.Visibility = False
+    return dp
+
+
+# =====================================================================
+# Master plan sketch — every outline in one place
+# =====================================================================
+def build_master_sketch(doc, body):
+    sk = body.newObject("Sketcher::SketchObject", "Sk_Master_Plan")
+    sk.AttachmentSupport = [(body.Origin.OriginFeatures[3], "")]   # XY
+    sk.MapMode = "FlatFace"
+    # No Z offset — master lives at z=0 (body-local mating plane)
+
+    # ----- Outer shell rectangle (construction = layout reference) -----
+    add_rect_constrained(
+        sk, 0, 0, 94.5, 46.0,
+        x0_expr=None, y0_expr=None,
+        w_expr=SP("enc_x"), h_expr=SP("enc_y"),
+        label="shell", construction=True)
+
+    # ----- Cavity rectangle (interior) -----
+    add_rect_constrained(
+        sk, 3.0, 2.0, 94.5 - 3.0 - 1.2, 46.0 - 2 * 2.0,
+        x0_expr=SP("wall_mx"),
+        y0_expr=SP("wall_y"),
+        w_expr=f"{SP('enc_x')} - {SP('wall_mx')} - {SP('wall_px')}",
+        h_expr=f"{SP('enc_y')} - 2 * {SP('wall_y')}",
+        label="cavity", construction=True)
+
+    # ----- 4 pillar squares -----
+    P = 5.0
+    pillar_specs = [
+        ("p1", "wall_mx",                               "wall_y"),
+        ("p2", f"{SP('enc_x')} - {SP('wall_px')} - {SP('pillar')}", "wall_y"),
+        ("p3", "wall_mx",                               f"{SP('enc_y')} - {SP('wall_y')} - {SP('pillar')}"),
+        ("p4", f"{SP('enc_x')} - {SP('wall_px')} - {SP('pillar')}", f"{SP('enc_y')} - {SP('wall_y')} - {SP('pillar')}"),
+    ]
+    pillar_xy_numeric = [
+        (3.0, 2.0),
+        (94.5 - 1.2 - P, 2.0),
+        (3.0, 46.0 - 2.0 - P),
+        (94.5 - 1.2 - P, 46.0 - 2.0 - P),
+    ]
+    for (lbl, x_expr, y_expr), (px, py) in zip(pillar_specs, pillar_xy_numeric):
+        x_expr_full = SP(x_expr) if x_expr in [a for a, _, _ in PARAMS] else x_expr
+        y_expr_full = SP(y_expr) if y_expr in [a for a, _, _ in PARAMS] else y_expr
+        add_rect_constrained(
+            sk, px, py, P, P,
+            x0_expr=x_expr_full,
+            y0_expr=y_expr_full,
+            w_expr=SP("pillar"),
+            h_expr=SP("pillar"),
+            label=lbl, construction=True)
+
+    # ----- Screen inlay rectangle -----
+    inlay_x0 = 3.0 + 0.4 - 0.3  # wall_mx + disp_slop - inlay_sx
+    inlay_y0 = (46.0 - 30.0) / 2 - 0.35
+    inlay_w = 65.0 + 2 * 0.3
+    inlay_h = 30.0 + 2 * 0.35
+    add_rect_constrained(
+        sk, inlay_x0, inlay_y0, inlay_w, inlay_h,
+        x0_expr=f"{SP('wall_mx')} + {SP('disp_slop')} - {SP('inlay_sx')}",
+        y0_expr=f"({SP('enc_y')} - {SP('disp_y')}) / 2 - {SP('inlay_sy')}",
+        w_expr=f"{SP('disp_x')} + 2 * {SP('inlay_sx')}",
+        h_expr=f"{SP('disp_y')} + 2 * {SP('inlay_sy')}",
+        label="inlay", construction=True)
+
+    # ----- Display window rectangle (with shift) -----
+    win_x0 = 3.0 + 0.4 + (65.0 - 48.0) / 2 + 2.8
+    win_y0 = (46.0 - 30.0) / 2 + (30.0 - 22.0) / 2
+    add_rect_constrained(
+        sk, win_x0, win_y0, 48.0, 22.0,
+        x0_expr=f"{SP('wall_mx')} + {SP('disp_slop')} + ({SP('disp_x')} - {SP('win_x')}) / 2 + {SP('win_shift')}",
+        y0_expr=f"({SP('enc_y')} - {SP('win_y')}) / 2",
+        w_expr=SP("win_x"),
+        h_expr=SP("win_y"),
+        label="win", construction=True)
+
+    # ----- FPC ribbon divet rectangle -----
+    fpc_x0 = 1.0
+    fpc_w  = inlay_x0 - 1.0   # ends at inlay start
+    fpc_y0 = 46.0 / 2 - 13.0 / 2
+    add_rect_constrained(
+        sk, fpc_x0, fpc_y0, fpc_w, 13.0,
+        x0_expr=SP("fpc_wall"),
+        y0_expr=f"{SP('enc_y')} / 2 - {SP('fpc_y')} / 2",
+        w_expr=f"({SP('wall_mx')} + {SP('disp_slop')} - {SP('inlay_sx')}) - {SP('fpc_wall')}",
+        h_expr=SP("fpc_y"),
+        label="fpc", construction=True)
+
+    # ----- Joystick PCB pocket rectangle -----
+    jpcb_x0 = inlay_x0 + inlay_w   # = 68.7
+    jpcb_y0 = 23.0 - 20.0 / 2      # centered on Y centerline
+    add_rect_constrained(
+        sk, jpcb_x0, jpcb_y0, 20.0, 20.0,
+        x0_expr=f"{SP('wall_mx')} + {SP('disp_slop')} - {SP('inlay_sx')} + {SP('disp_x')} + 2 * {SP('inlay_sx')}",
+        y0_expr=f"{SP('enc_y')} / 2 - {SP('joy_pcb_y')} / 2",
+        w_expr=SP("joy_pcb_x"),
+        h_expr=SP("joy_pcb_y"),
+        label="jpcb", construction=True)
+
+    # ----- Joystick through-hole circle -----
+    add_circle_constrained(
+        sk, 79.35, 23.0, 12.0,
+        cx_expr=SP("joy_cx"),
+        cy_expr=f"{SP('enc_y')} / 2",
+        d_expr=SP("joy_d"),
+        label="joy", construction=True)
+
+    # ----- 4 M3 bore circles at pillar centers -----
+    for i, (px, py) in enumerate(pillar_xy_numeric):
+        cx = px + P / 2
+        cy = py + P / 2
+        # build expressions matching pillar position formulas
+        if i == 0:
+            cx_expr = f"{SP('wall_mx')} + {SP('pillar')} / 2"
+            cy_expr = f"{SP('wall_y')} + {SP('pillar')} / 2"
+        elif i == 1:
+            cx_expr = f"{SP('enc_x')} - {SP('wall_px')} - {SP('pillar')} / 2"
+            cy_expr = f"{SP('wall_y')} + {SP('pillar')} / 2"
+        elif i == 2:
+            cx_expr = f"{SP('wall_mx')} + {SP('pillar')} / 2"
+            cy_expr = f"{SP('enc_y')} - {SP('wall_y')} - {SP('pillar')} / 2"
+        else:
+            cx_expr = f"{SP('enc_x')} - {SP('wall_px')} - {SP('pillar')} / 2"
+            cy_expr = f"{SP('enc_y')} - {SP('wall_y')} - {SP('pillar')} / 2"
+        add_circle_constrained(
+            sk, cx, cy, 3.2,
+            cx_expr=cx_expr, cy_expr=cy_expr,
+            d_expr=SP("m3_d"),
+            label=f"m3_{i+1}", construction=True)
+
+    doc.recompute()
+    # Make master sketch construction-only by hiding it from impacting features.
+    # We don't pad/pocket from it; per-feature sketches replicate the geometry.
+    sk.Visibility = True
+    return sk
+
+
+def build_section_sketch_y_centerline(doc, body):
+    """
+    XZ-plane side-profile section through Y = enc_y/2 (display + joystick
+    centerline). Pure construction geometry — every Z height (mating face,
+    inlay floor, FPC floor, face_bot, face plate top, bullnose top, ext
+    bottom) is dimensioned from spreadsheet aliases. Edit the spreadsheet
+    to change cover thickness; this sketch updates to show the new layout.
+    """
+    XZ = body.Origin.OriginFeatures[4]   # XZ plane (Y-normal)
+    sk = body.newObject("Sketcher::SketchObject", "Sk_Section_Y23")
+    sk.AttachmentSupport = [(XZ, "")]
+    sk.MapMode = "FlatFace"
+    sk.AttachmentOffset = App.Placement(V(0, 0, 23.0), ROT0)
+    sk.setExpression(".AttachmentOffset.Base.z", f"{SP('enc_y')} / 2")
+
+    # Sketch local axes: X = global X, Y = global Z.
+    # Outer cover envelope at this Y slice: rectangle from
+    # (X=0, Z=-ext) to (X=enc_x, Z=face_bot+fp_z+bull_r)
+    add_rect_constrained(
+        sk,
+        x0=0.0, y0=-5.0,
+        w=94.5, h=11.7 + 5.0,
+        x0_expr=None, y0_expr=f"-{SP('ext')}",
+        w_expr=SP("enc_x"),
+        h_expr=f"{SP('face_bot')} + {SP('fp_z')} + {SP('bull_r')} + {SP('ext')}",
+        label="env", construction=True)
+
+    # Z reference levels — horizontal construction lines spanning X=0..enc_x.
+    # Each level is a single LineSegment with its Y constrained to a Z-alias
+    # expression. The line endpoints are X=0 and X=enc_x (lock to the envelope).
+    def add_z_level(z_value, z_expr, label):
+        g0 = sk.GeometryCount
+        sk.addGeometry(
+            Part.LineSegment(V(0, z_value, 0), V(94.5, z_value, 0)),
+            True)  # construction
+        idx = g0
+        sk.addConstraint(Sketcher.Constraint("Horizontal", idx))
+        # Lock endpoints to envelope X extents (origin and right edge).
+        sk.addConstraint(Sketcher.Constraint("DistanceX", -1, 1, idx, 1, 0.0))
+        sk.addConstraint(Sketcher.Constraint("DistanceX", -1, 1, idx, 2, 94.5))
+        # Last constraint we just added — re-bind RHS to enc_x alias
+        last_dx = sk.ConstraintCount - 1
+        sk.setExpression(f"Constraints[{last_dx}]", SP("enc_x"))
+        # Y position via DistanceY from origin
+        cy = sk.addConstraint(Sketcher.Constraint("DistanceY", -1, 1, idx, 1, z_value))
+        sk.renameConstraint(cy, f"Z_{label}")
+        if z_expr is not None:
+            sk.setExpression(f"Constraints[{cy}]", z_expr)
+        return idx
+
+    # Cover-local Z layout (z=0 is the cover's mating face)
+    add_z_level(-5.0,  f"-{SP('ext')}",                                    "ext_bot")        # walls extend below mating
+    add_z_level( 0.0,  None,                                               "mating")         # mating face (origin)
+    add_z_level( 2.0,  f"{SP('face_bot')} - {SP('inlay_z')} - {SP('fpc_dze')}", "fpc_floor") # FPC divet floor
+    add_z_level( 4.0,  f"{SP('face_bot')} - {SP('inlay_z')}",              "inlay_floor")    # screen inlay floor
+    add_z_level( 7.0,  SP("face_bot"),                                     "face_bot")       # inside ceiling / display top
+    add_z_level( 7.7,  f"{SP('face_bot')} + {SP('fp_z')}",                 "face_top")       # face plate top
+    add_z_level(11.7,  f"{SP('face_bot')} + {SP('fp_z')} + {SP('bull_r')}", "bullnose_top")  # bullnose top
+
+    # X markers (vertical construction lines) at notable X positions.
+    def add_x_marker(x_value, x_expr, label):
+        g0 = sk.GeometryCount
+        sk.addGeometry(
+            Part.LineSegment(V(x_value, -5.0, 0), V(x_value, 11.7, 0)),
+            True)
+        idx = g0
+        sk.addConstraint(Sketcher.Constraint("Vertical", idx))
+        # X position from origin
+        cx = sk.addConstraint(Sketcher.Constraint("DistanceX", -1, 1, idx, 1, x_value))
+        sk.renameConstraint(cx, f"X_{label}")
+        if x_expr is not None:
+            sk.setExpression(f"Constraints[{cx}]", x_expr)
+        # Lock endpoints in Z to envelope Z extents
+        sk.addConstraint(Sketcher.Constraint("DistanceY", -1, 1, idx, 1, -5.0))
+        last = sk.ConstraintCount - 1
+        sk.setExpression(f"Constraints[{last}]", f"-{SP('ext')}")
+        sk.addConstraint(Sketcher.Constraint("DistanceY", -1, 1, idx, 2, 11.7))
+        last = sk.ConstraintCount - 1
+        sk.setExpression(f"Constraints[{last}]",
+                         f"{SP('face_bot')} + {SP('fp_z')} + {SP('bull_r')}")
+        return idx
+
+    add_x_marker(3.0,    SP("wall_mx"),                                              "wall_mx")
+    add_x_marker(94.5 - 1.2, f"{SP('enc_x')} - {SP('wall_px')}",                     "wall_px")
+    add_x_marker(3.1,    f"{SP('wall_mx')} + {SP('disp_slop')} - {SP('inlay_sx')}",  "inlay_x0")
+    add_x_marker(68.7,   f"{SP('wall_mx')} + {SP('disp_slop')} - {SP('inlay_sx')} + {SP('disp_x')} + 2 * {SP('inlay_sx')}", "inlay_x1")
+    add_x_marker(79.35,  SP("joy_cx"),                                               "joy_cx")
+    add_x_marker(1.0,    SP("fpc_wall"),                                             "fpc_x0")
+
+    doc.recompute()
+    sk.Visibility = True
+    return sk
+
+
+# =====================================================================
+# Per-feature sketch helpers (each one is a tiny local sketch that
+# duplicates the master's outline so we get a valid Profile shape)
+# =====================================================================
+def feature_rect_sketch(body, name, support, x0, y0, w, h,
+                        x0_expr, y0_expr, w_expr, h_expr,
+                        z_offset=0.0):
+    sk = body.newObject("Sketcher::SketchObject", name)
+    sk.AttachmentSupport = [(support, "")]
+    sk.MapMode = "FlatFace"
+    if z_offset != 0.0:
+        sk.AttachmentOffset = App.Placement(V(0, 0, z_offset), ROT0)
+    add_rect_constrained(sk, x0, y0, w, h,
+                         x0_expr=x0_expr, y0_expr=y0_expr,
+                         w_expr=w_expr, h_expr=h_expr,
+                         label="r")
+    return sk
+
+
+def feature_circle_sketch(body, name, support, cx, cy, d,
+                          cx_expr, cy_expr, d_expr,
+                          z_offset=0.0):
+    sk = body.newObject("Sketcher::SketchObject", name)
+    sk.AttachmentSupport = [(support, "")]
+    sk.MapMode = "FlatFace"
+    if z_offset != 0.0:
+        sk.AttachmentOffset = App.Placement(V(0, 0, z_offset), ROT0)
+    add_circle_constrained(sk, cx, cy, d,
+                           cx_expr=cx_expr, cy_expr=cy_expr, d_expr=d_expr,
+                           label="c")
+    return sk
+
+
+# =====================================================================
+# TopCover construction
+# =====================================================================
+def build_top_cover(doc):
+    body = doc.addObject("PartDesign::Body", "TopCover")
+    XY = body.Origin.OriginFeatures[3]   # XY plane
+
+    # --- Master plan sketch (informational, also the dimensional contract) ---
+    master = build_master_sketch(doc, body)
+
+    # --- Side-profile section sketch through Y centerline (Z layout reference) ---
+    section_y = build_section_sketch_y_centerline(doc, body)
+
+    # --- 1. Outer shell pad ---
+    sk_shell = feature_rect_sketch(
+        body, "Sk_Shell", XY,
+        0, 0, 94.5, 46.0,
+        x0_expr=None, y0_expr=None,
+        w_expr=SP("enc_x"), h_expr=SP("enc_y"),
+        z_offset=-5.0)
+    sk_shell.setExpression(".AttachmentOffset.Base.z", f"-{SP('ext')}")
+
+    pad = body.newObject("PartDesign::Pad", "Pad_Shell")
+    pad.Profile = sk_shell
+    pad.Length = 11.7 + 5.0
+    pad.setExpression("Length",
+                      f"{SP('face_bot')} + {SP('fp_z')} + {SP('bull_r')} + {SP('ext')}")
+    doc.recompute()
+
+    # --- 2. Vertical-edge corner fillets ---
+    vert_edges = find_edges_by_axis(pad, axis="vertical")
+    if vert_edges:
+        fc = body.newObject("PartDesign::Fillet", "Fillet_Corners")
+        fc.Base = (pad, vert_edges)
+        fc.Radius = 4.0
+        fc.setExpression("Radius", SP("corner_r"))
+        doc.recompute()
+        prev = fc
+    else:
+        prev = pad
+
+    # --- 3. Top-edge bullnose fillet ---
+    top_edges = find_edges_by_axis(prev, axis="horizontal_top",
+                                   z_min=11.7 - 0.5)
+    if top_edges:
+        fb = body.newObject("PartDesign::Fillet", "Fillet_Bullnose")
+        fb.Base = (prev, top_edges)
+        fb.Radius = 4.0
+        fb.setExpression("Radius", SP("bull_r"))
+        doc.recompute()
+
+    # --- 4. Cavity pocket (single rectangle; pillars are added back next) ---
+    sk_cav = feature_rect_sketch(
+        body, "Sk_Cavity", XY,
+        3.0, 2.0, 94.5 - 3.0 - 1.2, 46.0 - 4.0,
+        x0_expr=SP("wall_mx"),
+        y0_expr=SP("wall_y"),
+        w_expr=f"{SP('enc_x')} - {SP('wall_mx')} - {SP('wall_px')}",
+        h_expr=f"{SP('enc_y')} - 2 * {SP('wall_y')}",
+        z_offset=-5.0)
+    sk_cav.setExpression(".AttachmentOffset.Base.z", f"-{SP('ext')}")
+
+    cav = body.newObject("PartDesign::Pocket", "Cut_Cavity")
+    cav.Profile = sk_cav
+    cav.Length = 7.0 + 5.0   # face_bot + ext
+    cav.Reversed = True      # sketch at z=-ext, cut UPWARD into body
+    cav.setExpression("Length", f"{SP('face_bot')} + {SP('ext')}")
+    doc.recompute()
+
+    # --- 4b. Pad 4 corner pillars back into the cavity ---
+    P = 5.0
+    pillar_specs = [
+        (3.0,           2.0,            SP("wall_mx"),                                          SP("wall_y")),
+        (94.5 - 1.2 - P, 2.0,           f"{SP('enc_x')} - {SP('wall_px')} - {SP('pillar')}",    SP("wall_y")),
+        (3.0,           46.0 - 2.0 - P, SP("wall_mx"),                                          f"{SP('enc_y')} - {SP('wall_y')} - {SP('pillar')}"),
+        (94.5 - 1.2 - P, 46.0 - 2.0 - P, f"{SP('enc_x')} - {SP('wall_px')} - {SP('pillar')}",   f"{SP('enc_y')} - {SP('wall_y')} - {SP('pillar')}"),
+    ]
+    for k, (px, py, x_expr, y_expr) in enumerate(pillar_specs):
+        sk_pil = feature_rect_sketch(
+            body, f"Sk_Pillar_{k+1}", XY,
+            px, py, P, P,
+            x0_expr=x_expr, y0_expr=y_expr,
+            w_expr=SP("pillar"), h_expr=SP("pillar"),
+            z_offset=-5.0)
+        sk_pil.setExpression(".AttachmentOffset.Base.z", f"-{SP('ext')}")
+        pp = body.newObject("PartDesign::Pad", f"CoverPillar_{k+1}")
+        pp.Profile = sk_pil
+        pp.Length = 7.0 + 5.0
+        pp.setExpression("Length", f"{SP('face_bot')} + {SP('ext')}")
+        doc.recompute()
+
+    # --- 5. Screen inlay pocket (downward from face_bot, depth=inlay_z) ---
+    sk_inlay = feature_rect_sketch(
+        body, "Sk_Inlay", XY,
+        3.1, 7.65, 65.6, 30.7,
+        x0_expr=f"{SP('wall_mx')} + {SP('disp_slop')} - {SP('inlay_sx')}",
+        y0_expr=f"({SP('enc_y')} - {SP('disp_y')}) / 2 - {SP('inlay_sy')}",
+        w_expr=f"{SP('disp_x')} + 2 * {SP('inlay_sx')}",
+        h_expr=f"{SP('disp_y')} + 2 * {SP('inlay_sy')}",
+        z_offset=7.0)
+    sk_inlay.setExpression(".AttachmentOffset.Base.z", SP("face_bot"))
+    inlay = body.newObject("PartDesign::Pocket", "Cut_Inlay")
+    inlay.Profile = sk_inlay
+    inlay.Length = 3.0
+    inlay.Reversed = False   # sketch at z=face_bot, cut DOWNWARD by inlay_z
+    inlay.setExpression("Length", SP("inlay_z"))
+    doc.recompute()
+
+    # --- 6. Display window pocket (upward from face_bot, through dome, with taper) ---
+    sk_win = feature_rect_sketch(
+        body, "Sk_Window", XY,
+        3.4 + (65.0 - 48.0)/2 + 2.8, 8.0 + (30.0 - 22.0)/2, 48.0, 22.0,
+        x0_expr=f"{SP('wall_mx')} + {SP('disp_slop')} + ({SP('disp_x')} - {SP('win_x')}) / 2 + {SP('win_shift')}",
+        y0_expr=f"({SP('enc_y')} - {SP('win_y')}) / 2",
+        w_expr=SP("win_x"),
+        h_expr=SP("win_y"),
+        z_offset=7.0)
+    sk_win.setExpression(".AttachmentOffset.Base.z", SP("face_bot"))
+    win = body.newObject("PartDesign::Pocket", "Cut_Window")
+    win.Profile = sk_win
+    win.Length = 4.7 + 0.2     # face_top - face_bot + bull_r + tiny = 0.7 + 4.0 + 0.2
+    win.Reversed = True        # sketch at z=face_bot, cut UPWARD through face plate + dome
+    win.setExpression("Length", f"{SP('fp_z')} + {SP('bull_r')} + 0.2")
+    win.TaperAngle = math.degrees(math.atan2(2.0, 4.7))   # outward taper
+    doc.recompute()
+
+    # --- 7. Joystick through-hole pocket (upward, with taper) ---
+    sk_joy = feature_circle_sketch(
+        body, "Sk_Joystick", XY,
+        79.35, 23.0, 12.0,
+        cx_expr=SP("joy_cx"),
+        cy_expr=f"{SP('enc_y')} / 2",
+        d_expr=SP("joy_d"),
+        z_offset=7.0)
+    sk_joy.setExpression(".AttachmentOffset.Base.z", SP("face_bot"))
+    joy = body.newObject("PartDesign::Pocket", "Cut_Joystick")
+    joy.Profile = sk_joy
+    joy.Length = 4.7 + 0.2
+    joy.Reversed = True       # cut UPWARD through face plate + dome
+    joy.setExpression("Length", f"{SP('fp_z')} + {SP('bull_r')} + 0.2")
+    joy.TaperAngle = math.degrees(math.atan2(1.5, 4.7))
+    doc.recompute()
+
+    # --- 8. M3 bores (4) — pocketed all the way through pillars ---
+    for i in range(4):
+        if i == 0:
+            cx_expr = f"{SP('wall_mx')} + {SP('pillar')} / 2"
+            cy_expr = f"{SP('wall_y')} + {SP('pillar')} / 2"
+            cx, cy = 3.0 + 2.5, 2.0 + 2.5
+        elif i == 1:
+            cx_expr = f"{SP('enc_x')} - {SP('wall_px')} - {SP('pillar')} / 2"
+            cy_expr = f"{SP('wall_y')} + {SP('pillar')} / 2"
+            cx, cy = 94.5 - 1.2 - 2.5, 2.0 + 2.5
+        elif i == 2:
+            cx_expr = f"{SP('wall_mx')} + {SP('pillar')} / 2"
+            cy_expr = f"{SP('enc_y')} - {SP('wall_y')} - {SP('pillar')} / 2"
+            cx, cy = 3.0 + 2.5, 46.0 - 2.0 - 2.5
+        else:
+            cx_expr = f"{SP('enc_x')} - {SP('wall_px')} - {SP('pillar')} / 2"
+            cy_expr = f"{SP('enc_y')} - {SP('wall_y')} - {SP('pillar')} / 2"
+            cx, cy = 94.5 - 1.2 - 2.5, 46.0 - 2.0 - 2.5
+
+        sk_bore = feature_circle_sketch(
+            body, f"Sk_M3_{i+1}", XY,
+            cx, cy, 3.2,
+            cx_expr=cx_expr, cy_expr=cy_expr, d_expr=SP("m3_d"),
+            z_offset=-5.0)
+        sk_bore.setExpression(".AttachmentOffset.Base.z", f"-{SP('ext')}")
+        bore = body.newObject("PartDesign::Pocket", f"M3Bore_{i+1}")
+        bore.Profile = sk_bore
+        bore.Length = 7.0 + 5.0 + 0.2
+        bore.Reversed = True   # sketch at z=-ext, cut UPWARD through pillar
+        bore.setExpression("Length",
+                           f"{SP('face_bot')} + {SP('ext')} + 0.2")
+        doc.recompute()
+
+    # --- 9. Joystick PCB pocket (downward from face_bot, depth=inlay_z) ---
+    sk_jpcb = feature_rect_sketch(
+        body, "Sk_JoyPCB", XY,
+        68.7, 13.0, 20.0, 20.0,
+        x0_expr=f"{SP('wall_mx')} + {SP('disp_slop')} - {SP('inlay_sx')} + {SP('disp_x')} + 2 * {SP('inlay_sx')}",
+        y0_expr=f"{SP('enc_y')} / 2 - {SP('joy_pcb_y')} / 2",
+        w_expr=SP("joy_pcb_x"),
+        h_expr=SP("joy_pcb_y"),
+        z_offset=7.0)
+    sk_jpcb.setExpression(".AttachmentOffset.Base.z", SP("face_bot"))
+    jpcb = body.newObject("PartDesign::Pocket", "Cut_JoyPCB")
+    jpcb.Profile = sk_jpcb
+    jpcb.Length = 3.0
+    jpcb.Reversed = False     # sketch at z=face_bot, cut DOWNWARD by inlay_z
+    jpcb.setExpression("Length", SP("inlay_z"))
+    doc.recompute()
+
+    # --- 10. FPC ribbon divet (downward, depth = inlay_z + fpc_dze) ---
+    sk_fpc = feature_rect_sketch(
+        body, "Sk_FPC", XY,
+        1.0, 16.5, 2.1, 13.0,
+        x0_expr=SP("fpc_wall"),
+        y0_expr=f"{SP('enc_y')} / 2 - {SP('fpc_y')} / 2",
+        w_expr=f"({SP('wall_mx')} + {SP('disp_slop')} - {SP('inlay_sx')}) - {SP('fpc_wall')}",
+        h_expr=SP("fpc_y"),
+        z_offset=7.0)
+    sk_fpc.setExpression(".AttachmentOffset.Base.z", SP("face_bot"))
+    fpc = body.newObject("PartDesign::Pocket", "Cut_FPC")
+    fpc.Profile = sk_fpc
+    fpc.Length = 5.0
+    fpc.Reversed = False      # sketch at z=face_bot, cut DOWNWARD by inlay_z+fpc_dze
+    fpc.setExpression("Length", f"{SP('inlay_z')} + {SP('fpc_dze')}")
+    doc.recompute()
+
+    return body
+
+
+# =====================================================================
+# Main
+# =====================================================================
+def main():
+    if not os.path.exists(SRC_FCSTD):
+        print(f"ERROR: source file not found: {SRC_FCSTD}", file=sys.stderr)
+        sys.exit(1)
+
+    print(f"Opening {SRC_FCSTD}")
+    doc = App.openDocument(SRC_FCSTD)
+
+    # Remove old TopCover body and any features that lived inside it
+    print("Removing existing TopCover body and dependents...")
+    old = doc.getObject("TopCover")
+    if old is not None:
+        # children of body
+        old_children = []
+        if hasattr(old, "Group"):
+            old_children = [c.Name for c in old.Group]
+        for cn in old_children:
+            try:
+                doc.removeObject(cn)
+            except Exception as ex:
+                print(f"   skip {cn}: {ex}")
+        try:
+            doc.removeObject("TopCover")
+        except Exception as ex:
+            print(f"   skip TopCover body: {ex}")
+
+    # Spreadsheet
+    print("Setting up spreadsheet...")
+    setup_spreadsheet(doc)
+
+    # Build new TopCover
+    print("Building parametric TopCover...")
+    tc = build_top_cover(doc)
+
+    doc.recompute()
+
+    # Visual placement (mate top cover above base assembly stack)
+    tc.Placement = App.Placement(V(0, 0, 8.0), ROT0)
+
+    # Color
+    if hasattr(tc, "ViewObject") and tc.ViewObject is not None:
+        try:
+            tc.ViewObject.ShapeColor = (0.4, 0.55, 0.8)
+            tc.ViewObject.Transparency = 30
+        except Exception:
+            pass
+
+    # Save
+    print(f"Saving to {OUT_FCSTD}")
+    doc.saveAs(OUT_FCSTD)
+
+    # Report
+    feats = [o.Name for o in tc.Group if "Origin" not in o.Name]
+    print(f"\nTopCover: {len(feats)} features")
+    for f in feats:
+        print(f"  - {f}")
+    print(f"  Tip = {tc.Tip.Name if tc.Tip else 'None'}")
+    try:
+        bb = tc.Shape.BoundBox
+        print(f"  BoundBox: ({bb.XMin:.2f}, {bb.YMin:.2f}, {bb.ZMin:.2f}) -> "
+              f"({bb.XMax:.2f}, {bb.YMax:.2f}, {bb.ZMax:.2f})")
+        print(f"  Faces: {len(tc.Shape.Faces)}, Volume: {tc.Shape.Volume:.1f} mm^3")
+    except Exception as ex:
+        print(f"  (shape introspection failed: {ex})")
+
+
+try:
+    main()
+except Exception:
+    import traceback
+    print("\n=== TRACEBACK ===")
+    traceback.print_exc()
+    print("=== END ===")
+    raise
