@@ -1988,12 +1988,12 @@ Every prompt entry below uses the following fields. Entries that don't yet list 
 - **Prompt:** "I need to update the schematics, get rid of the RP2040, use the ESP32, add a parts list, and wire up all the components on this if you can."
 - **Input Tokens (est):** ~50
 - **Output Tokens (est):** ~25,000
+- **Commit:** `04cecb3` — Replace RP2040 with ESP32-S3-WROOM-1-N16R8 in schematic, add BOM, Prompt #149
 - **Files Created/Modified:**
   - `hardware-design/Board Design kicad/generate_schematic.py` (rewritten — replaced RP2040 with ESP32-S3-WROOM-1-N16R8 symbol and wiring; removed W25Q16JV flash, 12MHz crystal + load caps, 27R USB resistors, ATGM336H GPS; added ESP32-S3 lib symbol with 17 pins; rewired all nets: SPI e-paper GPIO9/10/3/11/46/12, I2C IMU GPIO16/17, USB-OTG GPIO19/20 direct to USB-C, joystick GPIO4-8, EN pull-up; component count 33→20; added full BOM table in docstring)
   - `hardware-design/Board Design kicad/dilder.kicad_sch` (regenerated — rev 0.3, ESP32-S3 schematic with all nets wired, validated with kicad-cli)
   - `hardware-design/BOM.md` (created — full bill of materials with LCSC part numbers, costs per component, GPIO pin assignment table, cost summary, changelog from v0.2)
   - `hardware-design/Measurements.md` (updated — replaced Pico board with ESP32-S3-WROOM-1 module dimensions, added PCB, joystick, USB-C, JST, MPU-6050 measurements)
-  - Commit: `04cecb3`
 
 ---
 
@@ -2002,6 +2002,7 @@ Every prompt entry below uses the following fields. Entries that don't yet list 
 - **Prompt:** "OK, pull in some example schematics and KiCad files into a new example folder in hardware design that use the ESP32 and somewhat similar functions. Find as many related examples as possible, put them in their own folder, and create an MD file for each to describe the use of each design and origin and backstory and details and links and TOC."
 - **Input Tokens (est):** ~80
 - **Output Tokens (est):** ~15,000
+- **Commit:** `2e5e0a8` — Add 11 ESP32 KiCad reference designs with documentation, Prompt #150
 - **Files Created/Modified:**
   - `hardware-design/examples/` (created — 11 open-source ESP32/ESP32-S3 KiCad projects cloned as reference designs)
   - `hardware-design/examples/01-pocketmage-pda/` (ESP32-S3 e-ink PDA, ~1800 stars, Apache-2.0)
@@ -2017,7 +2018,6 @@ Every prompt entry below uses the following fields. Entries that don't yet list 
   - `hardware-design/examples/11-aeonlabs-s3-template/` (minimal ESP32-S3 template, CC0)
   - Each folder has `ABOUT.md` with origin, backstory, feature comparison table, key takeaways, KiCad file listing, and links
   - `hardware-design/examples/INDEX.md` (created — master TOC with 3-tier relevance ranking, feature cross-reference table, usage guide)
-  - Commit: `2e5e0a8`
 
 ---
 
@@ -2063,6 +2063,7 @@ Every prompt entry below uses the following fields. Entries that don't yet list 
 - **Prompt:** "Continue on the parts sheets — ensure every needed part has a matching MD file and a manufacturer spec/datasheet in the datasheets folder. Each MD file needs to be robust and in-depth, well-researched — important background info, what it functions for, how it works, technologies behind it. The more advanced a part, the more in-depth you need to be, dumb it down and make TOCs for everyone and provide sources."
 - **Input Tokens (est):** ~100
 - **Output Tokens (est):** ~40,000
+- **Commit:** `12829d6` — Rewrite all parts sheets with full TOCs, technology guides, and sources, Prompt #153
 - **Files Created/Modified:**
   - Rewrote all 12 existing part sheets from scratch with full Table of Contents, plain-English "What Is This Part?" intros, deep technology explainers (MEMS accelerometer physics, MOSFET field-effect operation, CC/CV lithium charging theory, Schottky metal-semiconductor junctions, LDO bandgap reference internals, MLCC multi-layer construction, LED photon emission, I2C/SPI protocol tutorials, USB-C CC negotiation), manufacturer/inventor history, and cited sources (Wikipedia, datasheets, application notes, tutorials)
   - `hardware-design/parts-sheets/esp32-s3-wroom1.md` (62→230 lines — CPU architecture, WiFi OFDM, BLE, PSRAM vs SRAM, PCB antenna MIFA design, USB-OTG, module vs bare chip, Espressif history)
@@ -2084,7 +2085,6 @@ Every prompt entry below uses the following fields. Entries that don't yet list 
   - `hardware-design/parts-sheets/README.md` (rewritten — comprehensive index with descriptions of each sheet's coverage, component count summary)
   - `website/docs/docs/hardware/wiring-pinout.md` (modified — added ESP32-S3 custom PCB GPIO table, power chain diagram, block diagram)
   - `website/docs/docs/hardware/materials-list.md` (modified — added ESP32-S3 PCB BOM section at top)
-  - Commit: `12829d6`
 
 ---
 
@@ -2093,12 +2093,12 @@ Every prompt entry below uses the following fields. Entries that don't yet list 
 - **Prompt:** "Create a breadboard prototype guide with EU/US sourcing and alpha board plans."
 - **Input Tokens (est):** ~80
 - **Output Tokens (est):** ~20,000
+- **Commit:** `a5aec52` — Add breadboard prototype guide with EU/US sourcing and alpha board plans, Prompt #154
 - **Files Created/Modified:**
   - `hardware-design/breadboard-prototype-guide.md` (created — 7 ESP32-S3 dev board options with comparison table, GPIO wiring map matching custom PCB, breadboard assembly steps, shopping lists optimized for German/EU retailers: Botland, Eckstein, BerryBase, Olimex, EXP-Tech, Amazon)
   - Three compact alpha board approaches: Feather stack, protoboard solder build, 3D-printed bracket with Olimex DevKit-Lipo
   - `.gitignore` (updated for `.history/` dirs)
   - `PromptProgression.md` (#154), `website/docs/prompts/index.md` (#154)
-  - Commit: `a5aec52`
 
 ---
 
@@ -2107,6 +2107,7 @@ Every prompt entry below uses the following fields. Entries that don't yet list 
 - **Prompt:** "Continue where you left off — look at the staged changes and the planning and go from there."
 - **Input Tokens (est):** ~150
 - **Output Tokens (est):** ~60,000
+- **Commit:** `dbc82c1` — Add v0.4 PCB routing, board design doc, update prompts, Prompt #155
 - **Key Work:** PCB routing (Phase 4). Wrote `route_v04.py` — a 4-layer router for the v0.4 board using B.Cu vertical channels for long signals, staggered B.Cu L-routes for ePaper/joystick (crossing-free), custom routes for USB/EN/BOOT/battery protection, and F.Cu for power chain and local nets. Added In1.Cu GND plane and In2.Cu 3V3 plane. Iteratively fixed channel collisions (EN vs I2C_SDA), VBUS path crossings, and 3V3 via placement. Created comprehensive board design document.
 - **Files Created/Modified:**
   - `hardware-design/Board Design kicad/route_v04.py` (created — v0.4 router, ~400 lines)
@@ -2115,7 +2116,6 @@ Every prompt entry below uses the following fields. Entries that don't yet list 
   - `hardware-design/board-design-v04.md` (created — complete board design document with BOM, zones, GPIO map, routing strategy, DRC status, fab workflow)
   - KiCad project files updated (`.kicad_prl`, `.kicad_pro`, `.kicad_sch`)
   - `website/docs/prompts/index.md` (updated with Prompts #154-155)
-  - Commit: `dbc82c1`
 
 ---
 
@@ -3186,6 +3186,7 @@ Every prompt entry below uses the following fields. Entries that don't yet list 
 - **Prompt sequence:** Joystick breakout PCB design (KiCad schematic + layout + BOM for SKRHABE010 on 20x20mm board, JLCPCB/LCSC sourcing research), then base plate modifications: battery rails +5mm height, USB-C support block (15mm wide, dead center Y, 5mm deep), iterative repositioning (-10mm X transform, resize to 5mm depth, +3mm height), duplicate block placed 5mm adjacent.
 - **Input Tokens (est):** ~400 across the sequence
 - **Output Tokens (est):** ~20,000
+- **Commit:** `c039cf2` — Joystick breakout PCB (KiCad 8) + base plate v3 support blocks
 - **Files / interpretation:**
   - `hardware-design/joystick-pcb/` (new directory) — complete KiCad 8 project for 20x20mm SKRHABE010 5-direction navigation switch breakout PCB:
     - `joystick-pcb.kicad_pro` — project file
@@ -3248,6 +3249,7 @@ Every prompt entry below uses the following fields. Entries that don't yet list 
 - **Prompt:** "ok I added more images to the root folder lets analyse and rename the files with a detailed description convert to jpeg and delete originals then update the docs with the pictures and the design evolution as well this is last nights print with the assemble next plan is to wire in the batteries to the board and design a joystick board also lets take all the jpegs in the root folder and put them in a proper directory then update the blog and site and commit and push then update the prompts"
 - **Input Tokens (est):** ~100
 - **Output Tokens (est):** ~15,000
+- **Commit:** `e86efd7` — Rev 2 v3 print session photos + relocate root images + blog/docs update
 - **Files / interpretation:**
   - 17 HEIC photos from 2026-04-26 print session analysed, converted to JPEG, renamed with descriptive names, placed in `website/docs/assets/images/enclosure/`:
     - `rev2-v3-assembly-exploded-topcover-and-baseplate.jpg` — full assembly side by side
@@ -3283,6 +3285,7 @@ Every prompt entry below uses the following fields. Entries that don't yet list 
 
 - **Input Tokens (est):** ~500 across the sequence
 - **Output Tokens (est):** ~8,000
+- **Commit:** `cab962e` — Hand-routed joystick PCB (K1-1506SN-01) + blog/docs/prompts update
 - **Summary:** First PCB designed entirely from scratch (no autorouter). KiCad workspace screenshot cropped into 4 labeled JPEGs (PCB layout, schematic, 3D viewer, full workspace). New blog post `joystick-hand-routed-pcb.md`. Design evolution updated with new section and version history row. Front page updated with joystick PCB 3D preview image and current progress. JLCPCB BOM reformatted in `production/bom.csv`.
 - **Layman summary:** Designed a tiny circuit board (about the size of a postage stamp) for a joystick controller. Started from nothing — installed the parts catalog, downloaded the joystick component from an online supplier, drew the wiring diagram, laid out where every wire goes on the board, added labels so you know which wire is which direction, and exported the manufacturing files to send to a factory in China that will make the real board.
 - **Files:**
@@ -3309,6 +3312,7 @@ Every prompt entry below uses the following fields. Entries that don't yet list 
   - Cleanup: joystick-pcb/ (autorouter version) deleted in favor of joystick-pcb-by-hand/. Solar params removed from thinner file after fork.
 - **Input Tokens (est):** ~600 across the sequence
 - **Output Tokens (est):** ~30,000
+- **Commit:** `21650d8` — Top cover curvature param + base plate pillar tuning + solar cutout variant
 - **Files / interpretation:**
   - `04-26-design-alterations/top-cover-windowed-screen-inlay-v3-2piece.scad` — `face_plate_outer_edge_curve_radius_mm` parameter + ellipsoid sphere scaling in `shell_with_bullnose_top`
   - `04-26-design-alterations/base-plate-v1-2mm-thinner.scad` — `peg_height_above_pillar_mm` slider, `pillar_extension_z_above_plate_mm` with negative range, split pillar/extension wing geometry
@@ -3334,6 +3338,7 @@ Every prompt entry below uses the following fields. Entries that don't yet list 
   - Docs: new `website/docs/docs/reference/pico-2-w.md` with specs comparison, critical gotchas, and migration guide. Added to mkdocs nav.
 - **Input Tokens (est):** ~800 across the sequence
 - **Output Tokens (est):** ~45,000
+- **Commit:** `39d375f` — Add Pico 2 W (RP2350) as third target board
 - **Files:**
   - `firmware/include/platform/board_config.h` — `BOARD_PICO2_W` section (RP2350, 4MB flash, same pins)
   - `firmware/CMakeLists.txt` — `PICO2_W` target board option
@@ -3355,6 +3360,7 @@ Every prompt entry below uses the following fields. Entries that don't yet list 
 - **Prompt:** "ok new heic images added analyse and describe and rename them descriptively and put them on the front page after converting to jpeg and put em in a proper folder delete the heic files and update the blog and hardware evolution pull the renders for the latest scad and this is going to be the current design so update the website and hard design to reflect that then commit and push update prompts and push"
 - **Input Tokens (est):** ~80
 - **Output Tokens (est):** ~8,000
+- **Commit:** `ac8f356` — Current design photos + front page gallery + Pico 2 W blog post
 - **Files:**
   - `website/docs/assets/images/enclosure/rev2-current/rev2-assembled-front-view.jpg` (new) — converted from HEIC, Pico 2 W running Sassy Octopus front view
   - `website/docs/assets/images/enclosure/rev2-current/rev2-assembled-three-quarter-view.jpg` (new) — three-quarter angle showing case depth
@@ -3379,6 +3385,7 @@ Every prompt entry below uses the following fields. Entries that don't yet list 
   - Render both new files to 3MF; commit and push the design evolution; update prompts.
 - **Input Tokens (est):** ~400 across the sequence
 - **Output Tokens (est):** ~25,000
+- **Commit:** `faf44b7` — Thin-af base plate fork + cradle with batt-clip slots + 10440 battery research
 - **Summary:** Two new SCAD forks for the 2026-04-27 design pass: a thinner solar-cutout base plate (`base-plate-solar-thin-af-27-04`) carrying the with-supports preset as defaults, and an AAA cradle with battery-clip slots (`aaa-cradle-with-batt-clips`) sized for the cheapest Swpeet 7×7 mm unipolar contact plates. The cradle slots are oriented in YZ, opening to the plug top — 0.9 mm friction-fit thickness, plates drop in from above, wires exit upward. Battery-of-record settled: PKCELL ICR10440 raw 3.7 V Li-Ion AAA, wired in **parallel** (not series — 2S = 7.4 V exceeds the Pico W's 5.5 V VSYS max). Adhesive research note added (`solar-panel-bonding-adhesives.md`) covering Sikaflex / VHB / DOWSIL options for bonding the AK 62×36 panel to a PETG base plate outdoors.
 - **Layman summary:** Cloned two 3D-print files to start the next iteration. The base plate gets a name based on its goal — make it really thin. The battery cradle gets a new feature — four little slots at the ends of each battery cylinder, sized to hold the metal contact tabs from a cheap multi-pack of battery springs. Also nailed down which rechargeable AAA-shaped batteries to actually buy (the 3.7 V "raw lithium" kind — not the deceptively similar 1.5 V "smart" kind — because the charger board on the device only knows how to charge the raw kind), and wrote up which glues survive years of sun for sticking the solar panel down.
 - **Files:**
@@ -3402,6 +3409,7 @@ Every prompt entry below uses the following fields. Entries that don't yet list 
 - **Prompt:** "put a small 1mm thick retaining side in front of the battery clip holder so it will hold the battery clip in and only surround the perimeter so that contact points are exposed to the battery" — followed by a render-and-push pass after a user-named preset was added.
 - **Input Tokens (est):** ~80
 - **Output Tokens (est):** ~3,500
+- **Commit:** `583744d` — Add retainer wall to batt-clip slots
 - **Summary:** Added a 1 mm retainer wall on the cell side of each of the 4 battery-clip slots in `aaa-cradle-with-batt-clips.scad`. Implementation uses SUBTRACTIVE geometry (no floating add-ons): each slot is pulled back from its bay end by `batt_clip_retainer_thickness_x_mm`, leaving body material as the wall, and a smaller central window (`batt_clip_retainer_window_size_y/z_mm`, default 5 × 5 mm) is cut through the wall to expose the plate's contact face to the cell. The wall catches the 7 × 7 mm Swpeet plate's perimeter with 1 mm of edge engagement on all sides. Cylinder cut shaves ~0.1 mm off the wall on the bay side, so effective wall thickness is ~0.9 mm (close enough to spec). Four new tunable knobs: `batt_clip_retainer_enabled` (true), `_thickness_x_mm` (1.0), `_window_size_y_mm` / `_window_size_z_mm` (5.0). Set enabled=false to revert to the original through-slot. User then added a new customizer preset `battery clips first print 04-27` capturing these values for the next print run, and rendered it.
 - **Layman summary:** Each battery contact tab now has a tiny picture-frame in front of it — a 1 mm wall with a 5 mm hole cut in the middle. The frame catches the edge of the metal contact tab so it can't fall sideways into the battery hole, but the hole in the frame's middle lets the contact still touch the battery's terminal. Like a window screen: the screen catches the bug, the air gets through.
 - **Files:**
@@ -3419,6 +3427,7 @@ Every prompt entry below uses the following fields. Entries that don't yet list 
 - **Prompt:** "ok I designed the board and sent it to JLCPCB, got this email... help me understand what they are asking... make an md note of this exchange in the hardware design and give a summary of the design process and status so far, update the website with a progression blog page, and update the design evolution and running summary of everything"
 - **Input Tokens (est):** ~200
 - **Output Tokens (est):** ~8,000
+- **Commit:** `5ca8a59` — JLCPCB joystick PCB order notes + blog + docs/prompts update
 - **Summary:** Analyzed the JLCPCB placement verification email for the joystick PCB order. The factory flagged SW1 (K1-1506SN-01) because the near-symmetric package makes automated rotation detection unreliable. "Polarity" in this context means component orientation, not electrical polarity — the switch is passive. Confirmed the placement image shows the correct rotation (pin A/up arrow away from header). Documented the exchange, the full PCB design journey (autorouted Rev 1 failure through hand-routed Rev 2 success), current build status, and lesson learned (add pin 1 silkscreen dot). New blog post with build status table and next steps.
 - **Files:**
   - `hardware-design/jlcpcb-joystick-pcb-order-notes.md` (new) — JLCPCB order notes, placement verification analysis, PCB design journey, current status
@@ -3434,6 +3443,7 @@ Every prompt entry below uses the following fields. Entries that don't yet list 
 - **Prompt:** "can we embed the filename into the model print, have that as an option in the export, find a flat bit that won't be on the printer bed and put a file or product number?"
 - **Input Tokens (est):** ~40
 - **Output Tokens (est):** ~4,500
+- **Commit:** `a4abf3f` — DesignTool: embedded label feature + export history tracking
 - **Summary:** Added a label-embedding option to the DesignTool's Export tab. Recessed or raised text on any vertical face (front/back/left/right), configurable font size, depth, and position. Uses a two-pass STL workflow: plain export first, then a wrapper SCAD that `import()`s the STL and applies `difference()` (recessed) or `union()` (raised) with a `linear_extrude`d `text()` block. Label details recorded in description.md and history.json for each export.
 - **Layman summary:** Added a feature to stamp a filename or product number onto the side of your 3D-printed part — like a tiny engraved label that won't interfere with the flat bottom sitting on the print bed.
 - **Files:**
@@ -3445,6 +3455,7 @@ Every prompt entry below uses the following fields. Entries that don't yet list 
 - **Prompt:** "take the models in the Dilder Pico Prototype with joystick cutout aaa battery holder and clip cutouts Working Model Rev 1 and create a proper parametric FreeCAD design based on the SCAD and parameters setup"
 - **Input Tokens (est):** ~60
 - **Output Tokens (est):** ~25,000
+- **Commit:** `5d25c9a` — FreeCAD PartDesign parametric model — full 3-part enclosure
 - **Summary:** Translated all three Rev 2 enclosure parts (base plate, AAA cradle, top cover) from OpenSCAD to FreeCAD. First attempt used `Part::Feature` (frozen CSG shapes) — looked correct but had no editable feature tree. Rebuilt from scratch using real PartDesign API: `Sketcher::SketchObject` with constraints, `PartDesign::Pad`, `PartDesign::Pocket`, `PartDesign::Fillet`, `AdditiveBox`, `AdditiveCylinder`, `SubtractiveCylinder`. 81 features across 3 Bodies, 90-parameter spreadsheet with expression links. Fixed face-coordinate-system issues by replacing sketch-on-face pockets with `SubtractiveBox`/`SubtractiveCylinder` using explicit placement coordinates. Added USB-C stadium-shaped cutout (rounded bottom corners, open top) using 3 subtractive features. Comprehensive FreeCAD guide written with step-by-step tutorial panels showing 2D sketch diagrams alongside 3D results.
 - **Layman summary:** Converted the entire Tamagotchi case design from a text-based CAD tool (OpenSCAD) into a visual CAD tool (FreeCAD) where you can click on any part of the model and change its dimensions by typing new numbers. Like going from editing code to using a graphical editor.
 - **Files:**
@@ -3460,6 +3471,7 @@ Every prompt entry below uses the following fields. Entries that don't yet list 
 - **Prompt sequence:** Multi-turn FreeCAD rebuild of the TopCover body. Started with a viewing question ("how do I see the final part?"), escalated to "the topcover doesn't have the cutouts like the SCAD does," then "rebuild it from scratch with proper sketches and constraints — option C," then "I want a full master sketch for this," followed by "the cavity has a plane covering the inside and the FPC divet is missing," and finally "I want ZX sketches to alter component depths so I can make the top cover as thin as possible."
 - **Input Tokens (est):** ~400 across the sequence
 - **Output Tokens (est):** ~40,000
+- **Commit:** `8868f13` — Parametric TopCover rebuild with master sketch + Z-section + prompt #262
 - **Summary:** Full parametric rebuild of the TopCover Body in `Dilder_Rev2_PartDesign.FCStd`. Replaced the placement-based `SubtractiveBox` / `SubtractiveCylinder` primitives from prompt #261 with a sketch-driven master-sketch architecture. New `topcover_master_sketch.FCMacro` (~700 lines) builds: a 30-alias `TC_Params` spreadsheet (the dimensional source of truth); `Sk_Master_Plan` — a single XY-plane construction-only sketch holding every plan-view outline (outer shell, cavity, 4 pillars, screen inlay, display window, FPC ribbon divet, joystick PCB pocket, joystick through-hole, 4 M3 bores) fully constrained to spreadsheet aliases so the entire plan is visible in one diagram; per-feature sketches (`Sk_Shell`, `Sk_Cavity`, `Sk_Pillar_1..4`, `Sk_Inlay`, `Sk_Window`, `Sk_Joystick`, `Sk_M3_1..4`, `Sk_JoyPCB`, `Sk_FPC`) each on its own datum offset, with full geometric (Coincident, Horizontal, Vertical) + dimensional (DistanceX, DistanceY, Diameter) constraints all expression-bound to the same aliases; PartDesign Pads/Pockets driven by those sketches plus `Fillet_Corners` (vertical edges) and `Fillet_Bullnose` (top edges); display window and joystick hole get tapered Pockets (23.05° and 17.70° outward draft) matching SCAD's `hull()`-based frustum cuts. Two debug iterations: (1) the master sketch's overlapping rectangles caused `makeElementFace: invalid face` errors until every line in the master was flagged construction-only; (2) every `Pocket.Reversed` flag was inverted from convention — verified by an empirical test that proved `Reversed=False` cuts in -Z (downward) from the sketch plane (not +Z as initially assumed), causing the cavity to never carve out and the FPC divet to extrude into space. Fixed all 7 cuts (cavity now Reversed=True for upward, inlay/JoyPCB/FPC now False for downward, window/joystick/M3-bore now True for upward) — volume dropped 57460 → 20288 mm³ and face count grew 40 → 48, confirming the cuts now actually remove material. Final addition: `Sk_Section_Y23`, an XZ-plane side-profile section through Y=23 (display + joystick centerline) showing the full Z-layout as construction lines — outer envelope rectangle, 7 horizontal Z-level construction lines (`Z_ext_bot`, `Z_mating`, `Z_fpc_floor`, `Z_inlay_floor`, `Z_face_bot`, `Z_face_top`, `Z_bullnose_top`), and 6 vertical X-marker lines (`X_wall_mx`, `X_wall_px`, `X_inlay_x0/x1`, `X_joy_cx`, `X_fpc_x0`) — every dimension expression-bound so the section visualizes whatever the spreadsheet currently dictates. Documented the thinning levers: total height = `face_bot + fp_z + bull_r` = 11.7 mm; aggressive thin preset (`face_bot=5.0`, `fp_z=0.5`, `bull_r=1.5`) drops it to 7.0 mm. BasePlate and AAACradle bodies untouched. Pre-rebuild `.bak` snapshot kept for rollback.
 - **Layman summary:** Took the case's top cover and rebuilt it inside FreeCAD so every shape is now a real editable sketch instead of a frozen box. There's one "master diagram" sketch that shows the whole top-down view in one place, and a side-view sketch that shows every height layer (where the screen sits, where the face plate is, how thick the rolled top edge is). Both sketches are wired to a parameter spreadsheet — change a number there, hit recompute, and the cover updates. To make the cover thinner, edit three numbers: how much room the screen needs, how thick the top plate is, and how rounded the top edge is. Also fixed two bugs along the way: the cavity wasn't actually hollowing out (had a "ceiling plane" floating inside) and the cable slot wasn't getting cut — both because every Pocket was set to cut in the wrong direction.
 - **Files:**
