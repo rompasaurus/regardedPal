@@ -940,6 +940,180 @@ def build_top_cover(doc):
 
 
 # =====================================================================
+# PICO 2 W BOARD (imported STEP + procedural 2×20 pin headers)
+# =====================================================================
+# Raspberry Pi only publishes the official STEP for the non-W Pico 2,
+# but the Pico 2 W is mechanically identical (same 51×21mm outline, same
+# USB-C and 40-pin layout — only the wireless module differs on top).
+# The official STEP omits headers, so we add them parametrically.
+# Source: https://datasheets.raspberrypi.com/pico/Pico-2-step.zip
+#
+# Orientation:
+#   True  → USB-C end at +X (mating with the +X-wall USB-C cutout)
+#   False → board flipped 180° about Z; USB-C end at -X, board's -X edge
+#           anchored to AAACradle Face44 (inner -X wall of PicoNest cavity)
+
+PICO_USB_PLUS_X = False
+PICO_ANCHOR_FACE = ("AAACradle", 44)   # X-anchor (used when PICO_USB_PLUS_X is False)
+PICO_Z_ANCHOR_FACE = ("AAACradle", 6)  # Z-anchor: bbox ZMin lands on this face's Z
+
+
+def add_pico_with_headers(doc):
+    macro_dir = os.path.dirname(os.path.abspath(__file__))
+    step_path = os.path.normpath(os.path.join(
+        macro_dir, "..", "reference-boards",
+        "raspberry-pi-pico-2", "RaspberryPi-Pico-2.step"))
+
+    if not os.path.exists(step_path):
+        print(f"  ! Pico STEP not found: {step_path} — skipping import")
+        return None
+
+    print("  Importing Pico 2 W board + headers...")
+    shape = Part.Shape()
+    shape.read(step_path)
+
+    # ── Normalize orientation: shortest axis (board thickness) → +Z ──
+    # SolidWorks export uses Y-up for the board normal; map Y→Z so the
+    # board lies flat on the XY plane with components on +Z side.
+    bb0 = shape.BoundBox
+    dims = [bb0.XLength, bb0.YLength, bb0.ZLength]
+    short = dims.index(min(dims))
+    m = App.Matrix()
+    if short == 0:
+        m.rotateY(math.radians(90))
+    elif short == 1:
+        m.rotateX(math.radians(90))
+    shape = shape.transformGeometry(m)
+
+    # Ensure long board axis (51mm) lies along X — rotate 90° about Z if not.
+    bb_chk = shape.BoundBox
+    if bb_chk.YLength > bb_chk.XLength:
+        m_z = App.Matrix(); m_z.rotateZ(math.radians(90))
+        shape = shape.transformGeometry(m_z)
+
+    bb = shape.BoundBox
+    print(f"    Pico bbox after orient: "
+          f"{bb.XLength:.1f} × {bb.YLength:.1f} × {bb.ZLength:.1f}")
+
+    # ── Optional 180° Z reversal (USB-C end swap) ──
+    if not PICO_USB_PLUS_X:
+        m_zr = App.Matrix(); m_zr.rotateZ(math.radians(180))
+        shape = shape.transformGeometry(m_zr)
+        bb = shape.BoundBox
+
+    # ── Build 2×20 pin headers on the BOTTOM face of the board ──
+    # In the current (pre-Z-flip) frame, components are on +Z and the bare
+    # board bottom is at bb.ZMin. After the Z-flip below, the headers will
+    # end up on top (pins pointing +Z up into the cradle).
+    pcb_z_bot = bb.ZMin
+    pin_pitch = 2.54
+    pin_count = 20
+    row_inset = 1.0
+    pin1_inset = 1.61
+    pin_w = 0.64
+    pin_above = 8.6
+    shroud_h = 2.54
+
+    pieces = []
+    for row_y in (bb.YMin + row_inset, bb.YMax - row_inset):
+        strip_x0 = bb.XMin + pin1_inset - pin_pitch / 2
+        strip_len = pin_pitch * pin_count
+        # Plastic shroud below the board
+        pieces.append(Part.makeBox(
+            strip_len, pin_pitch, shroud_h,
+            V(strip_x0, row_y - pin_pitch / 2, pcb_z_bot - shroud_h)))
+        # Pins extending further below the shroud
+        for n in range(pin_count):
+            px = bb.XMin + pin1_inset + n * pin_pitch
+            pieces.append(Part.makeBox(
+                pin_w, pin_w, pin_above,
+                V(px - pin_w / 2, row_y - pin_w / 2,
+                  pcb_z_bot - shroud_h - pin_above)))
+    header_shape = Part.Compound(pieces)
+
+    # ── Z-flip: rotate 180° about world X axis (board upside down,
+    #    headers swing from below to above, pins point +Z) ──
+    m_flip_z = App.Matrix(); m_flip_z.rotateX(math.radians(180))
+    shape = shape.transformGeometry(m_flip_z)
+    header_shape = header_shape.transformGeometry(m_flip_z)
+
+    # ── Anchor combined assembly in global coords ──
+    enc_x_v, enc_y_v, wall_px_v = 94.5, 46.0, 1.2
+
+    bb_b = shape.BoundBox
+    bb_h = header_shape.BoundBox
+    cb_xmin = min(bb_b.XMin, bb_h.XMin)
+    cb_xmax = max(bb_b.XMax, bb_h.XMax)
+    cb_ymin = min(bb_b.YMin, bb_h.YMin)
+    cb_ymax = max(bb_b.YMax, bb_h.YMax)
+    cb_zmin = min(bb_b.ZMin, bb_h.ZMin)
+
+    def resolve_face_global(spec):
+        """Return the face's center point in global coords, or None."""
+        body_name, face_idx = spec
+        body = doc.getObject(body_name)
+        if body is None or len(body.Tip.Shape.Faces) < face_idx:
+            return None, None
+        f = body.Tip.Shape.Faces[face_idx - 1]
+        return body.Placement.multVec(f.CenterOfMass), f"{body_name}.Face{face_idx}"
+
+    if PICO_USB_PLUS_X:
+        target_x = enc_x_v - wall_px_v
+        dx = target_x - cb_xmax
+    else:
+        face_pt, label = resolve_face_global(PICO_ANCHOR_FACE)
+        if face_pt is None:
+            print(f"  ! Anchor face {PICO_ANCHOR_FACE} unavailable — "
+                  f"falling back to -X wall")
+            target_x = wall_px_v
+        else:
+            target_x = face_pt.x
+            print(f"    X-anchored to {label} at global X={target_x:.2f}")
+        dx = target_x - cb_xmin
+
+    dy = enc_y_v / 2 - (cb_ymin + (cb_ymax - cb_ymin) / 2)
+
+    z_face_pt, z_label = resolve_face_global(PICO_Z_ANCHOR_FACE)
+    if z_face_pt is None:
+        print(f"  ! Z anchor face {PICO_Z_ANCHOR_FACE} unavailable — "
+              f"falling back to bp_top")
+        target_z = 6.0
+    else:
+        target_z = z_face_pt.z
+        print(f"    Z-anchored to {z_label} at global Z={target_z:.2f}")
+
+    # After the 180° X flip the board's back is at bb_b.ZMax and the
+    # component-side face (the planar PCB surface visible at Z=8.73 in the
+    # selection) sits one board thickness below. Land that plane on target_z.
+    PCB_THICKNESS = 1.0
+    pcb_plane_z = bb_b.ZMax - PCB_THICKNESS
+    dz = target_z - pcb_plane_z
+
+    m_pos = App.Matrix(); m_pos.move(V(dx, dy, dz))
+    shape = shape.transformGeometry(m_pos)
+    header_shape = header_shape.transformGeometry(m_pos)
+
+    pico = doc.addObject("Part::Feature", "Pico2W_Board")
+    pico.Shape = shape
+
+    headers = doc.addObject("Part::Feature", "Pico2W_Headers")
+    headers.Shape = header_shape
+
+    try:
+        headers.ViewObject.ShapeColor = (0.10, 0.10, 0.10)
+    except Exception:
+        pass
+
+    fb = shape.BoundBox
+    fh = header_shape.BoundBox
+    print(f"    Board placed: X=[{fb.XMin:.1f},{fb.XMax:.1f}]  "
+          f"Y=[{fb.YMin:.1f},{fb.YMax:.1f}]  Z=[{fb.ZMin:.2f},{fb.ZMax:.2f}]")
+    print(f"    Headers:      X=[{fh.XMin:.1f},{fh.XMax:.1f}]  "
+          f"Y=[{fh.YMin:.1f},{fh.YMax:.1f}]  Z=[{fh.ZMin:.2f},{fh.ZMax:.2f}]")
+    return pico, headers
+
+
+# =====================================================================
 # MAIN — build all, assemble, save
 # =====================================================================
 
@@ -978,6 +1152,11 @@ def main():
     cr.Placement = App.Placement(
         V(96.3, 0, bp_top + 7.0),
         App.Rotation(V(0, 1, 0), 180))
+    doc.recompute()
+
+    # Pico import comes after assembly placements so face anchors resolve in
+    # global coords (cradle is rotated 180° about Y at this point).
+    pico_result = add_pico_with_headers(doc)
 
     # ── Body colors ──
     try:

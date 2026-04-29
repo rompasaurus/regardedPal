@@ -52,6 +52,26 @@ The 3D-printed enclosure is a three-part design: base plate with solar panel rec
   <em>All three parts stacked in their mated positions.</em>
 </p>
 
+### Pico 2 W in the Assembly
+
+The FreeCAD macro now imports the official Raspberry Pi Pico 2 STEP file (mechanically identical to the Pico 2 W) and adds procedural 2×20 pin headers. The board is mounted upside-down with its component-side face flush against the cradle's mating plane, headers extending up into the PicoNest cavity.
+
+<p align="center">
+  <img src="hardware-design/renders/assembly-with-pico-iso.png" alt="Assembly with Pico — top cover translucent" width="500" />
+  <br />
+  <em>Top cover rendered translucent so the Pico 2 W board, headers, and cradle are all visible.</em>
+</p>
+
+<p align="center">
+  <img src="hardware-design/renders/assembly-with-pico-no-cover.png" alt="Assembly without top cover" width="380" />
+  <img src="hardware-design/renders/assembly-with-pico-on-base.png" alt="Pico on base plate, cradle hidden" width="380" />
+</p>
+<p align="center">
+  <em>Left: top cover hidden so the cradle and Pico are exposed. Right: cradle hidden so the Pico's seating on the base plate is visible — header pin tips reach the level where the cradle would clip in.</em>
+</p>
+
+See the [FreeCAD macro reference](website/docs/docs/hardware/freecad-mk2-macro.md) for a full walkthrough of how the macro is structured.
+
 ---
 
 ## What This Project Is

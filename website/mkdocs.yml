@@ -118,6 +118,7 @@ nav:
           - Enclosure Design: docs/hardware/enclosure-design.md
           - Design Evolution: docs/hardware/design-evolution.md
           - ESP32-S3 Enclosure (SCAD): docs/hardware/esp32s3-enclosure-scad.md
+          - FreeCAD Mk2 Macro: docs/hardware/freecad-mk2-macro.md
           - 3D Printing Pipeline: docs/hardware/3d-printing-pipeline.md
       - Setup:
           - First-Time Setup (C SDK): docs/setup/first-time-setup.md
