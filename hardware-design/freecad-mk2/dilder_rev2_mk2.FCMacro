@@ -215,8 +215,8 @@ PARAMS = [
     ("inlay_z",        3.0,  "Screen inlay depth"),
     ("inlay_slop",     0.3,  "Inlay XY slop"),
     ("inlay_yslop",    0.35, "Inlay Y slop"),
-    ("win_xl",        48.0,  "Window length X"),
-    ("win_yd",        22.0,  "Window depth Y"),
+    ("win_xl",        50.0,  "Window length X"),
+    ("win_yd",        25.0,  "Window depth Y"),
     ("win_shift",      2.8,  "Window shift toward +X"),
     ("joy_d",         12.0,  "Joystick hole diameter"),
     ("joy_cx",        79.35, "Joystick center X"),
@@ -652,19 +652,17 @@ def build_cradle(doc):
     doc.recompute()
 
     # Battery arcs through connecting block
-    # IMPORTANT: In the SCAD these arcs are a difference() inside the connecting
-    # block only. In FreeCAD, SubtractiveCylinder cuts the ENTIRE body. If the
-    # arc extends to X=bay_mx_start it eats through the -X clip retainer walls.
-    # Fix: stop the arc just before the clip slot area.
-    # clip_slot_x=0.9, ret_thick=1.0 (defined later but needed here)
-    arc_x_end = bay_mx_start - 0.9 - 1.0 - 0.1   # = 18.4 (before clip area)
-    arc_len = arc_x_end - (plug_x0 - 0.1)          # = 15.2
+    # Start 10mm from X origin so the -X side of the cradle stays sealed
+    # (solid wall for printability). Stop before the clip slot area on +X side.
+    arc_x_start = 10.0                              # 10mm from X origin — left wall sealed
+    arc_x_end = bay_mx_start - 0.9 - 1.0 - 0.1     # = 18.4 (before clip area)
+    arc_len = arc_x_end - arc_x_start               # = 8.4
     for j, bay_y in enumerate([7.85, 38.15]):
         arc = body.newObject("PartDesign::SubtractiveCylinder", f"ConnBlockArc_{j+1}")
         arc.Radius = bay_d / 2
         arc.Height = arc_len
         arc.Placement = App.Placement(
-            V(plug_x0 - 0.1, bay_y, bay_cz),
+            V(arc_x_start, bay_y, bay_cz),
             App.Rotation(V(0, 1, 0), 90))
         doc.recompute()
 
