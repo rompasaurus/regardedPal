@@ -140,8 +140,10 @@ save("var-10-joystick-detail.png")
 # 11 — Display detail
 save("var-11-display-detail.png")
 
-# 12 — Baseplate bottom
-show(["BasePlate"])
+# 12 — Baseplate bottom (with solar panel + leads visible — these
+# are the parts that mount on the bottom face)
+show(["BasePlate", "Solar_Frame", "Solar_Cells",
+      "Solar_Wire_Plus", "Solar_Wire_Minus"])
 view_bottom()
 save("var-12-baseplate-bottom.png", axometric=False, fit=False)
 

@@ -243,6 +243,13 @@ PARAMS = [
     ("thumb_sock_y",   3.3,  "Snap socket Y size"),
     ("thumb_sock_d",   3.5,  "Snap socket depth (cuts up from disc bottom)"),
     ("thumb_stick_cy", 24.35, "Actuator stick Y center (offset +0.68 from cover hole; per JoystickPCB STEP geometry)"),
+    # ─── Solar panel (AK 62×36, sits in base plate's bottom solar pit) ───
+    ("sol_panel_x",   62.0,  "Solar panel X (= sol_x - 0.4 slop → AK 62×36 nominal)"),
+    ("sol_panel_y",   36.0,  "Solar panel Y (= sol_y - 0.4 slop)"),
+    ("sol_panel_z",    2.0,  "Solar panel total Z (matches sol_z so the panel fills the pit)"),
+    ("sol_cell_inset", 1.5,  "Inset of the dark-blue cell layer from the panel frame edges"),
+    ("sol_cell_z",     0.25, "Thickness of the cell layer (lower band on the panel — visible side)"),
+    ("sol_wire_d",     1.0,  "Solar lead wire OD (red = +, black = -)"),
 ]
 
 
@@ -1694,6 +1701,113 @@ def add_peripherals(doc):
 
 
 # =====================================================================
+# SOLAR PANEL — AK 62 × 36 mm, ~2 mm thick, fits in the base plate's
+# bottom solar pit (cut by Cut_SolarPit at 62.4 × 36.4 × 2.0 mm with
+# 0.2 mm slop per edge). Two leads route through 3.1 mm holes in the
+# pit floor at sol_h1 / sol_h2.
+# =====================================================================
+# AK doesn't publish CAD models for these monocrystalline panels;
+# built procedurally from the dimensions used to design the pit.
+# Panel is two stacked boxes: a dark frame (top, against pit ceiling)
+# and a deep-blue cell layer on the visible bottom face. From outside
+# the device looking up at the base plate, you see the cell layer
+# inset by `sol_cell_inset` with a thin frame around it.
+
+def add_solar_panel(doc):
+    print("  Adding solar panel (AK 62×36)...")
+
+    # ── Geometry (global; base plate Placement is identity, so base
+    # plate local coords = global coords) ──
+    enc_x_v = 94.5
+    enc_y_v = 46.0
+    sol_x_v = 62.4              # pit width (matches sol_x param)
+    sol_y_v = 36.4              # pit depth
+    sol_z_v = 2.0               # pit Z depth (= panel total Z)
+
+    panel_x_v = 62.0            # actual panel width
+    panel_y_v = 36.0            # actual panel depth
+    panel_z_v = 2.0             # actual panel total Z (frame + cells)
+    cell_inset_v = 1.5          # frame margin around the active cells
+    cell_z_v = 0.25             # cell layer thickness
+
+    # Pit is centered on the base plate.
+    pit_x0 = enc_x_v / 2 - sol_x_v / 2     # 16.05
+    pit_y0 = enc_y_v / 2 - sol_y_v / 2     # 4.80
+    panel_x0 = enc_x_v / 2 - panel_x_v / 2  # 16.25
+    panel_y0 = enc_y_v / 2 - panel_y_v / 2  # 5.00
+
+    # Panel TOP face touches the pit ceiling at Z = sol_z_v = 2.0;
+    # panel BOTTOM face flush with base plate bottom at Z = 0.
+    panel_top_z = sol_z_v        # 2.0
+    panel_bot_z = panel_top_z - panel_z_v   # 0.0
+
+    # Frame body: covers the upper part of the panel volume (Z = cell_z..panel_z),
+    # full footprint. Color: very dark blue/black (panel back substrate).
+    frame_z0 = panel_bot_z + cell_z_v          # 0.25
+    frame = Part.makeBox(
+        panel_x_v, panel_y_v, panel_z_v - cell_z_v,
+        V(panel_x0, panel_y0, frame_z0))
+    frame_obj = doc.addObject("Part::Feature", "Solar_Frame")
+    frame_obj.Shape = frame
+
+    # Cell layer: thin slab on the bottom (visible) face, inset from the
+    # frame edges so a thin frame border shows around the cells.
+    cell_x0 = panel_x0 + cell_inset_v
+    cell_y0 = panel_y0 + cell_inset_v
+    cell_x_v = panel_x_v - 2 * cell_inset_v   # 59.0
+    cell_y_v = panel_y_v - 2 * cell_inset_v   # 33.0
+    cells = Part.makeBox(
+        cell_x_v, cell_y_v, cell_z_v,
+        V(cell_x0, cell_y0, panel_bot_z))
+    cells_obj = doc.addObject("Part::Feature", "Solar_Cells")
+    cells_obj.Shape = cells
+
+    # Lead wires — two short stubs through the wire holes in the pit
+    # floor. Hole positions are pit-local in the macro's spreadsheet:
+    #   sol_h1 = (2.5, 2.0)  → global (pit_x0 + 2.5, pit_y0 + 2.0)
+    #   sol_h2 = (60.0, 2.4) → global (pit_x0 + 60.0, pit_y0 + 2.4)
+    # Wires emerge from the panel back (Z = panel_top_z = 2.0) and rise
+    # up to ~Z=10 — clear of the base plate top (Z = 6) and into the
+    # cradle pocket. Slightly less than 3.1 mm hole dia so they fit
+    # comfortably (1.0 mm OD wire).
+    wire_d_v = 1.0
+    wire_top_z = 10.0
+    leads = [
+        ("Solar_Wire_Plus",  pit_x0 + 2.5, pit_y0 + 2.0, (0.85, 0.10, 0.10)),
+        ("Solar_Wire_Minus", pit_x0 + 60.0, pit_y0 + 2.4, (0.05, 0.05, 0.05)),
+    ]
+    for name, wx, wy, color in leads:
+        wire = Part.makeCylinder(
+            wire_d_v / 2, wire_top_z - panel_top_z,
+            V(wx, wy, panel_top_z))
+        w_obj = doc.addObject("Part::Feature", name)
+        w_obj.Shape = wire
+        try:
+            w_obj.ViewObject.ShapeColor = color
+        except Exception:
+            pass
+
+    try:
+        # Frame: dark navy/black panel substrate
+        frame_obj.ViewObject.ShapeColor = (0.08, 0.08, 0.12)
+        # Active cells: deep blue with a hint of purple — typical
+        # monocrystalline cell appearance
+        cells_obj.ViewObject.ShapeColor = (0.10, 0.15, 0.45)
+    except Exception:
+        pass
+
+    print(f"    Solar panel: X=[{panel_x0:.2f},{panel_x0+panel_x_v:.2f}]  "
+          f"Y=[{panel_y0:.2f},{panel_y0+panel_y_v:.2f}]  "
+          f"Z=[{panel_bot_z:.2f},{panel_top_z:.2f}]")
+    print(f"    Cells:       inset {cell_inset_v} mm, "
+          f"layer Z=[{panel_bot_z:.2f},{panel_bot_z+cell_z_v:.2f}]")
+    print(f"    Leads:       through wire holes at "
+          f"({pit_x0+2.5:.2f}, {pit_y0+2.0:.2f}) and "
+          f"({pit_x0+60.0:.2f}, {pit_y0+2.4:.2f})")
+    return frame_obj, cells_obj
+
+
+# =====================================================================
 # MAIN — build all, assemble, save
 # =====================================================================
 
@@ -1749,6 +1863,10 @@ def main():
     # Thumbpiece — snap cap over the K1-1506SN-01 actuator stick, sits
     # flush within the cover's 12 mm joystick circle cutout
     build_thumbpiece(doc)
+
+    # Solar panel — AK 62×36 mm, sits in the base plate's bottom solar pit
+    # with leads through the two wire holes
+    add_solar_panel(doc)
 
     # ── Body colors ──
     try:
