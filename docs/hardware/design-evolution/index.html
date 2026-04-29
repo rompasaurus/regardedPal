@@ -956,6 +956,36 @@
   
   
     <li class="md-nav__item">
+      <a href="../../../blog/category/freecad/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    FreeCAD
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    
+  
+  
+    <li class="md-nav__item">
       <a href="../../../blog/category/hardware/" class="md-nav__link">
         
   
@@ -2449,6 +2479,34 @@
     
   
     ESP32-S3 Enclosure (SCAD)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../freecad-mk2-macro/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    FreeCAD Mk2 Macro
   
 
     
@@ -5706,6 +5764,12 @@
 <td>Working Model Rev 1</td>
 <td>snapshot</td>
 <td>Organized working design into named part folders (Base Plate, AAA Cradle, Top Cover) with SCAD source, JSON presets, STL, 3MF, and description for each. First formal "frozen" working model checkpoint</td>
+</tr>
+<tr>
+<td>2026-04-29</td>
+<td>FreeCAD Mk2 macro</td>
+<td>Pico import + Z-flip mount</td>
+<td><code>dilder_rev2_mk2.FCMacro</code> now imports the official Raspberry Pi Pico 2 STEP file (mechanically identical to the Pico 2 W) and adds procedural 2×20 pin headers. Bbox-driven re-orientation makes the import robust to source-CAD axis conventions. The board is built right-side-up with headers below, then the entire stack rotates 180° about X so headers point up and components face the base plate. Position is anchored to named cradle faces — <code>AAACradle.Face44</code> for X (inner −X wall of PicoNest cavity, global X = 11.20) and <code>AAACradle.Face6</code> for Z (cradle mating plane, global Z = 6.00) — so changes to the cradle propagate to the Pico's seating without manual fixup. PCB component-side face sits flush at Z = 6.00, components hang into the base plate's cradle pocket, header pin tips reach Z = 18.14</td>
 </tr>
 </tbody>
 </table>

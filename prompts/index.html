@@ -954,6 +954,36 @@
   
   
     <li class="md-nav__item">
+      <a href="../blog/category/freecad/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    FreeCAD
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    
+  
+  
+    <li class="md-nav__item">
       <a href="../blog/category/hardware/" class="md-nav__link">
         
   
@@ -1515,6 +1545,34 @@
     
   
     ESP32-S3 Enclosure (SCAD)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../docs/hardware/freecad-mk2-macro/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    FreeCAD Mk2 Macro
   
 
     
@@ -4831,6 +4889,28 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#prompt-263-2026-04-29" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Prompt #263 — 2026-04-29
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#prompt-264-2026-04-29" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Prompt #264 — 2026-04-29
+      
+    </span>
+  </a>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -6801,6 +6881,28 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#prompt-263-2026-04-29" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Prompt #263 — 2026-04-29
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#prompt-264-2026-04-29" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Prompt #264 — 2026-04-29
+      
+    </span>
+  </a>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -8241,6 +8343,22 @@
 <li><strong>Input Tokens (est):</strong> ~400 across the sequence</li>
 <li><strong>Output Tokens (est):</strong> ~40,000</li>
 <li><strong>Summary:</strong> Full parametric rebuild of the TopCover body. New <code>topcover_master_sketch.FCMacro</code> (~700 lines) replaces the placement-based <code>SubtractiveBox</code>/<code>SubtractiveCylinder</code> primitives from #261 with a sketch-driven master-sketch architecture. 30-alias <code>TC_Params</code> spreadsheet drives every dimension. <code>Sk_Master_Plan</code> is a single XY-plane construction-only sketch holding every plan-view outline (shell, cavity, 4 pillars, screen inlay, display window, FPC ribbon divet, joystick PCB pocket, joystick through-hole, 4 M3 bores) fully constrained. Per-feature sketches (<code>Sk_Shell</code>, <code>Sk_Cavity</code>, <code>Sk_Pillar_1..4</code>, <code>Sk_Inlay</code>, <code>Sk_Window</code>, <code>Sk_Joystick</code>, <code>Sk_M3_1..4</code>, <code>Sk_JoyPCB</code>, <code>Sk_FPC</code>) drive Pads/Pockets with full geometric + dimensional constraints, all expression-bound to the same aliases. Display window and joystick hole get tapered Pockets (23.05° / 17.70°) matching SCAD's <code>hull()</code>-based frustum cuts. Two debug iterations: master-sketch face-validity errors fixed by flagging all overlapping geometry as construction-only; every Pocket <code>Reversed</code> flag was inverted from convention — empirical test confirmed <code>Reversed=False</code> cuts in -Z (downward) from the sketch plane, fixed all 7 cuts (volume 57460 → 20288 mm³, faces 40 → 48). Final addition: <code>Sk_Section_Y23</code> — an XZ-plane side-profile section through the display + joystick centerline showing the full Z layout as construction lines (7 horizontal Z levels, 6 vertical X markers, all named and expression-bound). Total cover height = <code>face_bot + fp_z + bull_r</code> = 11.7 mm; thin preset (5.0 / 0.5 / 1.5) drops it to 7.0 mm. BasePlate + AAACradle untouched.</li>
+</ul>
+<hr />
+<h2 id="prompt-263-2026-04-29">Prompt #263 — 2026-04-29<a class="headerlink" href="#prompt-263-2026-04-29" title="Permanent link">&para;</a></h2>
+<p><strong>Prompt:</strong> "the solar panel holes for the wires dont cut through the base plate fully in the macro you made" — followed by "commit and push all these changes and update the documentation create a few render pic of all the pieces we made individually and assembled and put that on the front page then commit and push this all update the prompts with the git hashes and commit and push once more"</p>
+<ul>
+<li><strong>Input Tokens (est):</strong> ~150</li>
+<li><strong>Output Tokens (est):</strong> ~12,000</li>
+<li><strong>Summary:</strong> Fixed the solar panel wire holes in <code>dilder_rev2_mk2.FCMacro</code> — the two <code>SubtractiveCylinder</code> features were at step 7 in the feature tree, but steps 9-12 added pillars, wings, rail supports, and blocks above them. Since PartDesign evaluates sequentially, the holes only cut material that existed at step 7. Moved them to step 13 (last operation) so they cut through everything. Added final baked SCAD files for all 3 parts, FreeCAD Mk2 design files (FCStd + 3MF exports), rendered all parts via OpenSCAD CLI, added render gallery to README front page, updated Phase 6 progress.</li>
+</ul>
+<hr />
+<h2 id="prompt-264-2026-04-29">Prompt #264 — 2026-04-29<a class="headerlink" href="#prompt-264-2026-04-29" title="Permanent link">&para;</a></h2>
+<p><strong>Prompt sequence:</strong> Multi-turn integration of the Raspberry Pi Pico 2 W board model into the FreeCAD assembly. "ok we got a macro to create the dilder board in free cad lets also pull in a model for the pico2 w board with headers see if you can find it online it would be good to seel it in the part assembly" → "ok reverse the pico on the x axis and align the edge of the board to the ClipWindow_2P.Face44" → "the headers should be on the opposite face of the pico board then we need to flip the board and headers along the z axis" → "nope that didn't work … the pico board face should sit flush with <code>AAACradle.ClipWindow_2P.Face6</code>" → "perfect orientation now lets make sure the ClipWindow_2P.Face44 is on the same z axis point as <code>AAACradle.ClipWindow_2P.Face6</code>" → "update the docs and make a new set of rendering pics and update the website and front page add a blog and outline the tech and steps used to create this model and how the macro works in a separate website doc commit and push and update prompt fix grammar add the commit hashes and push".</p>
+<ul>
+<li><strong>Input Tokens (est):</strong> ~600 across the sequence</li>
+<li><strong>Output Tokens (est):</strong> ~25,000</li>
+<li><strong>Summary:</strong> Added the Pico 2 W to the FreeCAD assembly with procedural pin headers, anchored to named cradle faces. Found that Raspberry Pi only publishes the official STEP for the (non-W) Pico 2 — mechanically identical to the Pico 2 W — and downloaded it to <code>hardware-design/reference-boards/raspberry-pi-pico-2/</code>. Wrote <code>add_pico_with_headers()</code> in <code>dilder_rev2_mk2.FCMacro</code>. Bbox-driven re-orientation puts the imported board flat in XY with components on +Z and the long axis on X regardless of source-CAD convention. Procedural 2×20 pin headers (2.54 mm pitch, 0.64 mm square pins, 8.6 mm above board, 2.54 mm shroud) built <strong>below</strong> the board, then the entire stack rotates 180° about world X so headers point up and the component side faces the base plate. Position is anchored to named cradle faces by index — <code>AAACradle.Face44</code> (inner −X wall of PicoNest cavity) gives the X anchor and <code>AAACradle.Face6</code> (cradle plug-top mating plane) gives the Z anchor. The Pico import has to run <em>after</em> the cradle's <code>Placement</code> is set in <code>main()</code> so face center-of-mass points resolve to global coords. Final anchor expression <code>bbox.ZMax − PCB_THICKNESS</code> lands the board's component-side face flush with Face6 at global Z = 6.00; components hang into the base plate's cradle pocket (Z 3.27 → 6.00); pin tips reach Z = 18.14. Four new FreeCAD-rendered images committed (iso with translucent cover, no-cover, cradle-hidden, front elevation), README front page updated with a Pico-in-assembly section, new blog post <code>freecad-pico-import-and-assembly.md</code>, new doc page <code>docs/hardware/freecad-mk2-macro.md</code> walking through every macro section and the anchor pattern. PromptProgression and website prompts index synced.</li>
 </ul>
 
 
