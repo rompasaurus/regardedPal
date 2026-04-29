@@ -893,10 +893,17 @@ def build_top_cover(doc):
     doc.recompute()
 
     # ── 9. Display viewing window (through face plate + dome) ──
-    win_w = 48.0
-    win_h = 22.0
+    # Literal width/height must match the spreadsheet defaults (win_xl, win_yd)
+    # so the placement-based centering grows symmetrically when the window is
+    # resized. Using a stale literal here makes the cut shift toward one edge.
+    win_w = 50.0
+    win_h = 25.0
+    # Align Y center of the window with the joystick's Y center (joy_cy =
+    # enc_y/2). Anchoring directly to joy_cy makes the alignment explicit so
+    # any future change to the joystick Y propagates to the window.
+    joy_cy_v = 46.0 / 2     # = enc_y / 2
     win_x0 = disp_x0 + (65.0 - win_w)/2 + 2.8
-    win_y0 = disp_y0 + (30.0 - win_h)/2
+    win_y0 = joy_cy_v - win_h / 2
 
     win_z_height = total_h - face_bot + 0.2  # through face plate + dome
     win = body.newObject("PartDesign::SubtractiveBox", "Cut_Window")
