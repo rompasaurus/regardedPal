@@ -3483,3 +3483,28 @@ Every prompt entry below uses the following fields. Entries that don't yet list 
   - `hardware-design/freecad/Dilder_Rev2_PartDesign_MasterSketch.20260427-204016.FCBak`, `…20260427-205533.FCBak` (new) — FreeCAD auto-backups
 
 ---
+
+## Prompt #263 — 2026-04-29
+- **Prompt:** "the solar panel holes for the wires dont cut through the base plate fully in the macro you made" — followed by "commit and push all these changes and update the documentation create a few render pic of all the pieces we made individually and assembled and put that on the front page then commit and push this all update the prompts with the git hashes and commit and push once more"
+- **Input Tokens (est):** ~150
+- **Output Tokens (est):** ~12,000
+- **Commit:** `9d96395` — Rev 2 Mk2 enclosure: final SCAD parts, FreeCAD macro fix, renders, README update
+- **Summary:** Fixed the solar panel wire holes in `dilder_rev2_mk2.FCMacro` — the two `SubtractiveCylinder` features were at step 7 in the feature tree, but steps 9-12 added pillars, wings, rail supports, and blocks on top. Since PartDesign evaluates sequentially, the holes only cut material that existed at step 7. Moved them to step 13 (last operation) so they cut through everything. Also added final baked SCAD files for all 3 parts, FreeCAD Mk2 design files (FCStd + 3MF exports), rendered all parts via OpenSCAD CLI (base plate top/bottom, AAA cradle, top cover, assembled), added render gallery to README front page, updated Phase 6 progress, and added `*.FCBak` to `.gitignore`.
+- **Layman summary:** The wire holes for the solar panel weren't going all the way through the base plate because they were being drilled before walls and supports were added on top — like drilling a hole in a table before gluing a shelf over it. Moved the drilling step to the very end so it punches through everything. Also took nice pictures of all three parts and put them on the project's front page.
+- **Files:**
+  - `hardware-design/freecad-mk2/dilder_rev2_mk2.FCMacro` — moved WireHole SubtractiveCylinders from step 7 to step 13 (end of feature tree)
+  - `hardware-design/renders/base-plate.png` (new) — OpenSCAD render, top view
+  - `hardware-design/renders/base-plate-bottom.png` (new) — OpenSCAD render, bottom view showing solar pit
+  - `hardware-design/renders/aaa-cradle.png` (new) — OpenSCAD render
+  - `hardware-design/renders/top-cover.png` (new) — OpenSCAD render
+  - `hardware-design/renders/assembled.png` (new) — OpenSCAD render, all 3 parts stacked
+  - `README.md` — added enclosure render gallery section + updated Phase 6 checklist
+  - `.gitignore` — added `*.FCBak` pattern
+  - `hardware-design/final case with aaa cradle and solar/*.scad` (new) — final baked SCAD files
+  - `hardware-design/freecad-mk2/*.FCStd` (new) — FreeCAD Mk2 design files
+  - `hardware-design/freecad-mk2/*.3mf` (new) — exported meshes
+  - `hardware-design/freecad-mk2/BUILD-INSTRUCTIONS.txt` (new)
+  - `hardware-design/speaker-module-selection.md` (new)
+  - `PromptProgression.md` — prompt #263 appended
+
+---
