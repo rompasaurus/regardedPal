@@ -72,6 +72,26 @@ The FreeCAD macro now imports the official Raspberry Pi Pico 2 STEP file (mechan
 
 See the [FreeCAD macro reference](website/docs/docs/hardware/freecad-mk2-macro.md) for a full walkthrough of how the macro is structured.
 
+### Joystick Thumbpiece
+
+A printable snap cap that fits over the K1-1506SN-01 5-way switch peg. Single disc, 11 mm OD (= cover hole − 1 mm) so it nests inside the cover's joystick cutout with 0.5 mm radial clearance for directional swing. Concave thumb dish on top, rectangular snap socket on the bottom centered on the actuator (the SW1 stick is offset +0.68 mm in Y from the cover hole on the production PCB layout — disc reads visually centered, socket lands on the peg). Built parametrically in `dilder_rev2_mk2.FCMacro` as a separate `Thumbpiece` Body — drop `thumb_sock_x/y` from 3.3 to ~3.15 in the spreadsheet to convert friction-fit to interference snap-fit.
+
+<p align="center">
+  <img src="hardware-design/renders/var-01-hero-iso.png" alt="Assembly with thumbpiece" width="500" />
+  <br />
+  <em>Top-down view of the assembled prototype — display window on the left, joystick with the new thumbpiece on the right.</em>
+</p>
+
+<p align="center">
+  <img src="hardware-design/renders/var-10-joystick-detail.png" alt="Joystick + thumbpiece detail" width="380" />
+  <img src="hardware-design/renders/var-thumbpiece-hero.png" alt="Thumbpiece in cover hole" width="380" />
+</p>
+<p align="center">
+  <em>Left: joystick area in context. Right: thumbpiece nested in the cover cutout with the cover dialed to 85% transparency for clarity.</em>
+</p>
+
+See the [thumbpiece design write-up](website/docs/blog/posts/joystick-thumbpiece-snap-cap.md) for the geometry walkthrough — including the dish-vs-socket constraint that almost ruined the first cut.
+
 ---
 
 ## What This Project Is

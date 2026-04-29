@@ -1,0 +1,213 @@
+"""
+Render Views — produces a fixed set of PNGs from Dilder_Rev2_Mk2.FCStd.
+
+Run with:  freecad render_views.FCMacro
+Or offscreen:  QT_QPA_PLATFORM=offscreen freecad render_views.FCMacro
+
+Each view sets up camera + visibility, then saves a PNG to ../renders/var-*.png.
+The set mirrors what was committed on 2026-04-29 plus a thumbpiece detail.
+"""
+
+import os, time
+import FreeCAD as App
+import FreeCADGui as Gui
+
+MACRO_DIR = os.path.dirname(os.path.abspath(__file__))
+FCSTD_PATH = os.path.join(MACRO_DIR, "Dilder_Rev2_Mk2.FCStd")
+RENDER_DIR = os.path.normpath(os.path.join(MACRO_DIR, "..", "renders"))
+
+W, H = 1600, 1200
+BG = "Transparent"
+
+doc = App.openDocument(FCSTD_PATH)
+Gui.ActiveDocument = Gui.getDocument(doc.Name)
+view = Gui.ActiveDocument.activeView()
+
+
+def all_objects():
+    return [o for o in doc.Objects if hasattr(o, "ViewObject")]
+
+
+def show(names):
+    """Show the named objects, hide all others."""
+    show_set = set(names)
+    for o in all_objects():
+        try:
+            o.ViewObject.Visibility = (o.Name in show_set)
+        except Exception:
+            pass
+    Gui.updateGui()
+
+
+def show_all_except(hidden):
+    h = set(hidden)
+    for o in all_objects():
+        try:
+            o.ViewObject.Visibility = (o.Name not in h)
+        except Exception:
+            pass
+    Gui.updateGui()
+
+
+def save(name, axometric=True, fit=True):
+    if axometric:
+        try:
+            Gui.SendMsgToActiveView("ViewIsometric")
+        except Exception:
+            pass
+    if fit:
+        Gui.SendMsgToActiveView("ViewFit")
+    Gui.updateGui()
+    time.sleep(0.05)
+    out = os.path.join(RENDER_DIR, name)
+    view.saveImage(out, W, H, BG)
+    print(f"  wrote {out}")
+
+
+def view_top():
+    Gui.SendMsgToActiveView("ViewTop")
+    Gui.SendMsgToActiveView("ViewFit")
+
+
+def view_front():
+    Gui.SendMsgToActiveView("ViewFront")
+    Gui.SendMsgToActiveView("ViewFit")
+
+
+def view_bottom():
+    Gui.SendMsgToActiveView("ViewBottom")
+    Gui.SendMsgToActiveView("ViewFit")
+
+
+# Restore default transparency on cover
+for o in all_objects():
+    if o.Name == "TopCover":
+        try:
+            o.ViewObject.Transparency = 40
+        except Exception:
+            pass
+
+print(f"Rendering to {RENDER_DIR} ...")
+
+# 01 — Hero iso (everything visible, transparent cover)
+show_all_except([])
+save("var-01-hero-iso.png")
+
+# 02 — Top-down translucent
+view_top()
+save("var-02-top-translucent.png", axometric=False, fit=False)
+
+# 03 — Front elevation
+view_front()
+save("var-03-front-elevation.png", axometric=False, fit=False)
+
+# 04 — Side stack (ViewLeft)
+Gui.SendMsgToActiveView("ViewLeft")
+Gui.SendMsgToActiveView("ViewFit")
+save("var-04-side-stack.png", axometric=False, fit=False)
+
+# 05 — Cover removed iso
+show_all_except(["TopCover"])
+save("var-05-cover-removed-iso.png")
+
+# 06 — Cover removed top
+view_top()
+save("var-06-cover-removed-top.png", axometric=False, fit=False)
+
+# 07 — Cradle + batt + clips iso (hide cover, base plate, pico, displays, joystick, thumbpiece)
+show_all_except([
+    "TopCover", "BasePlate", "Pico_Board", "Pico_Headers",
+    "JoystickPCB", "Thumbpiece", "TP4056_Module", "TP4056_USBC",
+    "EInk_Display", "EInk_Panel"])
+save("var-07-cradle-batt-clips-iso.png")
+
+# 08 — Cradle + batt + clips top
+view_top()
+save("var-08-cradle-batt-clips-top.png", axometric=False, fit=False)
+
+# 09 — Pico on base
+show_all_except([
+    "TopCover", "AAACradle", "JoystickPCB", "Thumbpiece",
+    "AAA_Battery_1", "AAA_Battery_1_PosTerm",
+    "AAA_Battery_2", "AAA_Battery_2_PosTerm",
+    "TP4056_Module", "TP4056_USBC", "EInk_Display", "EInk_Panel"])
+save("var-09-pico-on-base.png")
+
+# 10 — Joystick + thumbpiece detail (cover translucent, zoomed)
+show_all_except([])
+save("var-10-joystick-detail.png")
+
+# 11 — Display detail
+save("var-11-display-detail.png")
+
+# 12 — Baseplate bottom
+show(["BasePlate"])
+view_bottom()
+save("var-12-baseplate-bottom.png", axometric=False, fit=False)
+
+# 13 — Baseplate top
+view_top()
+save("var-13-baseplate-top.png", axometric=False, fit=False)
+
+# 14 — Cradle bottom
+show(["AAACradle"])
+view_bottom()
+save("var-14-cradle-bottom.png", axometric=False, fit=False)
+
+# 15 — Cover bottom
+show(["TopCover"])
+view_bottom()
+save("var-15-cover-bottom.png", axometric=False, fit=False)
+
+# 16 — Exploded iso (just split bodies on Z)
+show_all_except([])
+# Stash placements
+saved = {}
+for o in all_objects():
+    if o.Name in ("TopCover", "AAACradle", "BasePlate", "Thumbpiece"):
+        saved[o.Name] = o.Placement
+# Lift cover + thumbpiece higher
+for nm, dz in [("TopCover", 30), ("Thumbpiece", 40),
+               ("AAACradle", 0), ("BasePlate", -25)]:
+    if nm in saved:
+        p = App.Placement(saved[nm])
+        p.Base = p.Base + App.Vector(0, 0, dz)
+        doc.getObject(nm).Placement = p
+doc.recompute()
+save("var-16-exploded-iso.png")
+
+# 17 — Exploded front
+view_front()
+save("var-17-exploded-front.png", axometric=False, fit=False)
+
+# Restore placements
+for nm, p in saved.items():
+    doc.getObject(nm).Placement = p
+doc.recompute()
+
+# 18 — Joystick + thumbpiece aligned top (zoomed)
+show_all_except([])
+view_top()
+save("var-joystick-aligned-top.png", axometric=False, fit=False)
+
+# 19 — Thumbpiece hero (new render specific to the thumbpiece — keep
+# the cover visible for spatial context, but make it very transparent
+# so the thumbpiece reads clearly)
+show_all_except([])
+for o in all_objects():
+    if o.Name == "TopCover":
+        try:
+            o.ViewObject.Transparency = 85
+        except Exception:
+            pass
+save("var-thumbpiece-hero.png")
+# Restore cover transparency
+for o in all_objects():
+    if o.Name == "TopCover":
+        try:
+            o.ViewObject.Transparency = 40
+        except Exception:
+            pass
+
+print("Done.")
+App.closeDocument(doc.Name)

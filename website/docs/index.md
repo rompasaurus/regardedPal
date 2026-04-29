@@ -65,6 +65,28 @@ Jamal still sits in the armchair. He still wears the hat. He watches us build hi
 
 ---
 
+## Latest Prototype — Joystick Thumbpiece
+
+A printable snap cap that fits over the K1-1506SN-01 5-way switch peg, nests inside the cover's 12 mm joystick cutout with 0.5 mm radial clearance for directional swing, and gives the thumb a concave landing pad instead of a bare 3.2 mm rectangular nub. Designed entirely in the FreeCAD parametric macro — every dimension is a spreadsheet alias, so OD, height, dish radius, and snap-socket fit can be tuned without touching code.
+
+<div class="grid" markdown>
+
+<figure markdown="span">
+  ![Dilder Rev 2 — assembly hero showing thumbpiece in the joystick cutout](assets/images/enclosure/var-01-hero-iso.png){ width="420" loading=lazy }
+  <figcaption>Hero shot — the thumbpiece sits flush in the cover hole next to the e-ink display window</figcaption>
+</figure>
+
+<figure markdown="span">
+  ![Dilder Rev 2 — joystick + thumbpiece detail render](assets/images/enclosure/var-10-joystick-detail.png){ width="420" loading=lazy }
+  <figcaption>Joystick detail — concave thumb dish on top, snap socket below grips the actuator peg</figcaption>
+</figure>
+
+</div>
+
+[Read the full thumbpiece design write-up :material-arrow-right:](blog/posts/joystick-thumbpiece-snap-cap.md){ .md-button }
+
+---
+
 ## Meet the Octopus
 
 A tiny octopus lives on a 250x122 pixel e-ink display. It has **16 emotional states**, each with unique eyes, mouth expressions, body animations, and themed quotes. It's sassy. It's opinionated. It runs on 100KB of firmware and a coin cell's worth of ambition.

@@ -220,6 +220,9 @@ PARAMS = [
     ("win_shift",      2.8,  "Window shift toward +X"),
     ("joy_d",         12.0,  "Joystick hole diameter"),
     ("joy_cx",        79.35, "Joystick center X"),
+    ("joy_pcb_y_offset", 0.67, "SW1 Y offset from PCB bbox center (production-PCB constant — KiCad places the K1-1506SN-01 +0.67 mm in Y from board geometric center; cover's joystick hole + pocket are shifted by this amount so SW1's stick aligns with the through-hole)"),
+    ("joy_body_size", 10.6, "Square joystick body cutout size (K1-1506SN-01 body is 10.2 mm + 0.4 mm clearance; replaces the round joy_d hole — square corners of the body would otherwise foul the 12 mm circular cut)"),
+    ("joy_pit_depth", 8.45, "Depth of the joystick PCB pit cut UP into the AAA cradle so the K1-1506SN-01 body's 10 mm height fits between the cradle pit floor and the cover dome top. Drops PCB top Z from 19.5 to 11.05 globally, putting the body top at Z=21.05 (flush with the cover JoyPCBPocket top edge / Edge106 plane)"),
     ("m3_d",           3.2,  "M3 bore diameter"),
     ("joy_px",        20.0,  "Joystick PCB pocket X"),
     ("joy_py",        20.0,  "Joystick PCB pocket Y"),
@@ -227,6 +230,19 @@ PARAMS = [
     ("fpc_dw",         1.0,  "FPC divet wall remaining"),
     ("fpc_dze",        2.0,  "FPC divet Z extend below inlay"),
     ("pil_inner_r",    1.0,  "Pillar inner facing corner radius"),
+    # ─── Thumbpiece (snap cap nested in cover's 12 mm joystick hole) ───
+    # Single disc: OD = joy_d - 1.0 → 0.5 mm radial clearance all around
+    # (1 mm total) for joystick directional travel inside the hole. Snap
+    # socket on the underside fits over the K1-1506SN-01 actuator peg/stick.
+    ("thumb_od",      11.0,  "Thumbpiece OD = joy_d - 1.0 → 0.5 mm radial clearance in the 12 mm cover hole (1 mm total → joystick directional travel)"),
+    ("thumb_h",        4.5,  "Thumbpiece total height"),
+    ("thumb_top_clr",  0.1,  "Z clearance between thumbpiece top and cover top face (Z=23 globally)"),
+    ("thumb_dish_r",  12.0,  "Concave thumb dish spherical radius"),
+    ("thumb_dish_d",   0.6,  "Concave thumb dish depth at center (must be < thumb_h - thumb_top_clr - thumb_sock_d so the dish doesn't break into the socket cavity above the peg)"),
+    ("thumb_sock_x",   3.3,  "Snap socket X size (actuator stick is 3.2 mm; +0.1 mm fit clearance)"),
+    ("thumb_sock_y",   3.3,  "Snap socket Y size"),
+    ("thumb_sock_d",   3.5,  "Snap socket depth (cuts up from disc bottom)"),
+    ("thumb_stick_cy", 24.35, "Actuator stick Y center (offset +0.68 from cover hole; per JoystickPCB STEP geometry)"),
 ]
 
 
@@ -716,6 +732,34 @@ def build_cradle(doc):
             win.setExpression("Height", SP("clip_win") + " + " + SP("clip_wze"))
             doc.recompute()
 
+    # ── 10. Joystick PCB pit (cradle local) ─────────────────────────────
+    # The K1-1506SN-01 body is 10 mm tall — too tall to fit between the cover
+    # face plate (Z=18 global) and outer top (Z=23 global). To slot the body
+    # into the cover, the PCB drops below the cradle's mating face into a
+    # pit cut into the cradle plug. After the cradle's 180° Y flip:
+    #   - cradle plug_bot (local Z=-5.1) → global Z=18.1 (cradle's bottom)
+    #   - cradle plug_top (local Z=+7.0)  → global Z=6.0  (mating face)
+    # Pit opens DOWN globally (= UP in local). Depth = joy_pit_depth.
+    # XY same as cover JoyPCBPocket center (joy_cx, enc_y/2 + joy_pcb_y_offset),
+    # 20×20 footprint to match.
+    joy_pit_depth_v = 8.45
+    joy_pit_size = 20.0
+    joy_cx_v = 79.35
+    joy_pit_cy_local = 46.0 / 2 + 0.67   # enc_y/2 + joy_pcb_y_offset
+    joy_pit_cx_local = 96.3 - joy_cx_v   # global → local X
+    pit = body.newObject("PartDesign::SubtractiveBox", "JoystickPCBPit")
+    pit.Length = joy_pit_size
+    pit.Width = joy_pit_size
+    pit.Height = joy_pit_depth_v + 0.1
+    pit.Placement = App.Placement(
+        V(joy_pit_cx_local - joy_pit_size / 2,
+          joy_pit_cy_local - joy_pit_size / 2,
+          plug_bot - 0.05), ROT0)
+    pit.setExpression("Length", SP("joy_px"))
+    pit.setExpression("Width", SP("joy_py"))
+    pit.setExpression("Height", SP("joy_pit_depth") + " + 0.1")
+    doc.recompute()
+
     feats = [o.Name for o in body.Group if "Origin" not in o.Name]
     print(f"    AAACradle: {len(feats)} features")
     return body
@@ -898,10 +942,11 @@ def build_top_cover(doc):
     # resized. Using a stale literal here makes the cut shift toward one edge.
     win_w = 50.0
     win_h = 25.0
-    # Align Y center of the window with the joystick's Y center (joy_cy =
-    # enc_y/2). Anchoring directly to joy_cy makes the alignment explicit so
-    # any future change to the joystick Y propagates to the window.
-    joy_cy_v = 46.0 / 2     # = enc_y / 2
+    # Align Y center of the window with the joystick's Y center. Joystick is
+    # offset by joy_pcb_y_offset so SW1 lands centered on the through-hole;
+    # window follows so both stay on the same Y centerline.
+    joy_pcb_y_offset_v = 0.67
+    joy_cy_v = 46.0 / 2 + joy_pcb_y_offset_v
     win_x0 = disp_x0 + (65.0 - win_w)/2 + 2.8
     win_y0 = joy_cy_v - win_h / 2
 
@@ -915,27 +960,114 @@ def build_top_cover(doc):
     win.setExpression("Width", SP("win_yd"))
     doc.recompute()
 
-    # ── 10. Joystick through-hole ──
+    # ── 10. Joystick body cutout (SQUARE — K1-1506SN-01 body is 10.2×10.2,
+    #       its corners reach r=7.2 mm from center which falls OUTSIDE a
+    #       12 mm round hole. The PCB is final/production so we cannot
+    #       relocate SW1; instead the cover gets a square cutout sized to
+    #       the body + joy_body_size clearance, shifted by joy_pcb_y_offset
+    #       so SW1's stick lands on the through-axis.) ──
+    joy_pcb_y_offset_v = 0.67
     joy_cx = 79.35
-    joy_cy = enc_y / 2
-    joy_r = 12.0 / 2
+    joy_cy = enc_y / 2 + joy_pcb_y_offset_v
+    joy_body_size_v = 10.6
     joy_cut_h = total_h - face_bot + 0.2
 
+    # Round through-hole for the actuator stick (12 mm dia), kept from
+    # original design.
     joy = body.newObject("PartDesign::SubtractiveCylinder", "Cut_Joystick")
-    joy.Radius = joy_r
+    joy.Radius = 12.0 / 2
     joy.Height = joy_cut_h
     joy.Placement = App.Placement(V(joy_cx, joy_cy, face_bot - 0.1), ROT0)
     joy.setExpression("Radius", SP("joy_d") + " / 2")
     doc.recompute()
 
-    # ── 11. Joystick PCB pocket ──
-    # SCAD: Z = face_plate_bottom - 0.1 to face_plate_bottom + inlay_depth
-    # Same depth as screen inlay, cuts INTO face plate from below
+    # Square body cutout for the K1-1506SN-01 body — its corners reach
+    # r≈7.2 mm from center, OUTSIDE the 12 mm round hole's r=6 perimeter.
+    # The square only goes up to the body's TOP Z (= cover face_bot +
+    # joy_pit_depth - cradle plug thickness = where the body ends inside
+    # the dome). Above that, only the round Cut_Joystick remains visible
+    # from outside the cover (clean round actuator hole on the dome).
+    # Body top Z global = pit_floor (9.65) + PCB (1.5) + body (10.0) = 21.15
+    # In cover local: 21.15 - 11 = 10.15. Square cut from face_bot - 0.1
+    # = 6.9 to 10.15 → height 3.25.
+    joy_sq_h = 3.25
+    joy_sq = body.newObject("PartDesign::SubtractiveBox", "Cut_JoyBody")
+    joy_sq.Length = joy_body_size_v
+    joy_sq.Width = joy_body_size_v
+    joy_sq.Height = joy_sq_h
+    joy_sq.Placement = App.Placement(
+        V(joy_cx - joy_body_size_v/2, joy_cy - joy_body_size_v/2,
+          face_bot - 0.1), ROT0)
+    joy_sq.setExpression("Length", SP("joy_body_size"))
+    joy_sq.setExpression("Width", SP("joy_body_size"))
+    doc.recompute()
+
+    # ── 12. Joystick well (mold/sleeve extending DOWN from face_bot) ──
+    # Wraps around the K1-1506SN-01 body + PCB to lock them in place. Open
+    # at the top (joins the body cutout), closed sleeve walls on three
+    # sides, and a notch on the -Y face so the 6 wire-solder pads on the
+    # PCB stay accessible for soldering.
+    well_outer_x = 22.6
+    well_outer_y = 22.6
+    well_inner = 20.0          # matches JoyPCBPocket footprint = PCB + slop
+    well_depth = 8.45          # = joy_pit_depth — well floor at PCB bottom
+    well_x_c = joy_cx
+    well_y_c = joy_cy
+    # Extend well's TOP into the face plate so it fuses with the cover
+    # (cavity ends at face_bot+0.05; well top must sit ABOVE that to merge).
+    well_top_overlap = 1.0
+    well_outer_h = well_depth + well_top_overlap
+
+    well_outer = body.newObject("PartDesign::AdditiveBox", "JoyWell_Outer")
+    well_outer.Length = well_outer_x
+    well_outer.Width = well_outer_y
+    well_outer.Height = well_outer_h
+    well_outer.Placement = App.Placement(
+        V(well_x_c - well_outer_x / 2,
+          well_y_c - well_outer_y / 2,
+          face_bot - well_depth), ROT0)
+    doc.recompute()
+
+    # Inner subtractive: hollow out the well so the PCB+body fit inside
+    well_inner_obj = body.newObject(
+        "PartDesign::SubtractiveBox", "JoyWell_Inner")
+    well_inner_obj.Length = well_inner
+    well_inner_obj.Width = well_inner
+    well_inner_obj.Height = well_outer_h + 0.2
+    well_inner_obj.Placement = App.Placement(
+        V(well_x_c - well_inner / 2,
+          well_y_c - well_inner / 2,
+          face_bot - well_depth - 0.1), ROT0)
+    doc.recompute()
+
+    # Header notch on -Y face — the 6 wire-solder pads sit at the PCB's
+    # -Y end. The PCB itself is at cover-local Z = -1.35 .. 0.15 (PCB
+    # bottom .. top globally Z=9.65 .. 11.15). Cut a 4 mm tall window at
+    # the PCB level through the -Y wall so wires can route out.
+    notch_x = 17.0
+    notch_z = 4.0
+    notch_y = (well_outer_y - well_inner) / 2 + 0.4   # cuts through the wall + a hair
+    notch = body.newObject("PartDesign::SubtractiveBox", "JoyWell_HeaderNotch")
+    notch.Length = notch_x
+    notch.Width = notch_y
+    notch.Height = notch_z
+    notch.Placement = App.Placement(
+        V(well_x_c - notch_x / 2,
+          well_y_c - well_outer_y / 2 - 0.2,
+          face_bot - well_depth + 0.05), ROT0)
+    doc.recompute()
+
+    # ── 11. Joystick PCB pocket — Y shifted by joy_pcb_y_offset so the
+    #       PCB stays bbox-centered under SW1 (which is offset on the
+    #       production layout) ──
     jpcb = body.newObject("PartDesign::SubtractiveBox", "Cut_JoyPCBPocket")
     jpcb.Length = 20.0
     jpcb.Width = 20.0
     jpcb.Height = inlay_depth + 0.1   # 3.1 (same depth as inlay)
-    jpcb.Placement = App.Placement(V(inlay_x1, enc_y/2 - 20.0/2, face_bot - 0.05), ROT0)
+    jpcb.Placement = App.Placement(
+        V(inlay_x1,
+          (enc_y/2 + joy_pcb_y_offset_v) - 20.0/2,
+          face_bot - 0.05), ROT0)
     jpcb.setExpression("Length", SP("joy_px"))
     jpcb.setExpression("Width", SP("joy_py"))
     jpcb.setExpression("Height", SP("inlay_z") + " + 0.1")
@@ -961,8 +1093,13 @@ def build_top_cover(doc):
 #           anchored to AAACradle Face44 (inner -X wall of PicoNest cavity)
 
 PICO_USB_PLUS_X = False
-PICO_ANCHOR_FACE = ("AAACradle", 44)   # X-anchor (used when PICO_USB_PLUS_X is False)
-PICO_Z_ANCHOR_FACE = ("AAACradle", 6)  # Z-anchor: bbox ZMin lands on this face's Z
+# X-anchor face: inner -X wall of the PicoNest cavity (cradle local X=85.10,
+# global X=11.20 after the cradle 180° Y flip). Face index shifts when new
+# features are added to the cradle Body — was Face44 before JoystickPCBPit
+# was added at the end of build_cradle, now Face48. If you reorder cradle
+# features, re-probe the index.
+PICO_ANCHOR_FACE = ("AAACradle", 48)
+PICO_Z_ANCHOR_FACE = ("AAACradle", 6)  # Z-anchor: cradle plug-top mating face
 
 
 def add_pico_with_headers(doc):
@@ -1121,6 +1258,186 @@ def add_pico_with_headers(doc):
 
 
 # =====================================================================
+# JOYSTICK PCB — KiCad-exported STEP for the 5-way switch breakout
+# =====================================================================
+# Hand-routed K1-1506SN-01 board from
+# hardware-design/joystick-pcb-by-hand/JoystickBoardDilder/. STEP exported
+# via `kicad-cli pcb export step` (board + tracks + pads + silkscreen).
+
+JOY_PCB_STEP_PATH = (
+    "joystick-pcb-by-hand/JoystickBoardDilder/JoystickBoardDilder.step")
+
+
+def add_joystick_pcb(doc):
+    macro_dir = os.path.dirname(os.path.abspath(__file__))
+    step_path = os.path.normpath(os.path.join(
+        macro_dir, "..", JOY_PCB_STEP_PATH))
+
+    if not os.path.exists(step_path):
+        print(f"  ! Joystick PCB STEP not found: {step_path}")
+        return None
+
+    print("  Importing Joystick PCB (KiCad STEP)...")
+    shape = Part.Shape()
+    shape.read(step_path)
+
+    # Filter out SW1's small pin-lead solids (the 6 thin protrusions visible
+    # next to the switch body). Keep only solids whose volume exceeds a
+    # threshold large enough to drop pins but small enough to keep the
+    # switch body (10.2 × 10.2 × 10 mm = ~1040 mm³) and the PCB itself
+    # (~580 mm³ for a 19.6 × 19.6 × 1.5 mm board).
+    # Drop the SW1 pin-leads solid — KiCad's STEP export bundles all 6 pin
+    # leads as a single solid in the ~100-150 mm³ range. The PCB (~575 mm³),
+    # SW1 body (~470 mm³) and actuator stick (~14 mm³) are kept.
+    print(f"    Solid volumes: {[round(s.Volume, 1) for s in shape.Solids]}")
+    kept = []
+    for s in shape.Solids:
+        v = s.Volume
+        # Keep PCB + SW1 body + actuator stick (everything except the
+        # 100-150 mm³ pin-lead solid).
+        if 80.0 < v < 180.0:
+            continue
+        kept.append(s)
+    print(f"    Solids: kept {len(kept)} of {len(shape.Solids)} "
+          f"(dropped pin-lead solid in 80-180 mm³ band)")
+
+    shape = Part.Compound(kept)
+    bb = shape.BoundBox
+    print(f"    Joystick PCB raw bbox: "
+          f"{bb.XLength:.1f} × {bb.YLength:.1f} × {bb.ZLength:.1f}")
+
+    # PCB is production / final — anchor by PCB bbox center, not by SW1.
+    # KiCad's SW1 placement on the layout is intrinsic and not to be moved
+    # here. Instead, the COVER's joystick hole + pocket and the AAA cradle's
+    # JoystickPCBPit are shifted by `joy_pcb_y_offset` so they sit where SW1
+    # lands when the PCB is bbox-centered.
+    # PCB drops into the cradle pit so the SW1 body fits inside the cover.
+    # Pit floor in global Z = cradle plug_bot global (Z=18.1) - joy_pit_depth
+    # = 18.1 - 8.45 = 9.65. PCB bottom rests there (we use 9.55 with overlap).
+    joy_cx_g = 79.35
+    joy_cy_g = 46.0 / 2 + 0.67    # = enc_y / 2 + joy_pcb_y_offset = 23.67
+    pocket_floor_g = 18.1 - 8.45  # = 9.65 — PCB bottom rests on pit floor
+
+    bb_cx = (bb.XMin + bb.XMax) / 2
+    bb_cy = (bb.YMin + bb.YMax) / 2
+    dx = joy_cx_g - bb_cx
+    dy = joy_cy_g - bb_cy
+    dz = pocket_floor_g - bb.ZMin
+
+    m = App.Matrix(); m.move(V(dx, dy, dz))
+    shape = shape.transformGeometry(m)
+
+    obj = doc.addObject("Part::Feature", "JoystickPCB")
+    obj.Shape = shape
+
+    fb = shape.BoundBox
+    print(f"    Joystick PCB placed: X=[{fb.XMin:.1f},{fb.XMax:.1f}]  "
+          f"Y=[{fb.YMin:.1f},{fb.YMax:.1f}]  Z=[{fb.ZMin:.2f},{fb.ZMax:.2f}]")
+    # The KiCad STEP export now includes SW1 (K1-1506SN-01 5-way switch)
+    # because the typo'd 3D-model path in the .kicad_pcb is resolved via a
+    # local symlink (/home/rompasaurus/COdingProjects → CodingProjects).
+    # Re-export with: kicad-cli pcb export step --subst-models --include-tracks
+    # from joystick-pcb-by-hand/JoystickBoardDilder/.
+    return obj
+
+
+# =====================================================================
+# THUMBPIECE — snap cap over the K1-1506SN-01 5-way switch actuator stick
+# =====================================================================
+# Sits flush in the cover's 12 mm joystick circle cutout (top-of-cover Z=23),
+# OD = thumb_od (= joy_d - 1.0) for 0.5 mm radial clearance. Concave thumb
+# dish on the upper face. Rectangular snap socket on the underside fits
+# over the 3.2 × 3.2 mm actuator stick.
+#
+# Geometry references (from JoystickPCB STEP selections, global coords):
+#   stick X span 77.75 → 80.95  (center 79.35, width 3.2 mm)
+#   stick Y span 22.76 → 25.94  (center 24.35, width 3.18 mm)
+#   stick Z span 17.91 → 21.17  (top 21.17, height 3.26 mm)
+# The stick center Y (24.35) is offset +0.68 mm from the cover hole center
+# (joy_cx, enc_y/2 + joy_pcb_y_offset) = (79.35, 23.67), so the disc is
+# centered on the hole (visually flush) and the socket is offset to land
+# on the actual stick.
+
+def build_thumbpiece(doc):
+    print("  Building Thumbpiece...")
+    body = doc.addObject("PartDesign::Body", "Thumbpiece")
+
+    # ── Constants (global Z) ──
+    # Cover top face is at global Z = 23.0 (cover Placement Z=11 + local
+    # face_top=12). The 12 mm circle cutout opens here. The disc nests
+    # inside the hole — top sits just below cover top, OD = joy_d - 1.0
+    # for 0.5 mm radial clearance (1 mm total) so the joystick can swing
+    # for directional travel.
+    cover_top_z = 23.0
+    joy_cx_v = 79.35
+    joy_cy_hole_v = 46.0 / 2 + 0.67       # 23.67 — cover hole / disc center
+    joy_cy_stick_v = 24.35                # actuator stick center (per STEP)
+
+    thumb_od_v = 11.0
+    thumb_h_v = 4.5
+    top_clr_v = 0.1
+    top_z = cover_top_z - top_clr_v       # 22.90 — disc top
+    bot_z = top_z - thumb_h_v             # 18.40 — disc bottom
+
+    dish_r_v = 12.0
+    dish_d_v = 0.6   # shallow enough to leave a solid skin (~0.35 mm)
+                     # above the snap socket — keeps the peg covered.
+
+    sock_x_v = 3.3
+    sock_y_v = 3.3
+    sock_d_v = 3.5
+
+    # ── 1. Disc (additive cylinder, nested in 12 mm cover hole) ──
+    disc = body.newObject("PartDesign::AdditiveCylinder", "Thumb_Disc")
+    disc.Radius = thumb_od_v / 2
+    disc.Height = thumb_h_v
+    disc.Placement = App.Placement(
+        V(joy_cx_v, joy_cy_hole_v, bot_z), ROT0)
+    disc.setExpression("Radius", SP("thumb_od") + " / 2")
+    disc.setExpression("Height", SP("thumb_h"))
+
+    # ── 2. Concave thumb dish (subtractive sphere on top) ──
+    # Sphere positioned so its south pole sits at top_z - dish_d
+    # (= deepest point of dish). center_z = top_z + dish_r - dish_d.
+    dish = body.newObject("PartDesign::SubtractiveSphere", "Thumb_Dish")
+    dish.Radius = dish_r_v
+    dish.Placement = App.Placement(
+        V(joy_cx_v, joy_cy_hole_v,
+          top_z + dish_r_v - dish_d_v), ROT0)
+    dish.setExpression("Radius", SP("thumb_dish_r"))
+
+    # ── 3. Snap socket (subtractive box, cut up from disc bottom) ──
+    # Centered on the actuator stick (joy_cx, thumb_stick_cy) — offset
+    # +0.68 mm in Y from the disc axis (the cover hole is concentric with
+    # the PCB, but the stick is offset on the production layout). Sized
+    # 3.3 × 3.3 mm for friction fit on the 3.2 × 3.2 mm rectangular peg.
+    # The +0.1 mm Z overlap keeps the cut clean at the disc's bottom face.
+    sock = body.newObject("PartDesign::SubtractiveBox", "Thumb_Socket")
+    sock.Length = sock_x_v
+    sock.Width = sock_y_v
+    sock.Height = sock_d_v + 0.1
+    sock.Placement = App.Placement(
+        V(joy_cx_v - sock_x_v / 2,
+          joy_cy_stick_v - sock_y_v / 2,
+          bot_z - 0.05), ROT0)
+    sock.setExpression("Length", SP("thumb_sock_x"))
+    sock.setExpression("Width", SP("thumb_sock_y"))
+    sock.setExpression("Height", SP("thumb_sock_d") + " + 0.1")
+
+    doc.recompute()
+
+    try:
+        body.ViewObject.ShapeColor = (0.15, 0.15, 0.18)   # dark thumb cap
+    except Exception:
+        pass
+
+    print(f"    Thumbpiece: OD={thumb_od_v}, H={thumb_h_v}, "
+          f"socket={sock_x_v}×{sock_y_v}×{sock_d_v}, "
+          f"Z=[{bot_z:.2f},{top_z:.2f}] (nested in cover hole)")
+    return body
+
+
+# =====================================================================
 # PERIPHERALS — AAA batteries, TP4056 USB-C charger, Waveshare e-ink
 # =====================================================================
 # All three are built procedurally from datasheet dimensions. Third-party
@@ -1244,9 +1561,130 @@ def add_peripherals(doc):
     except Exception:
         pass
 
+    # ── Battery clip plates + springs (Swpeet 7×7 mm sheet metal kit) ──
+    # The cradle has 4 ClipSlot subtractions (1M/1P/2M/2P), one at each X-end
+    # of each bay. With the AAA cells' positive nub on the cell's local +X
+    # end (= cell's GLOBAL -X end after the cradle 180° Y flip), the polarity
+    # mapping in GLOBAL coords is:
+    #   ClipSlot_*P (cradle local +X, global X≈30.4) → POSITIVE plate
+    #     (cell's positive nub at global X=34.4 — the +X-end-of-cell-locally
+    #     becomes the -X-end-of-cell-globally after the flip)
+    #   ClipSlot_*M (cradle local -X, global X≈77.35) → NEGATIVE plate
+    #     (cell's flat negative end at global X=73.9; springs extend +X
+    #     toward the cell to provide compression)
+    # Cells wire in PARALLEL (2S 10440 would exceed Pico VSYS 5.5V max):
+    #   both POS plates → wire bus → TP4056 BAT+ (red) → Pico VSYS / VBUS
+    #   both NEG plates → wire bus → TP4056 BAT−  (black) → Pico GND
+    plate_w = 7.0       # plate Y/Z dimensions (Swpeet 7×7 mm)
+    plate_t = 0.5       # plate X thickness (sheet metal stamping)
+    spring_d = 5.0      # coil-spring outer diameter
+    spring_l = 4.0      # spring uncompressed length (extends into bay)
+    bump_d = 4.0        # positive contact bump diameter
+    bump_l = 3.0        # bump length (bridges plate face to cell + nub)
+    wire_d = 1.0        # wire stub OD
+    wire_l = 6.0        # short stub length
+
+    bay_y_g = {1: 7.85, 2: 38.15}
+    cell_pos_x_g = cell_x_min_g + aaa_len   # 73.9 — cell +X-globally end (positive nub)
+    cell_neg_x_g = cell_x_min_g             # 34.4 — cell -X-globally end (flat negative)
+
+    # In CRADLE LOCAL coords: 4 slots (computed in build_cradle):
+    #   P slots at local sx = 65.9 (slot face cell-side at local x = 65.9)
+    #   M slots at local sx = 18.5 (slot face cell-side at local x = 19.4)
+    # After cradle 180° Y flip + translate(96.3, 0, 13.0):
+    #   P slot face → global X = 96.3 - 65.9 = 30.4  (faces +X toward cell neg)
+    #   M slot face → global X = 96.3 - 19.4 = 76.9  (faces -X toward cell pos)
+    #
+    # So GLOBAL roles by suffix:
+    #   *P slots (global X=30.4) sit outboard of cell's NEGATIVE end (X=34.4)
+    #   *M slots (global X=76.9) sit outboard of cell's POSITIVE end (X=73.9)
+    pos_face_x_g = 76.9    # +X-face plate face (cell positive end side, M slots)
+    neg_face_x_g = 30.4    # -X-face plate face (cell negative end side, P slots)
+
+    clip_pieces_pos = []
+    clip_pieces_neg = []
+    spring_pieces = []
+    bump_pieces = []
+    pos_wires = []
+    neg_wires = []
+
+    for idx in (1, 2):
+        cy = bay_y_g[idx]
+
+        # POSITIVE plate (M slot, global +X side): plate face at pos_face_x_g
+        # facing -X toward the cell positive nub at cell_pos_x_g (=73.9).
+        plate_pos = Part.makeBox(plate_t, plate_w, plate_w,
+                                 V(pos_face_x_g, cy - plate_w/2, cell_z_g - plate_w/2))
+        clip_pieces_pos.append(plate_pos)
+        # Contact bump bridges plate face to cell positive nub
+        bump = Part.makeCylinder(bump_d/2, bump_l)
+        bump.rotate(V(0, 0, 0), V(0, 1, 0), -90)   # axis along -X
+        bump.translate(V(pos_face_x_g, cy, cell_z_g))
+        bump_pieces.append(bump)
+        # Wire stub on the exterior side (+X), pointing toward TP4056 area
+        wire_pos = Part.makeCylinder(wire_d/2, wire_l)
+        wire_pos.rotate(V(0, 0, 0), V(0, 1, 0), 90)   # axis along +X
+        wire_pos.translate(V(pos_face_x_g + plate_t, cy, cell_z_g))
+        pos_wires.append(wire_pos)
+
+        # NEGATIVE plate (P slot, global -X side): plate face at neg_face_x_g
+        # facing +X toward the cell negative end at cell_neg_x_g (=34.4).
+        plate_neg = Part.makeBox(plate_t, plate_w, plate_w,
+                                 V(neg_face_x_g - plate_t, cy - plate_w/2,
+                                   cell_z_g - plate_w/2))
+        clip_pieces_neg.append(plate_neg)
+        # Coil spring extends +X from plate face into the bay, compressed
+        # against cell's flat negative end (axial overlap at cell_neg_x_g).
+        spring = Part.makeCylinder(spring_d/2, spring_l)
+        spring.rotate(V(0, 0, 0), V(0, 1, 0), 90)   # axis along +X
+        spring.translate(V(neg_face_x_g, cy, cell_z_g))
+        spring_pieces.append(spring)
+        # Wire stub on the exterior side (-X)
+        wire_neg = Part.makeCylinder(wire_d/2, wire_l)
+        wire_neg.rotate(V(0, 0, 0), V(0, 1, 0), -90)   # axis along -X
+        wire_neg.translate(V(neg_face_x_g - plate_t, cy, cell_z_g))
+        neg_wires.append(wire_neg)
+
+    # Inter-cell parallel-wiring buses (visual indication only).
+    # Positive bus: connects both +plates' exterior wire stub ends, runs in Y
+    # at X just outboard of pos plates, Z at cell_z_g.
+    pos_bus_x = pos_face_x_g + plate_t + wire_l
+    pos_bus = Part.makeBox(wire_d, bay_y_g[2] - bay_y_g[1], wire_d,
+                           V(pos_bus_x - wire_d/2,
+                             bay_y_g[1], cell_z_g - wire_d/2))
+    pos_wires.append(pos_bus)
+    # Negative bus
+    neg_bus_x = neg_face_x_g - plate_t - wire_l
+    neg_bus = Part.makeBox(wire_d, bay_y_g[2] - bay_y_g[1], wire_d,
+                           V(neg_bus_x - wire_d/2,
+                             bay_y_g[1], cell_z_g - wire_d/2))
+    neg_wires.append(neg_bus)
+
+    plates_pos_obj = doc.addObject("Part::Feature", "BatteryClips_Positive")
+    plates_pos_obj.Shape = Part.Compound(clip_pieces_pos + bump_pieces)
+    plates_neg_obj = doc.addObject("Part::Feature", "BatteryClips_Negative")
+    plates_neg_obj.Shape = Part.Compound(clip_pieces_neg + spring_pieces)
+    pos_wires_obj = doc.addObject("Part::Feature", "BatteryWiring_Positive")
+    pos_wires_obj.Shape = Part.Compound(pos_wires)
+    neg_wires_obj = doc.addObject("Part::Feature", "BatteryWiring_Negative")
+    neg_wires_obj.Shape = Part.Compound(neg_wires)
+    try:
+        plates_pos_obj.ViewObject.ShapeColor = (0.85, 0.78, 0.35)   # brass plate
+        plates_neg_obj.ViewObject.ShapeColor = (0.85, 0.78, 0.35)
+        pos_wires_obj.ViewObject.ShapeColor = (0.85, 0.10, 0.10)    # red = +
+        neg_wires_obj.ViewObject.ShapeColor = (0.05, 0.05, 0.05)    # black = −
+    except Exception:
+        pass
+
     print(f"    AAA cells:    X=[{cell_x_min_g:.1f},"
           f"{cell_x_min_g+aaa_len:.1f}]  Y={list(cell_y_g.values())}  "
           f"Z={cell_z_g:.2f}")
+    print(f"    Battery clips: POS plates X={pos_face_x_g} (M slots, near "
+          f"cell + nub at X={cell_pos_x_g})")
+    print(f"                   NEG plates X={neg_face_x_g} (P slots, near "
+          f"cell − end at X={cell_neg_x_g})")
+    print(f"    Wiring:       POS bus at X={pos_bus_x:.1f} (red, both +→TP4056 BAT+)")
+    print(f"                  NEG bus at X={neg_bus_x:.1f} (black, both −→TP4056 BAT−)")
     print(f"    TP4056:       X=[{tp_x_min_g:.1f},{tp_x_min_g+tp_xl_v:.1f}]  "
           f"Y=[{tp_y_min_g:.1f},{tp_y_min_g+tp_yw_v:.1f}]  Z_top={tp_z_top_g:.2f}")
     print(f"    EInk display: X=[{disp_x_min_g:.1f},"
@@ -1304,6 +1742,13 @@ def main():
     # with positions in global coords already accounting for cradle/cover
     # placements. Run after placements for the same reason.
     add_peripherals(doc)
+
+    # Joystick PCB — KiCad STEP export, placed in the cover's joystick pocket
+    add_joystick_pcb(doc)
+
+    # Thumbpiece — snap cap over the K1-1506SN-01 actuator stick, sits
+    # flush within the cover's 12 mm joystick circle cutout
+    build_thumbpiece(doc)
 
     # ── Body colors ──
     try:
