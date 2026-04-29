@@ -22,6 +22,38 @@ That's how Dilder was born. Not from an engineering roadmap, but from a stuffed 
 
 ---
 
+## Enclosure — Rev 2 Mk2
+
+The 3D-printed enclosure is a three-part design: base plate with solar panel recess, AAA battery cradle insert, and top cover with display window and joystick cutout. Designed in OpenSCAD (parametric source) and FreeCAD (visual PartDesign).
+
+### Individual Parts
+
+<p align="center">
+  <img src="hardware-design/renders/base-plate.png" alt="Base Plate — top view" width="380" />
+  <img src="hardware-design/renders/aaa-cradle.png" alt="AAA Battery Cradle" width="380" />
+</p>
+<p align="center">
+  <em>Left: Base plate with cradle pocket, corner pillars, battery rail troughs, and USB-C cutout. Right: AAA battery cradle with dual bays, clip slots, and TP4056 indent.</em>
+</p>
+
+<p align="center">
+  <img src="hardware-design/renders/top-cover.png" alt="Top Cover" width="380" />
+  <img src="hardware-design/renders/base-plate-bottom.png" alt="Base Plate — bottom (solar pit)" width="380" />
+</p>
+<p align="center">
+  <em>Left: Top cover with display window, joystick hole, and bullnose edge. Right: Base plate bottom showing solar panel recess and wire holes.</em>
+</p>
+
+### Assembled
+
+<p align="center">
+  <img src="hardware-design/renders/assembled.png" alt="All three parts assembled" width="500" />
+  <br />
+  <em>All three parts stacked in their mated positions.</em>
+</p>
+
+---
+
 ## What This Project Is
 
 - **A virtual pet device** — a pocket-sized, low-power companion with personality, needs, and interactions displayed on an e-ink screen
@@ -124,13 +156,17 @@ Each phase maps to a section of the blog/YouTube series and can be followed inde
 - [ ] Validate all Phase 2-4 functionality on Pi Zero
 
 ### Phase 6 — 3D-Printed Case & Power
+> *In progress alongside Phase 2*
 
-- [ ] Design enclosure in CAD (FreeCAD / Fusion 360)
-- [ ] Account for display cutout, button access, USB charging port, speaker hole
-- [ ] Print prototypes and iterate on fit
-- [ ] Implement battery power (LiPo + PowerBoost 500C)
+- [x] Design enclosure in OpenSCAD — parametric 3-part design (base plate, AAA cradle, top cover)
+- [x] Account for display cutout, joystick access, USB-C charging port, solar panel recess
+- [x] Translate to FreeCAD PartDesign — full parametric model with 90+ parameter spreadsheet
+- [x] Battery cradle with clip slots for Swpeet AAA contact plates (parallel wiring)
+- [x] Solar panel wire through-holes in base plate
+- [x] Print prototypes and iterate on fit (Rev 2 Mk2 current)
+- [ ] Implement battery power (dual 10440 or single 3000mAh LiPo via TP4056)
 - [ ] Implement sleep/wake cycle to conserve battery
-- [ ] Publish final STL files and assembly instructions
+- [x] Publish STL/3MF files and build instructions ([hardware-design/freecad-mk2/](hardware-design/freecad-mk2/))
 
 ### Phase 7 — Extras & Community
 

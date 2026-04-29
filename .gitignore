@@ -84,5 +84,8 @@ hardware-design/kicad/dilder-breadboard/.history
 hardware-design/Board Design kicad/.history/
 **/.history/
 
+# FreeCAD backup files
+*.FCBak
+
 # Raw camera photos (converted to JPEG before committing)
 *.heic

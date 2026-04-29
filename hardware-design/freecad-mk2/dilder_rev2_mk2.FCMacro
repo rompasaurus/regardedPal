@@ -1,0 +1,1031 @@
+"""
+Dilder Rev 2 Mk2 — Full Parametric FreeCAD Model (PartDesign)
+==============================================================
+3 Bodies: BasePlate, AAACradle, TopCover
+Each built from constrained sketches + Pad/Pocket/Fillet/AdditivePrimitive chains.
+
+Presets baked:
+  Base plate:  thick floo reduce negative space  (ext_x=30, floor=2.6, shave 8→6)
+  AAA cradle:  04-27 shortened + open window  (cell_len = 39.5, clip_win_z_ext = 4)
+  Top cover:   4-26-final-face-for-now  (fp_z = 1.0, edge_curve_r = 2.2)
+
+All values live in the Parameters spreadsheet — change any cell, Ctrl+Shift+R.
+Save path (auto):  hardware-design/freecad-mk2/Dilder_Rev2_Mk2.FCStd
+
+Usage:
+  FreeCAD ≥ 0.21 > Macro > Run Macro > select this file
+"""
+
+import math, os
+import FreeCAD as App
+import Part
+import Sketcher
+
+V = App.Vector
+ROT0 = App.Rotation()
+
+# =====================================================================
+# EDGE FINDERS
+# =====================================================================
+
+def find_edges(feature, axis=None):
+    """Return edge name list by orientation."""
+    results = []
+    for i, e in enumerate(feature.Shape.Edges):
+        verts = e.Vertexes
+        if len(verts) != 2:
+            continue
+        p1, p2 = verts[0].Point, verts[1].Point
+        tag = f"Edge{i + 1}"
+        if axis == "vertical":
+            if abs(p1.x - p2.x) < 0.01 and abs(p1.y - p2.y) < 0.01 and abs(p1.z - p2.z) > 0.5:
+                results.append(tag)
+        elif axis == "horizontal_bottom":
+            if abs(p1.z - p2.z) < 0.01 and abs(p1.z) < 0.5 and abs(p2.z) < 0.5:
+                results.append(tag)
+        elif axis == "horizontal_top":
+            if abs(p1.z - p2.z) < 0.01 and p1.z > 5:
+                results.append(tag)
+    return results
+
+
+def edges_at_z(feature, z_target, tol=0.1):
+    """Return edge names at a specific Z height."""
+    results = []
+    for i, e in enumerate(feature.Shape.Edges):
+        verts = e.Vertexes
+        if len(verts) != 2:
+            continue
+        p1, p2 = verts[0].Point, verts[1].Point
+        if abs(p1.z - p2.z) < 0.01 and abs(p1.z - z_target) < tol:
+            results.append(f"Edge{i + 1}")
+    return results
+
+
+# =====================================================================
+# CONSTRAINED SKETCH HELPERS
+# =====================================================================
+
+def make_rect_sketch(body, name, z_offset, x0, y0, x1, y1):
+    """
+    Full constrained rectangle sketch at z_offset on XY plane.
+    Returns (sketch, constraint_indices) for expression binding.
+    """
+    doc = body.Document
+    sk = body.newObject("Sketcher::SketchObject", name)
+    sk.AttachmentSupport = [(body.Origin.OriginFeatures[3], "")]
+    sk.MapMode = "FlatFace"
+    sk.AttachmentOffset = App.Placement(V(0, 0, z_offset), ROT0)
+
+    w, h = x1 - x0, y1 - y0
+    sk.addGeometry(Part.LineSegment(V(x0, y0, 0), V(x1, y0, 0)), False)  # 0: bottom
+    sk.addGeometry(Part.LineSegment(V(x1, y0, 0), V(x1, y1, 0)), False)  # 1: right
+    sk.addGeometry(Part.LineSegment(V(x1, y1, 0), V(x0, y1, 0)), False)  # 2: top
+    sk.addGeometry(Part.LineSegment(V(x0, y1, 0), V(x0, y0, 0)), False)  # 3: left
+    # Close + orient
+    sk.addConstraint(Sketcher.Constraint("Coincident", 0, 2, 1, 1))
+    sk.addConstraint(Sketcher.Constraint("Coincident", 1, 2, 2, 1))
+    sk.addConstraint(Sketcher.Constraint("Coincident", 2, 2, 3, 1))
+    sk.addConstraint(Sketcher.Constraint("Coincident", 3, 2, 0, 1))
+    sk.addConstraint(Sketcher.Constraint("Horizontal", 0))
+    sk.addConstraint(Sketcher.Constraint("Horizontal", 2))
+    sk.addConstraint(Sketcher.Constraint("Vertical", 1))
+    sk.addConstraint(Sketcher.Constraint("Vertical", 3))
+    # Position + size
+    c_ox = sk.addConstraint(Sketcher.Constraint("DistanceX", -1, 1, 0, 1, x0))
+    c_oy = sk.addConstraint(Sketcher.Constraint("DistanceY", -1, 1, 0, 1, y0))
+    c_w  = sk.addConstraint(Sketcher.Constraint("DistanceX", 0, 1, 0, 2, w))
+    c_h  = sk.addConstraint(Sketcher.Constraint("DistanceY", 1, 1, 1, 2, h))
+    doc.recompute()
+    return sk, (c_ox, c_oy, c_w, c_h)
+
+
+def make_circle_sketch(body, name, z_offset, cx, cy, r):
+    """Circle sketch at z_offset."""
+    doc = body.Document
+    sk = body.newObject("Sketcher::SketchObject", name)
+    sk.AttachmentSupport = [(body.Origin.OriginFeatures[3], "")]
+    sk.MapMode = "FlatFace"
+    sk.AttachmentOffset = App.Placement(V(0, 0, z_offset), ROT0)
+    sk.addGeometry(Part.Circle(V(cx, cy, 0), V(0, 0, 1), r), False)
+    c_x = sk.addConstraint(Sketcher.Constraint("DistanceX", -1, 1, 0, 3, cx))
+    c_y = sk.addConstraint(Sketcher.Constraint("DistanceY", -1, 1, 0, 3, cy))
+    c_r = sk.addConstraint(Sketcher.Constraint("Radius", 0, r))
+    doc.recompute()
+    return sk, (c_x, c_y, c_r)
+
+
+def SP(alias):
+    """Spreadsheet expression string."""
+    return f"Parameters.{alias}"
+
+
+# =====================================================================
+# PARAMETER SPREADSHEET
+# =====================================================================
+
+PARAMS = [
+    # (alias, value, description)
+    # ─── Enclosure ───
+    ("enc_x",         94.5,  "Enclosure width X"),
+    ("enc_y",         46.0,  "Enclosure depth Y"),
+    ("wall_mx",        3.0,  "-X wall thickness"),
+    ("wall_px",        1.2,  "+X wall thickness"),
+    ("wall_y",         2.0,  "Side wall thickness Y"),
+    ("corner_r",       4.0,  "Corner radius"),
+    ("pillar",         5.0,  "Corner pillar side"),
+    # ─── Base plate ───
+    # SCAD builds at 8mm then shaves 2mm band (Z=4..6), effective height = 6
+    ("bp_h",           6.0,  "Base plate height Z (post-shave: 8 - 2)"),
+    ("bp_fillet",      2.0,  "Bottom fillet radius"),
+    ("bp_floor",       2.6,  "Pocket floor thickness (thick floo preset)"),
+    ("cpx0",           3.1,  "Pocket X start"),
+    ("cpx1",          93.2,  "Pocket X end"),
+    ("cpy0",           2.1,  "Pocket Y start"),
+    ("cpy1",          43.9,  "Pocket Y end"),
+    ("peg_d",          3.0,  "Peg diameter"),
+    ("peg_h",          3.0,  "Peg height above plate"),
+    ("peg_cham",       0.4,  "Peg tip chamfer"),
+    ("ext_x",         30.0,  "Pillar extension X (thick floo preset)"),
+    ("ext_y",          4.0,  "Pillar extension Y"),
+    ("ext_z",         -1.5,  "Extension Z above plate"),
+    ("bay_d",         11.1,  "AAA bay diameter"),
+    ("bay_yM",         7.85, "Bay -Y center"),
+    ("bay_yP",        38.15, "Bay +Y center"),
+    ("bay_xs",        34.0,  "Trough X start"),
+    ("bay_xl",        39.0,  "Trough X length"),
+    ("rail_lift",      5.0,  "Rail Z lift"),
+    ("rail_hred",      2.5,  "Rail height reduce"),
+    ("rail_dred",      2.0,  "Rail depth reduce per side"),
+    ("usb_w",          9.2,  "USB-C cutout width (9+0.2 tol)"),
+    ("usb_h",          4.45, "USB-C cutout height (4.25+0.2 tol)"),
+    ("usb_zd",         0.5,  "USB-C Z drop"),
+    ("usb_r",          1.0,  "USB-C corner radius"),
+    ("sol_x",         62.4,  "Solar pit width"),
+    ("sol_y",         36.4,  "Solar pit depth"),
+    ("sol_z",          2.0,  "Solar pit Z depth"),
+    ("sol_hd",         3.1,  "Solar hole diameter"),
+    ("sol_h1x",        2.5,  "Hole 1 X in pit"),
+    ("sol_h1y",        2.0,  "Hole 1 Y in pit"),
+    ("sol_h2x",       60.0,  "Hole 2 X in pit"),
+    ("sol_h2y",        2.4,  "Hole 2 Y in pit"),
+    ("ublk_xs",        5.0,  "USB block X size"),
+    ("ublk_yw",       15.0,  "USB block Y width"),
+    ("ublk_gap",       5.0,  "USB block X gap"),
+    ("ublk_inset",     5.0,  "USB block inset from +X wall"),
+    ("pblk_inset",    18.0,  "Pico block inset from -X wall"),
+    ("pblk_xs",        5.0,  "Pico block X size"),
+    ("pblk_yw",       15.0,  "Pico block Y width"),
+    ("pblk_zh",        2.0,  "Pico block Z height"),
+    # ─── AAA Cradle ───
+    ("plug_slop",      0.3,  "Plug wall slop"),
+    ("aaa_d",         10.5,  "AAA cell diameter"),
+    ("aaa_rslop",      0.3,  "AAA radial slop"),
+    ("aaa_bwall",      0.5,  "Bay wall above/below"),
+    ("aaa_len",       39.5,  "AAA cell length (shortened 04-27)"),
+    ("aaa_aslop",      1.0,  "AAA axial slop"),
+    ("aaa_cspace",     2.0,  "Contact space per end"),
+    ("pil_cslop",      0.4,  "Pillar cutout slop"),
+    ("fpc_gap",        3.0,  "FPC gap width"),
+    ("pico_by",       21.0,  "Pico board width Y"),
+    ("pico_bx",       78.0,  "Pico board length X"),
+    ("fit_tol",        0.4,  "Print fit tolerance"),
+    ("conn_xl",       29.0,  "Connecting block X length"),
+    ("tp_xl",         28.0,  "TP4056 board X"),
+    ("tp_yw",         17.0,  "TP4056 board Y"),
+    ("tp_iz",          1.0,  "TP4056 indent depth"),
+    ("tp_slop",        0.2,  "TP4056 slop"),
+    ("disp_cz",        3.0,  "Display cutout depth Z"),
+    ("clip_sz",        7.0,  "Clip plate size"),
+    ("clip_tk",        0.5,  "Clip plate thickness"),
+    ("clip_slop",      0.2,  "Clip slot slop"),
+    ("clip_ret",       1.0,  "Retainer thickness"),
+    ("clip_win",       5.0,  "Retainer window size YZ"),
+    ("clip_wze",       4.0,  "Retainer window Z extend up (04-27)"),
+    ("bay_gap_pil",    3.0,  "Bay gap from pillar cutout"),
+    ("bay_shift_mx",  20.0,  "Bay shift toward -X"),
+    # ─── Top Cover ───
+    ("tc_bull",        4.0,  "Bullnose radius"),
+    ("tc_edge_r",      2.2,  "Face plate edge curve radius (4-26-final)"),
+    ("tc_fp_z",        1.0,  "Face plate thickness (4-26-final)"),
+    ("tc_wext",        5.0,  "Wall ext below mating"),
+    ("disp_xl",       65.0,  "Display length X"),
+    ("disp_yd",       30.0,  "Display depth Y"),
+    ("disp_z",         7.0,  "Display thickness Z"),
+    ("inlay_z",        3.0,  "Screen inlay depth"),
+    ("inlay_slop",     0.3,  "Inlay XY slop"),
+    ("inlay_yslop",    0.35, "Inlay Y slop"),
+    ("win_xl",        48.0,  "Window length X"),
+    ("win_yd",        22.0,  "Window depth Y"),
+    ("win_shift",      2.8,  "Window shift toward +X"),
+    ("joy_d",         12.0,  "Joystick hole diameter"),
+    ("joy_cx",        79.35, "Joystick center X"),
+    ("m3_d",           3.2,  "M3 bore diameter"),
+    ("joy_px",        20.0,  "Joystick PCB pocket X"),
+    ("joy_py",        20.0,  "Joystick PCB pocket Y"),
+    ("fpc_dy",        13.0,  "FPC divet width Y"),
+    ("fpc_dw",         1.0,  "FPC divet wall remaining"),
+    ("fpc_dze",        2.0,  "FPC divet Z extend below inlay"),
+    ("pil_inner_r",    1.0,  "Pillar inner facing corner radius"),
+]
+
+
+def setup_spreadsheet(doc):
+    """Create or update the Parameters spreadsheet."""
+    if hasattr(doc, "Parameters"):
+        sheet = doc.Parameters
+    else:
+        sheet = doc.addObject("Spreadsheet::Sheet", "Parameters")
+    sheet.set("A1", "Parameter")
+    sheet.set("B1", "Value")
+    sheet.set("C1", "Description")
+    for i, (alias, val, desc) in enumerate(PARAMS, start=2):
+        cell = f"B{i}"
+        sheet.set(f"A{i}", alias)
+        sheet.set(cell, str(val))
+        sheet.set(f"C{i}", desc)
+        try:
+            sheet.setAlias(cell, alias)
+        except Exception:
+            pass
+    doc.recompute()
+    return sheet
+
+
+# =====================================================================
+# BASE PLATE  (preset: extended_inset-pillar-blocks)
+# =====================================================================
+
+def build_base_plate(doc):
+    print("  Building Base Plate...")
+    body = doc.addObject("PartDesign::Body", "BasePlate")
+
+    W, H = 94.5, 46.0
+    Z = 6.0           # effective height after shave (SCAD: 8mm - 2mm shave)
+    Z_preshave = 8.0   # original pre-shave height (for USB-C Z calculation)
+    floor_z = 2.6      # thick floo preset
+
+    # ── 1. Outer profile sketch (constrained rectangle at origin) ──
+    # Manual sketch — avoids over-constraining when pinned to origin
+    sk = body.newObject("Sketcher::SketchObject", "Sk_BP_Outline")
+    sk.AttachmentSupport = [(body.Origin.OriginFeatures[3], "")]
+    sk.MapMode = "FlatFace"
+    sk.addGeometry(Part.LineSegment(V(0, 0, 0), V(W, 0, 0)), False)
+    sk.addGeometry(Part.LineSegment(V(W, 0, 0), V(W, H, 0)), False)
+    sk.addGeometry(Part.LineSegment(V(W, H, 0), V(0, H, 0)), False)
+    sk.addGeometry(Part.LineSegment(V(0, H, 0), V(0, 0, 0)), False)
+    sk.addConstraint(Sketcher.Constraint("Coincident", 0, 2, 1, 1))
+    sk.addConstraint(Sketcher.Constraint("Coincident", 1, 2, 2, 1))
+    sk.addConstraint(Sketcher.Constraint("Coincident", 2, 2, 3, 1))
+    sk.addConstraint(Sketcher.Constraint("Coincident", 3, 2, 0, 1))
+    sk.addConstraint(Sketcher.Constraint("Horizontal", 0))
+    sk.addConstraint(Sketcher.Constraint("Horizontal", 2))
+    sk.addConstraint(Sketcher.Constraint("Vertical", 1))
+    sk.addConstraint(Sketcher.Constraint("Vertical", 3))
+    sk.addConstraint(Sketcher.Constraint("Coincident", 0, 1, -1, 1))  # pin to origin
+    c_w = sk.addConstraint(Sketcher.Constraint("DistanceX", 0, 1, 0, 2, W))
+    c_h = sk.addConstraint(Sketcher.Constraint("DistanceY", 1, 1, 1, 2, H))
+    sk.setExpression(f"Constraints[{c_w}]", SP("enc_x"))
+    sk.setExpression(f"Constraints[{c_h}]", SP("enc_y"))
+    doc.recompute()
+
+    # ── 2. Pad outer shell ──
+    pad = body.newObject("PartDesign::Pad", "Pad_Shell")
+    pad.Profile = sk
+    pad.Length = Z
+    pad.setExpression("Length", SP("bp_h"))
+    doc.recompute()
+
+    # ── 3. Fillet vertical edges (corner rounding) ──
+    vert = find_edges(pad, "vertical")
+    if vert:
+        fil_c = body.newObject("PartDesign::Fillet", "Fillet_Corners")
+        fil_c.Base = (pad, vert)
+        fil_c.Radius = 4.0
+        fil_c.setExpression("Radius", SP("corner_r"))
+        doc.recompute()
+        last = fil_c
+    else:
+        last = pad
+
+    # ── 4. Fillet bottom edges ──
+    bot = find_edges(last, "horizontal_bottom")
+    if bot:
+        fil_b = body.newObject("PartDesign::Fillet", "Fillet_BottomEdge")
+        fil_b.Base = (last, bot)
+        fil_b.Radius = 2.0
+        fil_b.setExpression("Radius", SP("bp_fillet"))
+        doc.recompute()
+
+    # ── 5. Cradle pocket ── SubtractiveBox from top
+    cpx0, cpy0, cpx1, cpy1 = 3.1, 2.1, 93.2, 43.9
+    pocket_depth = Z - floor_z  # 5.5
+    pock = body.newObject("PartDesign::SubtractiveBox", "Pocket_Cradle")
+    pock.Length = cpx1 - cpx0
+    pock.Width = cpy1 - cpy0
+    pock.Height = pocket_depth
+    pock.Placement = App.Placement(V(cpx0, cpy0, Z - pocket_depth), ROT0)
+    pock.setExpression("Length", SP("cpx1") + " - " + SP("cpx0"))
+    pock.setExpression("Width", SP("cpy1") + " - " + SP("cpy0"))
+    pock.setExpression("Height", SP("bp_h") + " - " + SP("bp_floor"))
+    doc.recompute()
+
+    # ── 6. Solar pit on bottom face ── SubtractiveBox (cuts upward from Z=0)
+    sol_w, sol_d, sol_z = 62.4, 36.4, 2.0
+    sx0 = W/2 - sol_w/2
+    sy0 = H/2 - sol_d/2
+    sol_cut = body.newObject("PartDesign::SubtractiveBox", "Cut_SolarPit")
+    sol_cut.Length = sol_w
+    sol_cut.Width = sol_d
+    sol_cut.Height = sol_z
+    sol_cut.Placement = App.Placement(V(sx0, sy0, 0), ROT0)
+    sol_cut.setExpression("Length", SP("sol_x"))
+    sol_cut.setExpression("Width", SP("sol_y"))
+    sol_cut.setExpression("Height", SP("sol_z"))
+    doc.recompute()
+
+    # (Wire holes moved to end — must cut through all additive features)
+
+    # ── 7. USB-C cutout (3 subtractive primitives for rounded opening) ──
+    # USB-C Z position uses the PRE-SHAVE height (8mm) because the cutout
+    # bottom (3.05) is below the shave band (Z=4). The shave doesn't move it.
+    uw = 9.2
+    ur = 1.0
+    usb_z_bot = Z_preshave - 4.45 - 0.5   # = 8 - 4.95 = 3.05
+    uc_y = H / 2
+    wall_depth = 3.0   # cuts well through the 1.2mm +X wall
+
+    usb_main = body.newObject("PartDesign::SubtractiveBox", "USB_Main")
+    usb_main.Length = wall_depth
+    usb_main.Width = uw
+    usb_main.Height = Z - usb_z_bot - ur + 1.0   # top-open
+    usb_main.Placement = App.Placement(
+        V(W - wall_depth/2 - 0.5, uc_y - uw/2, usb_z_bot + ur), ROT0)
+    doc.recompute()
+
+    usb_bot = body.newObject("PartDesign::SubtractiveBox", "USB_BottomStrip")
+    usb_bot.Length = wall_depth
+    usb_bot.Width = uw - 2 * ur
+    usb_bot.Height = ur
+    usb_bot.Placement = App.Placement(
+        V(W - wall_depth/2 - 0.5, uc_y - (uw - 2*ur)/2, usb_z_bot), ROT0)
+    doc.recompute()
+
+    for side, y_off in [("L", uc_y - uw/2 + ur), ("R", uc_y + uw/2 - ur)]:
+        cyl = body.newObject("PartDesign::SubtractiveCylinder", f"USB_Arc_{side}")
+        cyl.Radius = ur
+        cyl.Height = wall_depth
+        cyl.Placement = App.Placement(
+            V(W - wall_depth/2 - 0.5, y_off, usb_z_bot + ur),
+            App.Rotation(V(0, 1, 0), 90))
+        doc.recompute()
+
+    # ── 9. Corner pillars (4) with extended wings ──
+    ps = 5.0
+    center_x, center_y = W/2, H/2
+    peg_positions = [
+        (3.0 + ps/2,        2.0 + ps/2),         # -X-Y
+        (W - 1.2 - ps/2,    2.0 + ps/2),         # +X-Y
+        (3.0 + ps/2,        H - 2.0 - ps/2),     # -X+Y
+        (W - 1.2 - ps/2,    H - 2.0 - ps/2),     # +X+Y
+    ]
+    ext_x, ext_y = 30.0, 4.0   # PRESET: thick floo reduce negative space
+
+    for i, (px, py) in enumerate(peg_positions):
+        is_mx = px < center_x
+        is_my = py < center_y
+
+        # 5×5 pillar pad
+        pil = body.newObject("PartDesign::AdditiveBox", f"Pillar_{i+1}")
+        pil.Length = ps
+        pil.Width = ps
+        pil.Height = Z - floor_z
+        pil.Placement = App.Placement(V(px - ps/2, py - ps/2, floor_z), ROT0)
+        pil.setExpression("Length", SP("pillar"))
+        pil.setExpression("Width", SP("pillar"))
+        pil.setExpression("Height", SP("bp_h") + " - " + SP("bp_floor"))
+        doc.recompute()
+
+        # Extension wing
+        wx = (px - ps/2) if is_mx else (px - ps/2 - ext_x)
+        wy = (py - ps/2) if is_my else (py - ps/2 - ext_y)
+        wh = Z + (-1.5) - floor_z   # = 4.0
+        if wh > 0:
+            wing = body.newObject("PartDesign::AdditiveBox", f"PillarWing_{i+1}")
+            wing.Length = ps + ext_x
+            wing.Width = ps + ext_y
+            wing.Height = wh
+            wing.Placement = App.Placement(V(wx, wy, floor_z), ROT0)
+            wing.setExpression("Length", SP("pillar") + " + " + SP("ext_x"))
+            wing.setExpression("Width", SP("pillar") + " + " + SP("ext_y"))
+            wing.setExpression("Height", SP("bp_h") + " + " + SP("ext_z") + " - " + SP("bp_floor"))
+            doc.recompute()
+
+        # Peg cylinder
+        peg = body.newObject("PartDesign::AdditiveCylinder", f"Peg_{i+1}")
+        peg.Radius = 1.5
+        peg.Height = 3.0
+        peg.Placement = App.Placement(V(px, py, Z), ROT0)
+        peg.setExpression("Radius", SP("peg_d") + " / 2")
+        peg.setExpression("Height", SP("peg_h"))
+        doc.recompute()
+
+        # Peg tip chamfer
+        peg_top_z = Z + 3.0
+        ch_edges = edges_at_z(peg, peg_top_z)
+        if ch_edges:
+            cham = body.newObject("PartDesign::Chamfer", f"PegChamfer_{i+1}")
+            cham.Base = (peg, ch_edges[:1])
+            cham.Size = 0.4
+            cham.setExpression("Size", SP("peg_cham"))
+            doc.recompute()
+
+    # ── 10. Battery rail troughs (±Y) ──
+    bay_r = 11.1 / 2
+    bay_cz_glob = Z + 0.95   # 8.95
+    lift = 5.0
+
+    for idx, (bay_y, is_plus) in enumerate([(7.85, False), (38.15, True)]):
+        if is_plus:
+            fy0 = bay_y - bay_r - 0.1 + 2.0   # rail_dred
+            fy1 = H - 2.0
+        else:
+            fy0 = 2.0
+            fy1 = bay_y + bay_r + 0.1 - 2.0
+
+        rz_bot = floor_z + lift    # 7.5
+        fz_top = Z - 2.5 + lift    # 10.5
+
+        # Support block below rail
+        sup = body.newObject("PartDesign::AdditiveBox", f"RailSupport_{idx+1}")
+        sup.Length = 39.0
+        sup.Width = fy1 - fy0
+        sup.Height = lift + 0.1
+        sup.Placement = App.Placement(V(34.0, fy0, floor_z), ROT0)
+        sup.setExpression("Length", SP("bay_xl"))
+        sup.setExpression("Height", SP("rail_lift") + " + 0.1")
+        doc.recompute()
+
+        # Rail body
+        rail = body.newObject("PartDesign::AdditiveBox", f"RailBody_{idx+1}")
+        rail.Length = 39.0
+        rail.Width = fy1 - fy0
+        rail.Height = fz_top - rz_bot + 0.1
+        rail.Placement = App.Placement(V(34.0, fy0, rz_bot), ROT0)
+        rail.setExpression("Length", SP("bay_xl"))
+        doc.recompute()
+
+        # Battery cylinder subtraction (axis along X)
+        cyl_cz = bay_cz_glob + lift   # 13.95
+        cyl = body.newObject("PartDesign::SubtractiveCylinder", f"BattCylCut_{idx+1}")
+        cyl.Radius = bay_r
+        cyl.Height = 39.2
+        cyl.Placement = App.Placement(
+            V(34.0 - 0.1, bay_y, cyl_cz),
+            App.Rotation(V(0, 1, 0), 90))
+        cyl.setExpression("Radius", SP("bay_d") + " / 2")
+        cyl.setExpression("Height", SP("bay_xl") + " + 0.2")
+        doc.recompute()
+
+    # ── 11. USB support blocks (2) ──
+    bx0 = W - 5.0 - 2 * 5.0
+    by0 = H/2 - 15.0/2
+    bz_h = usb_z_bot - floor_z   # height from floor to USB bottom (= 3.05 - 2.6 = 0.45)
+
+    for j, offset in enumerate([0, -(5.0 + 5.0)]):
+        blk = body.newObject("PartDesign::AdditiveBox", f"USBBlock_{j+1}")
+        blk.Length = 5.0
+        blk.Width = 15.0
+        blk.Height = max(0.1, bz_h)
+        blk.Placement = App.Placement(V(bx0 + offset, by0, floor_z), ROT0)
+        blk.setExpression("Length", SP("ublk_xs"))
+        blk.setExpression("Width", SP("ublk_yw"))
+        doc.recompute()
+
+    # ── 12. Pico retention block ──
+    prb = body.newObject("PartDesign::AdditiveBox", "PicoRetentionBlock")
+    prb.Length = 5.0
+    prb.Width = 15.0
+    prb.Height = 2.0
+    prb.Placement = App.Placement(V(3.0 + 18.0, H/2 - 15.0/2, floor_z), ROT0)
+    prb.setExpression("Length", SP("pblk_xs"))
+    prb.setExpression("Width", SP("pblk_yw"))
+    prb.setExpression("Height", SP("pblk_zh"))
+    doc.recompute()
+
+    # ── 13. Solar wire holes (LAST — cuts through all additive features) ──
+    hole_r = 3.1 / 2
+    for hi, (hx, hy) in enumerate([(2.5, 2.0), (60.0, 2.4)]):
+        hole = body.newObject("PartDesign::SubtractiveCylinder", f"WireHole_{hi+1}")
+        hole.Radius = hole_r
+        hole.Height = Z + 2  # generous through-all
+        hole.Placement = App.Placement(V(sx0 + hx, sy0 + hy, -1.0), ROT0)
+        hole.setExpression("Radius", SP("sol_hd") + " / 2")
+        hole.setExpression("Height", SP("bp_h") + " + 2")
+        doc.recompute()
+
+    feats = [o.Name for o in body.Group if "Origin" not in o.Name]
+    print(f"    BasePlate: {len(feats)} features")
+    return body
+
+
+# =====================================================================
+# AAA CRADLE  (preset: shortened + open clip window 04-27)
+# =====================================================================
+
+def build_cradle(doc):
+    print("  Building AAA Cradle...")
+    body = doc.addObject("PartDesign::Body", "AAACradle")
+
+    # Derived constants (matching SCAD exactly)
+    bay_d = 10.5 + 2 * 0.3            # 11.1
+    plug_thick = bay_d + 2 * 0.5      # 12.1
+    plug_top = 7.0
+    plug_bot = plug_top - plug_thick   # -5.1
+    plug_x0, plug_x1 = 3.3, 93.0
+    plug_y0, plug_y1 = 2.3, 43.7
+    bay_cz = (plug_top + plug_bot) / 2  # 0.95
+
+    # AAA bay X range — PRESET values
+    aaa_len = 39.5   # PRESET: shortened from 44.5
+    bay_len = aaa_len + 2*2.0 + 1.0   # = 44.5
+    px_pillar_cut_mx = 94.5 - 1.2 - 5.0 - 0.4   # 87.9
+    bay_px_end = px_pillar_cut_mx - 3.0 - 20.0   # 64.9
+    bay_mx_start = bay_px_end - bay_len           # 20.4
+
+    ps = 5.0
+    slop = 0.4
+
+    # ── 1. Main plug body (sketch + pad) ──
+    sk_plug, (c_ox, c_oy, c_pw, c_ph) = make_rect_sketch(
+        body, "Sk_CR_PlugBody", plug_bot,
+        plug_x0, plug_y0, plug_x1, plug_y1)
+    doc.recompute()
+
+    pad = body.newObject("PartDesign::Pad", "Pad_PlugBody")
+    pad.Profile = sk_plug
+    pad.Length = plug_thick
+    doc.recompute()
+
+    # ── 2. Corner pillar cutouts (4) ──
+    cs = ps + 2 * slop
+    pillar_origins = [
+        (3.0, 2.0), (94.5 - 1.2 - ps, 2.0),
+        (3.0, 46.0 - 2.0 - ps), (94.5 - 1.2 - ps, 46.0 - 2.0 - ps),
+    ]
+    for i, (ox, oy) in enumerate(pillar_origins):
+        cut = body.newObject("PartDesign::SubtractiveBox", f"PillarCut_{i+1}")
+        cut.Length = cs
+        cut.Width = cs
+        cut.Height = plug_thick + 0.4
+        cut.Placement = App.Placement(V(ox - slop, oy - slop, plug_bot - 0.1), ROT0)
+        doc.recompute()
+
+    # ── 3. FPC gap ──
+    fpc = body.newObject("PartDesign::SubtractiveBox", "FPC_Gap")
+    fpc.Length = 3.1
+    fpc.Width = plug_y1 - plug_y0 + 0.2
+    fpc.Height = plug_thick + 0.2
+    fpc.Placement = App.Placement(V(plug_x0 - 0.1, plug_y0 - 0.1, plug_bot - 0.1), ROT0)
+    fpc.setExpression("Length", SP("fpc_gap") + " + 0.1")
+    doc.recompute()
+
+    # ── 4. AAA bays (2 × cylinder + top-open slot) ──
+    for j, bay_y in enumerate([7.85, 38.15]):
+        cyl = body.newObject("PartDesign::SubtractiveCylinder", f"AAABay_{j+1}")
+        cyl.Radius = bay_d / 2
+        cyl.Height = bay_len + 0.2
+        cyl.Placement = App.Placement(
+            V(bay_mx_start - 0.1, bay_y, bay_cz),
+            App.Rotation(V(0, 1, 0), 90))
+        cyl.setExpression("Radius",
+            "(" + SP("aaa_d") + " + 2 * " + SP("aaa_rslop") + ") / 2")
+        doc.recompute()
+
+        slot = body.newObject("PartDesign::SubtractiveBox", f"BayTopOpen_{j+1}")
+        slot.Length = bay_len + 0.2
+        slot.Width = bay_d
+        slot.Height = plug_top + 0.1 - bay_cz
+        slot.Placement = App.Placement(
+            V(bay_mx_start - 0.1, bay_y - bay_d/2, bay_cz), ROT0)
+        doc.recompute()
+
+    # ── 5. Pico nest ──
+    pico_ny = 21.0 + 2 * 0.4   # 21.8
+    pico_nx = 78.0 + 2 * 0.4   # 78.8
+    pico_y_start = 46.0 / 2 - pico_ny / 2
+    pico_x_start = max(plug_x0 + 3.0,
+        ((plug_x0 + 3.0 + bay_mx_start) / 2 - pico_nx / 2))
+
+    nest = body.newObject("PartDesign::SubtractiveBox", "PicoNest")
+    nest.Length = pico_nx
+    nest.Width = pico_ny
+    nest.Height = plug_thick + 0.2
+    nest.Placement = App.Placement(V(pico_x_start, pico_y_start, plug_bot - 0.1), ROT0)
+    doc.recompute()
+
+    # ── 6. -X inset ──
+    inset = body.newObject("PartDesign::SubtractiveBox", "MinusX_Inset")
+    inset.Length = 29.0
+    inset.Width = pico_ny
+    inset.Height = plug_thick + 0.2
+    inset.Placement = App.Placement(V(plug_x0, pico_y_start, plug_bot - 0.1), ROT0)
+    inset.setExpression("Length", SP("conn_xl"))
+    doc.recompute()
+
+    # ── 7. +X display connector cutout ──
+    disp_cut = body.newObject("PartDesign::SubtractiveBox", "DispConnCutout")
+    disp_cut.Length = plug_x1 - bay_px_end + 0.1
+    disp_cut.Width = pico_ny
+    disp_cut.Height = 3.1
+    disp_cut.Placement = App.Placement(V(bay_px_end, pico_y_start, plug_bot - 0.1), ROT0)
+    disp_cut.setExpression("Height", SP("disp_cz") + " + 0.1")
+    doc.recompute()
+
+    # ── 8. Connecting block (additive, re-fills -X inset area) ──
+    conn = body.newObject("PartDesign::AdditiveBox", "ConnBlock")
+    conn.Length = 29.0
+    conn.Width = pico_ny
+    conn.Height = plug_thick
+    conn.Placement = App.Placement(V(plug_x0, pico_y_start, plug_bot), ROT0)
+    conn.setExpression("Length", SP("conn_xl"))
+    doc.recompute()
+
+    # Battery arcs through connecting block
+    # IMPORTANT: In the SCAD these arcs are a difference() inside the connecting
+    # block only. In FreeCAD, SubtractiveCylinder cuts the ENTIRE body. If the
+    # arc extends to X=bay_mx_start it eats through the -X clip retainer walls.
+    # Fix: stop the arc just before the clip slot area.
+    # clip_slot_x=0.9, ret_thick=1.0 (defined later but needed here)
+    arc_x_end = bay_mx_start - 0.9 - 1.0 - 0.1   # = 18.4 (before clip area)
+    arc_len = arc_x_end - (plug_x0 - 0.1)          # = 15.2
+    for j, bay_y in enumerate([7.85, 38.15]):
+        arc = body.newObject("PartDesign::SubtractiveCylinder", f"ConnBlockArc_{j+1}")
+        arc.Radius = bay_d / 2
+        arc.Height = arc_len
+        arc.Placement = App.Placement(
+            V(plug_x0 - 0.1, bay_y, bay_cz),
+            App.Rotation(V(0, 1, 0), 90))
+        doc.recompute()
+
+    # TP4056 indent on connecting block top
+    tp_len = 28.0 + 2 * 0.2   # 28.4
+    tp_wid = 17.0 + 2 * 0.2   # 17.4
+    tp_y = (pico_y_start + pico_y_start + pico_ny) / 2 - tp_wid / 2
+    tp_indent = body.newObject("PartDesign::SubtractiveBox", "TP4056_Indent")
+    tp_indent.Length = tp_len
+    tp_indent.Width = tp_wid
+    tp_indent.Height = 1.1
+    tp_indent.Placement = App.Placement(V(plug_x0, tp_y, plug_top - 1.0), ROT0)
+    tp_indent.setExpression("Height", SP("tp_iz") + " + 0.1")
+    doc.recompute()
+
+    # ── 9. Battery clip slots (4) + retainer windows ──
+    clip_slot_y = 7.0 + 2 * 0.2   # 7.4
+    clip_slot_x = 0.5 + 2 * 0.2   # 0.9
+    ret_thick = 1.0
+    win_sz = 5.0
+    win_z_ext = 4.0   # PRESET: opened batt clip window at top
+
+    for j, bay_y in enumerate([7.85, 38.15]):
+        for bay_x, is_plus in [(bay_mx_start, False), (bay_px_end, True)]:
+            sx = (bay_x + ret_thick if is_plus
+                  else bay_x - clip_slot_x - ret_thick)
+            sy = bay_y - clip_slot_y / 2
+            sz_bot = bay_cz - 7.0/2 - 0.2   # -2.75
+
+            tag = f"_{j+1}{'P' if is_plus else 'M'}"
+            slot = body.newObject("PartDesign::SubtractiveBox", f"ClipSlot{tag}")
+            slot.Length = clip_slot_x
+            slot.Width = clip_slot_y
+            slot.Height = plug_top + 0.1 - sz_bot
+            slot.Placement = App.Placement(V(sx, sy, sz_bot), ROT0)
+            doc.recompute()
+
+            # Retainer window
+            wx = (bay_x - 0.1 if is_plus
+                  else bay_x - ret_thick - 0.1)
+            wy = bay_y - win_sz / 2
+            wz = bay_cz - win_sz / 2
+            wh = win_sz + win_z_ext   # 9.0 total (5 + 4 extend up)
+
+            win = body.newObject("PartDesign::SubtractiveBox", f"ClipWindow{tag}")
+            win.Length = ret_thick + 0.2
+            win.Width = win_sz
+            win.Height = wh
+            win.Placement = App.Placement(V(wx, wy, wz), ROT0)
+            win.setExpression("Width", SP("clip_win"))
+            win.setExpression("Height", SP("clip_win") + " + " + SP("clip_wze"))
+            doc.recompute()
+
+    feats = [o.Name for o in body.Group if "Origin" not in o.Name]
+    print(f"    AAACradle: {len(feats)} features")
+    return body
+
+
+# =====================================================================
+# TOP COVER  (preset: 4-26-final-face-for-now)
+# =====================================================================
+
+def build_top_cover(doc):
+    print("  Building Top Cover...")
+    body = doc.addObject("PartDesign::Body", "TopCover")
+
+    enc_x, enc_y = 94.5, 46.0
+    wall_mx, wall_px, wall_y = 3.0, 1.2, 2.0
+    ps = 5.0
+    face_bot = 7.0
+    fp_z = 1.0          # PRESET: 4-26-final (was 0.7)
+    face_top = face_bot + fp_z   # 8.0
+    bull_r = 4.0
+    edge_r = 2.2        # PRESET: 4-26-final (was 4.0)
+    total_h = face_top + bull_r   # 12.0
+    ext = 5.0
+
+    # ── 1. Outer shell (sketch + pad) ──
+    # Manual sketch — avoids over-constraining when pinned to origin
+    sk = body.newObject("Sketcher::SketchObject", "Sk_TC_Outline")
+    sk.AttachmentSupport = [(body.Origin.OriginFeatures[3], "")]
+    sk.MapMode = "FlatFace"
+    sk.AttachmentOffset = App.Placement(V(0, 0, -ext), ROT0)
+    sk.addGeometry(Part.LineSegment(V(0, 0, 0), V(enc_x, 0, 0)), False)
+    sk.addGeometry(Part.LineSegment(V(enc_x, 0, 0), V(enc_x, enc_y, 0)), False)
+    sk.addGeometry(Part.LineSegment(V(enc_x, enc_y, 0), V(0, enc_y, 0)), False)
+    sk.addGeometry(Part.LineSegment(V(0, enc_y, 0), V(0, 0, 0)), False)
+    sk.addConstraint(Sketcher.Constraint("Coincident", 0, 2, 1, 1))
+    sk.addConstraint(Sketcher.Constraint("Coincident", 1, 2, 2, 1))
+    sk.addConstraint(Sketcher.Constraint("Coincident", 2, 2, 3, 1))
+    sk.addConstraint(Sketcher.Constraint("Coincident", 3, 2, 0, 1))
+    sk.addConstraint(Sketcher.Constraint("Horizontal", 0))
+    sk.addConstraint(Sketcher.Constraint("Horizontal", 2))
+    sk.addConstraint(Sketcher.Constraint("Vertical", 1))
+    sk.addConstraint(Sketcher.Constraint("Vertical", 3))
+    sk.addConstraint(Sketcher.Constraint("Coincident", 0, 1, -1, 1))  # pin to origin
+    c_w = sk.addConstraint(Sketcher.Constraint("DistanceX", 0, 1, 0, 2, enc_x))
+    c_h = sk.addConstraint(Sketcher.Constraint("DistanceY", 1, 1, 1, 2, enc_y))
+    sk.setExpression(f"Constraints[{c_w}]", SP("enc_x"))
+    sk.setExpression(f"Constraints[{c_h}]", SP("enc_y"))
+    doc.recompute()
+
+    pad = body.newObject("PartDesign::Pad", "Pad_Shell")
+    pad.Profile = sk
+    pad.Length = total_h + ext   # 17
+    pad.setExpression("Length",
+        SP("disp_z") + " + " + SP("tc_fp_z") + " + " +
+        SP("tc_bull") + " + " + SP("tc_wext"))
+    doc.recompute()
+
+    # ── 2. Fillet vertical edges (corner rounding) ──
+    vert = find_edges(pad, "vertical")
+    if vert:
+        fil = body.newObject("PartDesign::Fillet", "Fillet_Corners")
+        fil.Base = (pad, vert)
+        fil.Radius = 4.0
+        fil.setExpression("Radius", SP("corner_r"))
+        doc.recompute()
+
+    # ── 3. Fillet top edges (bullnose) ──
+    # Find edges on the top face (Z = total_h) for rounding
+    tip = body.Tip
+    top_edges = []
+    for i, e in enumerate(tip.Shape.Edges):
+        verts = e.Vertexes
+        if len(verts) == 2:
+            p1, p2 = verts[0].Point, verts[1].Point
+            mid_z = (p1.z + p2.z) / 2
+            # Only pick edges that are EXACTLY at the top (not mid-height)
+            if abs(p1.z - p2.z) < 0.01 and abs(mid_z - total_h) < 0.05:
+                top_edges.append(f"Edge{i + 1}")
+    if top_edges:
+        fil_top = body.newObject("PartDesign::Fillet", "Fillet_Bullnose")
+        fil_top.Base = (tip, top_edges)
+        fil_top.Radius = edge_r   # 2.2 — controls how flat the face is
+        fil_top.setExpression("Radius", SP("tc_edge_r"))
+        doc.recompute()
+
+    # ── 4. Interior cavity ──
+    cav_x0, cav_x1 = wall_mx, enc_x - wall_px
+    cav_y0, cav_y1 = wall_y, enc_y - wall_y
+    cav_h = face_bot + ext   # 12
+
+    cav = body.newObject("PartDesign::SubtractiveBox", "Cut_Cavity")
+    cav.Length = cav_x1 - cav_x0
+    cav.Width = cav_y1 - cav_y0
+    cav.Height = cav_h + 0.1
+    cav.Placement = App.Placement(V(cav_x0, cav_y0, -ext - 0.05), ROT0)
+    cav.setExpression("Length",
+        SP("enc_x") + " - " + SP("wall_mx") + " - " + SP("wall_px"))
+    cav.setExpression("Width", SP("enc_y") + " - 2 * " + SP("wall_y"))
+    cav.setExpression("Height", SP("disp_z") + " + " + SP("tc_wext") + " + 0.1")
+    doc.recompute()
+
+    # ── 5. Corner pillars (4, fill cavity corners) ──
+    pillar_origins = [
+        (wall_mx, wall_y),
+        (enc_x - wall_px - ps, wall_y),
+        (wall_mx, enc_y - wall_y - ps),
+        (enc_x - wall_px - ps, enc_y - wall_y - ps),
+    ]
+    pil_h = face_top + ext   # 13 (from -5 to 8)
+    for i, (ox, oy) in enumerate(pillar_origins):
+        pil = body.newObject("PartDesign::AdditiveBox", f"CoverPillar_{i+1}")
+        pil.Length = ps
+        pil.Width = ps
+        pil.Height = pil_h
+        pil.Placement = App.Placement(V(ox, oy, -ext), ROT0)
+        pil.setExpression("Length", SP("pillar"))
+        pil.setExpression("Width", SP("pillar"))
+        pil.setExpression("Height",
+            SP("disp_z") + " + " + SP("tc_fp_z") + " + " + SP("tc_wext"))
+        doc.recompute()
+
+    # ── 6. M3 screw bores (4 through pillars) ──
+    peg_pos = [
+        (wall_mx + ps/2, wall_y + ps/2),
+        (enc_x - wall_px - ps/2, wall_y + ps/2),
+        (wall_mx + ps/2, enc_y - wall_y - ps/2),
+        (enc_x - wall_px - ps/2, enc_y - wall_y - ps/2),
+    ]
+    for i, (px, py) in enumerate(peg_pos):
+        bore = body.newObject("PartDesign::SubtractiveCylinder", f"M3Bore_{i+1}")
+        bore.Radius = 3.2 / 2
+        bore.Height = face_bot + ext + 0.2
+        bore.Placement = App.Placement(V(px, py, -ext - 0.1), ROT0)
+        bore.setExpression("Radius", SP("m3_d") + " / 2")
+        doc.recompute()
+
+    # ── 7. Screen inlay pocket ──
+    disp_x0 = wall_mx + 0.4   # 3.4
+    disp_x1 = disp_x0 + 65.0  # 68.4
+    disp_y0 = enc_y/2 - 30.0/2  # 8.0
+    disp_y1 = disp_y0 + 30.0    # 38.0
+    inlay_x0 = disp_x0 - 0.3    # 3.1
+    inlay_x1 = disp_x1 + 0.3    # 68.7
+    inlay_y0 = disp_y0 - 0.35   # 7.65
+    inlay_y1 = disp_y1 + 0.35   # 38.35
+    inlay_depth = 3.0
+    # Inlay cuts UPWARD into face plate: Z = face_bot to face_bot + inlay_depth
+    # (SCAD: screen_inlay_bottom_z = face_plate_bottom = 7, top = 7 + 3 = 10)
+    inlay = body.newObject("PartDesign::SubtractiveBox", "Cut_ScreenInlay")
+    inlay.Length = inlay_x1 - inlay_x0
+    inlay.Width = inlay_y1 - inlay_y0
+    inlay.Height = inlay_depth + 0.1
+    inlay.Placement = App.Placement(V(inlay_x0, inlay_y0, face_bot - 0.05), ROT0)
+    inlay.setExpression("Height", SP("inlay_z") + " + 0.1")
+    doc.recompute()
+
+    # ── 8. FPC ribbon divet ──
+    # SCAD: Z = face_bot - fpc_extend (5) to face_bot + inlay_depth (10)
+    # Cuts through -X wall below face plate + into face plate above
+    fpc_x0 = 1.0
+    fpc_x1 = inlay_x0             # 3.1
+    fpc_y0 = enc_y/2 - 13.0/2    # 16.5
+    fpc_y1 = fpc_y0 + 13.0       # 29.5
+    fpc_z_extend = 2.0            # extends 2mm below face_bot into wall
+    fpc_z_bot = face_bot - fpc_z_extend   # 5.0
+    fpc_total_h = inlay_depth + fpc_z_extend  # 5.0 (Z=5 to Z=10)
+
+    fpc_cut = body.newObject("PartDesign::SubtractiveBox", "Cut_FPCDivet")
+    fpc_cut.Length = fpc_x1 - fpc_x0
+    fpc_cut.Width = fpc_y1 - fpc_y0
+    fpc_cut.Height = fpc_total_h + 0.1
+    fpc_cut.Placement = App.Placement(V(fpc_x0, fpc_y0, fpc_z_bot), ROT0)
+    fpc_cut.setExpression("Width", SP("fpc_dy"))
+    fpc_cut.setExpression("Height", SP("inlay_z") + " + " + SP("fpc_dze") + " + 0.1")
+    doc.recompute()
+
+    # ── 9. Display viewing window (through face plate + dome) ──
+    win_w = 48.0
+    win_h = 22.0
+    win_x0 = disp_x0 + (65.0 - win_w)/2 + 2.8
+    win_y0 = disp_y0 + (30.0 - win_h)/2
+
+    win_z_height = total_h - face_bot + 0.2  # through face plate + dome
+    win = body.newObject("PartDesign::SubtractiveBox", "Cut_Window")
+    win.Length = win_w
+    win.Width = win_h
+    win.Height = win_z_height
+    win.Placement = App.Placement(V(win_x0, win_y0, face_bot - 0.1), ROT0)
+    win.setExpression("Length", SP("win_xl"))
+    win.setExpression("Width", SP("win_yd"))
+    doc.recompute()
+
+    # ── 10. Joystick through-hole ──
+    joy_cx = 79.35
+    joy_cy = enc_y / 2
+    joy_r = 12.0 / 2
+    joy_cut_h = total_h - face_bot + 0.2
+
+    joy = body.newObject("PartDesign::SubtractiveCylinder", "Cut_Joystick")
+    joy.Radius = joy_r
+    joy.Height = joy_cut_h
+    joy.Placement = App.Placement(V(joy_cx, joy_cy, face_bot - 0.1), ROT0)
+    joy.setExpression("Radius", SP("joy_d") + " / 2")
+    doc.recompute()
+
+    # ── 11. Joystick PCB pocket ──
+    # SCAD: Z = face_plate_bottom - 0.1 to face_plate_bottom + inlay_depth
+    # Same depth as screen inlay, cuts INTO face plate from below
+    jpcb = body.newObject("PartDesign::SubtractiveBox", "Cut_JoyPCBPocket")
+    jpcb.Length = 20.0
+    jpcb.Width = 20.0
+    jpcb.Height = inlay_depth + 0.1   # 3.1 (same depth as inlay)
+    jpcb.Placement = App.Placement(V(inlay_x1, enc_y/2 - 20.0/2, face_bot - 0.05), ROT0)
+    jpcb.setExpression("Length", SP("joy_px"))
+    jpcb.setExpression("Width", SP("joy_py"))
+    jpcb.setExpression("Height", SP("inlay_z") + " + 0.1")
+    doc.recompute()
+
+    feats = [o.Name for o in body.Group if "Origin" not in o.Name]
+    print(f"    TopCover: {len(feats)} features")
+    return body
+
+
+# =====================================================================
+# MAIN — build all, assemble, save
+# =====================================================================
+
+def main():
+    doc_name = "Dilder_Rev2_Mk2"
+
+    # Close if already open
+    if App.ActiveDocument and App.ActiveDocument.Name == doc_name:
+        App.closeDocument(doc_name)
+
+    doc = App.newDocument(doc_name)
+    print("=" * 60)
+    print("Dilder Rev 2 Mk2 — Parametric FreeCAD PartDesign Build")
+    print("=" * 60)
+
+    print("\nSetting up Parameters spreadsheet...")
+    setup_spreadsheet(doc)
+
+    bp = build_base_plate(doc)
+    cr = build_cradle(doc)
+    tc = build_top_cover(doc)
+
+    # ── Assembly positioning ──
+    # Base plate top face is at Z = bp_h = 6.0 (post-shave)
+    # Both cover and cradle mate flush with that face.
+    bp_top = 6.0   # base plate top Z (8mm - 2mm shave)
+
+    # Cover: wall extension goes 5mm below local z=0.
+    # Bottom face (local z=-5) flush with base plate top.
+    tc_wall_ext = 5.0
+    tc.Placement = App.Placement(V(0, 0, bp_top + tc_wall_ext), ROT0)
+
+    # Cradle: flipped 180° around Y (mirrors X and Z).
+    # Former plug_top face (local Z=7.0) → rotated to Z=-7.0.
+    # Flush with base plate top: -7.0 + Z_shift = bp_top → Z_shift = 13.0
+    cr.Placement = App.Placement(
+        V(96.3, 0, bp_top + 7.0),
+        App.Rotation(V(0, 1, 0), 180))
+
+    # ── Body colors ──
+    try:
+        bp.ViewObject.ShapeColor = (0.6, 0.65, 0.7)    # steel blue-gray
+        cr.ViewObject.ShapeColor = (0.9, 0.75, 0.4)    # warm amber
+        tc.ViewObject.ShapeColor = (0.4, 0.55, 0.8)    # blue
+        tc.ViewObject.Transparency = 40
+    except Exception:
+        pass
+
+    doc.recompute()
+
+    # ── Feature summary ──
+    print("\nFeature tree:")
+    for body_obj in [bp, cr, tc]:
+        feats = [o.Name for o in body_obj.Group
+                 if "Origin" not in o.Name and "Sketch" not in o.TypeId]
+        sketches = [o.Name for o in body_obj.Group
+                    if "Sketch" in o.TypeId]
+        print(f"  {body_obj.Name}:")
+        print(f"    {len(sketches)} sketches, {len(feats)} operations")
+        for f in body_obj.Group:
+            if "Origin" in f.Name:
+                continue
+            kind = f.TypeId.split("::")[-1]
+            print(f"      {kind:30s}  {f.Name}")
+
+    # ── Save ──
+    save_dir = os.path.dirname(os.path.abspath(__file__))
+    save_path = os.path.join(save_dir, "Dilder_Rev2_Mk2.FCStd")
+    doc.saveAs(save_path)
+    print(f"\nSaved: {save_path}")
+
+    print("\n  Double-click any Sketch to edit geometry.")
+    print("  Change values in Parameters spreadsheet, then Ctrl+Shift+R.")
+    print("=" * 60)
+
+    try:
+        import FreeCADGui
+        FreeCADGui.activeDocument().activeView().viewAxometric()
+        FreeCADGui.SendMsgToActiveView("ViewFit")
+    except Exception:
+        pass
+
+    return doc
+
+
+if __name__ == "__main__" or True:
+    main()

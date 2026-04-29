@@ -1,0 +1,48 @@
+Dilder Rev 2 Mk2 — FreeCAD PartDesign Model
+=============================================
+
+Single macro that builds all 3 bodies with constrained sketches,
+PartDesign operations (Pad, Pocket, Fillet, Chamfer, AdditiveBox,
+SubtractiveBox, SubtractiveCylinder, AdditiveCylinder), and a
+Parameters spreadsheet for full parametric control.
+
+File:
+  dilder_rev2_mk2.FCMacro   — builds all 3 bodies, saves .FCStd
+
+How to use:
+  1. Open FreeCAD (0.21+)
+  2. Macro > Macros > navigate to this folder
+  3. Run dilder_rev2_mk2.FCMacro
+  4. It builds 3 bodies + saves Dilder_Rev2_Mk2.FCStd automatically
+  5. Edit Parameters spreadsheet, Ctrl+Shift+R to recompute
+
+Bodies:
+  BasePlate  — outer shell pad + corner fillet + bottom fillet
+               + cradle pocket + solar pit pocket + wire holes
+               + USB-C cutout (rounded) + 4 pillars with 27mm
+               extensions + pegs with chamfers + battery rail
+               troughs + USB support blocks + Pico retention block
+
+  AAACradle  — plug body pad + 4 pillar cutouts + FPC gap
+               + 2 AAA cylinder bays + top-open slots
+               + Pico nest + -X inset + connecting block
+               + battery arcs + TP4056 indent + display cutout
+               + 4 clip slots with retainer windows (4mm Z extend)
+
+  TopCover   — outer shell pad + corner fillet + bullnose fillet
+               + interior cavity + 4 corner pillars + 4 M3 bores
+               + screen inlay pocket + FPC divet + display window
+               + joystick through-hole + joystick PCB pocket
+
+Presets baked:
+  Base plate:  extended_inset-pillar-blocks  (ext_x=27)
+  AAA cradle:  04-27 shortened + open window (len=39.5, clip_wze=4)
+  Top cover:   4-26-final-face-for-now       (fp_z=1.0, edge_r=2.2)
+
+Z-stack (global coordinates):
+  Z =  0.0  Base plate bottom (solar pit faces down)
+  Z =  2.5  Pocket floor
+  Z =  8.0  Base plate top / cover mating surface
+  Z = 15.0  Face plate bottom (display top)
+  Z = 16.0  Face plate top
+  Z = 20.0  Cover top (bullnose apex)
