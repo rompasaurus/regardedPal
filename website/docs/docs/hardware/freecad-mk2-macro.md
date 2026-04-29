@@ -41,7 +41,8 @@ The macro splits cleanly into five sections:
 | 2. Spreadsheet | `setup_spreadsheet` | `Parameters` sheet with 100+ aliased cells |
 | 3. Bodies | `build_base_plate`, `build_cradle`, `build_top_cover` | Three PartDesign Bodies |
 | 4. Pico import | `add_pico_with_headers` | `Pico2W_Board` + `Pico2W_Headers` features |
-| 5. Main | `main` | Spreadsheet → bodies → assembly placements → Pico import → save |
+| 5. Peripherals | `add_peripherals` | `AAA_Battery_1/2`, `TP4056_Module`, `EInkDisplay_Module` |
+| 6. Main | `main` | Spreadsheet → bodies → assembly placements → Pico import → peripherals → save |
 
 ### The Parameters spreadsheet
 
@@ -214,6 +215,24 @@ The result:
 | Back of PCB (bbox ZMax) | 7.00 |
 | Header shroud top | 9.54 |
 | Pin tips | 18.14 |
+
+## Peripherals
+
+`add_peripherals(doc)` runs after the Pico import and adds three more components, all built procedurally from datasheet dimensions:
+
+### AAA batteries
+
+Two cylinders (10.5 mm dia × 39.5 mm long, dark grey) plus a smaller positive-terminal cap on the +X end (5.5 mm dia × 1 mm tall, brass color). Positioned in the cradle's two battery bays at global Y = 7.85 / 38.15, Z = 12.05 (= 13 − bay_cz). Cylinder axes lie along X with the cell centered in the bay's effective length range.
+
+### TP4056 USB-C charge module
+
+A 28 × 17 × 1.6 mm navy blue PCB with a small IC + capacitor block on top and a silver USB-C connector protruding +X (toward the base plate's +X-wall USB-C cutout). Sits in the cradle's `TP4056_Indent` recess so the board's top face is flush with the cradle's plug-top mating plane at global Z = 6.0. Components hang down toward the base plate.
+
+### Waveshare 2.13" e-paper display
+
+Off-white module body (65 × 30 × 3 mm) sized to fill the top cover's screen inlay, with a brighter "paper white" panel rectangle (50 × 22 mm, win-shifted toward +X) on the +Z face representing the active e-ink area. Module back sits flush with the inlay floor at global Z = 18.0; active panel surface at Z = 21.0, visible through the cover's display window cut.
+
+Why procedural instead of imported STEP? Most third-party CAD models for these (TP4056, Waveshare e-paper) are behind login or paywalls (CraftedTech, GrabCAD), and Waveshare doesn't publish CAD for the Pico-ePaper-2.13. Procedural geometry stays fast, deterministic, and parametric — same pattern as the Pico's pin headers.
 
 ## Tweaking it
 

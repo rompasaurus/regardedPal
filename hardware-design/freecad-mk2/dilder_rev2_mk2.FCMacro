@@ -1121,6 +1121,141 @@ def add_pico_with_headers(doc):
 
 
 # =====================================================================
+# PERIPHERALS — AAA batteries, TP4056 USB-C charger, Waveshare e-ink
+# =====================================================================
+# All three are built procedurally from datasheet dimensions. Third-party
+# CAD models for these (TP4056 modules, Waveshare e-paper) are mostly
+# behind login/paywalls and Waveshare doesn't publish CAD for the
+# Pico-ePaper-2.13. Procedural geometry is fast, deterministic, and
+# parametric — same approach as the Pico's pin headers.
+
+def add_peripherals(doc):
+    print("  Adding peripherals (batteries, TP4056, e-ink display)...")
+
+    # ── AAA batteries (2x, one per cradle bay) ──
+    # 1.5V Li-Ion AAA / 10440 form factor: 10.5 mm dia × 39.5 mm length
+    # In cradle local: bay_mx_start=20.4 to bay_px_end=64.9 (44.5mm bay),
+    # cells centered with aaa_cspace=2.0 per end → cell X local 22.4..61.9.
+    # bay_y locals: 7.85, 38.15. bay_cz local: 0.95.
+    # Cradle Placement: 180° about Y, then translate (96.3, 0, bp_top+7.0=13).
+    # → global cell X = [96.3-61.9, 96.3-22.4] = [34.4, 73.9]
+    # → global cell Y = bay_y_local (Y unchanged by Y rotation)
+    # → global cell Z = 13.0 - bay_cz_local = 12.05
+    aaa_d = 10.5
+    aaa_len = 39.5
+    cell_x_min_g = 96.3 - 61.9
+    cell_y_g = {1: 7.85, 2: 38.15}
+    cell_z_g = 13.0 - 0.95
+    # Battery cylinder is along X axis, placed by cylinder center on -X end
+    # FreeCAD makeCylinder is along Z by default; rotate 90° about Y to align
+    # with X, with the cylinder origin at one end of the cell.
+    for idx in (1, 2):
+        body = Part.makeCylinder(aaa_d / 2, aaa_len)
+        # Rotate so cylinder axis is along +X (Z → +X)
+        body.translate(V(0, 0, -aaa_len / 2))   # center on origin
+        body.rotate(V(0, 0, 0), V(0, 1, 0), 90)  # axis Z → X
+        body.translate(V(cell_x_min_g + aaa_len / 2,
+                         cell_y_g[idx], cell_z_g))
+        cell = doc.addObject("Part::Feature", f"AAA_Battery_{idx}")
+        cell.Shape = body
+
+        # Positive terminal nub at +X end of cell (small cap, brighter color)
+        nub_d = 5.5
+        nub_h = 1.0
+        nub = Part.makeCylinder(nub_d / 2, nub_h)
+        nub.rotate(V(0, 0, 0), V(0, 1, 0), 90)
+        nub.translate(V(cell_x_min_g + aaa_len, cell_y_g[idx], cell_z_g))
+        nub_obj = doc.addObject("Part::Feature", f"AAA_Battery_{idx}_PosTerm")
+        nub_obj.Shape = nub
+        try:
+            cell.ViewObject.ShapeColor = (0.18, 0.18, 0.20)   # battery body grey
+            nub_obj.ViewObject.ShapeColor = (0.85, 0.78, 0.35)  # brass tip
+        except Exception:
+            pass
+
+    # ── TP4056 USB-C charger module ──
+    # Standard module: 28 mm × 17 mm × 1.6 mm PCB + USB-C bump (~9×7×3.4)
+    # Cradle's TP4056_Indent (cradle local): plug_x0=3.3 to plug_x0+tp_xl=31.3,
+    # tp_y=14.3 to tp_y+tp_yw=31.3, top face at plug_top=7 (board sits flush).
+    # After cradle 180° Y flip + translate: global X=64.6..93.0, Y=14.3..31.3,
+    # Z (board top, formerly local +Z=7) = 13-7 = 6 → board hangs DOWN from
+    # there to Z=6-1.6=4.4, components reach to ~3.0. USB-C connector points
+    # +X (toward base plate +X-wall cutout at X=93.3).
+    tp_xl_v = 28.0
+    tp_yw_v = 17.0
+    tp_pcb_t = 1.6
+    tp_x_min_g = 96.3 - (3.3 + tp_xl_v)        # = 65.0
+    tp_y_min_g = 14.3
+    tp_z_top_g = 13.0 - 7.0                    # = 6.0 (board top, mating)
+    # PCB body
+    tp_pcb = Part.makeBox(tp_xl_v, tp_yw_v, tp_pcb_t,
+                          V(tp_x_min_g, tp_y_min_g, tp_z_top_g - tp_pcb_t))
+    # USB-C connector — protrudes +X beyond the board edge
+    usbc_w, usbc_d, usbc_h = 9.0, 7.5, 3.4
+    usbc = Part.makeBox(usbc_d, usbc_w, usbc_h,
+                        V(tp_x_min_g + tp_xl_v - 2.0,
+                          tp_y_min_g + (tp_yw_v - usbc_w) / 2,
+                          tp_z_top_g - tp_pcb_t - usbc_h + 0.4))
+    # IC + capacitor lump (rough block representing the SOIC + caps)
+    ic_lump = Part.makeBox(14, 8, 1.6,
+                           V(tp_x_min_g + 8, tp_y_min_g + 4.5,
+                             tp_z_top_g - tp_pcb_t - 1.6))
+    tp_obj = doc.addObject("Part::Feature", "TP4056_Module")
+    tp_obj.Shape = Part.Compound([tp_pcb, ic_lump])
+    usbc_obj = doc.addObject("Part::Feature", "TP4056_USBC")
+    usbc_obj.Shape = usbc
+    try:
+        tp_obj.ViewObject.ShapeColor = (0.10, 0.18, 0.50)   # navy blue PCB
+        usbc_obj.ViewObject.ShapeColor = (0.70, 0.72, 0.75)  # silver USB-C
+    except Exception:
+        pass
+
+    # ── Waveshare 2.13" e-paper display module ──
+    # Module sized to fit screen inlay (disp_xl=65, disp_yd=30, inlay_z=3).
+    # Active e-paper area approx 48×22 mm centered with the win_shift toward
+    # +X. Module thickness ~3.0 mm fitting the 3 mm inlay depth.
+    # TopCover Placement: V(0, 0, bp_top + tc_wall_ext = 11), no rotation.
+    # Inlay carves from local Z=face_bot=7 upward by inlay_depth=3 → global
+    # Z = 11+7 = 18 (module bottom = back of display PCB) to Z = 11+10 = 21
+    # (active screen surface visible through the window cut).
+    disp_xl_v, disp_yd_v = 65.0, 30.0
+    disp_x_min_g = 3.4   # disp_x0 = wall_mx + 0.4
+    disp_y_min_g = 8.0   # disp_y0 = enc_y/2 - disp_yd/2
+    disp_z_back_g = 11.0 + 7.0   # module back (PCB) sits flush with inlay floor
+    disp_module_h = 3.0          # full module thickness
+    # Module body (PCB + plastic carrier)
+    disp_pcb = Part.makeBox(disp_xl_v, disp_yd_v, disp_module_h,
+                            V(disp_x_min_g, disp_y_min_g, disp_z_back_g))
+    # Active e-paper area on the +Z (visible) face — slightly raised
+    win_w_v, win_h_v = 48.0, 22.0
+    win_shift_v = 2.8
+    panel_x = disp_x_min_g + (disp_xl_v - win_w_v) / 2 + win_shift_v
+    panel_y = disp_y_min_g + (disp_yd_v - win_h_v) / 2
+    panel_z = disp_z_back_g + disp_module_h - 0.05
+    panel = Part.makeBox(win_w_v, win_h_v, 0.1,
+                         V(panel_x, panel_y, panel_z))
+    disp_obj = doc.addObject("Part::Feature", "EInkDisplay_Module")
+    disp_obj.Shape = disp_pcb
+    panel_obj = doc.addObject("Part::Feature", "EInkDisplay_Panel")
+    panel_obj.Shape = panel
+    try:
+        disp_obj.ViewObject.ShapeColor = (0.92, 0.92, 0.93)   # off-white carrier
+        panel_obj.ViewObject.ShapeColor = (0.98, 0.98, 0.98)  # paper white
+    except Exception:
+        pass
+
+    print(f"    AAA cells:    X=[{cell_x_min_g:.1f},"
+          f"{cell_x_min_g+aaa_len:.1f}]  Y={list(cell_y_g.values())}  "
+          f"Z={cell_z_g:.2f}")
+    print(f"    TP4056:       X=[{tp_x_min_g:.1f},{tp_x_min_g+tp_xl_v:.1f}]  "
+          f"Y=[{tp_y_min_g:.1f},{tp_y_min_g+tp_yw_v:.1f}]  Z_top={tp_z_top_g:.2f}")
+    print(f"    EInk display: X=[{disp_x_min_g:.1f},"
+          f"{disp_x_min_g+disp_xl_v:.1f}]  "
+          f"Y=[{disp_y_min_g:.1f},{disp_y_min_g+disp_yd_v:.1f}]  "
+          f"Z=[{disp_z_back_g:.2f},{disp_z_back_g+disp_module_h:.2f}]")
+
+
+# =====================================================================
 # MAIN — build all, assemble, save
 # =====================================================================
 
@@ -1164,6 +1299,11 @@ def main():
     # Pico import comes after assembly placements so face anchors resolve in
     # global coords (cradle is rotated 180° about Y at this point).
     pico_result = add_pico_with_headers(doc)
+
+    # Peripherals (AAA cells, TP4056, e-ink display) — built procedurally
+    # with positions in global coords already accounting for cradle/cover
+    # placements. Run after placements for the same reason.
+    add_peripherals(doc)
 
     # ── Body colors ──
     try:

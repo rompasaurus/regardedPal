@@ -52,9 +52,9 @@ The 3D-printed enclosure is a three-part design: base plate with solar panel rec
   <em>All three parts stacked in their mated positions.</em>
 </p>
 
-### Pico 2 W in the Assembly
+### Full Assembly with Electronics
 
-The FreeCAD macro now imports the official Raspberry Pi Pico 2 STEP file (mechanically identical to the Pico 2 W) and adds procedural 2×20 pin headers. The board is mounted upside-down with its component-side face flush against the cradle's mating plane, headers extending up into the PicoNest cavity.
+The FreeCAD macro now imports the official Raspberry Pi Pico 2 STEP file (mechanically identical to the Pico 2 W) and adds procedural 2×20 pin headers. It also builds three more peripherals from datasheet dimensions — two AAA Li-Ion cells in the cradle bays, a TP4056 USB-C charge module in the connecting block indent, and a Waveshare 2.13" e-paper display in the top cover's screen inlay. The Pico is mounted upside-down with its component-side face flush against the cradle's mating plane, headers extending up into the PicoNest cavity.
 
 <p align="center">
   <img src="hardware-design/renders/assembly-with-pico-iso.png" alt="Assembly with Pico — top cover translucent" width="500" />
