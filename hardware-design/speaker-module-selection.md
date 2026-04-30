@@ -405,7 +405,164 @@ slice API. One GPIO pin + one ground wire.
 
 ---
 
-### 4. SparkFun Thin Speaker (PRT-20660)
+### 4. uxcell 20mm Round Speaker 1W 8 ohm (4-pack) — Amazon Budget Pick
+
+| Spec | Value |
+|------|-------|
+| Dimensions | 20 mm dia x ~4 mm thick |
+| Impedance | 8 ohm |
+| Power | 1 W |
+| Quantity | 4 pcs |
+| Price | ~$5-7 USD (~$1.50/ea) |
+| Sources | [Amazon B00O9Y3YAQ](https://www.amazon.com/uxcell-Internal-Magnet-Speaker-Loudspeaker/dp/B00O9Y3YAQ), [Amazon B01MYBC1CT (2-pack)](https://www.amazon.com/uxcell-Mediant-Internal-Magnetic-Speaker/dp/B01MYBC1CT) |
+
+**Pros:**
+- Same form factor as SparkFun COM-26553 but cheaper per unit in 4-pack
+- Internal magnet — no stray flux into nearby Hall sensors / joystick
+- Prime shipping (vs AliExpress 2-4 week wait)
+- 4 mm thick fits Z-budget with margin
+
+**Cons:**
+- Generic Chinese OEM — frequency response not characterized
+- Pre-attached lead length varies between batches
+
+---
+
+### 5. JESSINIE Ultra-Thin 20mm Speaker 1W 8 ohm (20-pack)
+
+| Spec | Value |
+|------|-------|
+| Dimensions | 20 mm dia, ultra-thin profile |
+| Impedance | 8 ohm |
+| Power | 1 W |
+| Sound pressure | 98 +/- 3 dB |
+| Quantity | 20 pcs |
+| Price | ~$10-13 USD (~$0.50-0.65/ea) |
+| Sources | [Amazon B0G57VT7Y8](https://www.amazon.com/JESSINIE-Ultra-Thin-Speaker-8%CE%A9-1W/dp/B0G57VT7Y8) |
+
+**Pros:**
+- Cheapest per-unit on Amazon when buying the 20-pack
+- 98 dB output rivals premium amp setups
+- Plastic frame is lighter than metal-can speakers
+- Plenty of spares for prototyping iterations
+
+**Cons:**
+- Only economical if you want bulk
+- Plastic frame less rigid — needs case clamping for best bass
+- Cable termination quality varies
+
+---
+
+### 6. IIVVERR / Aexit 30x20x4mm Oval Speaker 1W 8 ohm
+
+| Spec | Value |
+|------|-------|
+| Dimensions | 30 x 20 x 4 mm (oval) |
+| Impedance | 8 ohm |
+| Power | 1 W |
+| Price | ~$4-6 USD per pair |
+| Sources | [IIVVERR B086S9F83P](https://www.amazon.com/IIVVERR-Stereo-Speaker-Est%C3%A9reo-Completa/dp/B086S9F83P), [Aexit B07LFHGSTS](https://www.amazon.com/Aexit-Speakers-Stereo-Speaker-Satellite/dp/B07LFHGSTS) |
+
+**Pros:**
+- **Direct Amazon equivalent of Adafruit Mini Oval (4227)** at lower cost
+- Same 30 x 20 x 4 mm footprint that already fits the battery bay
+- 1 mm thinner than Adafruit oval — adds Z-margin
+- Tablet-PC pull style — designed for thin-profile use
+
+**Cons:**
+- No-name brand, dimensional tolerance not guaranteed
+- Listings frequently relist under different seller names
+- Lead length sometimes too short for cradle-to-amp routing
+
+---
+
+### 7. uxcell 16mm Round Speaker 1W 8 ohm (4-pack)
+
+| Spec | Value |
+|------|-------|
+| Dimensions | 16 mm dia x ~3-4 mm thick |
+| Impedance | 8 ohm |
+| Power | 1 W |
+| Quantity | 4 pcs |
+| Price | ~$5-7 USD |
+| Sources | [Amazon B082ZPP4P8](https://www.amazon.com/uxcell-Audio-Speaker-Electronic-Projects/dp/B082ZPP4P8) |
+
+**Pros:**
+- Smaller footprint than 20mm — fits in tighter cradle pockets or side gaps
+- 1W rating in a 16mm body is unusually high
+- Pre-wired with leads
+
+**Cons:**
+- Smaller cone = less low-end response
+- Less common size — fewer mounting reference designs
+
+---
+
+### 8. DMiotech / Gump's 15mm Mini Speaker 1W 8 ohm (4-pack)
+
+| Spec | Value |
+|------|-------|
+| Dimensions | 15 mm dia x ~3-4 mm thick |
+| Impedance | 8 ohm |
+| Power | 1 W |
+| Price | ~$4-6 USD per 4-pack |
+| Sources | [DMiotech B0BMB423HV](https://www.amazon.com/DMiotech-Diameter-Magnetic-Replacement-Loudspeaker/dp/B0BMB423HV), [Gump's B0DG8P86YD](https://www.amazon.com/Gumps-grocery-Internal-Loudspeaker-15MM-8%CE%A9-1/dp/B0DG8P86YD) |
+
+**Pros:**
+- Same size as SparkFun PRT-20660 but with full 1W rating (vs 0.5W)
+- Phone-replacement style — designed for tight enclosures
+- 4-pack at SparkFun single-unit price
+
+**Cons:**
+- 15mm cone struggles with anything below 1 kHz
+- Best for beeps/voice prompts, not music
+
+---
+
+### 9. XIITIA 3W 8 ohm Mini Speaker w/ 2.54mm Dupont (6-pack)
+
+| Spec | Value |
+|------|-------|
+| Impedance | 8 ohm |
+| Power | 3 W |
+| Connector | 2.54mm DuPont (plug-and-play) |
+| Quantity | 6 pcs |
+| Price | ~$8-10 USD |
+| Sources | [Amazon B0D5HPQQ81](https://www.amazon.com/XIITIA-Loundspeaker-Interface-Compatible-Electronic/dp/B0D5HPQQ81) |
+
+**Pros:**
+- DuPont connector means no soldering — drop into a header on the PCB
+- 3W rating gives headroom on the MAX98357A / NS4168 amps
+- Great for breadboard prototyping before final assembly
+
+**Cons:**
+- Likely too thick (>5mm) for the Dilder battery bay — verify before ordering
+- 3W is overkill — amps will clip first
+- DuPont connector adds 2-3mm height penalty
+
+---
+
+### 10. Adafruit Thin Plastic Speaker 0.25W (Amazon)
+
+| Spec | Value |
+|------|-------|
+| Impedance | 8 ohm |
+| Power | 0.25 W |
+| Profile | Thin plastic frame |
+| Price | ~$2-3 USD |
+| Sources | [Amazon B00N4YW7G4](https://www.amazon.com/Speakers-Transducers-Plastic-Speaker-Wires/dp/B00N4YW7G4) |
+
+**Pros:**
+- Adafruit-vetted quality on Amazon Prime
+- Thin profile competitive with the SparkFun 15mm option
+
+**Cons:**
+- Only 0.25W — quietest of all options listed
+- Voice-only / beep duty, no music
+
+---
+
+### 11. SparkFun Thin Speaker (PRT-20660)
 
 | Spec | Value |
 |------|-------|

@@ -5,7 +5,7 @@ Run with:  freecad render_views.FCMacro
 Or offscreen:  QT_QPA_PLATFORM=offscreen freecad render_views.FCMacro
 
 Each view sets up camera + visibility, then saves a PNG to ../renders/var-*.png.
-The set mirrors what was committed on 2026-04-29 plus a thumbpiece detail.
+Updated 2026-04-30: added piezo speaker, IMU accelerometer, joystick anchor pad.
 """
 
 import os, time
@@ -117,8 +117,9 @@ save("var-06-cover-removed-top.png", axometric=False, fit=False)
 # 07 — Cradle + batt + clips iso (hide cover, base plate, pico, displays, joystick, thumbpiece)
 show_all_except([
     "TopCover", "BasePlate", "Pico_Board", "Pico_Headers",
-    "JoystickPCB", "Thumbpiece", "TP4056_Module", "TP4056_USBC",
-    "EInk_Display", "EInk_Panel"])
+    "JoystickPCB", "Thumbpiece", "TP4056_Module",
+    "EInk_Display", "EInk_Panel",
+    "Piezo_Brass", "Piezo_Ceramic", "IMU_Module"])
 save("var-07-cradle-batt-clips-iso.png")
 
 # 08 — Cradle + batt + clips top
@@ -130,7 +131,7 @@ show_all_except([
     "TopCover", "AAACradle", "JoystickPCB", "Thumbpiece",
     "AAA_Battery_1", "AAA_Battery_1_PosTerm",
     "AAA_Battery_2", "AAA_Battery_2_PosTerm",
-    "TP4056_Module", "TP4056_USBC", "EInk_Display", "EInk_Panel"])
+    "TP4056_Module", "EInk_Display", "EInk_Panel"])
 save("var-09-pico-on-base.png")
 
 # 10 — Joystick + thumbpiece detail (cover translucent, zoomed)
@@ -210,6 +211,19 @@ for o in all_objects():
             o.ViewObject.Transparency = 40
         except Exception:
             pass
+
+# 20 — Baseplate sensors (piezo ring + IMU pocket + batteries, top view)
+show(["BasePlate", "Piezo_Brass", "Piezo_Ceramic", "IMU_Module"])
+view_top()
+save("var-baseplate-sensors-top.png", axometric=False, fit=False)
+
+# 21 — Baseplate sensors iso
+save("var-baseplate-sensors-iso.png")
+
+# 22 — Cover bottom with anchor pad visible
+show(["TopCover"])
+view_bottom()
+save("var-cover-anchor-bottom.png", axometric=False, fit=False)
 
 print("Done.")
 App.closeDocument(doc.Name)

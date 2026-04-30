@@ -65,25 +65,39 @@ Jamal still sits in the armchair. He still wears the hat. He watches us build hi
 
 ---
 
-## Latest Prototype — Joystick Thumbpiece
+## Latest Prototype — Sensors, Speaker, and Joystick Anchor
 
-A printable snap cap that fits over the K1-1506SN-01 5-way switch peg, nests inside the cover's 12 mm joystick cutout with 0.5 mm radial clearance for directional swing, and gives the thumb a concave landing pad instead of a bare 3.2 mm rectangular nub. Designed entirely in the FreeCAD parametric macro — every dimension is a spreadsheet alias, so OD, height, dish radius, and snap-socket fit can be tuned without touching code.
+The parametric FreeCAD macro gained three new systems in today's build: a **20 mm piezo speaker** in a circular retaining ring, an **MPU-6500 6-axis accelerometer** in a recessed pocket, and a precision **joystick anchor pad** that replaces the old well/sleeve design. The joystick PCB alignment was fixed (stick now dead-center in the hole), and the cradle pit tightened from 23 mm to 20 mm for a snug board fit.
 
 <div class="grid" markdown>
 
 <figure markdown="span">
-  ![Dilder Rev 2 — assembly hero showing thumbpiece in the joystick cutout](assets/images/enclosure/var-01-hero-iso.png){ width="420" loading=lazy }
-  <figcaption>Hero shot — the thumbpiece sits flush in the cover hole next to the e-ink display window</figcaption>
+  ![Dilder Rev 2 — assembly hero with piezo and IMU](assets/images/enclosure/var-01-hero-iso.png){ width="420" loading=lazy }
+  <figcaption>Hero shot — full assembly with piezo speaker ring and IMU pocket visible through the translucent cover</figcaption>
 </figure>
 
 <figure markdown="span">
-  ![Dilder Rev 2 — joystick + thumbpiece detail render](assets/images/enclosure/var-10-joystick-detail.png){ width="420" loading=lazy }
-  <figcaption>Joystick detail — concave thumb dish on top, snap socket below grips the actuator peg</figcaption>
+  ![Dilder Rev 2 — baseplate sensors top view](assets/images/enclosure/var-baseplate-sensors-top.png){ width="420" loading=lazy }
+  <figcaption>Base plate top — piezo disc in circular ring (center), IMU module in rectangular pocket (left)</figcaption>
 </figure>
 
 </div>
 
-[Read the full thumbpiece design write-up :material-arrow-right:](blog/posts/joystick-thumbpiece-snap-cap.md){ .md-button }
+<div class="grid" markdown>
+
+<figure markdown="span">
+  ![Dilder Rev 2 — baseplate sensors isometric](assets/images/enclosure/var-baseplate-sensors-iso.png){ width="420" loading=lazy }
+  <figcaption>Isometric — retaining walls for the piezo (22.2 mm OD) and IMU (27.4 x 17.4 mm) between the battery rails</figcaption>
+</figure>
+
+<figure markdown="span">
+  ![Dilder Rev 2 — cover bottom with joystick anchor pad](assets/images/enclosure/var-cover-anchor-bottom.png){ width="420" loading=lazy }
+  <figcaption>Cover bottom — 14 x 14 mm joystick anchor pad with 12 mm square inner hole, stops at PCB top surface</figcaption>
+</figure>
+
+</div>
+
+[Read the full build write-up :material-arrow-right:](blog/posts/joystick-anchor-piezo-imu-sensors.md){ .md-button }
 
 ---
 

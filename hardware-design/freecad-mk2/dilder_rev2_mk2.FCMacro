@@ -224,8 +224,9 @@ PARAMS = [
     ("joy_body_size", 10.6, "Square joystick body cutout size (K1-1506SN-01 body is 10.2 mm + 0.4 mm clearance; replaces the round joy_d hole — square corners of the body would otherwise foul the 12 mm circular cut)"),
     ("joy_pit_depth", 8.45, "Depth of the joystick PCB pit cut UP into the AAA cradle so the K1-1506SN-01 body's 10 mm height fits between the cradle pit floor and the cover dome top. Drops PCB top Z from 19.5 to 11.05 globally, putting the body top at Z=21.05 (flush with the cover JoyPCBPocket top edge / Edge106 plane)"),
     ("m3_d",           3.2,  "M3 bore diameter"),
-    ("joy_px",        20.0,  "Joystick PCB pocket X"),
-    ("joy_py",        20.0,  "Joystick PCB pocket Y"),
+    ("joy_px",        20.0,  "Joystick PCB pocket X (cover pocket)"),
+    ("joy_py",        20.0,  "Joystick PCB pocket Y (cover pocket)"),
+    ("joy_pit_xy",    20.0,  "Joystick PCB pit XY in cradle (board 19.6 + 0.2 mm/side clearance)"),
     ("fpc_dy",        13.0,  "FPC divet width Y"),
     ("fpc_dw",         1.0,  "FPC divet wall remaining"),
     ("fpc_dze",        2.0,  "FPC divet Z extend below inlay"),
@@ -242,7 +243,7 @@ PARAMS = [
     ("thumb_sock_x",   3.3,  "Snap socket X size (actuator stick is 3.2 mm; +0.1 mm fit clearance)"),
     ("thumb_sock_y",   3.3,  "Snap socket Y size"),
     ("thumb_sock_d",   3.5,  "Snap socket depth (cuts up from disc bottom)"),
-    ("thumb_stick_cy", 24.35, "Actuator stick Y center (offset +0.68 from cover hole; per JoystickPCB STEP geometry)"),
+    ("thumb_stick_cy", 23.68, "Actuator stick Y center (PCB bbox-centered at enc_y/2=23.0, stick offset +0.68 from bbox center; now aligned with cover hole at 23.67)"),
     # ─── Solar panel (AK 62×36, sits in base plate's bottom solar pit) ───
     ("sol_panel_x",   62.0,  "Solar panel X (= sol_x - 0.4 slop → AK 62×36 nominal)"),
     ("sol_panel_y",   36.0,  "Solar panel Y (= sol_y - 0.4 slop)"),
@@ -525,18 +526,73 @@ def build_base_plate(doc):
         blk.setExpression("Width", SP("ublk_yw"))
         doc.recompute()
 
-    # ── 12. Pico retention block ──
-    prb = body.newObject("PartDesign::AdditiveBox", "PicoRetentionBlock")
-    prb.Length = 5.0
-    prb.Width = 15.0
-    prb.Height = 2.0
-    prb.Placement = App.Placement(V(3.0 + 18.0, H/2 - 15.0/2, floor_z), ROT0)
-    prb.setExpression("Length", SP("pblk_xs"))
-    prb.setExpression("Width", SP("pblk_yw"))
-    prb.setExpression("Height", SP("pblk_zh"))
+    # (PicoRetentionBlock removed — overlapped with IMU pocket)
+
+    # ── 12. Piezo speaker ring (between battery rails) ──
+    # Circular retaining wall for the 20 mm piezo disc (FT-20T).
+    # ID = 20.2 mm (0.1 mm clearance per side for slide-fit),
+    # wall = 1.0 mm → OD = 22.2 mm.  Fits in the 23 mm Y gap
+    # between the two rail support blocks.
+    piezo_ring_id = 20.2
+    piezo_ring_wall = 1.0
+    piezo_ring_od = piezo_ring_id + 2 * piezo_ring_wall   # 22.2
+    piezo_ring_h = 1.5   # wall height above pocket floor
+    piezo_cx = W / 2     # 47.25 — centered in X
+    piezo_cy = H / 2     # 23.0  — centered between rails
+
+    ring_out = body.newObject("PartDesign::AdditiveCylinder", "PiezoRing_Outer")
+    ring_out.Radius = piezo_ring_od / 2
+    ring_out.Height = piezo_ring_h
+    ring_out.Placement = App.Placement(V(piezo_cx, piezo_cy, floor_z), ROT0)
     doc.recompute()
 
-    # ── 13. Solar wire holes (LAST — cuts through all additive features) ──
+    ring_in = body.newObject("PartDesign::SubtractiveCylinder", "PiezoRing_Inner")
+    ring_in.Radius = piezo_ring_id / 2
+    ring_in.Height = piezo_ring_h + 0.2
+    ring_in.Placement = App.Placement(V(piezo_cx, piezo_cy, floor_z - 0.1), ROT0)
+    doc.recompute()
+
+    # ── 14. MPU-6500 accelerometer pocket (between battery rails, -X side) ──
+    # GY-6500 module: 25 × 15 × 1.0 mm PCB + ~1.2 mm components on top.
+    # Oriented with 25 mm along X, 15 mm along Y, same Y center as piezo.
+    # Retaining wall around a recessed pocket (module drops in flush).
+    imu_xl = 25.0    # module X length
+    imu_yw = 15.0    # module Y width
+    imu_pcb_t = 1.0  # PCB thickness
+    imu_slop = 0.2   # clearance per side
+    imu_wall = 1.0   # retaining wall thickness
+    imu_wall_h = 1.5 # wall height above pocket floor
+
+    # Center: same Y as piezo, shifted toward -X from piezo ring edge
+    imu_cy = piezo_cy                                       # 23.0
+    imu_cx = piezo_cx - piezo_ring_od / 2 - 2.0 - imu_xl / 2  # gap of 2 mm
+
+    # Pocket dimensions (inner cavity)
+    ipx = imu_xl + 2 * imu_slop    # 25.4
+    ipy = imu_yw + 2 * imu_slop    # 15.4
+    # Outer wall dimensions
+    opx = ipx + 2 * imu_wall       # 27.4
+    opy = ipy + 2 * imu_wall       # 17.4
+
+    # Outer retaining wall
+    imu_wall_box = body.newObject("PartDesign::AdditiveBox", "IMU_Wall")
+    imu_wall_box.Length = opx
+    imu_wall_box.Width = opy
+    imu_wall_box.Height = imu_wall_h
+    imu_wall_box.Placement = App.Placement(
+        V(imu_cx - opx / 2, imu_cy - opy / 2, floor_z), ROT0)
+    doc.recompute()
+
+    # Inner pocket (module drops in)
+    imu_pocket = body.newObject("PartDesign::SubtractiveBox", "IMU_Pocket")
+    imu_pocket.Length = ipx
+    imu_pocket.Width = ipy
+    imu_pocket.Height = imu_wall_h + 0.2
+    imu_pocket.Placement = App.Placement(
+        V(imu_cx - ipx / 2, imu_cy - ipy / 2, floor_z - 0.1), ROT0)
+    doc.recompute()
+
+    # ── 15. Solar wire holes (LAST — cuts through all additive features) ──
     hole_r = 3.1 / 2
     for hi, (hx, hy) in enumerate([(2.5, 2.0), (60.0, 2.4)]):
         hole = body.newObject("PartDesign::SubtractiveCylinder", f"WireHole_{hi+1}")
@@ -675,11 +731,12 @@ def build_cradle(doc):
     doc.recompute()
 
     # Battery arcs through connecting block
-    # Start 10mm from X origin so the -X side of the cradle stays sealed
-    # (solid wall for printability). Stop before the clip slot area on +X side.
-    arc_x_start = 10.0                              # 10mm from X origin — left wall sealed
+    # Terminated at local X=16 (global X≈80.3) so the arc doesn't extend
+    # into the joystick PCB compartment on the right side of the cradle.
+    # Stop before the clip slot area on +X side.
+    arc_x_start = 16.0                              # shortened — was 10.0; avoids joystick area
     arc_x_end = bay_mx_start - 0.9 - 1.0 - 0.1     # = 18.4 (before clip area)
-    arc_len = arc_x_end - arc_x_start               # = 8.4
+    arc_len = arc_x_end - arc_x_start               # = 2.4
     for j, bay_y in enumerate([7.85, 38.15]):
         arc = body.newObject("PartDesign::SubtractiveCylinder", f"ConnBlockArc_{j+1}")
         arc.Radius = bay_d / 2
@@ -747,12 +804,12 @@ def build_cradle(doc):
     #   - cradle plug_bot (local Z=-5.1) → global Z=18.1 (cradle's bottom)
     #   - cradle plug_top (local Z=+7.0)  → global Z=6.0  (mating face)
     # Pit opens DOWN globally (= UP in local). Depth = joy_pit_depth.
-    # XY same as cover JoyPCBPocket center (joy_cx, enc_y/2 + joy_pcb_y_offset),
-    # 20×20 footprint to match.
+    # XY centered at (joy_cx, enc_y/2 + joy_pcb_y_offset).
+    # 20×20 mm footprint — snug fit for 19.6 mm board (0.2 mm/side).
     joy_pit_depth_v = 8.45
-    joy_pit_size = 20.0
+    joy_pit_size = 20.0   # board 19.6 + 0.2 mm/side clearance (no well)
     joy_cx_v = 79.35
-    joy_pit_cy_local = 46.0 / 2 + 0.67   # enc_y/2 + joy_pcb_y_offset
+    joy_pit_cy_local = 46.0 / 2           # enc_y/2 — centered on board bbox
     joy_pit_cx_local = 96.3 - joy_cx_v   # global → local X
     pit = body.newObject("PartDesign::SubtractiveBox", "JoystickPCBPit")
     pit.Length = joy_pit_size
@@ -762,10 +819,107 @@ def build_cradle(doc):
         V(joy_pit_cx_local - joy_pit_size / 2,
           joy_pit_cy_local - joy_pit_size / 2,
           plug_bot - 0.05), ROT0)
-    pit.setExpression("Length", SP("joy_px"))
-    pit.setExpression("Width", SP("joy_py"))
+    pit.setExpression("Length", SP("joy_pit_xy"))
+    pit.setExpression("Width", SP("joy_pit_xy"))
     pit.setExpression("Height", SP("joy_pit_depth") + " + 0.1")
     doc.recompute()
+
+    # ── 11. Fill pit wall gap at FPC_Gap / ConnBlock boundary ──
+    # FPC_Gap removes material across the full Y width at X=3.2..6.3.
+    # ConnBlock only refills Y=12.1..33.9.  With the pit now 20 mm
+    # (down from 23), the pit +Y edge may sit inside the ConnBlock,
+    # making the +Y fill unnecessary.  Guard all fills with size checks.
+    fill_x0 = plug_x0 - 0.1                                # 3.2
+    fill_x1 = joy_pit_cx_local - joy_pit_size / 2           # pit -X edge
+    pit_top_z = plug_bot + joy_pit_depth_v + 0.05
+    ceil_x1 = plug_x0 + 3.0                                  # 6.3 (FPC gap +X edge)
+
+    # +Y fill: only needed if pit +Y edge extends past ConnBlock +Y
+    fill_y0 = pico_y_start + pico_ny                        # 33.9
+    fill_y1 = joy_pit_cy_local + joy_pit_size / 2           # pit +Y edge
+    if fill_y1 > fill_y0 and fill_x1 > fill_x0:
+        fill_py = body.newObject("PartDesign::AdditiveBox", "PitWallFill_PY")
+        fill_py.Length = fill_x1 - fill_x0
+        fill_py.Width = fill_y1 - fill_y0
+        fill_py.Height = plug_thick
+        fill_py.Placement = App.Placement(V(fill_x0, fill_y0, plug_bot), ROT0)
+        doc.recompute()
+
+        # Ceiling cap above pit
+        ceil_x0 = fill_x1
+        if ceil_x1 > ceil_x0:
+            fill_ceil = body.newObject("PartDesign::AdditiveBox", "PitWallFill_PY_Ceil")
+            fill_ceil.Length = ceil_x1 - ceil_x0
+            fill_ceil.Width = fill_y1 - fill_y0
+            fill_ceil.Height = plug_top - pit_top_z
+            fill_ceil.Placement = App.Placement(
+                V(ceil_x0, fill_y0, pit_top_z), ROT0)
+            doc.recompute()
+
+        # +Y closing wall
+        wall_depth = 0.2
+        fill_wall = body.newObject("PartDesign::AdditiveBox", "PitWallFill_PY_Wall")
+        fill_wall.Length = ceil_x1 - fill_x0
+        fill_wall.Width = wall_depth
+        fill_wall.Height = plug_thick
+        fill_wall.Placement = App.Placement(
+            V(fill_x0, fill_y1, plug_bot), ROT0)
+        doc.recompute()
+
+    # -Y fill: only needed if pit -Y edge extends past ConnBlock -Y
+    fill_y0_m = joy_pit_cy_local - joy_pit_size / 2
+    fill_y1_m = pico_y_start                                # 12.1
+    if fill_y0_m > fill_y1_m and fill_x1 > fill_x0:
+        fill_my = body.newObject("PartDesign::AdditiveBox", "PitWallFill_MY")
+        fill_my.Length = fill_x1 - fill_x0
+        fill_my.Width = fill_y0_m - fill_y1_m
+        fill_my.Height = plug_thick
+        fill_my.Placement = App.Placement(
+            V(fill_x0, fill_y1_m, plug_bot), ROT0)
+        doc.recompute()
+
+        ceil_x0 = fill_x1
+        if ceil_x1 > ceil_x0:
+            fill_ceil_m = body.newObject("PartDesign::AdditiveBox", "PitWallFill_MY_Ceil")
+            fill_ceil_m.Length = ceil_x1 - ceil_x0
+            fill_ceil_m.Width = fill_y0_m - fill_y1_m
+            fill_ceil_m.Height = plug_top - pit_top_z
+            fill_ceil_m.Placement = App.Placement(
+                V(ceil_x0, fill_y1_m, pit_top_z), ROT0)
+            doc.recompute()
+
+    # ── 12. Battery bay re-cuts through ConnBlock ──
+    # The ConnBlock (X=3.3..32.3, added after AAABay/BayTopOpen) covers
+    # up the battery bay profile from X=20.3..32.3.  Re-cut both bays
+    # from the clip holder area (X=18.4) to just past the ConnBlock +X
+    # edge so the pockets stay open.  The sealed -X wall (X=3.3..16)
+    # is preserved for printability.
+    conn_x1 = plug_x0 + 29.0 + 0.2                          # 32.5
+    bay_recut_x0 = bay_mx_start                                # 20.4 (past clip retainer)
+    bay_recut_len = conn_x1 - bay_recut_x0                    # 14.1
+
+    for j, by in enumerate([7.85, 38.15]):
+        # Cylinder — bay profile
+        arc = body.newObject("PartDesign::SubtractiveCylinder",
+                             f"ConnBlockBayCut_{j+1}")
+        arc.Radius = bay_d / 2
+        arc.Height = bay_recut_len
+        arc.Placement = App.Placement(
+            V(bay_recut_x0, by, bay_cz),
+            App.Rotation(V(0, 1, 0), 90))
+        arc.setExpression("Radius",
+            "(" + SP("aaa_d") + " + 2 * " + SP("aaa_rslop") + ") / 2")
+        doc.recompute()
+
+        # Top-open slot — opens bay above cylinder center
+        slot = body.newObject("PartDesign::SubtractiveBox",
+                              f"ConnBlockBayOpen_{j+1}")
+        slot.Length = bay_recut_len
+        slot.Width = bay_d
+        slot.Height = plug_top + 0.1 - bay_cz
+        slot.Placement = App.Placement(
+            V(bay_recut_x0, by - bay_d / 2, bay_cz), ROT0)
+        doc.recompute()
 
     feats = [o.Name for o in body.Group if "Origin" not in o.Name]
     print(f"    AAACradle: {len(feats)} features")
@@ -988,96 +1142,48 @@ def build_top_cover(doc):
     joy.setExpression("Radius", SP("joy_d") + " / 2")
     doc.recompute()
 
-    # Square body cutout for the K1-1506SN-01 body — its corners reach
-    # r≈7.2 mm from center, OUTSIDE the 12 mm round hole's r=6 perimeter.
-    # The square only goes up to the body's TOP Z (= cover face_bot +
-    # joy_pit_depth - cradle plug thickness = where the body ends inside
-    # the dome). Above that, only the round Cut_Joystick remains visible
-    # from outside the cover (clean round actuator hole on the dome).
-    # Body top Z global = pit_floor (9.65) + PCB (1.5) + body (10.0) = 21.15
-    # In cover local: 21.15 - 11 = 10.15. Square cut from face_bot - 0.1
-    # = 6.9 to 10.15 → height 3.25.
-    joy_sq_h = 3.25
-    joy_sq = body.newObject("PartDesign::SubtractiveBox", "Cut_JoyBody")
-    joy_sq.Length = joy_body_size_v
-    joy_sq.Width = joy_body_size_v
-    joy_sq.Height = joy_sq_h
-    joy_sq.Placement = App.Placement(
-        V(joy_cx - joy_body_size_v/2, joy_cy - joy_body_size_v/2,
-          face_bot - 0.1), ROT0)
-    joy_sq.setExpression("Length", SP("joy_body_size"))
-    joy_sq.setExpression("Width", SP("joy_body_size"))
+    # (Cut_JoyBody removed — the 14×14 mm pcbjoystick anchor pad now
+    #  provides the square body clearance instead of a separate subtractive
+    #  cutout; the 12 mm round Cut_Joystick remains for the actuator hole.)
+
+    # (JoyWell_Outer / JoyWell_Inner / Cut_JoyPCBPocket removed — the
+    #  anchor pad now locates the switch body, and the tightened cradle pit
+    #  (20 mm) holds the 19.6 mm PCB directly with 0.2 mm/side clearance.)
+
+    # ── 12. Joystick PCB anchor pad ──
+    # 14×14 mm outer frame with 12×12 mm square inner hole, centered on
+    # the joystick axis.  Extends from face_bot down to the PCB top face
+    # (6.85 mm) — acts as a locating collar for the K1-1506SN-01 switch
+    # body without intersecting the board.
+    anchor_outer = 14.0
+    anchor_inner = 12.0
+    # Anchor bottom meets the PCB top face:
+    #   pit floor global = 18.1 - 8.45 = 9.65
+    #   PCB thickness ≈ 1.5 mm → PCB top global = 11.15
+    #   cover local = global - 11.0 → PCB top local = 0.15
+    #   depth = face_bot - PCB top local = 7.0 - 0.15 = 6.85
+    anchor_depth = 6.85
+    anchor_r = 1.0
+
+    anc = body.newObject("PartDesign::AdditiveBox", "JoyAnchor_Outer")
+    anc.Length = anchor_outer
+    anc.Width = anchor_outer
+    anc.Height = anchor_depth
+    anc.Placement = App.Placement(
+        V(joy_cx - anchor_outer / 2,
+          joy_cy - anchor_outer / 2,
+          face_bot - anchor_depth), ROT0)
     doc.recompute()
 
-    # ── 12. Joystick well (mold/sleeve extending DOWN from face_bot) ──
-    # Wraps around the K1-1506SN-01 body + PCB to lock them in place. Open
-    # at the top (joins the body cutout), closed sleeve walls on three
-    # sides, and a notch on the -Y face so the 6 wire-solder pads on the
-    # PCB stay accessible for soldering.
-    well_outer_x = 22.6
-    well_outer_y = 22.6
-    well_inner = 20.0          # matches JoyPCBPocket footprint = PCB + slop
-    well_depth = 8.45          # = joy_pit_depth — well floor at PCB bottom
-    well_x_c = joy_cx
-    well_y_c = joy_cy
-    # Extend well's TOP into the face plate so it fuses with the cover
-    # (cavity ends at face_bot+0.05; well top must sit ABOVE that to merge).
-    well_top_overlap = 1.0
-    well_outer_h = well_depth + well_top_overlap
-
-    well_outer = body.newObject("PartDesign::AdditiveBox", "JoyWell_Outer")
-    well_outer.Length = well_outer_x
-    well_outer.Width = well_outer_y
-    well_outer.Height = well_outer_h
-    well_outer.Placement = App.Placement(
-        V(well_x_c - well_outer_x / 2,
-          well_y_c - well_outer_y / 2,
-          face_bot - well_depth), ROT0)
-    doc.recompute()
-
-    # Inner subtractive: hollow out the well so the PCB+body fit inside
-    well_inner_obj = body.newObject(
-        "PartDesign::SubtractiveBox", "JoyWell_Inner")
-    well_inner_obj.Length = well_inner
-    well_inner_obj.Width = well_inner
-    well_inner_obj.Height = well_outer_h + 0.2
-    well_inner_obj.Placement = App.Placement(
-        V(well_x_c - well_inner / 2,
-          well_y_c - well_inner / 2,
-          face_bot - well_depth - 0.1), ROT0)
-    doc.recompute()
-
-    # Header notch on -Y face — the 6 wire-solder pads sit at the PCB's
-    # -Y end. The PCB itself is at cover-local Z = -1.35 .. 0.15 (PCB
-    # bottom .. top globally Z=9.65 .. 11.15). Cut a 4 mm tall window at
-    # the PCB level through the -Y wall so wires can route out.
-    notch_x = 17.0
-    notch_z = 4.0
-    notch_y = (well_outer_y - well_inner) / 2 + 0.4   # cuts through the wall + a hair
-    notch = body.newObject("PartDesign::SubtractiveBox", "JoyWell_HeaderNotch")
-    notch.Length = notch_x
-    notch.Width = notch_y
-    notch.Height = notch_z
-    notch.Placement = App.Placement(
-        V(well_x_c - notch_x / 2,
-          well_y_c - well_outer_y / 2 - 0.2,
-          face_bot - well_depth + 0.05), ROT0)
-    doc.recompute()
-
-    # ── 11. Joystick PCB pocket — Y shifted by joy_pcb_y_offset so the
-    #       PCB stays bbox-centered under SW1 (which is offset on the
-    #       production layout) ──
-    jpcb = body.newObject("PartDesign::SubtractiveBox", "Cut_JoyPCBPocket")
-    jpcb.Length = 20.0
-    jpcb.Width = 20.0
-    jpcb.Height = inlay_depth + 0.1   # 3.1 (same depth as inlay)
-    jpcb.Placement = App.Placement(
-        V(inlay_x1,
-          (enc_y/2 + joy_pcb_y_offset_v) - 20.0/2,
-          face_bot - 0.05), ROT0)
-    jpcb.setExpression("Length", SP("joy_px"))
-    jpcb.setExpression("Width", SP("joy_py"))
-    jpcb.setExpression("Height", SP("inlay_z") + " + 0.1")
+    # Inner cutout — 12×12 mm square hole through the anchor
+    anc_in = body.newObject("PartDesign::SubtractiveBox", "JoyAnchor_Inner")
+    anc_in.Length = anchor_inner
+    anc_in.Width = anchor_inner
+    anc_in.Height = anchor_depth + 0.2
+    anc_in.Placement = App.Placement(
+        V(joy_cx - anchor_inner / 2,
+          joy_cy - anchor_inner / 2,
+          face_bot - anchor_depth - 0.1), ROT0)
     doc.recompute()
 
     feats = [o.Name for o in body.Group if "Origin" not in o.Name]
@@ -1100,13 +1206,14 @@ def build_top_cover(doc):
 #           anchored to AAACradle Face44 (inner -X wall of PicoNest cavity)
 
 PICO_USB_PLUS_X = False
-# X-anchor face: inner -X wall of the PicoNest cavity (cradle local X=85.10,
-# global X=11.20 after the cradle 180° Y flip). Face index shifts when new
-# features are added to the cradle Body — was Face44 before JoystickPCBPit
-# was added at the end of build_cradle, now Face48. If you reorder cradle
-# features, re-probe the index.
-PICO_ANCHOR_FACE = ("AAACradle", 48)
-PICO_Z_ANCHOR_FACE = ("AAACradle", 6)  # Z-anchor: cradle plug-top mating face
+# Anchor positions computed directly from cradle geometry so they don't
+# break when features are added/removed (face indices are fragile).
+# X-anchor: inner -X wall of PicoNest — cradle local X = pico_x_start +
+#   pico_nx = 6.3 + 78.8 = 85.1.  After 180° Y flip + translate(96.3):
+#   global X = 96.3 - 85.1 = 11.2.
+# Z-anchor: plug_top mating face — global Z = bp_top = 6.0.
+PICO_ANCHOR_X_GLOBAL = 11.2
+PICO_ANCHOR_Z_GLOBAL = 6.0
 
 
 def add_pico_with_headers(doc):
@@ -1212,26 +1319,14 @@ def add_pico_with_headers(doc):
         target_x = enc_x_v - wall_px_v
         dx = target_x - cb_xmax
     else:
-        face_pt, label = resolve_face_global(PICO_ANCHOR_FACE)
-        if face_pt is None:
-            print(f"  ! Anchor face {PICO_ANCHOR_FACE} unavailable — "
-                  f"falling back to -X wall")
-            target_x = wall_px_v
-        else:
-            target_x = face_pt.x
-            print(f"    X-anchored to {label} at global X={target_x:.2f}")
+        target_x = PICO_ANCHOR_X_GLOBAL
+        print(f"    X-anchored to PicoNest -X wall at global X={target_x:.2f}")
         dx = target_x - cb_xmin
 
     dy = enc_y_v / 2 - (cb_ymin + (cb_ymax - cb_ymin) / 2)
 
-    z_face_pt, z_label = resolve_face_global(PICO_Z_ANCHOR_FACE)
-    if z_face_pt is None:
-        print(f"  ! Z anchor face {PICO_Z_ANCHOR_FACE} unavailable — "
-              f"falling back to bp_top")
-        target_z = 6.0
-    else:
-        target_z = z_face_pt.z
-        print(f"    Z-anchored to {z_label} at global Z={target_z:.2f}")
+    target_z = PICO_ANCHOR_Z_GLOBAL
+    print(f"    Z-anchored to plug_top mating face at global Z={target_z:.2f}")
 
     # After the 180° X flip the board's back is at bb_b.ZMax and the
     # component-side face (the planar PCB surface visible at Z=8.73 in the
@@ -1322,7 +1417,10 @@ def add_joystick_pcb(doc):
     # Pit floor in global Z = cradle plug_bot global (Z=18.1) - joy_pit_depth
     # = 18.1 - 8.45 = 9.65. PCB bottom rests there (we use 9.55 with overlap).
     joy_cx_g = 79.35
-    joy_cy_g = 46.0 / 2 + 0.67    # = enc_y / 2 + joy_pcb_y_offset = 23.67
+    joy_cy_g = 46.0 / 2           # = enc_y / 2 = 23.0 — PCB bbox-centered
+    # (was 46.0/2 + 0.67 which double-applied the SW1 offset; the cover
+    #  hole / pocket / pit already shift by joy_pcb_y_offset to land on
+    #  SW1's stick, so the PCB itself should sit at the true bbox center.)
     pocket_floor_g = 18.1 - 8.45  # = 9.65 — PCB bottom rests on pit floor
 
     bb_cx = (bb.XMin + bb.XMax) / 2
@@ -1358,12 +1456,11 @@ def add_joystick_pcb(doc):
 #
 # Geometry references (from JoystickPCB STEP selections, global coords):
 #   stick X span 77.75 → 80.95  (center 79.35, width 3.2 mm)
-#   stick Y span 22.76 → 25.94  (center 24.35, width 3.18 mm)
+#   stick Y span 22.08 → 25.26  (center 23.68, width 3.18 mm)
 #   stick Z span 17.91 → 21.17  (top 21.17, height 3.26 mm)
-# The stick center Y (24.35) is offset +0.68 mm from the cover hole center
-# (joy_cx, enc_y/2 + joy_pcb_y_offset) = (79.35, 23.67), so the disc is
-# centered on the hole (visually flush) and the socket is offset to land
-# on the actual stick.
+# With the PCB bbox-centered at enc_y/2 = 23.0, the stick center Y (23.68)
+# is now only +0.01 mm from the cover hole center (79.35, 23.67) — the
+# joystick peg sits effectively dead-center in the hole.
 
 def build_thumbpiece(doc):
     print("  Building Thumbpiece...")
@@ -1378,7 +1475,7 @@ def build_thumbpiece(doc):
     cover_top_z = 23.0
     joy_cx_v = 79.35
     joy_cy_hole_v = 46.0 / 2 + 0.67       # 23.67 — cover hole / disc center
-    joy_cy_stick_v = 24.35                # actuator stick center (per STEP)
+    joy_cy_stick_v = 23.68                # actuator stick center (PCB bbox at enc_y/2)
 
     thumb_od_v = 11.0
     thumb_h_v = 4.5
@@ -1414,10 +1511,11 @@ def build_thumbpiece(doc):
     dish.setExpression("Radius", SP("thumb_dish_r"))
 
     # ── 3. Snap socket (subtractive box, cut up from disc bottom) ──
-    # Centered on the actuator stick (joy_cx, thumb_stick_cy) — offset
-    # +0.68 mm in Y from the disc axis (the cover hole is concentric with
-    # the PCB, but the stick is offset on the production layout). Sized
-    # 3.3 × 3.3 mm for friction fit on the 3.2 × 3.2 mm rectangular peg.
+    # Centered on the disc axis (joy_cx, joy_cy_hole) — with the PCB
+    # bbox-centered at enc_y/2, the stick is now only ~0.01 mm from the
+    # hole center so the socket is concentric with both the disc and the
+    # peg. Sized 3.3 × 3.3 mm for friction fit on the 3.2 × 3.2 mm
+    # rectangular peg.
     # The +0.1 mm Z overlap keeps the cut clean at the disc's bottom face.
     sock = body.newObject("PartDesign::SubtractiveBox", "Thumb_Socket")
     sock.Length = sock_x_v
@@ -1425,7 +1523,7 @@ def build_thumbpiece(doc):
     sock.Height = sock_d_v + 0.1
     sock.Placement = App.Placement(
         V(joy_cx_v - sock_x_v / 2,
-          joy_cy_stick_v - sock_y_v / 2,
+          joy_cy_hole_v - sock_y_v / 2,
           bot_z - 0.05), ROT0)
     sock.setExpression("Length", SP("thumb_sock_x"))
     sock.setExpression("Width", SP("thumb_sock_y"))
@@ -1514,23 +1612,15 @@ def add_peripherals(doc):
     # PCB body
     tp_pcb = Part.makeBox(tp_xl_v, tp_yw_v, tp_pcb_t,
                           V(tp_x_min_g, tp_y_min_g, tp_z_top_g - tp_pcb_t))
-    # USB-C connector — protrudes +X beyond the board edge
-    usbc_w, usbc_d, usbc_h = 9.0, 7.5, 3.4
-    usbc = Part.makeBox(usbc_d, usbc_w, usbc_h,
-                        V(tp_x_min_g + tp_xl_v - 2.0,
-                          tp_y_min_g + (tp_yw_v - usbc_w) / 2,
-                          tp_z_top_g - tp_pcb_t - usbc_h + 0.4))
+    # (TP4056_USBC connector visualization removed — module shape only)
     # IC + capacitor lump (rough block representing the SOIC + caps)
     ic_lump = Part.makeBox(14, 8, 1.6,
                            V(tp_x_min_g + 8, tp_y_min_g + 4.5,
                              tp_z_top_g - tp_pcb_t - 1.6))
     tp_obj = doc.addObject("Part::Feature", "TP4056_Module")
     tp_obj.Shape = Part.Compound([tp_pcb, ic_lump])
-    usbc_obj = doc.addObject("Part::Feature", "TP4056_USBC")
-    usbc_obj.Shape = usbc
     try:
         tp_obj.ViewObject.ShapeColor = (0.10, 0.18, 0.50)   # navy blue PCB
-        usbc_obj.ViewObject.ShapeColor = (0.70, 0.72, 0.75)  # silver USB-C
     except Exception:
         pass
 
@@ -1713,6 +1803,98 @@ def add_peripherals(doc):
 # the device looking up at the base plate, you see the cell layer
 # inset by `sol_cell_inset` with a thin frame around it.
 
+def add_piezo_speaker(doc):
+    """20 mm piezo disc (FT-20T / YOUMILE JK-YM-297A).
+    Brass plate 20 mm × 0.20 mm + ceramic element 15 mm × 0.22 mm.
+    Sits inside the PiezoRing on the base plate pocket floor."""
+    print("  Adding piezo speaker disc (20 mm FT-20T)...")
+
+    # Base plate pocket floor (global, base plate has identity placement)
+    floor_z = 2.6
+    cx = 94.5 / 2   # = 47.25 — matches PiezoRing center
+    cy = 46.0 / 2   # = 23.0
+
+    brass_d = 20.0
+    brass_t = 0.20
+    ceram_d = 15.0
+    ceram_t = 0.22
+
+    # Brass disc — sits on the pocket floor
+    brass = Part.makeCylinder(brass_d / 2, brass_t, V(cx, cy, floor_z))
+    # Ceramic element — centered on top of brass
+    ceramic = Part.makeCylinder(ceram_d / 2, ceram_t,
+                                V(cx, cy, floor_z + brass_t))
+
+    obj_brass = doc.addObject("Part::Feature", "Piezo_Brass")
+    obj_brass.Shape = brass
+    obj_ceram = doc.addObject("Part::Feature", "Piezo_Ceramic")
+    obj_ceram.Shape = ceramic
+    try:
+        obj_brass.ViewObject.ShapeColor = (0.85, 0.73, 0.35)   # brass gold
+        obj_ceram.ViewObject.ShapeColor = (0.75, 0.75, 0.72)   # silver-grey ceramic
+    except Exception:
+        pass
+
+    print(f"    Piezo: {brass_d} mm disc at ({cx:.1f}, {cy:.1f}, {floor_z}), "
+          f"total thickness {brass_t + ceram_t:.2f} mm")
+
+
+def add_imu_module(doc):
+    """GY-6500 (MPU-6500) 6-axis IMU module: 25 × 15 × 1.0 mm PCB.
+    Placed in the IMU_Pocket on the base plate, same Y as piezo,
+    shifted toward -X."""
+    print("  Adding IMU module (GY-6500 / MPU-6500)...")
+
+    floor_z = 2.6
+    piezo_cx = 94.5 / 2   # 47.25
+    piezo_cy = 46.0 / 2   # 23.0
+    piezo_ring_od = 22.2
+
+    imu_xl = 25.0
+    imu_yw = 15.0
+    imu_pcb_t = 1.0
+    imu_cx = piezo_cx - piezo_ring_od / 2 - 2.0 - imu_xl / 2
+    imu_cy = piezo_cy
+
+    pcb_x0 = imu_cx - imu_xl / 2
+    pcb_y0 = imu_cy - imu_yw / 2
+
+    # PCB
+    pcb = Part.makeBox(imu_xl, imu_yw, imu_pcb_t,
+                       V(pcb_x0, pcb_y0, floor_z))
+
+    # MPU-6500 QFN chip (3 × 3 × 0.9 mm) — centered on PCB, offset
+    # toward the end opposite the pin header
+    chip_x = 3.0
+    chip_y = 3.0
+    chip_z = 0.9
+    chip = Part.makeBox(chip_x, chip_y, chip_z,
+                        V(imu_cx - chip_x / 2,
+                          imu_cy - chip_y / 2,
+                          floor_z + imu_pcb_t))
+
+    # Passive components lump (voltage reg + caps, rough block)
+    comp = Part.makeBox(8.0, 4.0, 1.2,
+                        V(pcb_x0 + 2.0,
+                          pcb_y0 + imu_yw - 5.0,
+                          floor_z + imu_pcb_t))
+
+    # 8-pin header pads on one short edge (no pins soldered — just pads)
+    header_strip = Part.makeBox(1.5, 8 * 2.54, 0.3,
+                                V(pcb_x0 + imu_xl - 1.8,
+                                  imu_cy - (8 * 2.54) / 2,
+                                  floor_z + imu_pcb_t))
+
+    pcb_obj = doc.addObject("Part::Feature", "IMU_Module")
+    pcb_obj.Shape = Part.Compound([pcb, chip, comp, header_strip])
+    try:
+        pcb_obj.ViewObject.ShapeColor = (0.10, 0.12, 0.45)  # dark blue PCB
+    except Exception:
+        pass
+
+    print(f"    IMU: {imu_xl}×{imu_yw} mm at ({imu_cx:.1f}, {imu_cy:.1f})")
+
+
 def add_solar_panel(doc):
     print("  Adding solar panel (AK 62×36)...")
 
@@ -1863,6 +2045,12 @@ def main():
     # Thumbpiece — snap cap over the K1-1506SN-01 actuator stick, sits
     # flush within the cover's 12 mm joystick circle cutout
     build_thumbpiece(doc)
+
+    # Piezo speaker — 20 mm disc in the base plate's PiezoRing
+    add_piezo_speaker(doc)
+
+    # IMU — GY-6500 (MPU-6500) in the base plate's IMU_Pocket
+    add_imu_module(doc)
 
     # Solar panel — AK 62×36 mm, sits in the base plate's bottom solar pit
     # with leads through the two wire holes
