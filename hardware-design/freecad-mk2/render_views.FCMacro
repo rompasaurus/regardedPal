@@ -1,22 +1,26 @@
 """
-Render Views — produces a fixed set of PNGs from Dilder_Rev2_Mk2.FCStd.
+Render Views — comprehensive render set for Dilder Rev 2 Mk2.
 
 Run with:  freecad render_views.FCMacro
-Or offscreen:  QT_QPA_PLATFORM=offscreen freecad render_views.FCMacro
+Or specify a file:
+    DILDER_FCSTD="/path/to/MyFile.FCStd" freecad render_views.FCMacro
 
-Each view sets up camera + visibility, then saves a PNG to ../renders/var-*.png.
-Updated 2026-04-30: added piezo speaker, IMU accelerometer, joystick anchor pad.
+If DILDER_FCSTD is not set, opens the default Dilder_Rev2_Mk2.FCStd.
+Output: ../renders/var-*.png and comp-*.png
+
+Updated 2026-05-01: comprehensive re-render for piezo, IMU, anchor pad iteration.
 """
 
-import os, time
+import os, sys, time
 import FreeCAD as App
 import FreeCADGui as Gui
 
 MACRO_DIR = os.path.dirname(os.path.abspath(__file__))
-FCSTD_PATH = os.path.join(MACRO_DIR, "Dilder_Rev2_Mk2.FCStd")
+FCSTD_PATH = os.environ.get("DILDER_FCSTD",
+    os.path.join(MACRO_DIR, "Dilder_Rev2_Mk2.FCStd"))
 RENDER_DIR = os.path.normpath(os.path.join(MACRO_DIR, "..", "renders"))
 
-W, H = 1600, 1200
+W, H = 1920, 1440
 BG = "Transparent"
 
 doc = App.openDocument(FCSTD_PATH)
@@ -49,6 +53,15 @@ def show_all_except(hidden):
     Gui.updateGui()
 
 
+def set_cover_transparency(t):
+    for o in all_objects():
+        if o.Name == "TopCover":
+            try:
+                o.ViewObject.Transparency = t
+            except Exception:
+                pass
+
+
 def save(name, axometric=True, fit=True):
     if axometric:
         try:
@@ -68,28 +81,37 @@ def view_top():
     Gui.SendMsgToActiveView("ViewTop")
     Gui.SendMsgToActiveView("ViewFit")
 
-
 def view_front():
     Gui.SendMsgToActiveView("ViewFront")
     Gui.SendMsgToActiveView("ViewFit")
 
+def view_rear():
+    Gui.SendMsgToActiveView("ViewRear")
+    Gui.SendMsgToActiveView("ViewFit")
+
+def view_left():
+    Gui.SendMsgToActiveView("ViewLeft")
+    Gui.SendMsgToActiveView("ViewFit")
+
+def view_right():
+    Gui.SendMsgToActiveView("ViewRight")
+    Gui.SendMsgToActiveView("ViewFit")
 
 def view_bottom():
     Gui.SendMsgToActiveView("ViewBottom")
     Gui.SendMsgToActiveView("ViewFit")
 
 
-# Restore default transparency on cover
-for o in all_objects():
-    if o.Name == "TopCover":
-        try:
-            o.ViewObject.Transparency = 40
-        except Exception:
-            pass
-
+# ── Setup ──
+set_cover_transparency(40)
+os.makedirs(RENDER_DIR, exist_ok=True)
 print(f"Rendering to {RENDER_DIR} ...")
 
-# 01 — Hero iso (everything visible, transparent cover)
+# =====================================================================
+# SECTION 1 — FULL ASSEMBLY (all components, transparent cover)
+# =====================================================================
+
+# 01 — Hero isometric
 show_all_except([])
 save("var-01-hero-iso.png")
 
@@ -101,129 +123,233 @@ save("var-02-top-translucent.png", axometric=False, fit=False)
 view_front()
 save("var-03-front-elevation.png", axometric=False, fit=False)
 
-# 04 — Side stack (ViewLeft)
-Gui.SendMsgToActiveView("ViewLeft")
-Gui.SendMsgToActiveView("ViewFit")
-save("var-04-side-stack.png", axometric=False, fit=False)
+# 04 — Side stack (left)
+view_left()
+save("var-04-side-left.png", axometric=False, fit=False)
 
-# 05 — Cover removed iso
-show_all_except(["TopCover"])
-save("var-05-cover-removed-iso.png")
+# 05 — Side stack (right)
+view_right()
+save("var-05-side-right.png", axometric=False, fit=False)
 
-# 06 — Cover removed top
+# 06 — Rear elevation
+view_rear()
+save("var-06-rear-elevation.png", axometric=False, fit=False)
+
+# =====================================================================
+# SECTION 2 — COVER REMOVED (internals visible)
+# =====================================================================
+
+# 07 — Cover removed iso
+show_all_except(["TopCover", "Thumbpiece"])
+save("var-07-cover-removed-iso.png")
+
+# 08 — Cover removed top
 view_top()
-save("var-06-cover-removed-top.png", axometric=False, fit=False)
+save("var-08-cover-removed-top.png", axometric=False, fit=False)
 
-# 07 — Cradle + batt + clips iso (hide cover, base plate, pico, displays, joystick, thumbpiece)
+# =====================================================================
+# SECTION 3 — INDIVIDUAL BODIES
+# =====================================================================
+
+# 09 — Cradle + batteries + clips iso
 show_all_except([
-    "TopCover", "BasePlate", "Pico_Board", "Pico_Headers",
+    "TopCover", "BasePlate", "Pico2W_Board", "Pico2W_Headers",
     "JoystickPCB", "Thumbpiece", "TP4056_Module",
-    "EInk_Display", "EInk_Panel",
-    "Piezo_Brass", "Piezo_Ceramic", "IMU_Module"])
-save("var-07-cradle-batt-clips-iso.png")
+    "EInkDisplay_Module", "EInkDisplay_Panel",
+    "Piezo_Brass", "Piezo_Ceramic", "IMU_Module",
+    "Solar_Frame", "Solar_Cells", "Solar_Wire_Plus", "Solar_Wire_Minus"])
+save("var-09-cradle-batt-clips-iso.png")
 
-# 08 — Cradle + batt + clips top
+# 10 — Cradle + batteries top
 view_top()
-save("var-08-cradle-batt-clips-top.png", axometric=False, fit=False)
+save("var-10-cradle-batt-clips-top.png", axometric=False, fit=False)
 
-# 09 — Pico on base
-show_all_except([
-    "TopCover", "AAACradle", "JoystickPCB", "Thumbpiece",
-    "AAA_Battery_1", "AAA_Battery_1_PosTerm",
-    "AAA_Battery_2", "AAA_Battery_2_PosTerm",
-    "TP4056_Module", "EInk_Display", "EInk_Panel"])
-save("var-09-pico-on-base.png")
+# 11 — Pico + sensors on base plate
+show(["BasePlate", "Piezo_Brass", "Piezo_Ceramic", "IMU_Module"])
+save("var-11-pico-sensors-on-base.png")
 
-# 10 — Joystick + thumbpiece detail (cover translucent, zoomed)
-show_all_except([])
-save("var-10-joystick-detail.png")
+# 12 — Baseplate top (sensors visible)
+view_top()
+save("var-12-baseplate-sensors-top.png", axometric=False, fit=False)
 
-# 11 — Display detail
-save("var-11-display-detail.png")
+# 13 — Baseplate sensors iso
+save("var-13-baseplate-sensors-iso.png")
 
-# 12 — Baseplate bottom (with solar panel + leads visible — these
-# are the parts that mount on the bottom face)
+# 14 — Baseplate bottom (solar panel)
 show(["BasePlate", "Solar_Frame", "Solar_Cells",
       "Solar_Wire_Plus", "Solar_Wire_Minus"])
 view_bottom()
-save("var-12-baseplate-bottom.png", axometric=False, fit=False)
+save("var-14-baseplate-bottom.png", axometric=False, fit=False)
 
-# 13 — Baseplate top
+# 15 — Baseplate top (bare)
+show(["BasePlate"])
 view_top()
-save("var-13-baseplate-top.png", axometric=False, fit=False)
+save("var-15-baseplate-top-bare.png", axometric=False, fit=False)
 
-# 14 — Cradle bottom
+# 16 — Cradle bottom
 show(["AAACradle"])
 view_bottom()
-save("var-14-cradle-bottom.png", axometric=False, fit=False)
+save("var-16-cradle-bottom.png", axometric=False, fit=False)
 
-# 15 — Cover bottom
+# 17 — Cover bottom (anchor pad visible)
 show(["TopCover"])
+set_cover_transparency(0)
 view_bottom()
-save("var-15-cover-bottom.png", axometric=False, fit=False)
+save("var-17-cover-bottom.png", axometric=False, fit=False)
 
-# 16 — Exploded iso (just split bodies on Z)
+# 18 — Cover bottom iso (anchor pad)
+save("var-18-cover-anchor-iso.png")
+
+set_cover_transparency(40)
+
+# =====================================================================
+# SECTION 4 — DETAIL CLOSE-UPS
+# =====================================================================
+
+# 19 — Joystick + thumbpiece detail
+show_all_except([])
+save("var-19-joystick-detail.png")
+
+# 20 — Joystick aligned top
+view_top()
+save("var-20-joystick-aligned-top.png", axometric=False, fit=False)
+
+# 21 — Thumbpiece hero (85% transparent cover)
+show_all_except([])
+set_cover_transparency(85)
+save("var-21-thumbpiece-hero.png")
+set_cover_transparency(40)
+
+# 22 — Display detail
+show_all_except([])
+save("var-22-display-detail.png")
+
+# =====================================================================
+# SECTION 5 — EXPLODED VIEWS
+# =====================================================================
+
 show_all_except([])
 # Stash placements
 saved = {}
 for o in all_objects():
     if o.Name in ("TopCover", "AAACradle", "BasePlate", "Thumbpiece"):
-        saved[o.Name] = o.Placement
-# Lift cover + thumbpiece higher
-for nm, dz in [("TopCover", 30), ("Thumbpiece", 40),
-               ("AAACradle", 0), ("BasePlate", -25)]:
-    if nm in saved:
-        p = App.Placement(saved[nm])
-        p.Base = p.Base + App.Vector(0, 0, dz)
-        doc.getObject(nm).Placement = p
-doc.recompute()
-save("var-16-exploded-iso.png")
+        saved[o.Name] = App.Placement(o.Placement)
 
-# 17 — Exploded front
+# Explode along Z
+offsets = {"TopCover": 30, "Thumbpiece": 40, "AAACradle": 0, "BasePlate": -25}
+for nm, dz in offsets.items():
+    obj = doc.getObject(nm)
+    if obj:
+        p = App.Placement(saved.get(nm, obj.Placement))
+        p.Base = p.Base + App.Vector(0, 0, dz)
+        obj.Placement = p
+doc.recompute()
+
+# 23 — Exploded iso
+save("var-23-exploded-iso.png")
+
+# 24 — Exploded front
 view_front()
-save("var-17-exploded-front.png", axometric=False, fit=False)
+save("var-24-exploded-front.png", axometric=False, fit=False)
+
+# 25 — Exploded top
+view_top()
+save("var-25-exploded-top.png", axometric=False, fit=False)
 
 # Restore placements
 for nm, p in saved.items():
-    doc.getObject(nm).Placement = p
+    obj = doc.getObject(nm)
+    if obj:
+        obj.Placement = p
 doc.recompute()
 
-# 18 — Joystick + thumbpiece aligned top (zoomed)
+# =====================================================================
+# SECTION 6 — ASSEMBLED (opaque cover)
+# =====================================================================
+
+# 26 — Assembled iso (opaque cover)
 show_all_except([])
+set_cover_transparency(0)
+save("var-26-assembled-opaque-iso.png")
+
+# 27 — Assembled front (opaque)
+view_front()
+save("var-27-assembled-opaque-front.png", axometric=False, fit=False)
+
+set_cover_transparency(40)
+
+# =====================================================================
+# SECTION 7 — PER-COMPONENT ISOLATED RENDERS (for design doc)
+# =====================================================================
+
+# Base plate — iso + top + bottom
+show(["BasePlate"])
+save("comp-baseplate-iso.png")
 view_top()
-save("var-joystick-aligned-top.png", axometric=False, fit=False)
-
-# 19 — Thumbpiece hero (new render specific to the thumbpiece — keep
-# the cover visible for spatial context, but make it very transparent
-# so the thumbpiece reads clearly)
-show_all_except([])
-for o in all_objects():
-    if o.Name == "TopCover":
-        try:
-            o.ViewObject.Transparency = 85
-        except Exception:
-            pass
-save("var-thumbpiece-hero.png")
-# Restore cover transparency
-for o in all_objects():
-    if o.Name == "TopCover":
-        try:
-            o.ViewObject.Transparency = 40
-        except Exception:
-            pass
-
-# 20 — Baseplate sensors (piezo ring + IMU pocket + batteries, top view)
-show(["BasePlate", "Piezo_Brass", "Piezo_Ceramic", "IMU_Module"])
-view_top()
-save("var-baseplate-sensors-top.png", axometric=False, fit=False)
-
-# 21 — Baseplate sensors iso
-save("var-baseplate-sensors-iso.png")
-
-# 22 — Cover bottom with anchor pad visible
-show(["TopCover"])
+save("comp-baseplate-top.png", axometric=False, fit=False)
 view_bottom()
-save("var-cover-anchor-bottom.png", axometric=False, fit=False)
+save("comp-baseplate-bottom.png", axometric=False, fit=False)
 
-print("Done.")
+# AAA Cradle — iso + top + bottom
+show(["AAACradle"])
+save("comp-cradle-iso.png")
+view_top()
+save("comp-cradle-top.png", axometric=False, fit=False)
+view_bottom()
+save("comp-cradle-bottom.png", axometric=False, fit=False)
+
+# Top Cover — iso (transparent) + bottom (opaque, shows anchor)
+show(["TopCover"])
+set_cover_transparency(40)
+save("comp-cover-iso.png")
+set_cover_transparency(0)
+save("comp-cover-iso-opaque.png")
+view_bottom()
+save("comp-cover-bottom.png", axometric=False, fit=False)
+view_top()
+save("comp-cover-top.png", axometric=False, fit=False)
+set_cover_transparency(40)
+
+# Thumbpiece — iso
+show(["Thumbpiece"])
+save("comp-thumbpiece-iso.png")
+
+# Joystick PCB — iso
+show(["JoystickPCB"])
+save("comp-joystick-pcb-iso.png")
+
+# Pico 2 W + headers — iso
+show(["Pico2W_Board", "Pico2W_Headers"])
+save("comp-pico-iso.png")
+
+# Piezo speaker — iso
+show(["Piezo_Brass", "Piezo_Ceramic"])
+save("comp-piezo-iso.png")
+
+# IMU module — iso
+show(["IMU_Module"])
+save("comp-imu-iso.png")
+
+# Solar panel — iso (bottom view)
+show(["Solar_Frame", "Solar_Cells", "Solar_Wire_Plus", "Solar_Wire_Minus"])
+view_bottom()
+save("comp-solar-bottom.png", axometric=False, fit=False)
+save("comp-solar-iso.png")
+
+# TP4056 charger — iso
+show(["TP4056_Module"])
+save("comp-tp4056-iso.png")
+
+# Batteries + clips — iso
+show(["AAA_Battery_1", "AAA_Battery_1_PosTerm",
+      "AAA_Battery_2", "AAA_Battery_2_PosTerm",
+      "BatteryClips_Positive", "BatteryClips_Negative",
+      "BatteryWiring_Positive", "BatteryWiring_Negative"])
+save("comp-batteries-iso.png")
+
+# Display — iso
+show(["EInkDisplay_Module", "EInkDisplay_Panel"])
+save("comp-display-iso.png")
+
+print(f"\nDone — renders saved to {RENDER_DIR}")
 App.closeDocument(doc.Name)

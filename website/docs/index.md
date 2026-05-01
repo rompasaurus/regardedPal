@@ -67,18 +67,18 @@ Jamal still sits in the armchair. He still wears the hat. He watches us build hi
 
 ## Latest Prototype — Sensors, Speaker, and Joystick Anchor
 
-The parametric FreeCAD macro gained three new systems in today's build: a **20 mm piezo speaker** in a circular retaining ring, an **MPU-6500 6-axis accelerometer** in a recessed pocket, and a precision **joystick anchor pad** that replaces the old well/sleeve design. The joystick PCB alignment was fixed (stick now dead-center in the hole), and the cradle pit tightened from 23 mm to 20 mm for a snug board fit.
+The parametric FreeCAD macro gained three new systems: a **20 mm piezo speaker** in a circular retaining ring, an **MPU-6500 6-axis accelerometer** in a recessed pocket, and a precision **joystick anchor pad** that replaces the old well/sleeve design. The joystick PCB alignment was fixed (stick now dead-center in the hole), and the cradle pit tightened from 23 mm to 20 mm for a snug board fit.
 
 <div class="grid" markdown>
 
 <figure markdown="span">
-  ![Dilder Rev 2 — assembly hero with piezo and IMU](assets/images/enclosure/var-01-hero-iso.png){ width="420" loading=lazy }
-  <figcaption>Hero shot — full assembly with piezo speaker ring and IMU pocket visible through the translucent cover</figcaption>
+  ![Dilder Rev 2 — hero isometric](assets/images/enclosure/var-01-hero-iso.png){ width="420" loading=lazy }
+  <figcaption>Hero shot — full assembly with all components visible through the translucent cover</figcaption>
 </figure>
 
 <figure markdown="span">
-  ![Dilder Rev 2 — baseplate sensors top view](assets/images/enclosure/var-baseplate-sensors-top.png){ width="420" loading=lazy }
-  <figcaption>Base plate top — piezo disc in circular ring (center), IMU module in rectangular pocket (left)</figcaption>
+  ![Dilder Rev 2 — 3/4 angle front-right](assets/images/enclosure/var-06a-angle-front-right.png){ width="420" loading=lazy }
+  <figcaption>3/4 angle — joystick thumbpiece and display window on the bullnose dome</figcaption>
 </figure>
 
 </div>
@@ -86,18 +86,34 @@ The parametric FreeCAD macro gained three new systems in today's build: a **20 m
 <div class="grid" markdown>
 
 <figure markdown="span">
-  ![Dilder Rev 2 — baseplate sensors isometric](assets/images/enclosure/var-baseplate-sensors-iso.png){ width="420" loading=lazy }
-  <figcaption>Isometric — retaining walls for the piezo (22.2 mm OD) and IMU (27.4 x 17.4 mm) between the battery rails</figcaption>
+  ![Dilder Rev 2 — exploded isometric](assets/images/enclosure/var-23-exploded-iso.png){ width="420" loading=lazy }
+  <figcaption>Exploded view — base plate, cradle with batteries, cover with anchor pad, and thumbpiece</figcaption>
 </figure>
 
 <figure markdown="span">
-  ![Dilder Rev 2 — cover bottom with joystick anchor pad](assets/images/enclosure/var-cover-anchor-bottom.png){ width="420" loading=lazy }
-  <figcaption>Cover bottom — 14 x 14 mm joystick anchor pad with 12 mm square inner hole, stops at PCB top surface</figcaption>
+  ![Dilder Rev 2 — assembled opaque](assets/images/enclosure/var-26-assembled-opaque-iso.png){ width="420" loading=lazy }
+  <figcaption>Assembled (opaque cover) — the finished device with display window and joystick</figcaption>
+</figure>
+
+</div>
+
+<div class="grid" markdown>
+
+<figure markdown="span">
+  ![Dilder Rev 2 — cover removed](assets/images/enclosure/var-07-cover-removed-iso.png){ width="420" loading=lazy }
+  <figcaption>Cover removed — cradle with batteries, Pico board, TP4056 charger, and joystick PCB</figcaption>
+</figure>
+
+<figure markdown="span">
+  ![Dilder Rev 2 — base plate sensors](assets/images/enclosure/var-11-pico-sensors-on-base.png){ width="420" loading=lazy }
+  <figcaption>Base plate — piezo speaker ring (center) and IMU pocket (left) between battery rails</figcaption>
 </figure>
 
 </div>
 
 [Read the full build write-up :material-arrow-right:](blog/posts/joystick-anchor-piezo-imu-sensors.md){ .md-button }
+
+[View the complete design breakdown :material-arrow-right:](docs/hardware/freecad-mk2-design.md){ .md-button }
 
 ---
 

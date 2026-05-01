@@ -1,0 +1,235 @@
+"""
+Animate Assembly — frame-by-frame assembly animation for Dilder Rev 2 Mk2.
+
+Run with:  freecad animate_assembly.FCMacro
+
+Saves numbered PNGs to ../renders/anim/ showing each component dropping into
+place from above.  Assemble into GIF/video with:
+
+    ffmpeg -framerate 12 -i ../renders/anim/frame-%04d.png \
+           -vf "scale=960:720" -loop 0 ../renders/assembly-animation.gif
+
+Or for MP4:
+    ffmpeg -framerate 12 -i ../renders/anim/frame-%04d.png \
+           -c:v libx264 -pix_fmt yuv420p ../renders/assembly-animation.mp4
+
+Updated 2026-05-01.
+"""
+
+import os, time, math
+import FreeCAD as App
+import FreeCADGui as Gui
+
+MACRO_DIR = os.path.dirname(os.path.abspath(__file__))
+FCSTD_PATH = os.environ.get("DILDER_FCSTD",
+    os.path.join(MACRO_DIR, "Dilder_Rev2_Mk2.FCStd"))
+ANIM_DIR = os.path.normpath(os.path.join(MACRO_DIR, "..", "renders", "anim"))
+
+W, H = 960, 720
+BG = "White"
+
+doc = App.openDocument(FCSTD_PATH)
+Gui.ActiveDocument = Gui.getDocument(doc.Name)
+view = Gui.ActiveDocument.activeView()
+
+os.makedirs(ANIM_DIR, exist_ok=True)
+
+V = App.Vector
+
+
+def all_objects():
+    return [o for o in doc.Objects if hasattr(o, "ViewObject")]
+
+
+def hide_all():
+    for o in all_objects():
+        try:
+            o.ViewObject.Visibility = False
+        except Exception:
+            pass
+
+
+def show_obj(name, vis=True):
+    obj = doc.getObject(name)
+    if obj:
+        try:
+            obj.ViewObject.Visibility = vis
+        except Exception:
+            pass
+
+
+def set_transparency(name, t):
+    obj = doc.getObject(name)
+    if obj:
+        try:
+            obj.ViewObject.Transparency = t
+        except Exception:
+            pass
+
+
+def save_frame(idx):
+    Gui.SendMsgToActiveView("ViewIsometric")
+    Gui.SendMsgToActiveView("ViewFit")
+    Gui.updateGui()
+    time.sleep(0.02)
+    path = os.path.join(ANIM_DIR, f"frame-{idx:04d}.png")
+    view.saveImage(path, W, H, BG)
+    return path
+
+
+# ── Stash all original placements ──
+orig_placements = {}
+for o in all_objects():
+    if hasattr(o, "Placement"):
+        orig_placements[o.Name] = App.Placement(o.Placement)
+
+
+def set_z_offset(name, dz):
+    """Offset object Z from its original placement."""
+    obj = doc.getObject(name)
+    if obj and name in orig_placements:
+        p = App.Placement(orig_placements[name])
+        p.Base = p.Base + V(0, 0, dz)
+        obj.Placement = p
+
+
+def restore_placement(name):
+    obj = doc.getObject(name)
+    if obj and name in orig_placements:
+        obj.Placement = orig_placements[name]
+
+
+# ── Animation sequence ──
+# Each step: (object_names, label, drop_from_z, hold_frames)
+# Objects drop from drop_from_z down to 0 (their natural position) over N frames
+DROP_FRAMES = 15
+HOLD_FRAMES = 6
+
+# Define the assembly order (bottom to top)
+assembly_steps = [
+    # Step 1: Base plate slides in from below
+    {
+        "show": ["BasePlate"],
+        "drop": {"BasePlate": -40},
+    },
+    # Step 2: Solar panel on bottom
+    {
+        "show": ["Solar_Frame", "Solar_Cells",
+                 "Solar_Wire_Plus", "Solar_Wire_Minus"],
+        "drop": {"Solar_Frame": -30, "Solar_Cells": -30,
+                 "Solar_Wire_Plus": -30, "Solar_Wire_Minus": -30},
+    },
+    # Step 3: Piezo speaker drops in
+    {
+        "show": ["Piezo_Brass", "Piezo_Ceramic"],
+        "drop": {"Piezo_Brass": 40, "Piezo_Ceramic": 40},
+    },
+    # Step 4: IMU module drops in
+    {
+        "show": ["IMU_Module"],
+        "drop": {"IMU_Module": 40},
+    },
+    # Step 5: Cradle drops in
+    {
+        "show": ["AAACradle"],
+        "drop": {"AAACradle": 50},
+    },
+    # Step 6: Batteries slide in
+    {
+        "show": ["AAA_Battery_1", "AAA_Battery_1_PosTerm",
+                 "AAA_Battery_2", "AAA_Battery_2_PosTerm"],
+        "drop": {"AAA_Battery_1": 40, "AAA_Battery_1_PosTerm": 40,
+                 "AAA_Battery_2": 40, "AAA_Battery_2_PosTerm": 40},
+    },
+    # Step 7: Battery clips
+    {
+        "show": ["BatteryClips_Positive", "BatteryClips_Negative",
+                 "BatteryWiring_Positive", "BatteryWiring_Negative"],
+        "drop": {"BatteryClips_Positive": 30,
+                 "BatteryClips_Negative": 30,
+                 "BatteryWiring_Positive": 30,
+                 "BatteryWiring_Negative": 30},
+    },
+    # Step 8: TP4056 charger
+    {
+        "show": ["TP4056_Module"],
+        "drop": {"TP4056_Module": 35},
+    },
+    # Step 9: Pico board + headers
+    {
+        "show": ["Pico2W_Board", "Pico2W_Headers"],
+        "drop": {"Pico2W_Board": 40, "Pico2W_Headers": 40},
+    },
+    # Step 10: Joystick PCB
+    {
+        "show": ["JoystickPCB"],
+        "drop": {"JoystickPCB": 35},
+    },
+    # Step 11: Display
+    {
+        "show": ["EInkDisplay_Module", "EInkDisplay_Panel"],
+        "drop": {"EInkDisplay_Module": 30, "EInkDisplay_Panel": 30},
+    },
+    # Step 12: Top cover
+    {
+        "show": ["TopCover"],
+        "drop": {"TopCover": 45},
+        "pre": lambda: set_transparency("TopCover", 40),
+    },
+    # Step 13: Thumbpiece (last — snaps into cover hole)
+    {
+        "show": ["Thumbpiece"],
+        "drop": {"Thumbpiece": 25},
+    },
+]
+
+print(f"Animating {len(assembly_steps)} steps to {ANIM_DIR} ...")
+
+hide_all()
+frame = 0
+
+for step_idx, step in enumerate(assembly_steps):
+    print(f"  Step {step_idx + 1}: {', '.join(step['show'])}")
+
+    # Run pre-hook if any
+    if "pre" in step:
+        step["pre"]()
+
+    # Show objects and set start offset
+    for name in step["show"]:
+        show_obj(name)
+    for name, dz in step["drop"].items():
+        set_z_offset(name, dz)
+    doc.recompute()
+
+    # Animate drop (ease-in-out using cosine interpolation)
+    for f in range(DROP_FRAMES):
+        t = f / (DROP_FRAMES - 1)  # 0 → 1
+        ease = (1 - math.cos(t * math.pi)) / 2  # smooth ease-in-out
+        for name, dz in step["drop"].items():
+            set_z_offset(name, dz * (1 - ease))
+        doc.recompute()
+        save_frame(frame)
+        frame += 1
+
+    # Restore to exact position
+    for name in step["drop"]:
+        restore_placement(name)
+    doc.recompute()
+
+    # Hold frames at final position
+    for _ in range(HOLD_FRAMES):
+        save_frame(frame)
+        frame += 1
+
+# Final assembled hold (longer)
+for _ in range(24):
+    save_frame(frame)
+    frame += 1
+
+print(f"\nDone — {frame} frames saved to {ANIM_DIR}")
+print(f"Assemble with:")
+print(f"  ffmpeg -framerate 12 -i {ANIM_DIR}/frame-%04d.png \\")
+print(f"         -vf 'scale=960:720' -loop 0 {RENDER_DIR}/assembly-animation.gif")
+
+App.closeDocument(doc.Name)
