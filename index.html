@@ -538,6 +538,45 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#first-pcb-from-scratch-joystick-breakout-board" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        First PCB from Scratch — Joystick Breakout Board
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="First PCB from Scratch — Joystick Breakout Board">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#whats-on-the-board" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What's on the board
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#from-screen-to-factory" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        From screen to factory
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#current-phase" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -3287,6 +3326,45 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#first-pcb-from-scratch-joystick-breakout-board" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        First PCB from Scratch — Joystick Breakout Board
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="First PCB from Scratch — Joystick Breakout Board">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#whats-on-the-board" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What's on the board
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#from-screen-to-factory" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        From screen to factory
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#current-phase" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -3492,6 +3570,46 @@
 <p>Select a program and you get a live preview, estimated firmware size (~100KB), how much of the Pico's 2MB flash you'll use (~5%), and one-click deploy.</p>
 <p><a class="md-button" href="docs/tools/devtool/">DevTool docs <span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11z"/></svg></span></a></p>
 <hr />
+<h2 id="first-pcb-from-scratch-joystick-breakout-board">First PCB from Scratch — Joystick Breakout Board<a class="headerlink" href="#first-pcb-from-scratch-joystick-breakout-board" title="Permanent link">&para;</a></h2>
+<p>Before the Dilder, the closest I'd come to PCB design was staring at someone else's Gerber files and thinking "that looks complicated." This board changed that.</p>
+<p>The joystick needed a breakout board — the K1-1506SN-01 5-way switch is a tiny surface-mount component with six pins spaced 1.27 mm apart. You can't hand-solder wires to that. So instead of buying a pre-made breakout (they don't exist for this switch), I designed one from scratch in KiCad 10.</p>
+<div class="grid">
+<figure>
+  <img alt="Schematic editor in KiCad" loading="lazy" src="assets/images/hardware/pcb/joystick-hand-schematic-editor.jpg" width="420" />
+<br />
+<figcaption>The schematic — five direction pins (Up, Down, Left, Right, Push) plus a common ground, all routed through the switch to header pads</figcaption>
+</figure>
+<figure>
+  <img alt="PCB layout editor in KiCad" loading="lazy" src="assets/images/hardware/pcb/joystick-hand-pcb-layout-editor.jpg" width="420" />
+<br />
+<figcaption>The PCB layout — every trace hand-routed on a 19.6 x 19.6 mm board. No autorouter, no templates, just dragging copper one track at a time</figcaption>
+</figure>
+</div>
+<h3 id="whats-on-the-board">What's on the board<a class="headerlink" href="#whats-on-the-board" title="Permanent link">&para;</a></h3>
+<p>The switch sits in the center. Six pads radiate out to header holes along one edge — 2.54 mm pitch so you can solder standard pin headers and plug it straight into a breadboard or the Dilder's cradle pit. The whole thing is smaller than a postage stamp.</p>
+<p>The routing was the fun part. KiCad shows you the "ratsnest" — a web of thin lines showing which pads need to connect — and you trace actual copper paths between them. It's like a puzzle where the pieces are wires and the constraint is "don't let them cross." Six signals on a single-layer board means some creative curving, but the K1-1506SN-01 has a clean enough pinout that everything routes without vias.</p>
+<div class="grid">
+<figure>
+  <img alt="3D preview of the finished board" loading="lazy" src="assets/images/hardware/pcb/joystick-hand-3d-viewer.jpg" width="420" />
+<br />
+<figcaption>KiCad's 3D viewer — the finished board with the switch model placed. You can see the gold traces, the header pads, and the silkscreen labels</figcaption>
+</figure>
+<figure>
+  <img alt="Full KiCad workspace" loading="lazy" src="assets/images/hardware/pcb/joystick-hand-pcb-full-workspace.jpg" width="420" />
+<br />
+<figcaption>The full workspace — schematic, layout, and 3D preview side by side during the design session</figcaption>
+</figure>
+</div>
+<h3 id="from-screen-to-factory">From screen to factory<a class="headerlink" href="#from-screen-to-factory" title="Permanent link">&para;</a></h3>
+<p>The board went from KiCad to JLCPCB-ready in one session. Gerbers exported, BOM generated, pick-and-place file formatted. Five boards for a few dollars, shipped from Shenzhen. The switch gets placed by machine — I just solder the header pins when they arrive.</p>
+<p>The STEP model of the finished board is imported directly into the FreeCAD assembly, where it sits in the cradle's 20 x 20 mm joystick pit with the switch body poking up through the cover's anchor pad into the thumbpiece.</p>
+<figure>
+  <img alt="Joystick PCB in the FreeCAD assembly" loading="lazy" src="assets/images/enclosure/comp-joystick-pcb-iso.png" width="400" />
+<br />
+<figcaption>The board as it appears in the 3D model — imported from the KiCad STEP export, positioned in the cradle pit</figcaption>
+</figure>
+<p><a class="md-button" href="docs/hardware/joystick-wiring/">Joystick wiring guide <span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11z"/></svg></span></a></p>
+<hr />
 <h2 id="current-phase">Current Phase<a class="headerlink" href="#current-phase" title="Permanent link">&para;</a></h2>
 <div class="admonition info">
 <p class="admonition-title">Phase 2 — Firmware Foundation (C on Pico W)</p>
@@ -3500,11 +3618,6 @@
 <p><strong>In Progress:</strong> Custom PCB design — switched from RP2040 to <strong>ESP32-S3-WROOM-1-N16R8</strong> (WiFi+BLE, 16MB flash, 8MB PSRAM). 4-layer board (45x80mm, 27 components) designed in KiCad, ready for interactive routing and JLCPCB fabrication. <strong>Hand-routed joystick breakout PCB</strong> (K1-1506SN-01, 19.6x19.6mm) designed from scratch in KiCad 10 with gerbers and BOM ready for JLCPCB.</p>
 <p><strong>Next:</strong> Order joystick PCB from JLCPCB | Complete ESP32 PCB routing and order boards | Wire batteries to board | Game loop with state machine</p>
 </div>
-<figure>
-  <img alt="Hand-routed joystick breakout PCB — 3D preview" loading="lazy" src="assets/images/hardware/pcb/joystick-hand-3d-viewer.jpg" width="500" />
-<br />
-<figcaption>First PCB from scratch — hand-routed K1-1506SN-01 joystick breakout board in KiCad 10</figcaption>
-</figure>
 <hr />
 <h2 id="quick-links">Quick Links<a class="headerlink" href="#quick-links" title="Permanent link">&para;</a></h2>
 <div class="grid cards">
