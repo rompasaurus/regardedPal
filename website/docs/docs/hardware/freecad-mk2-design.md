@@ -35,12 +35,12 @@ Everything is generated from a single parametric macro (`dilder_rev2_mk2.FCMacro
 <div class="grid" markdown>
 
 <figure markdown="span">
-  ![Base plate isometric](../assets/images/enclosure/comp-baseplate-iso.png){ width="420" loading=lazy }
+  ![Base plate isometric](../../assets/images/enclosure/comp-baseplate-iso.png){ width="420" loading=lazy }
   <figcaption>Isometric — pocket cavity, corner pillars with alignment pegs, battery rail supports, piezo ring, and IMU pocket</figcaption>
 </figure>
 
 <figure markdown="span">
-  ![Base plate top](../assets/images/enclosure/comp-baseplate-top.png){ width="420" loading=lazy }
+  ![Base plate top](../../assets/images/enclosure/comp-baseplate-top.png){ width="420" loading=lazy }
   <figcaption>Top view — four 5 mm corner pillars with 3 mm pegs, USB-C cutout on +X wall, sensor mounts between rails</figcaption>
 </figure>
 
@@ -80,12 +80,12 @@ Everything is generated from a single parametric macro (`dilder_rev2_mk2.FCMacro
 <div class="grid" markdown>
 
 <figure markdown="span">
-  ![Cradle isometric](../assets/images/enclosure/comp-cradle-iso.png){ width="420" loading=lazy }
+  ![Cradle isometric](../../assets/images/enclosure/comp-cradle-iso.png){ width="420" loading=lazy }
   <figcaption>Isometric — plug body with battery bays, clip slots, connecting block, and joystick PCB pit</figcaption>
 </figure>
 
 <figure markdown="span">
-  ![Cradle bottom](../assets/images/enclosure/comp-cradle-bottom.png){ width="420" loading=lazy }
+  ![Cradle bottom](../../assets/images/enclosure/comp-cradle-bottom.png){ width="420" loading=lazy }
   <figcaption>Bottom (global top) — the mating face that sits flush with the base plate top</figcaption>
 </figure>
 
@@ -127,12 +127,12 @@ Everything is generated from a single parametric macro (`dilder_rev2_mk2.FCMacro
 <div class="grid" markdown>
 
 <figure markdown="span">
-  ![Cover isometric transparent](../assets/images/enclosure/comp-cover-iso.png){ width="420" loading=lazy }
+  ![Cover isometric transparent](../../assets/images/enclosure/comp-cover-iso.png){ width="420" loading=lazy }
   <figcaption>Isometric (40% transparent) — bullnose dome, display window, joystick hole, screen inlay pocket</figcaption>
 </figure>
 
 <figure markdown="span">
-  ![Cover bottom](../assets/images/enclosure/comp-cover-bottom.png){ width="420" loading=lazy }
+  ![Cover bottom](../../assets/images/enclosure/comp-cover-bottom.png){ width="420" loading=lazy }
   <figcaption>Bottom view — joystick anchor pad (14 x 14 mm), M3 bores, corner pillars, screen inlay cavity</figcaption>
 </figure>
 
@@ -168,7 +168,7 @@ Everything is generated from a single parametric macro (`dilder_rev2_mk2.FCMacro
 ## Thumbpiece
 
 <figure markdown="span">
-  ![Thumbpiece isometric](../assets/images/enclosure/comp-thumbpiece-iso.png){ width="300" loading=lazy }
+  ![Thumbpiece isometric](../../assets/images/enclosure/comp-thumbpiece-iso.png){ width="300" loading=lazy }
   <figcaption>Snap cap — 11 mm disc with concave dish on top and rectangular snap socket on bottom</figcaption>
 </figure>
 
@@ -193,7 +193,7 @@ Everything is generated from a single parametric macro (`dilder_rev2_mk2.FCMacro
 ## Joystick PCB
 
 <figure markdown="span">
-  ![Joystick PCB isometric](../assets/images/enclosure/comp-joystick-pcb-iso.png){ width="350" loading=lazy }
+  ![Joystick PCB isometric](../../assets/images/enclosure/comp-joystick-pcb-iso.png){ width="350" loading=lazy }
   <figcaption>KiCad STEP import — K1-1506SN-01 5-way switch on a 19.6 x 19.6 mm hand-routed breakout board</figcaption>
 </figure>
 
@@ -212,7 +212,7 @@ Everything is generated from a single parametric macro (`dilder_rev2_mk2.FCMacro
 ## Pico 2 W Board
 
 <figure markdown="span">
-  ![Pico 2 W isometric](../assets/images/enclosure/comp-pico-iso.png){ width="350" loading=lazy }
+  ![Pico 2 W isometric](../../assets/images/enclosure/comp-pico-iso.png){ width="350" loading=lazy }
   <figcaption>Official STEP import + procedural 2x20 pin headers — board sits inverted in the cradle's Pico nest</figcaption>
 </figure>
 
@@ -225,7 +225,7 @@ Everything is generated from a single parametric macro (`dilder_rev2_mk2.FCMacro
 ## Piezo Speaker
 
 <figure markdown="span">
-  ![Piezo disc isometric](../assets/images/enclosure/comp-piezo-iso.png){ width="300" loading=lazy }
+  ![Piezo disc isometric](../../assets/images/enclosure/comp-piezo-iso.png){ width="300" loading=lazy }
   <figcaption>FT-20T / YOUMILE JK-YM-297A — 20 mm brass disc with 15 mm ceramic element</figcaption>
 </figure>
 
@@ -240,7 +240,7 @@ Everything is generated from a single parametric macro (`dilder_rev2_mk2.FCMacro
 ## MPU-6500 IMU Accelerometer
 
 <figure markdown="span">
-  ![IMU module isometric](../assets/images/enclosure/comp-imu-iso.png){ width="300" loading=lazy }
+  ![IMU module isometric](../../assets/images/enclosure/comp-imu-iso.png){ width="300" loading=lazy }
   <figcaption>GY-6500 module — MPU-6500 6-axis gyro+accelerometer on a 25 x 15 mm breakout</figcaption>
 </figure>
 
@@ -257,7 +257,7 @@ Everything is generated from a single parametric macro (`dilder_rev2_mk2.FCMacro
 ## TP4056 Charger Module
 
 <figure markdown="span">
-  ![TP4056 isometric](../assets/images/enclosure/comp-tp4056-iso.png){ width="300" loading=lazy }
+  ![TP4056 isometric](../../assets/images/enclosure/comp-tp4056-iso.png){ width="300" loading=lazy }
   <figcaption>TP4056 USB-C charger module — 28 x 17 x 1.6 mm PCB with IC/cap lump</figcaption>
 </figure>
 
@@ -270,7 +270,7 @@ Everything is generated from a single parametric macro (`dilder_rev2_mk2.FCMacro
 ## AAA Batteries and Clips
 
 <figure markdown="span">
-  ![Batteries and clips isometric](../assets/images/enclosure/comp-batteries-iso.png){ width="420" loading=lazy }
+  ![Batteries and clips isometric](../../assets/images/enclosure/comp-batteries-iso.png){ width="420" loading=lazy }
   <figcaption>Two AAA Li-Ion cells (10.5 x 39.5 mm) with Swpeet 7x7 mm clip plates and wiring</figcaption>
 </figure>
 
@@ -283,7 +283,7 @@ Everything is generated from a single parametric macro (`dilder_rev2_mk2.FCMacro
 ## Waveshare E-Ink Display
 
 <figure markdown="span">
-  ![Display isometric](../assets/images/enclosure/comp-display-iso.png){ width="350" loading=lazy }
+  ![Display isometric](../../assets/images/enclosure/comp-display-iso.png){ width="350" loading=lazy }
   <figcaption>Waveshare 2.13" e-Paper V3 module — 65.2 x 30 x 3.0 mm carrier with 48 x 22 mm active panel</figcaption>
 </figure>
 
@@ -296,7 +296,7 @@ Everything is generated from a single parametric macro (`dilder_rev2_mk2.FCMacro
 ## AK 62x36 Solar Panel
 
 <figure markdown="span">
-  ![Solar panel bottom](../assets/images/enclosure/comp-solar-bottom.png){ width="420" loading=lazy }
+  ![Solar panel bottom](../../assets/images/enclosure/comp-solar-bottom.png){ width="420" loading=lazy }
   <figcaption>AK 62x36 mm solar panel — frame + dark-blue cell layer, visible from the base plate bottom</figcaption>
 </figure>
 
@@ -311,12 +311,12 @@ Everything is generated from a single parametric macro (`dilder_rev2_mk2.FCMacro
 <div class="grid" markdown>
 
 <figure markdown="span">
-  ![Full assembly hero](../assets/images/enclosure/var-01-hero-iso.png){ width="420" loading=lazy }
+  ![Full assembly hero](../../assets/images/enclosure/var-01-hero-iso.png){ width="420" loading=lazy }
   <figcaption>Hero shot — complete assembly with transparent cover showing all internal components</figcaption>
 </figure>
 
 <figure markdown="span">
-  ![Exploded isometric](../assets/images/enclosure/var-23-exploded-iso.png){ width="420" loading=lazy }
+  ![Exploded isometric](../../assets/images/enclosure/var-23-exploded-iso.png){ width="420" loading=lazy }
   <figcaption>Exploded view — base plate drops 25 mm, cover lifts 30 mm, thumbpiece lifts 40 mm</figcaption>
 </figure>
 
@@ -325,12 +325,12 @@ Everything is generated from a single parametric macro (`dilder_rev2_mk2.FCMacro
 <div class="grid" markdown>
 
 <figure markdown="span">
-  ![Assembled opaque](../assets/images/enclosure/var-26-assembled-opaque-iso.png){ width="420" loading=lazy }
+  ![Assembled opaque](../../assets/images/enclosure/var-26-assembled-opaque-iso.png){ width="420" loading=lazy }
   <figcaption>Assembled (opaque cover) — what it looks like as a finished device</figcaption>
 </figure>
 
 <figure markdown="span">
-  ![Cover removed](../assets/images/enclosure/var-07-cover-removed-iso.png){ width="420" loading=lazy }
+  ![Cover removed](../../assets/images/enclosure/var-07-cover-removed-iso.png){ width="420" loading=lazy }
   <figcaption>Cover removed — cradle with batteries, TP4056, Pico board, joystick PCB, and display visible</figcaption>
 </figure>
 
