@@ -11,13 +11,45 @@ cd hardware-design
 ./build_and_render.sh
 ```
 
-The tool walks through 5 interactive screens:
+The tool walks through 4 interactive screens:
 
-1. **Model picker** — all `.FCStd` files sorted by date, newest first
-2. **Render set** — 19 options from "Everything" to individual components
-3. **Style** — resolution, background color, cover transparency
-4. **Confirmation** — review your choices
-5. **Render** — FreeCAD GUI opens, renders PNGs, copies to website
+### Screen 1 — Model Picker
+
+All `.FCStd` files sorted by date modified (newest first), with file sizes.
+
+<figure markdown="span">
+  ![Model picker screen](../assets/images/tools/render-cli/screen-1-model-picker.png){ width="700" loading=lazy }
+  <figcaption>Pick a model by number, or press r to rebuild from the parametric macro</figcaption>
+</figure>
+
+### Screen 2 — Render Set
+
+19 options organized into full sets, individual bodies, peripherals, and special modes.
+
+<figure markdown="span">
+  ![Render set screen](../assets/images/tools/render-cli/screen-2-render-set.png){ width="700" loading=lazy }
+  <figcaption>Choose from "Everything" (40+ images) down to a single component portrait</figcaption>
+</figure>
+
+### Screen 3 — Render Style
+
+Resolution, background, and cover transparency.
+
+<figure markdown="span">
+  ![Style picker screen](../assets/images/tools/render-cli/screen-3-style-picker.png){ width="700" loading=lazy }
+  <figcaption>Four resolutions, four backgrounds, four transparency levels</figcaption>
+</figure>
+
+### Screen 4 — Confirmation
+
+Review all selections before rendering.
+
+<figure markdown="span">
+  ![Confirmation screen](../assets/images/tools/render-cli/screen-4-confirmation.png){ width="700" loading=lazy }
+  <figcaption>Summary of model, render set, resolution, background, and cover transparency</figcaption>
+</figure>
+
+After confirmation, FreeCAD GUI opens, renders all views, and copies PNGs to the website assets directory.
 
 ## Render Sets
 
