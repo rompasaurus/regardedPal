@@ -127,7 +127,7 @@ def SP(alias):
 PARAMS = [
     # (alias, value, description)
     # ─── Enclosure ───
-    ("enc_x",         94.9,  "Enclosure width X"),
+    ("enc_x",         96.9,  "Enclosure width X (+2mm extension at X=64 slice plane, 05-01-2026)"),
     ("enc_y",         46.0,  "Enclosure depth Y"),
     ("wall_mx",        3.0,  "-X wall thickness"),
     ("wall_px",        1.2,  "+X wall thickness"),
@@ -140,23 +140,23 @@ PARAMS = [
     ("bp_fillet",      2.0,  "Bottom fillet radius"),
     ("bp_floor",       2.6,  "Pocket floor thickness (thick floo preset)"),
     ("cpx0",           3.1,  "Pocket X start"),
-    ("cpx1",          93.6,  "Pocket X end"),
+    ("cpx1",          95.6,  "Pocket X end (+2mm)"),
     ("cpy0",           2.1,  "Pocket Y start"),
     ("cpy1",          43.9,  "Pocket Y end"),
     ("peg_d",          3.0,  "Peg diameter"),
     ("peg_h",          3.0,  "Peg height above plate"),
     ("peg_cham",       0.4,  "Peg tip chamfer"),
     ("ext_x",         30.0,  "Pillar extension X (thick floo preset)"),
-    ("ext_y",          4.0,  "Pillar extension Y"),
+    ("ext_y",          0.0,  "Pillar extension Y (was 4.0; reduced wing Y from 9→5mm to free middle of base 05-01-2026)"),
     ("ext_z",         -1.5,  "Extension Z above plate"),
     ("bay_d",         11.1,  "AAA bay diameter"),
     ("bay_yM",         7.85, "Bay -Y center"),
     ("bay_yP",        38.15, "Bay +Y center"),
     ("bay_xs",        34.0,  "Trough X start"),
-    ("bay_xl",        39.0,  "Trough X length"),
+    ("bay_xl",        41.0,  "Trough X length (+2mm to fill X=64 slice gap)"),
     ("rail_lift",      5.0,  "Rail Z lift"),
     ("rail_hred",      2.5,  "Rail height reduce"),
-    ("rail_dred",      2.0,  "Rail depth reduce per side"),
+    ("rail_dred",      6.0,  "Rail depth reduce per side (was 2.0; reduced rail support Y by 4mm 05-01-2026)"),
     ("usb_w",          9.2,  "USB-C cutout width (9+0.2 tol)"),
     ("usb_h",          4.45, "USB-C cutout height (4.25+0.2 tol)"),
     ("usb_zd",         0.5,  "USB-C Z drop"),
@@ -182,13 +182,13 @@ PARAMS = [
     ("aaa_d",         10.5,  "AAA cell diameter"),
     ("aaa_rslop",      0.3,  "AAA radial slop"),
     ("aaa_bwall",      0.5,  "Bay wall above/below"),
-    ("aaa_len",       39.5,  "AAA cell length (shortened 04-27)"),
+    ("aaa_len",       41.5,  "AAA cell length (+2mm rail extension at X=64 slice 05-01-2026; was 39.5)"),
     ("aaa_aslop",      1.0,  "AAA axial slop"),
     ("aaa_cspace",     2.0,  "Contact space per end"),
     ("pil_cslop",      0.4,  "Pillar cutout slop"),
     ("fpc_gap",        3.0,  "FPC gap width"),
     ("pico_by",       21.0,  "Pico board width Y"),
-    ("pico_bx",       78.0,  "Pico board length X"),
+    ("pico_bx",       80.0,  "Pico nest length X (+2mm with enclosure extension)"),
     ("fit_tol",        0.4,  "Print fit tolerance"),
     ("conn_xl",       29.0,  "Connecting block X length"),
     ("tp_xl",         28.0,  "TP4056 board X"),
@@ -219,7 +219,7 @@ PARAMS = [
     ("win_yd",        25.0,  "Window depth Y"),
     ("win_shift",      2.8,  "Window shift toward +X"),
     ("joy_d",         12.0,  "Joystick hole diameter"),
-    ("joy_cx",        79.35, "Joystick center X"),
+    ("joy_cx",        81.35, "Joystick center X (+2mm with enclosure extension at X=64 slice)"),
     ("joy_pcb_y_offset", 0.67, "SW1 Y offset from PCB bbox center (production-PCB constant — KiCad places the K1-1506SN-01 +0.67 mm in Y from board geometric center; cover's joystick hole + pocket are shifted by this amount so SW1's stick aligns with the through-hole)"),
     ("joy_body_size", 10.6, "Square joystick body cutout size (K1-1506SN-01 body is 10.2 mm + 0.4 mm clearance; replaces the round joy_d hole — square corners of the body would otherwise foul the 12 mm circular cut)"),
     ("joy_pit_depth", 8.45, "Depth of the joystick PCB pit cut UP into the AAA cradle so the K1-1506SN-01 body's 10 mm height fits between the cradle pit floor and the cover dome top. Drops PCB top Z from 19.5 to 11.05 globally, putting the body top at Z=21.05 (flush with the cover JoyPCBPocket top edge / Edge106 plane)"),
@@ -284,7 +284,7 @@ def build_base_plate(doc):
     print("  Building Base Plate...")
     body = doc.addObject("PartDesign::Body", "BasePlate")
 
-    W, H = 94.9, 46.0
+    W, H = 96.9, 46.0
     Z = 6.0           # effective height after shave (SCAD: 8mm - 2mm shave)
     Z_preshave = 8.0   # original pre-shave height (for USB-C Z calculation)
     floor_z = 2.6      # thick floo preset
@@ -342,7 +342,7 @@ def build_base_plate(doc):
         doc.recompute()
 
     # ── 5. Cradle pocket ── SubtractiveBox from top
-    cpx0, cpy0, cpx1, cpy1 = 3.1, 2.1, 93.6, 43.9
+    cpx0, cpy0, cpx1, cpy1 = 3.1, 2.1, 95.6, 43.9
     pocket_depth = Z - floor_z  # 5.5
     pock = body.newObject("PartDesign::SubtractiveBox", "Pocket_Cradle")
     pock.Length = cpx1 - cpx0
@@ -413,7 +413,7 @@ def build_base_plate(doc):
         (3.0 + ps/2,        H - 2.0 - ps/2),     # -X+Y
         (W - 1.2 - ps/2,    H - 2.0 - ps/2),     # +X+Y
     ]
-    ext_x, ext_y = 30.0, 4.0   # PRESET: thick floo reduce negative space
+    ext_x, ext_y = 30.0, 0.0   # ext_y reduced to 0 (was 4.0) to shrink wing Y from 9→5mm 05-01-2026
 
     for i, (px, py) in enumerate(peg_positions):
         is_mx = px < center_x
@@ -471,18 +471,18 @@ def build_base_plate(doc):
 
     for idx, (bay_y, is_plus) in enumerate([(7.85, False), (38.15, True)]):
         if is_plus:
-            fy0 = bay_y - bay_r - 0.1 + 2.0   # rail_dred
+            fy0 = bay_y - bay_r - 0.1 + 6.0   # rail_dred (was 2.0; -4mm rail support Y)
             fy1 = H - 2.0
         else:
             fy0 = 2.0
-            fy1 = bay_y + bay_r + 0.1 - 2.0
+            fy1 = bay_y + bay_r + 0.1 - 6.0   # rail_dred (was 2.0; -4mm rail support Y)
 
         rz_bot = floor_z + lift    # 7.5
         fz_top = Z - 2.5 + lift    # 10.5
 
         # Support block below rail
         sup = body.newObject("PartDesign::AdditiveBox", f"RailSupport_{idx+1}")
-        sup.Length = 39.0
+        sup.Length = 41.0
         sup.Width = fy1 - fy0
         sup.Height = lift + 0.1
         sup.Placement = App.Placement(V(34.0, fy0, floor_z), ROT0)
@@ -492,7 +492,7 @@ def build_base_plate(doc):
 
         # Rail body
         rail = body.newObject("PartDesign::AdditiveBox", f"RailBody_{idx+1}")
-        rail.Length = 39.0
+        rail.Length = 41.0
         rail.Width = fy1 - fy0
         rail.Height = fz_top - rz_bot + 0.1
         rail.Placement = App.Placement(V(34.0, fy0, rz_bot), ROT0)
@@ -503,7 +503,7 @@ def build_base_plate(doc):
         cyl_cz = bay_cz_glob + lift   # 13.95
         cyl = body.newObject("PartDesign::SubtractiveCylinder", f"BattCylCut_{idx+1}")
         cyl.Radius = bay_r
-        cyl.Height = 39.2
+        cyl.Height = 41.2
         cyl.Placement = App.Placement(
             V(34.0 - 0.1, bay_y, cyl_cz),
             App.Rotation(V(0, 1, 0), 90))
@@ -621,16 +621,16 @@ def build_cradle(doc):
     plug_thick = bay_d + 2 * 0.5      # 12.1
     plug_top = 7.0
     plug_bot = plug_top - plug_thick   # -5.1
-    plug_x0, plug_x1 = 3.3, 93.4
+    plug_x0, plug_x1 = 3.3, 95.4
     plug_y0, plug_y1 = 2.3, 43.7
     bay_cz = (plug_top + plug_bot) / 2  # 0.95
 
     # AAA bay X range — PRESET values
-    aaa_len = 39.5   # PRESET: shortened from 44.5
-    bay_len = aaa_len + 2*2.0 + 1.0   # = 44.5
-    px_pillar_cut_mx = 94.9 - 1.2 - 5.0 - 0.4   # 88.3
-    bay_px_end = px_pillar_cut_mx - 3.0 - 20.0   # 64.9
-    bay_mx_start = bay_px_end - bay_len           # 20.4
+    aaa_len = 41.5   # PRESET: shortened from 44.5; +2mm rail extension at X=64 slice (05-01-2026)
+    bay_len = aaa_len + 2*2.0 + 1.0   # = 46.5
+    px_pillar_cut_mx = 96.9 - 1.2 - 5.0 - 0.4   # 90.3 (enc_x +2mm)
+    bay_px_end = px_pillar_cut_mx - 3.0 - 20.0   # 67.3 (was 65.3 → +2mm in cradle local; -X global side stays put)
+    bay_mx_start = bay_px_end - bay_len           # 20.8 (unchanged: bay grows +2mm, anchored to -X global / +X cradle-local)
 
     ps = 5.0
     slop = 0.4
@@ -649,8 +649,8 @@ def build_cradle(doc):
     # ── 2. Corner pillar cutouts (4) ──
     cs = ps + 2 * slop
     pillar_origins = [
-        (3.0, 2.0), (94.9 - 1.2 - ps, 2.0),
-        (3.0, 46.0 - 2.0 - ps), (94.9 - 1.2 - ps, 46.0 - 2.0 - ps),
+        (3.0, 2.0), (96.9 - 1.2 - ps, 2.0),
+        (3.0, 46.0 - 2.0 - ps), (96.9 - 1.2 - ps, 46.0 - 2.0 - ps),
     ]
     for i, (ox, oy) in enumerate(pillar_origins):
         cut = body.newObject("PartDesign::SubtractiveBox", f"PillarCut_{i+1}")
@@ -691,7 +691,7 @@ def build_cradle(doc):
 
     # ── 5. Pico nest ──
     pico_ny = 21.0 + 2 * 0.4   # 21.8
-    pico_nx = 78.0 + 2 * 0.4 + 0.4   # 79.2 (+0.4 for extended +X enclosure)
+    pico_nx = 80.0 + 2 * 0.4 + 0.4   # 81.2 (+2mm Pico nest at X=64 slice 05-01-2026; was 79.2)
     pico_y_start = 46.0 / 2 - pico_ny / 2
     pico_x_start = max(plug_x0 + 3.0,
         ((plug_x0 + 3.0 + bay_mx_start) / 2 - pico_nx / 2))
@@ -808,9 +808,9 @@ def build_cradle(doc):
     # 20×20 mm footprint — snug fit for 19.6 mm board (0.2 mm/side).
     joy_pit_depth_v = 8.45
     joy_pit_size = 20.0   # board 19.6 + 0.2 mm/side clearance (no well)
-    joy_cx_v = 79.35
+    joy_cx_v = 81.35   # +2mm with enc_x extension (05-01-2026)
     joy_pit_cy_local = 46.0 / 2           # enc_y/2 — centered on board bbox
-    joy_pit_cx_local = 96.7 - joy_cx_v   # global → local X
+    joy_pit_cx_local = 98.7 - joy_cx_v   # global → local X (cradle translate now 98.7)
     pit = body.newObject("PartDesign::SubtractiveBox", "JoystickPCBPit")
     pit.Length = joy_pit_size
     pit.Width = joy_pit_size
@@ -934,7 +934,7 @@ def build_top_cover(doc):
     print("  Building Top Cover...")
     body = doc.addObject("PartDesign::Body", "TopCover")
 
-    enc_x, enc_y = 94.9, 46.0
+    enc_x, enc_y = 96.9, 46.0
     wall_mx, wall_px, wall_y = 3.0, 1.2, 2.0
     ps = 5.0
     face_bot = 7.0
@@ -1128,7 +1128,7 @@ def build_top_cover(doc):
     #       the body + joy_body_size clearance, shifted by joy_pcb_y_offset
     #       so SW1's stick lands on the through-axis.) ──
     joy_pcb_y_offset_v = 0.67
-    joy_cx = 79.35
+    joy_cx = 81.35   # +2mm with enc_x extension (05-01-2026)
     joy_cy = enc_y / 2 + joy_pcb_y_offset_v
     joy_body_size_v = 10.6
     joy_cut_h = total_h - face_bot + 0.2
@@ -1296,7 +1296,7 @@ def add_pico_with_headers(doc):
     header_shape = header_shape.transformGeometry(m_flip_z)
 
     # ── Anchor combined assembly in global coords ──
-    enc_x_v, enc_y_v, wall_px_v = 94.9, 46.0, 1.2
+    enc_x_v, enc_y_v, wall_px_v = 96.9, 46.0, 1.2
 
     bb_b = shape.BoundBox
     bb_h = header_shape.BoundBox
@@ -1416,7 +1416,7 @@ def add_joystick_pcb(doc):
     # PCB drops into the cradle pit so the SW1 body fits inside the cover.
     # Pit floor in global Z = cradle plug_bot global (Z=18.1) - joy_pit_depth
     # = 18.1 - 8.45 = 9.65. PCB bottom rests there (we use 9.55 with overlap).
-    joy_cx_g = 79.35
+    joy_cx_g = 81.35   # +2mm with enc_x extension (05-01-2026)
     joy_cy_g = 46.0 / 2           # = enc_y / 2 = 23.0 — PCB bbox-centered
     # (was 46.0/2 + 0.67 which double-applied the SW1 offset; the cover
     #  hole / pocket / pit already shift by joy_pcb_y_offset to land on
@@ -1473,7 +1473,7 @@ def build_thumbpiece(doc):
     # for 0.5 mm radial clearance (1 mm total) so the joystick can swing
     # for directional travel.
     cover_top_z = 23.0
-    joy_cx_v = 79.35
+    joy_cx_v = 81.35   # +2mm with enc_x extension (05-01-2026)
     joy_cy_hole_v = 46.0 / 2 + 0.67       # 23.67 — cover hole / disc center
     joy_cy_stick_v = 23.68                # actuator stick center (PCB bbox at enc_y/2)
 
@@ -1564,8 +1564,8 @@ def add_peripherals(doc):
     # → global cell Y = bay_y_local (Y unchanged by Y rotation)
     # → global cell Z = 13.0 - bay_cz_local = 12.05
     aaa_d = 10.5
-    aaa_len = 39.5
-    cell_x_min_g = 96.7 - 61.9
+    aaa_len = 41.5
+    cell_x_min_g = 98.7 - 63.9   # +2mm cradle translate, +2mm cell length → cell -X global stays put
     cell_y_g = {1: 7.85, 2: 38.15}
     cell_z_g = 13.0 - 0.95
     # Battery cylinder is along X axis, placed by cylinder center on -X end
@@ -1605,7 +1605,7 @@ def add_peripherals(doc):
     tp_xl_v = 28.0
     tp_yw_v = 17.0
     tp_pcb_t = 1.6
-    tp_x_min_g = 96.7 - (3.3 + tp_xl_v)        # = 65.4
+    tp_x_min_g = 98.7 - (3.3 + tp_xl_v)        # = 67.4 (+2mm with enclosure extension)
     tp_y_min_g = 14.3
     tp_z_bot_g = 13.0 - 6.0                    # = 7.0 (indent floor = Face69)
     # PCB body — sits flat on indent floor
@@ -1694,8 +1694,8 @@ def add_peripherals(doc):
     # So GLOBAL roles by suffix:
     #   *P slots (global X=30.4) sit outboard of cell's NEGATIVE end (X=34.4)
     #   *M slots (global X=76.9) sit outboard of cell's POSITIVE end (X=73.9)
-    pos_face_x_g = 76.9    # +X-face plate face (cell positive end side, M slots)
-    neg_face_x_g = 30.4    # -X-face plate face (cell negative end side, P slots)
+    pos_face_x_g = 78.9    # +X-face plate face (cell positive end side, M slots) — shifted +2mm
+    neg_face_x_g = 30.4    # -X-face plate face (cell negative end side, P slots) — stays put
 
     clip_pieces_pos = []
     clip_pieces_neg = []
@@ -1810,7 +1810,7 @@ def add_piezo_speaker(doc):
 
     # Base plate pocket floor (global, base plate has identity placement)
     floor_z = 2.6
-    cx = 94.9 / 2   # = 47.45 — matches PiezoRing center
+    cx = 96.9 / 2   # = 48.45 — matches PiezoRing center (enc_x extended +2mm)
     cy = 46.0 / 2   # = 23.0
 
     brass_d = 20.0
@@ -1845,7 +1845,7 @@ def add_imu_module(doc):
     print("  Adding IMU module (GY-6500 / MPU-6500)...")
 
     floor_z = 2.6
-    piezo_cx = 94.9 / 2   # 47.45
+    piezo_cx = 96.9 / 2   # 48.45 (enc_x extended +2mm)
     piezo_cy = 46.0 / 2   # 23.0
     piezo_ring_od = 22.2
 
@@ -1899,9 +1899,9 @@ def add_solar_panel(doc):
 
     # ── Geometry (global; base plate Placement is identity, so base
     # plate local coords = global coords) ──
-    enc_x_v = 94.9
+    enc_x_v = 96.9              # +2mm with enclosure extension
     enc_y_v = 46.0
-    sol_x_v = 62.4              # pit width (matches sol_x param)
+    sol_x_v = 62.4              # pit width (matches sol_x param) — unchanged: cutout doesn't grow
     sol_y_v = 36.4              # pit depth
     sol_z_v = 2.0               # pit Z depth (= panel total Z)
 
@@ -2025,7 +2025,7 @@ def main():
     # Former plug_top face (local Z=7.0) → rotated to Z=-7.0.
     # Flush with base plate top: -7.0 + Z_shift = bp_top → Z_shift = 13.0
     cr.Placement = App.Placement(
-        V(96.7, 0, bp_top + 7.0),
+        V(98.7, 0, bp_top + 7.0),   # +2mm translate to keep cradle -X global flush at X=3.3 after enc_x extension
         App.Rotation(V(0, 1, 0), 180))
     doc.recompute()
 
