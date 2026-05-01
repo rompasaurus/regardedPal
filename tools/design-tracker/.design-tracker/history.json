@@ -49,5 +49,23 @@
       "macro_hash": "24d1b3436149"
     }
   ],
-  "prints": []
+  "prints": [
+    {
+      "id": 1,
+      "timestamp": "2026-05-01T13:48:14.921381",
+      "message": "extended board and fixe lipped curverd the thumbstick and widend usb c inlay",
+      "files": [
+        "Dilder_Rev2_Mk2 .4mm extension fixed lip and curved the thumbstickbambuprint.3mf",
+        "Dilder_Rev2_Mk2 .4mm extension fixed lip and curved the thumbstick-Thumbpiece.3mf",
+        "Dilder_Rev2_Mk2 .4mm extension fixed lip and curved the thumbstick-TopCover.3mf",
+        "Dilder_Rev2_Mk2 .4mm extension fixed lip and curved the thumbstick-AAACradle.3mf",
+        "Dilder_Rev2_Mk2 .4mm extension fixed lip and curved the thumbstick-BasePlate.3mf"
+      ],
+      "result": "success",
+      "notes": "",
+      "git_hash": "623e547",
+      "snapshot_id": null,
+      "camera_photos": []
+    }
+  ]
 }
