@@ -7,7 +7,7 @@ A Tkinter GUI for managing OpenSCAD hardware design files: browsing SCAD files a
 ## Usage
 
 ```bash
-python3 hardware-design/DesignTool/designtool.py
+python3 tools/designtool/designtool.py
 ```
 
 ---
@@ -64,7 +64,7 @@ Export a SCAD file with a specific preset to STL, 3MF, or both. Includes embedde
 - **Embedded label**: optional text/date stamp baked into the export filename
 - **Description**: auto-generated markdown documenting the export parameters vs defaults
 - **Export log**: real-time output from the OpenSCAD CLI (`openscad` or `openscad-nightly`)
-- All exports saved to `hardware-design/DesignTool/exports/` with timestamped filenames
+- All exports saved to `tools/designtool/exports/` with timestamped filenames
 
 ---
 
@@ -108,7 +108,7 @@ Full audit trail of every export — what was exported, when, with which paramet
 ## Architecture
 
 ```
-hardware-design/DesignTool/
+tools/designtool/
 ├── designtool.py         ← main application (1500+ lines)
 ├── exports/              ← exported STL/3MF files + descriptions
 └── history.json          ← full export audit trail
@@ -144,4 +144,4 @@ Catppuccin Mocha color scheme — matches the DevTool for visual consistency.
 - Python 3.9+ with Tkinter
 - OpenSCAD (for preview and export)
 
-Source: [`hardware-design/DesignTool/designtool.py`](https://github.com/rompasaurus/dilder/blob/main/hardware-design/DesignTool/designtool.py)
+Source: [`tools/designtool/designtool.py`](https://github.com/rompasaurus/dilder/blob/main/tools/designtool/designtool.py)

@@ -9,10 +9,12 @@
 set -euo pipefail
 
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
-MACRO_DIR="$SCRIPT_DIR/freecad-mk2"
-RENDER_DIR="$SCRIPT_DIR/renders"
+PROJECT_ROOT="$(cd "$SCRIPT_DIR/../.." && pwd)"
+HARDWARE_DIR="$PROJECT_ROOT/hardware-design"
+MACRO_DIR="$HARDWARE_DIR/freecad-mk2"
+RENDER_DIR="$HARDWARE_DIR/renders"
 ANIM_DIR="$RENDER_DIR/anim"
-WEBSITE_IMG="$SCRIPT_DIR/../website/docs/assets/images/enclosure"
+WEBSITE_IMG="$PROJECT_ROOT/website/docs/assets/images/enclosure"
 
 MODEL_MACRO="$MACRO_DIR/dilder_rev2_mk2.FCMacro"
 RENDER_MACRO="$MACRO_DIR/render_views.FCMacro"

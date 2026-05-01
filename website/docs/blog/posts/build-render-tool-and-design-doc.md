@@ -61,4 +61,4 @@ The render tool produces 40+ images in a single run. Here's the current set:
 | `var-26/27` | Assembled opaque (iso + front) |
 | `comp-*` | 14 isolated component portraits |
 
-Source: [`hardware-design/build_and_render.sh`](https://github.com/rompasaurus/dilder/blob/main/hardware-design/build_and_render.sh)
+Source: [`tools/build-render/build_and_render.sh`](https://github.com/rompasaurus/dilder/blob/main/tools/build-render/build_and_render.sh)

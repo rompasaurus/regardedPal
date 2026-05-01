@@ -7,8 +7,7 @@ Interactive CLI for rendering Dilder FreeCAD models into publication-quality PNG
 ## Usage
 
 ```bash
-cd hardware-design
-./build_and_render.sh
+./tools/build-render/build_and_render.sh
 ```
 
 The tool walks through 4 interactive screens:
@@ -116,4 +115,4 @@ ffmpeg -framerate 12 -i renders/anim/frame-%04d.png \
 - Each screenshot pumps the Qt event loop 5 times with 300ms delays to ensure the viewport finishes drawing before capture
 - Visibility toggling only affects top-level objects (Bodies and Part::Features), not internal PartDesign features — toggling those would make parent Bodies render blank
 
-Source: [`hardware-design/build_and_render.sh`](https://github.com/rompasaurus/dilder/blob/main/hardware-design/build_and_render.sh)
+Source: [`tools/build-render/build_and_render.sh`](https://github.com/rompasaurus/dilder/blob/main/tools/build-render/build_and_render.sh)

@@ -22,8 +22,10 @@ from datetime import datetime
 from pathlib import Path
 
 SCRIPT_DIR = Path(__file__).parent.resolve()
-FREECAD_DIR = SCRIPT_DIR / "freecad-mk2"
-RENDERS_DIR = SCRIPT_DIR / "renders"
+PROJECT_ROOT = SCRIPT_DIR.parent.parent
+HARDWARE_DIR = PROJECT_ROOT / "hardware-design"
+FREECAD_DIR = HARDWARE_DIR / "freecad-mk2"
+RENDERS_DIR = HARDWARE_DIR / "renders"
 TRACKER_DIR = SCRIPT_DIR / ".design-tracker"
 TRACKER_FILE = TRACKER_DIR / "history.json"
 SNAPSHOTS_DIR = TRACKER_DIR / "snapshots"
@@ -113,7 +115,7 @@ def get_git_hash():
     try:
         result = subprocess.run(
             ["git", "log", "--oneline", "-1"],
-            capture_output=True, text=True, cwd=SCRIPT_DIR
+            capture_output=True, text=True, cwd=PROJECT_ROOT
         )
         return result.stdout.strip().split()[0] if result.stdout.strip() else "unknown"
     except Exception:
@@ -124,7 +126,7 @@ def get_git_diff_stat():
     try:
         result = subprocess.run(
             ["git", "diff", "--stat", "HEAD", "--", "*.FCStd", "*.FCMacro"],
-            capture_output=True, text=True, cwd=SCRIPT_DIR
+            capture_output=True, text=True, cwd=PROJECT_ROOT
         )
         return result.stdout.strip() if result.stdout.strip() else "clean"
     except Exception:

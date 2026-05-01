@@ -15,12 +15,11 @@ The Design Tracker solves this by giving you a structured way to bookmark your p
 ## Usage
 
 ```bash
-cd hardware-design
-python3 design-tracker.py           # interactive menu
-python3 design-tracker.py status    # quick state check
-python3 design-tracker.py snap "widened inlay by 0.2mm"   # bookmark
-python3 design-tracker.py log       # full timeline
-python3 design-tracker.py diff 3 7  # compare two bookmarks
+python3 tools/design-tracker/design-tracker.py           # interactive menu
+python3 tools/design-tracker/design-tracker.py status    # quick state check
+python3 tools/design-tracker/design-tracker.py snap "widened inlay by 0.2mm"
+python3 tools/design-tracker/design-tracker.py log       # full timeline
+python3 tools/design-tracker/design-tracker.py diff 3 7  # compare two bookmarks
 ```
 
 ---
@@ -152,4 +151,4 @@ hardware-design/.design-tracker/
     └── ...
 ```
 
-Source: [`hardware-design/design-tracker.py`](https://github.com/rompasaurus/dilder/blob/main/hardware-design/design-tracker.py)
+Source: [`tools/design-tracker/design-tracker.py`](https://github.com/rompasaurus/dilder/blob/main/tools/design-tracker/design-tracker.py)
