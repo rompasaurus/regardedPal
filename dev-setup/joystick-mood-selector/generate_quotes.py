@@ -5,12 +5,12 @@ import sys
 import os
 
 # Add project root so we can import devtool's quote data
-sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..', '..', 'DevTool'))
+sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..', '..', 'tools', 'devtool'))
 
 # We need to extract quotes without importing the full tkinter GUI.
 # Read devtool.py source and exec just the quote list definitions.
 
-devtool_path = os.path.join(os.path.dirname(__file__), '..', '..', 'DevTool', 'devtool.py')
+devtool_path = os.path.join(os.path.dirname(__file__), '..', '..', 'tools', 'devtool', 'devtool.py')
 
 with open(devtool_path, 'r') as f:
     source = f.read()

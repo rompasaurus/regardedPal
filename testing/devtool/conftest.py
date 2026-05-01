@@ -21,7 +21,7 @@ PROJECT_ROOT = Path(__file__).parent.parent.parent.resolve()
 
 
 def _load_devtool_module():
-    """Load DevTool/devtool.py by file path to avoid collision with
+    """Load tools/devtool/devtool.py by file path to avoid collision with
     the testing/devtool/ package that Python finds first.
 
     Registers it as 'devtool_src' in sys.modules so that
@@ -31,7 +31,7 @@ def _load_devtool_module():
         return sys.modules["devtool_src"]
     spec = importlib.util.spec_from_file_location(
         "devtool_src",
-        PROJECT_ROOT / "DevTool" / "devtool.py",
+        PROJECT_ROOT / "tools" / "devtool" / "devtool.py",
     )
     mod = importlib.util.module_from_spec(spec)
     sys.modules["devtool_src"] = mod

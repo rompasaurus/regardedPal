@@ -74,7 +74,7 @@ sudo apt install python3-tk
 ### Step 2.2 — Install Python Dependencies
 
 ```bash
-cd DevTool/
+cd tools/devtool/
 pip install -r requirements.txt
 ```
 
@@ -97,7 +97,7 @@ If this prints `OK`, you're ready to go.
 From the project root:
 
 ```bash
-python3 DevTool/devtool.py
+python3 tools/devtool/devtool.py
 ```
 
 The application opens with eight tabs across the top:
@@ -404,7 +404,7 @@ Standard PNG format, 250x122 pixels, 1-bit depth. Requires Pillow to export. Can
 ## 13. Architecture Overview
 
 ```
-DevTool/
+tools/devtool/
     devtool.py          # Single-file application (~3,000 lines)
     requirements.txt    # Python dependencies
     README.md           # This documentation

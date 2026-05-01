@@ -144,7 +144,7 @@ Each phase maps to a section of the blog/YouTube series and can be followed inde
 - [x] Set up Docker-based C SDK cross-compilation toolchain
 - [x] Wire e-ink display to Pico W via jumper wires (SPI)
 - [x] Flash and run "Hello, Dilder!" on the e-ink display — proof of life
-- [x] Build DevTool GUI — display emulator, serial monitor, firmware flash, asset manager, GPIO reference, connection utility, documentation ([DevTool/](DevTool/))
+- [x] Build DevTool GUI — display emulator, serial monitor, firmware flash, asset manager, GPIO reference, connection utility, documentation ([tools/devtool/](tools/devtool/))
 - [x] Add Programs tab with animated octopus preview, firmware size estimation, and deploy
 - [x] Build IMG-receiver firmware — stream images from PC to Pico display via USB serial ([dev-setup/img-receiver/](dev-setup/img-receiver/))
 - [x] Build standalone deploy — runtime-rendered animation, runs without PC

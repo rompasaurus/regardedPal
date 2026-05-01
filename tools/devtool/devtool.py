@@ -14,7 +14,7 @@ Features:
   - GPIO pin reference for both boards
 
 Usage:
-  python3 DevTool/devtool.py
+  python3 tools/devtool/devtool.py
 """
 
 import io
@@ -155,7 +155,7 @@ DISPLAY_H = 122
 CANVAS_SCALE = 3
 
 # Project paths
-PROJECT_ROOT = Path(__file__).parent.parent.resolve()
+PROJECT_ROOT = Path(__file__).parent.parent.parent.resolve()
 ASSETS_DIR = PROJECT_ROOT / "assets"
 DEV_SETUP = PROJECT_ROOT / "dev-setup"
 

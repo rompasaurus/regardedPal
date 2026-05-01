@@ -96,7 +96,7 @@ Quotes are stored in `quotes.h` as a static array of `{text, mood_id}` structs. 
 ### Building and Flashing
 
 **Via DevTool GUI:**
-1. Open DevTool: `python3 DevTool/devtool.py`
+1. Open DevTool: `python3 tools/devtool/devtool.py`
 2. Select the program from the dropdown
 3. Select display variant (V2/V3/V3a/V4)
 4. Click "Build & Flash to Pico"

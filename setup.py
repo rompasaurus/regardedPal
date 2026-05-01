@@ -1707,7 +1707,7 @@ def step_docker():
     print(c("  │   Docker toolchain is ready. The DevTool can now build     │", FG_GREEN, BOLD))
     print(c("  │   and flash standalone firmware to the Pico W.             │", FG_GREEN, BOLD))
     print(c("  │                                                            │", FG_GREEN, BOLD))
-    print(c("  │   Launch DevTool:  python3 DevTool/devtool.py              │", FG_GREEN, BOLD))
+    print(c("  │   Launch DevTool:  python3 tools/devtool/devtool.py        │", FG_GREEN, BOLD))
     print(c("  │                                                            │", FG_GREEN, BOLD))
     print(c("  └────────────────────────────────────────────────────────────┘", FG_GREEN, BOLD))
     print()
