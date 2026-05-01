@@ -1,6 +1,6 @@
-# Design Tracker — CAD Version History and Print Log
+# Design Tracker v2.0 — GUI for CAD Version History, Print Logs, and Packages
 
-A CLI tool for tracking the evolution of FreeCAD hardware designs. Take snapshots, log prints, compare iterations, and maintain a complete audit trail of every design change.
+A Tkinter GUI (and CLI) for tracking the evolution of FreeCAD hardware designs. Take snapshots, log prints, browse renders, attach camera photos of physical prints, and bundle everything into tracked packages.
 
 ---
 
@@ -8,95 +8,171 @@ A CLI tool for tracking the evolution of FreeCAD hardware designs. Take snapshot
 
 After a few days of iterating on a 3D model, you end up with a dozen FCStd files with names like `Dilder_Rev2_Mk2Full parts so far with joystick model with battery assembly even closer joystick and pit refined and cradle curvature fixed pcbjoystick anchor.FCStd`. Which one was the one you actually printed? What changed between the version from Tuesday and the one from Thursday? Did you ever try that wider inlay, and did it work?
 
-The Design Tracker solves this by giving you a structured way to bookmark your progress, log your prints, and compare any two points in your design history.
+The Design Tracker solves this by giving you a structured way to bookmark your progress, log your prints, browse renders, attach photos of physical parts, and package everything together for easy reference.
 
 ---
 
-## Usage
+## Quick Start
 
 ```bash
-python3 tools/design-tracker/design-tracker.py           # interactive menu
-python3 tools/design-tracker/design-tracker.py status    # quick state check
-python3 tools/design-tracker/design-tracker.py snap "widened inlay by 0.2mm"
-python3 tools/design-tracker/design-tracker.py log       # full timeline
-python3 tools/design-tracker/design-tracker.py diff 3 7  # compare two bookmarks
+# Launch the GUI (default)
+python3 tools/design-tracker/design-tracker.py
+
+# Or use the CLI
+python3 tools/design-tracker/design-tracker.py --cli
 ```
 
 ---
 
-## Interactive Menu
+## Dashboard
 
 <figure markdown="span">
-  ![Design Tracker menu](../../assets/images/tools/design-tracker/tracker-menu.png){ width="600" loading=lazy }
-  <figcaption>Main menu — 6 commands for managing your design history</figcaption>
+  ![Dashboard](../../assets/images/tools/design-tracker/dashboard.png){ loading=lazy }
+  <figcaption>Dashboard — live stats, timeline of snapshots/prints/packages, action buttons</figcaption>
 </figure>
+
+The Dashboard shows a live summary of your design state:
+
+- **Git Hash** — current commit of the repository
+- **FCStd Files** — number of FreeCAD model files in `freecad-mk2/`
+- **3MF Exports** — number of sliceable 3MF exports
+- **Renders** — number of PNG renders in `hardware-design/renders/`
+- **Snapshots** — number of saved design snapshots
+- **Prints** — number of logged 3D prints
+
+**Timeline** merges all snapshots, prints, and packages into a single chronological view with color coding: green for snapshots, magenta for prints, orange for packages.
+
+**Actions:**
+
+- **Take Snapshot** — saves file counts, hashes, git ref, and backs up the newest FCStd to `.design-tracker/snapshots/`
+- **Refresh** — re-scans all directories for changes
+- **Compare Snapshots** — diff two snapshots side-by-side showing count deltas, hash changes, added/removed renders
 
 ---
 
-## Status
-
-Shows your current design state at a glance: how many models, exports, renders, and snapshots you have, plus the newest FCStd file and any uncommitted changes.
+## Models & Exports
 
 <figure markdown="span">
-  ![Status view](../../assets/images/tools/design-tracker/tracker-status.png){ width="600" loading=lazy }
-  <figcaption>Quick status — git hash, file counts, newest model details</figcaption>
+  ![Models & Exports](../../assets/images/tools/design-tracker/models-exports.png){ loading=lazy }
+  <figcaption>Side-by-side tables of FCStd models and 3MF exports</figcaption>
 </figure>
 
+Two side-by-side tables:
+
+**FreeCAD Models (.FCStd):**
+
+- File name, modification date, file size, and MD5 hash
+- Newest files appear first
+- Hashes let you detect changes even when filenames are the same
+
+**3MF Exports:**
+
+- All 3MF files from `freecad-mk2/` and the packages directory
+- Date and size for each export
+- Select files here when logging a print or creating a package
+
 ---
 
-## Snapshots
+## Prints
 
-A snapshot captures the current state of your design: which FCStd files exist, their hashes, how many 3MFs and renders are present, and a copy of the newest FCStd file backed up to `.design-tracker/snapshots/`.
+Track every 3D print attempt with full context.
 
-Every snapshot gets a sequential ID, timestamp, git hash, and your description. You can compare any two snapshots later to see exactly what changed.
+**Log New Print:**
 
-**When to snapshot:**
+1. Enter a description of what you printed
+2. Select the result: `success`, `partial`, or `failed`
+3. Add any notes about print settings or issues
+4. Select which 3MF files were used from the scan
+5. Optionally attach camera photos of the printout
 
-- Before starting a new feature
-- After getting a design to a "good" state
-- Before exporting for printing
-- At the end of a work session
+**Attach Photo to Print:**
+
+- Select a print entry in the table
+- Click "Attach Photo" to add camera pictures (PNG/JPG)
+- Photos are tracked by file path in the print record
+
+**Print Detail Panel:**
+
+- Click any print entry to see full details: files, notes, git hash, and attached photo paths
 
 ---
 
-## Timeline
-
-The full chronological history of snapshots and prints.
+## Renders
 
 <figure markdown="span">
-  ![Timeline view](../../assets/images/tools/design-tracker/tracker-timeline.png){ width="600" loading=lazy }
-  <figcaption>Timeline — every snapshot and print in chronological order</figcaption>
+  ![Renders](../../assets/images/tools/design-tracker/renders-gallery.png){ loading=lazy }
+  <figcaption>Render gallery with live image preview</figcaption>
 </figure>
 
+A gallery view of all render images in `hardware-design/renders/`:
+
+- **Left panel** — list of all render PNGs sorted by modification date
+- **Right panel** — live image preview of the selected render (requires Pillow)
+- **Open Renders Folder** — launches your system file manager
+
+These renders are generated by the [Build & Render Tool](build-render-tool.md) which creates publication-quality orthographic and isometric views from the FreeCAD assembly.
+
 ---
 
-## Print Log
+## Packages
 
-When you print something, log it: what files you sent to the printer, whether it succeeded, and any notes about fit, quality, or issues. This builds a record of which designs actually made it to physical plastic — invaluable when you're trying to remember "which version was that print from last week?"
+Bundle related files into tracked folders for easy archival.
+
+**Creating a Package:**
+
+1. Enter a descriptive name (e.g., "Rev2 Mk2 — widened USB cutout")
+2. Optionally link to a snapshot and/or print entry
+3. Select a FreeCAD model file to include
+4. Select 3MF export files to include
+5. Add render images from the renders folder
+6. Add camera photos of physical prints
+7. Write a changelog describing what changed
+
+Each package creates a folder in `.design-tracker/packages/` containing:
+
+- The FCStd model file (frozen copy)
+- Selected 3MF exports
+- `renders/` subfolder with selected render images
+- `photos/` subfolder with camera pictures
+- `CHANGES.md` with your changelog, metadata, git hash, and file manifest
 
 ---
 
-## Compare (Diff)
+## Guide
 
-Compare any two snapshots side by side. See what changed: file counts, FCStd hashes, macro changes, and which renders were added or removed.
+<figure markdown="span">
+  ![Guide](../../assets/images/tools/design-tracker/guide.png){ loading=lazy }
+  <figcaption>Built-in guide with walkthrough, workflow, naming conventions, and CLI reference</figcaption>
+</figure>
 
-```bash
-python3 design-tracker.py diff 1 5
+The built-in Guide tab covers every feature, the recommended design-print-review workflow, naming conventions, and CLI command reference — so you never have to leave the app to look things up.
+
+---
+
+## Workflow: Design-Print-Review Cycle
+
+```mermaid
+graph TD
+    A[Make changes in FreeCAD] --> B[Take Snapshot]
+    B --> C[Export 3MF files]
+    C --> D[Print and log the result]
+    D --> E[Attach camera photos]
+    E --> F[Create Package]
+    F --> G[Commit to git]
 ```
 
-Shows:
-- File count changes (FCStd, 3MF, renders)
-- Whether the FCStd or macro hash changed
-- New and removed render images
+1. **Make changes** in FreeCAD (edit the macro, rebuild the model)
+2. **Take a Snapshot** (Dashboard tab) to record the current state
+3. **Export 3MF files** for printing
+4. **Log the Print** (Prints tab) with result and notes
+5. **Take camera photos** of the physical print
+6. **Attach Photos** to the print entry
+7. **Create a Package** linking the snapshot, print, renders, and photos
+8. **Commit to git** when satisfied
 
 ---
 
 ## Naming Convention
-
-<figure markdown="span">
-  ![Naming guide](../../assets/images/tools/design-tracker/tracker-naming.png){ width="600" loading=lazy }
-  <figcaption>Recommended naming pattern for consistent, sortable filenames</figcaption>
-</figure>
 
 **Pattern:** `Dilder_Rev2_Mk2-<changes>-<DD-MM-YYYY-HHMM>.FCStd`
 
@@ -114,28 +190,16 @@ Shows:
 
 ---
 
-## Workflow
+## CLI Commands
 
-```
-  Design change in FreeCAD
-         │
-         ▼
-  Save FCStd with descriptive name + timestamp
-         │
-         ▼
-  python3 design-tracker.py snap "description"
-         │
-         ▼
-  Run build_and_render.sh to generate renders
-         │
-         ▼
-  Ready to print? → Export 3MF
-         │
-         ▼
-  python3 design-tracker.py print → log the result
-         │
-         ▼
-  git commit + push
+```bash
+python3 design-tracker.py               # launch GUI (default)
+python3 design-tracker.py --cli         # interactive terminal menu
+python3 design-tracker.py snap "msg"    # quick snapshot
+python3 design-tracker.py log           # show timeline
+python3 design-tracker.py status        # current design state
+python3 design-tracker.py diff 1 2      # compare snapshots 1 and 2
+python3 design-tracker.py naming        # naming convention guide
 ```
 
 ---
@@ -143,12 +207,29 @@ Shows:
 ## Data Storage
 
 ```
-hardware-design/.design-tracker/
-├── history.json              ← all snapshots + prints
-└── snapshots/
-    ├── snap-0001/            ← backup of newest FCStd at snapshot time
-    ├── snap-0002/
-    └── ...
+tools/design-tracker/
+  design-tracker.py          # main script (GUI + CLI)
+  screenshots/               # GUI screenshots for docs
+  .design-tracker/
+    history.json             # all snapshots, prints, packages
+    snapshots/
+      snap-0001/             # FCStd backup from snapshot 1
+      snap-0002/
+    packages/
+      pkg-0001_2026-05-01_1430_widened-usb/
+        Dilder_Rev2_Mk2.FCStd
+        *.3mf
+        renders/             # selected render PNGs
+        photos/              # camera pictures of prints
+        CHANGES.md           # changelog + file manifest
 ```
+
+---
+
+## Dependencies
+
+- Python 3.8+
+- tkinter (standard library)
+- Pillow (`pip install Pillow`) — for render image previews in the gallery
 
 Source: [`tools/design-tracker/design-tracker.py`](https://github.com/rompasaurus/dilder/blob/main/tools/design-tracker/design-tracker.py)
