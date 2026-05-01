@@ -17,7 +17,7 @@ The tool walks through 4 interactive screens:
 All `.FCStd` files sorted by date modified (newest first), with file sizes.
 
 <figure markdown="span">
-  ![Model picker screen](../assets/images/tools/render-cli/screen-1-model-picker.png){ width="700" loading=lazy }
+  ![Model picker screen](../../assets/images/tools/render-cli/screen-1-model-picker.png){ width="700" loading=lazy }
   <figcaption>Pick a model by number, or press r to rebuild from the parametric macro</figcaption>
 </figure>
 
@@ -26,7 +26,7 @@ All `.FCStd` files sorted by date modified (newest first), with file sizes.
 19 options organized into full sets, individual bodies, peripherals, and special modes.
 
 <figure markdown="span">
-  ![Render set screen](../assets/images/tools/render-cli/screen-2-render-set.png){ width="700" loading=lazy }
+  ![Render set screen](../../assets/images/tools/render-cli/screen-2-render-set.png){ width="700" loading=lazy }
   <figcaption>Choose from "Everything" (40+ images) down to a single component portrait</figcaption>
 </figure>
 
@@ -35,7 +35,7 @@ All `.FCStd` files sorted by date modified (newest first), with file sizes.
 Resolution, background, and cover transparency.
 
 <figure markdown="span">
-  ![Style picker screen](../assets/images/tools/render-cli/screen-3-style-picker.png){ width="700" loading=lazy }
+  ![Style picker screen](../../assets/images/tools/render-cli/screen-3-style-picker.png){ width="700" loading=lazy }
   <figcaption>Four resolutions, four backgrounds, four transparency levels</figcaption>
 </figure>
 
@@ -44,7 +44,7 @@ Resolution, background, and cover transparency.
 Review all selections before rendering.
 
 <figure markdown="span">
-  ![Confirmation screen](../assets/images/tools/render-cli/screen-4-confirmation.png){ width="700" loading=lazy }
+  ![Confirmation screen](../../assets/images/tools/render-cli/screen-4-confirmation.png){ width="700" loading=lazy }
   <figcaption>Summary of model, render set, resolution, background, and cover transparency</figcaption>
 </figure>
 
