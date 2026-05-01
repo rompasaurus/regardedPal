@@ -145,6 +145,7 @@ nav:
           - DevTool (GUI): docs/tools/devtool.md
           - Setup CLI: docs/tools/setup-cli.md
           - Website Dev CLI: docs/tools/website-dev.md
+          - DesignTool (SCAD): docs/tools/designtool.md
           - Build & Render Tool: docs/tools/build-render-tool.md
       - Reference:
           - Pico W: docs/reference/pico-w.md
