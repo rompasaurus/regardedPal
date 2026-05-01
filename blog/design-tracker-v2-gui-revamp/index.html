@@ -12,31 +12,31 @@
         <meta name="author" content="rompasaurus">
       
       
-        <link rel="canonical" href="https://dilder.dev/blog/page/5/">
+        <link rel="canonical" href="https://dilder.dev/blog/design-tracker-v2-gui-revamp/">
       
       
-        <link rel="prev" href="../../..">
+        <link rel="prev" href="../the-dilder-gets-a-speaker-a-motion-sensor-and-a-better-joystick/">
       
       
-        <link rel="next" href="../../category/3d-printing/">
+        <link rel="next" href="../how-to-stop-drowning-in-freecad-files-and-a-tool-to-help/">
       
       
         
       
       
-      <link rel="icon" href="../../../assets/images/dilder-icon.svg">
+      <link rel="icon" href="../../assets/images/dilder-icon.svg">
       <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.6">
     
     
       
-        <title>Build Journal - Dilder</title>
+        <title>Design Tracker v2.0 — From CLI to Full GUI with Print Packages - Dilder</title>
       
     
     
-      <link rel="stylesheet" href="../../../assets/stylesheets/main.484c7ddc.min.css">
+      <link rel="stylesheet" href="../../assets/stylesheets/main.484c7ddc.min.css">
       
         
-        <link rel="stylesheet" href="../../../assets/stylesheets/palette.ab4e12ef.min.css">
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.ab4e12ef.min.css">
       
       
 
@@ -55,9 +55,9 @@
       
     
     
-      <link rel="stylesheet" href="../../../stylesheets/extra.css">
+      <link rel="stylesheet" href="../../stylesheets/extra.css">
     
-    <script>__md_scope=new URL("../../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
     
       
   
@@ -92,7 +92,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#build-journal" class="md-skip">
+        <a href="#design-tracker-v20-from-cli-to-full-gui-with-print-packages" class="md-skip">
           Skip to content
         </a>
       
@@ -106,9 +106,9 @@
 
 <header class="md-header" data-md-component="header">
   <nav class="md-header__inner md-grid" aria-label="Header">
-    <a href="../../.." title="Dilder" class="md-header__button md-logo" aria-label="Dilder" data-md-component="logo">
+    <a href="../.." title="Dilder" class="md-header__button md-logo" aria-label="Dilder" data-md-component="logo">
       
-  <img src="../../../assets/images/dilder-icon.svg" alt="logo">
+  <img src="../../assets/images/dilder-icon.svg" alt="logo">
 
     </a>
     <label class="md-header__button md-icon" for="__drawer">
@@ -125,7 +125,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Build Journal
+              Design Tracker v2.0 — From CLI to Full GUI with Print Packages
             
           </span>
         </div>
@@ -238,7 +238,7 @@
   
   
     <li class="md-tabs__item">
-      <a href="../../.." class="md-tabs__link">
+      <a href="../.." class="md-tabs__link">
         
   
   
@@ -261,7 +261,7 @@
     
     
       <li class="md-tabs__item md-tabs__item--active">
-        <a href="../../" class="md-tabs__link">
+        <a href="../" class="md-tabs__link">
           
   
   
@@ -281,7 +281,7 @@
     
     
       <li class="md-tabs__item">
-        <a href="../../../docs/" class="md-tabs__link">
+        <a href="../../docs/" class="md-tabs__link">
           
   
   
@@ -301,7 +301,7 @@
     
     
       <li class="md-tabs__item">
-        <a href="../../../community/" class="md-tabs__link">
+        <a href="../../community/" class="md-tabs__link">
           
   
   
@@ -321,7 +321,7 @@
     
     
       <li class="md-tabs__item">
-        <a href="../../../about/" class="md-tabs__link">
+        <a href="../../about/" class="md-tabs__link">
           
   
   
@@ -339,7 +339,7 @@
   
   
     <li class="md-tabs__item">
-      <a href="../../../prompts/" class="md-tabs__link">
+      <a href="../../prompts/" class="md-tabs__link">
         
   
   
@@ -363,7 +363,9 @@
           
             
               
-              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" hidden>
                 <div class="md-sidebar__scrollwrap">
                   <div class="md-sidebar__inner">
                     
@@ -374,9 +376,9 @@
 
 <nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Navigation" data-md-level="0">
   <label class="md-nav__title" for="__drawer">
-    <a href="../../.." title="Dilder" class="md-nav__button md-logo" aria-label="Dilder" data-md-component="logo">
+    <a href="../.." title="Dilder" class="md-nav__button md-logo" aria-label="Dilder" data-md-component="logo">
       
-  <img src="../../../assets/images/dilder-icon.svg" alt="logo">
+  <img src="../../assets/images/dilder-icon.svg" alt="logo">
 
     </a>
     Dilder
@@ -403,7 +405,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../.." class="md-nav__link">
+      <a href="../.." class="md-nav__link">
         
   
   
@@ -484,21 +486,14 @@
                 
   
   
-  
-    
-      
     
   
   
-    <li class="md-nav__item">
-      
-      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
-      
-      
-        
-      
-      
-      <a href="../../" class="md-nav__link md-nav__link--active">
+    
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      <a href="../" class="md-nav__link">
         
   
   
@@ -514,7 +509,6 @@
   
 
       </a>
-      
     </li>
   
 
@@ -584,7 +578,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../archive/2026/" class="md-nav__link">
+      <a href="../archive/2026/" class="md-nav__link">
         
   
   
@@ -677,7 +671,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../category/3d-printing/" class="md-nav__link">
+      <a href="../category/3d-printing/" class="md-nav__link">
         
   
   
@@ -707,7 +701,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../category/architecture/" class="md-nav__link">
+      <a href="../category/architecture/" class="md-nav__link">
         
   
   
@@ -737,7 +731,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../category/art/" class="md-nav__link">
+      <a href="../category/art/" class="md-nav__link">
         
   
   
@@ -767,7 +761,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../category/battery/" class="md-nav__link">
+      <a href="../category/battery/" class="md-nav__link">
         
   
   
@@ -797,7 +791,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../category/build-guide/" class="md-nav__link">
+      <a href="../category/build-guide/" class="md-nav__link">
         
   
   
@@ -827,7 +821,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../category/cad/" class="md-nav__link">
+      <a href="../category/cad/" class="md-nav__link">
         
   
   
@@ -857,7 +851,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../category/design/" class="md-nav__link">
+      <a href="../category/design/" class="md-nav__link">
         
   
   
@@ -887,7 +881,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../category/devtool/" class="md-nav__link">
+      <a href="../category/devtool/" class="md-nav__link">
         
   
   
@@ -917,7 +911,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../category/enclosure/" class="md-nav__link">
+      <a href="../category/enclosure/" class="md-nav__link">
         
   
   
@@ -947,7 +941,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../category/firmware/" class="md-nav__link">
+      <a href="../category/firmware/" class="md-nav__link">
         
   
   
@@ -977,7 +971,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../category/freecad/" class="md-nav__link">
+      <a href="../category/freecad/" class="md-nav__link">
         
   
   
@@ -1007,7 +1001,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../category/hardware/" class="md-nav__link">
+      <a href="../category/hardware/" class="md-nav__link">
         
   
   
@@ -1037,7 +1031,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../category/kicad/" class="md-nav__link">
+      <a href="../category/kicad/" class="md-nav__link">
         
   
   
@@ -1067,7 +1061,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../category/manufacturing/" class="md-nav__link">
+      <a href="../category/manufacturing/" class="md-nav__link">
         
   
   
@@ -1097,7 +1091,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../category/pcb/" class="md-nav__link">
+      <a href="../category/pcb/" class="md-nav__link">
         
   
   
@@ -1127,7 +1121,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../category/pcb-design/" class="md-nav__link">
+      <a href="../category/pcb-design/" class="md-nav__link">
         
   
   
@@ -1157,7 +1151,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../category/planning/" class="md-nav__link">
+      <a href="../category/planning/" class="md-nav__link">
         
   
   
@@ -1187,7 +1181,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../category/software/" class="md-nav__link">
+      <a href="../category/software/" class="md-nav__link">
         
   
   
@@ -1217,7 +1211,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../category/tools/" class="md-nav__link">
+      <a href="../category/tools/" class="md-nav__link">
         
   
   
@@ -1312,7 +1306,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../docs/" class="md-nav__link">
+      <a href="../../docs/" class="md-nav__link">
         
   
   
@@ -1392,7 +1386,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../docs/hardware/materials-list/" class="md-nav__link">
+      <a href="../../docs/hardware/materials-list/" class="md-nav__link">
         
   
   
@@ -1420,7 +1414,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../docs/hardware/wiring-pinout/" class="md-nav__link">
+      <a href="../../docs/hardware/wiring-pinout/" class="md-nav__link">
         
   
   
@@ -1448,7 +1442,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../docs/hardware/joystick-wiring/" class="md-nav__link">
+      <a href="../../docs/hardware/joystick-wiring/" class="md-nav__link">
         
   
   
@@ -1476,7 +1470,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../docs/hardware/battery-wiring/" class="md-nav__link">
+      <a href="../../docs/hardware/battery-wiring/" class="md-nav__link">
         
   
   
@@ -1504,7 +1498,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../docs/hardware/enclosure-design/" class="md-nav__link">
+      <a href="../../docs/hardware/enclosure-design/" class="md-nav__link">
         
   
   
@@ -1532,7 +1526,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../docs/hardware/design-evolution/" class="md-nav__link">
+      <a href="../../docs/hardware/design-evolution/" class="md-nav__link">
         
   
   
@@ -1560,7 +1554,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../docs/hardware/esp32s3-enclosure-scad/" class="md-nav__link">
+      <a href="../../docs/hardware/esp32s3-enclosure-scad/" class="md-nav__link">
         
   
   
@@ -1588,7 +1582,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../docs/hardware/freecad-mk2-macro/" class="md-nav__link">
+      <a href="../../docs/hardware/freecad-mk2-macro/" class="md-nav__link">
         
   
   
@@ -1616,7 +1610,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../docs/hardware/freecad-mk2-design/" class="md-nav__link">
+      <a href="../../docs/hardware/freecad-mk2-design/" class="md-nav__link">
         
   
   
@@ -1644,7 +1638,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../docs/hardware/3d-printing-pipeline/" class="md-nav__link">
+      <a href="../../docs/hardware/3d-printing-pipeline/" class="md-nav__link">
         
   
   
@@ -1732,7 +1726,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../docs/setup/first-time-setup/" class="md-nav__link">
+      <a href="../../docs/setup/first-time-setup/" class="md-nav__link">
         
   
   
@@ -1760,7 +1754,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../docs/setup/pi-zero-setup/" class="md-nav__link">
+      <a href="../../docs/setup/pi-zero-setup/" class="md-nav__link">
         
   
   
@@ -1788,7 +1782,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../docs/setup/display-setup/" class="md-nav__link">
+      <a href="../../docs/setup/display-setup/" class="md-nav__link">
         
   
   
@@ -1816,7 +1810,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../docs/setup/dev-environment/" class="md-nav__link">
+      <a href="../../docs/setup/dev-environment/" class="md-nav__link">
         
   
   
@@ -1904,7 +1898,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../docs/design/kicad-schematic-pcb-guide/" class="md-nav__link">
+      <a href="../../docs/design/kicad-schematic-pcb-guide/" class="md-nav__link">
         
   
   
@@ -1932,7 +1926,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../docs/design/user-guide/" class="md-nav__link">
+      <a href="../../docs/design/user-guide/" class="md-nav__link">
         
   
   
@@ -1960,7 +1954,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../docs/design/user-engagement-plan/" class="md-nav__link">
+      <a href="../../docs/design/user-engagement-plan/" class="md-nav__link">
         
   
   
@@ -1988,7 +1982,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../docs/design/custom-pcb-design-research/" class="md-nav__link">
+      <a href="../../docs/design/custom-pcb-design-research/" class="md-nav__link">
         
   
   
@@ -2016,7 +2010,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../docs/design/board-design/" class="md-nav__link">
+      <a href="../../docs/design/board-design/" class="md-nav__link">
         
   
   
@@ -2044,7 +2038,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../docs/design/pcb-assembly-and-prototyping/" class="md-nav__link">
+      <a href="../../docs/design/pcb-assembly-and-prototyping/" class="md-nav__link">
         
   
   
@@ -2072,7 +2066,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../docs/design/open-board-designs/" class="md-nav__link">
+      <a href="../../docs/design/open-board-designs/" class="md-nav__link">
         
   
   
@@ -2100,7 +2094,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../docs/design/breadboard-prototype/" class="md-nav__link">
+      <a href="../../docs/design/breadboard-prototype/" class="md-nav__link">
         
   
   
@@ -2128,7 +2122,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../docs/design/motion-location-detection/" class="md-nav__link">
+      <a href="../../docs/design/motion-location-detection/" class="md-nav__link">
         
   
   
@@ -2216,7 +2210,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../docs/software/project-structure/" class="md-nav__link">
+      <a href="../../docs/software/project-structure/" class="md-nav__link">
         
   
   
@@ -2244,7 +2238,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../docs/software/firmware-engine/" class="md-nav__link">
+      <a href="../../docs/software/firmware-engine/" class="md-nav__link">
         
   
   
@@ -2272,7 +2266,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../docs/software/esp32-firmware/" class="md-nav__link">
+      <a href="../../docs/software/esp32-firmware/" class="md-nav__link">
         
   
   
@@ -2300,7 +2294,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../docs/software/emotion-states/" class="md-nav__link">
+      <a href="../../docs/software/emotion-states/" class="md-nav__link">
         
   
   
@@ -2388,7 +2382,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../docs/tools/devtool/" class="md-nav__link">
+      <a href="../../docs/tools/devtool/" class="md-nav__link">
         
   
   
@@ -2416,7 +2410,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../docs/tools/setup-cli/" class="md-nav__link">
+      <a href="../../docs/tools/setup-cli/" class="md-nav__link">
         
   
   
@@ -2444,7 +2438,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../docs/tools/website-dev/" class="md-nav__link">
+      <a href="../../docs/tools/website-dev/" class="md-nav__link">
         
   
   
@@ -2472,7 +2466,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../docs/tools/designtool/" class="md-nav__link">
+      <a href="../../docs/tools/designtool/" class="md-nav__link">
         
   
   
@@ -2500,7 +2494,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../docs/tools/build-render-tool/" class="md-nav__link">
+      <a href="../../docs/tools/build-render-tool/" class="md-nav__link">
         
   
   
@@ -2528,7 +2522,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../docs/tools/design-tracker/" class="md-nav__link">
+      <a href="../../docs/tools/design-tracker/" class="md-nav__link">
         
   
   
@@ -2616,7 +2610,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../docs/reference/pico-w/" class="md-nav__link">
+      <a href="../../docs/reference/pico-w/" class="md-nav__link">
         
   
   
@@ -2644,7 +2638,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../docs/reference/pico-2-w/" class="md-nav__link">
+      <a href="../../docs/reference/pico-2-w/" class="md-nav__link">
         
   
   
@@ -2672,7 +2666,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../docs/reference/pi-zero-wh/" class="md-nav__link">
+      <a href="../../docs/reference/pi-zero-wh/" class="md-nav__link">
         
   
   
@@ -2700,7 +2694,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../docs/reference/waveshare-eink/" class="md-nav__link">
+      <a href="../../docs/reference/waveshare-eink/" class="md-nav__link">
         
   
   
@@ -2728,7 +2722,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../docs/reference/esp32-s3-wroom1/" class="md-nav__link">
+      <a href="../../docs/reference/esp32-s3-wroom1/" class="md-nav__link">
         
   
   
@@ -2823,7 +2817,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../community/" class="md-nav__link">
+      <a href="../../community/" class="md-nav__link">
         
   
   
@@ -2851,7 +2845,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../community/discord/" class="md-nav__link">
+      <a href="../../community/discord/" class="md-nav__link">
         
   
   
@@ -2879,7 +2873,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../community/support/" class="md-nav__link">
+      <a href="../../community/support/" class="md-nav__link">
         
   
   
@@ -2966,7 +2960,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../about/" class="md-nav__link">
+      <a href="../../about/" class="md-nav__link">
         
   
   
@@ -2994,7 +2988,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../about/contact/" class="md-nav__link">
+      <a href="../../about/contact/" class="md-nav__link">
         
   
   
@@ -3029,7 +3023,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../prompts/" class="md-nav__link">
+      <a href="../../prompts/" class="md-nav__link">
         
   
   
@@ -3057,6 +3051,8 @@
             
             
               
+                
+              
               <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
                 <div class="md-sidebar__scrollwrap">
                   <div class="md-sidebar__inner">
@@ -3069,6 +3065,141 @@
     
   
   
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#what-changed" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What Changed
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#the-six-tabs" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The Six Tabs
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="The Six Tabs">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#dashboard" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Dashboard
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#models-exports" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Models &amp; Exports
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#prints" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Prints
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#renders" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Renders
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#packages" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Packages
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#guide" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Guide
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#the-workflow" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The Workflow
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#theme" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Theme
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#still-cli-friendly" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Still CLI-Friendly
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
 </nav>
                   </div>
                 </div>
@@ -3076,172 +3207,194 @@
             
           
           
-  <div class="md-content" data-md-component="content">
-    <div class="md-content__inner">
-      <header class="md-typeset">
-        <h1 id="build-journal">Build Journal<a class="headerlink" href="#build-journal" title="Permanent link">&para;</a></h1>
-      </header>
-      
-        <article class="md-post md-post--excerpt">
-  <header class="md-post__header">
-    
-      <nav class="md-post__authors md-typeset">
-        
-          <span class="md-author">
-            <img src="https://avatars.githubusercontent.com/u/600873?v=4" alt="rompasaurus">
-          </span>
-        
-      </nav>
-    
-    <div class="md-post__meta md-meta">
-      <ul class="md-meta__list">
-        <li class="md-meta__item">
-          <time datetime="2026-04-10 00:00:00+00:00">April 10, 2026</time></li>
-        
-          <li class="md-meta__item">
-            in
+  <div class="md-content md-content--post" data-md-component="content">
+    <div class="md-sidebar md-sidebar--post" data-md-component="sidebar" data-md-type="navigation">
+      <div class="md-sidebar__scrollwrap">
+        <div class="md-sidebar__inner md-post">
+          <nav class="md-nav md-nav--primary">
+            <div class="md-post__back">
+              <div class="md-nav__title md-nav__container">
+                <a href="../" class="md-nav__link">
+                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+                  <span class="md-ellipsis">
+                    Back to index
+                  </span>
+                </a>
+              </div>
+            </div>
             
-              <a href="../../category/hardware/" class="md-meta__link">Hardware</a>, 
-              <a href="../../category/firmware/" class="md-meta__link">Firmware</a></li>
-        
-        
+              <div class="md-post__authors md-typeset">
+                
+                  <div class="md-profile md-post__profile">
+                    <span class="md-author md-author--long">
+                      <img src="https://avatars.githubusercontent.com/u/600873?v=4" alt="rompasaurus">
+                    </span>
+                    <span class="md-profile__description">
+                      <strong>
+                        
+                          rompasaurus
+                        
+                      </strong>
+                      <br>
+                      Builder
+                    </span>
+                  </div>
+                
+              </div>
+            
+            <ul class="md-post__meta md-nav__list">
+              <li class="md-nav__item md-nav__item--section">
+                <div class="md-post__title">
+                  <span class="md-ellipsis">
+                    Metadata
+                  </span>
+                </div>
+                <nav class="md-nav">
+                  <ul class="md-nav__list">
+                    <li class="md-nav__item">
+                      <div class="md-nav__link">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 19H5V8h14m-3-7v2H8V1H6v2H5c-1.11 0-2 .89-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V5a2 2 0 0 0-2-2h-1V1m-1 11h-5v5h5z"/></svg>
+                        <time datetime="2026-05-01 00:00:00+00:00" class="md-ellipsis">May 1, 2026</time>
+                      </div>
+                    </li>
+                    
+                    
+                      <li class="md-nav__item">
+                        <div class="md-nav__link">
+                          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9 3v15h3V3zm3 2 4 13 3-1-4-13zM5 5v13h3V5zM3 19v2h18v-2z"/></svg>
+                          <span class="md-ellipsis">
+                            in
+                            
+                              <a href="../category/hardware/">Hardware</a>, 
+                              <a href="../category/software/">Software</a></span>
+                        </div>
+                      </li>
+                    
+                    
+                      
+                      <li class="md-nav__item">
+                        <div class="md-nav__link">
+                          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 20a8 8 0 0 0 8-8 8 8 0 0 0-8-8 8 8 0 0 0-8 8 8 8 0 0 0 8 8m0-18a10 10 0 0 1 10 10 10 10 0 0 1-10 10C6.47 22 2 17.5 2 12A10 10 0 0 1 12 2m.5 5v5.25l4.5 2.67-.75 1.23L11 13V7z"/></svg>
+                          <span class="md-ellipsis">
+                            
+                              3 min read
+                            
+                          </span>
+                        </div>
+                      </li>
+                    
+                  </ul>
+                </nav>
+              </li>
+            </ul>
+            
+          </nav>
           
-          <li class="md-meta__item">
-            
-              2 min read
-            
-          </li>
-        
-        
-      </ul>
-      
+        </div>
+      </div>
     </div>
-  </header>
-  <div class="md-post__content md-typeset">
-    <h2 id="first-pixels-hello-world-on-the-e-ink-display"><a class="toclink" href="../../phase-1-first-pixels/">First Pixels — Hello World on the E-Ink Display</a></h2>
-<p>We got pixels. Real, physical, black-on-white pixels on the Waveshare 2.13" e-ink display, driven by C firmware on the Pico W. Phase 1's proof-of-life is alive.</p>
-
-    
-      <nav class="md-post__action">
-        <a href="../../phase-1-first-pixels/">
-          Continue reading
-        </a>
-      </nav>
-    
-    
-  </div>
-</article>
-      
-        <article class="md-post md-post--excerpt">
-  <header class="md-post__header">
-    
-      <nav class="md-post__authors md-typeset">
-        
-          <span class="md-author">
-            <img src="https://avatars.githubusercontent.com/u/600873?v=4" alt="rompasaurus">
-          </span>
-        
-      </nav>
-    
-    <div class="md-post__meta md-meta">
-      <ul class="md-meta__list">
-        <li class="md-meta__item">
-          <time datetime="2026-04-09 00:00:00+00:00">April 9, 2026</time></li>
-        
-          <li class="md-meta__item">
-            in
-            
-              <a href="../../category/hardware/" class="md-meta__link">Hardware</a></li>
-        
-        
-          
-          <li class="md-meta__item">
-            
-              2 min read
-            
-          </li>
-        
-        
-      </ul>
-      
-    </div>
-  </header>
-  <div class="md-post__content md-typeset">
-    <h2 id="phase-1-hardware-pico-w-e-ink-lets-go"><a class="toclink" href="../../phase-1-hardware-begins/">Phase 1: Hardware — Pico W + E-Ink, Let's Go</a></h2>
-<p>The planning phase is done. We've got hardware on the bench. Phase 1 begins now.</p>
-
-    
-      <nav class="md-post__action">
-        <a href="../../phase-1-hardware-begins/">
-          Continue reading
-        </a>
-      </nav>
-    
-    
-  </div>
-</article>
-      
-        <article class="md-post md-post--excerpt">
-  <header class="md-post__header">
-    
-      <nav class="md-post__authors md-typeset">
-        
-          <span class="md-author">
-            <img src="https://avatars.githubusercontent.com/u/600873?v=4" alt="rompasaurus">
-          </span>
-        
-      </nav>
-    
-    <div class="md-post__meta md-meta">
-      <ul class="md-meta__list">
-        <li class="md-meta__item">
-          <time datetime="2026-04-08 00:00:00+00:00">April 8, 2026</time></li>
-        
-          <li class="md-meta__item">
-            in
-            
-              <a href="../../category/planning/" class="md-meta__link">Planning</a></li>
-        
-        
-          
-          <li class="md-meta__item">
-            
-              2 min read
-            
-          </li>
-        
-        
-      </ul>
-      
-    </div>
-  </header>
-  <div class="md-post__content md-typeset">
-    <h2 id="phase-0-planning-from-idea-to-blueprint"><a class="toclink" href="../../phase-0-planning/">Phase 0: Planning — From Idea to Blueprint</a></h2>
-<p>Every project starts somewhere. Dilder started with a question: how hard is it to actually build a Tamagotchi?</p>
-
-    
-      <nav class="md-post__action">
-        <a href="../../phase-0-planning/">
-          Continue reading
-        </a>
-      </nav>
-    
-    
-  </div>
-</article>
-      
+    <article class="md-content__inner md-typeset">
       
         
-          
+  
 
 
 
-<nav class="md-pagination">
-  <a class="md-pagination__link" href="../../">1</a> <span class="md-pagination__dots">..</span> <a class="md-pagination__link" href="../3/">3</a> <a class="md-pagination__link" href="../4/">4</a> <span class="md-pagination__current">5</span>
-</nav>
-        
+  
+  
+
+
+<h1 id="design-tracker-v20-from-cli-to-full-gui-with-print-packages">Design Tracker v2.0 — From CLI to Full GUI with Print Packages<a class="headerlink" href="#design-tracker-v20-from-cli-to-full-gui-with-print-packages" title="Permanent link">&para;</a></h1>
+<p>The Design Tracker started as a simple CLI menu for taking snapshots and logging prints. After a few weeks of daily use, the friction was clear: switching between terminal commands to check render images, flipping to a file manager to find the right 3MF, and trying to remember which camera photo went with which print. So I rebuilt it as a full Tkinter GUI with six tabs, a render gallery, camera photo attachment, and a package system that bundles everything together.</p>
+<!-- more -->
+
+<h2 id="what-changed">What Changed<a class="headerlink" href="#what-changed" title="Permanent link">&para;</a></h2>
+<p>The original v1.0 was a 7-option terminal menu: status, snapshot, timeline, print log, compare, naming guide, quit. It worked, but every action was text-based and there was no way to <em>see</em> anything — no render previews, no side-by-side file tables, no photo management.</p>
+<p>v2.0 keeps the full CLI (accessible via <code>--cli</code>) but defaults to a GUI with six tabs:</p>
+<figure>
+  <img alt="Dashboard" loading="lazy" src="../../assets/images/tools/design-tracker/dashboard.png" />
+<br />
+<figcaption>Dashboard — live stats, merged timeline, snapshot/compare actions</figcaption>
+</figure>
+<h2 id="the-six-tabs">The Six Tabs<a class="headerlink" href="#the-six-tabs" title="Permanent link">&para;</a></h2>
+<h3 id="dashboard">Dashboard<a class="headerlink" href="#dashboard" title="Permanent link">&para;</a></h3>
+<p>Live summary of the project state: git hash, file counts for FCStd/3MF/renders/snapshots/prints. The timeline merges all events (snapshots in green, prints in magenta, packages in orange) into a single chronological view. Take snapshots and compare them without leaving the tab.</p>
+<h3 id="models-exports">Models &amp; Exports<a class="headerlink" href="#models-exports" title="Permanent link">&para;</a></h3>
+<figure>
+  <img alt="Models &amp; Exports" loading="lazy" src="../../assets/images/tools/design-tracker/models-exports.png" />
+<br />
+<figcaption>Side-by-side tables of every FCStd model and 3MF export</figcaption>
+</figure>
+<p>Two side-by-side tables showing every FreeCAD model (with hashes for change detection) and every 3MF export. Sorted by modification date so the newest iterations are always at the top. The hash column is the key insight — two files with different names but the same hash are identical.</p>
+<h3 id="prints">Prints<a class="headerlink" href="#prints" title="Permanent link">&para;</a></h3>
+<p>Log every print attempt with description, result (success/partial/failed), notes, 3MF file selection, and camera photo attachment. Click any row to see the full detail: files used, notes, git hash, and paths to attached photos.</p>
+<h3 id="renders">Renders<a class="headerlink" href="#renders" title="Permanent link">&para;</a></h3>
+<figure>
+  <img alt="Renders" loading="lazy" src="../../assets/images/tools/design-tracker/renders-gallery.png" />
+<br />
+<figcaption>Gallery with live image preview — no more switching to a file manager</figcaption>
+</figure>
+<p>This was the biggest quality-of-life win. Instead of opening a file manager to browse <code>hardware-design/renders/</code>, the Renders tab lists all 73+ PNGs with a live preview pane. Click any render to see it. This is especially useful when deciding which renders to include in a package.</p>
+<h3 id="packages">Packages<a class="headerlink" href="#packages" title="Permanent link">&para;</a></h3>
+<p>The new centerpiece. A package bundles a FreeCAD model, 3MF exports, render images, camera photos, and a changelog into a single tracked folder. Each package gets linked to a snapshot and/or print entry, so you can trace exactly what design state produced which physical print.</p>
+<p>The folder structure is self-contained:
+<div class="language-text highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>pkg-0001_2026-05-01_1430_widened-usb/
+</span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>  Dilder_Rev2_Mk2.FCStd
+</span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>  Dilder_Rev2_Mk2-BasePlate.3mf
+</span><span id="__span-0-4"><a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>  renders/
+</span><span id="__span-0-5"><a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>    assembled.png
+</span><span id="__span-0-6"><a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a>    comp-cradle-iso.png
+</span><span id="__span-0-7"><a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a>  photos/
+</span><span id="__span-0-8"><a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a>    IMG_20260501_143022.jpg
+</span><span id="__span-0-9"><a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a>  CHANGES.md
+</span></code></pre></div></p>
+<h3 id="guide">Guide<a class="headerlink" href="#guide" title="Permanent link">&para;</a></h3>
+<p>Built-in reference covering every tab, the design-print-review workflow, naming conventions, and CLI commands. Scrollable, always accessible, no need to open the README separately.</p>
+<h2 id="the-workflow">The Workflow<a class="headerlink" href="#the-workflow" title="Permanent link">&para;</a></h2>
+<p>The tool is designed around a cycle:</p>
+<ol>
+<li>Make changes in FreeCAD</li>
+<li>Take a Snapshot (Dashboard)</li>
+<li>Export 3MF files</li>
+<li>Print and log the result (Prints)</li>
+<li>Take camera photos of the physical print</li>
+<li>Attach photos to the print entry</li>
+<li>Create a Package linking everything together</li>
+<li>Commit to git</li>
+</ol>
+<p>Each step feeds into the next, and the Package at the end captures the complete state of that iteration — the design file, the sliced exports, the rendered views, the physical photos, and a written changelog.</p>
+<h2 id="theme">Theme<a class="headerlink" href="#theme" title="Permanent link">&para;</a></h2>
+<p>Same Catppuccin Mocha dark theme as the <a href="../../docs/tools/designtool/">DesignTool</a>, so both tools feel like parts of the same suite.</p>
+<h2 id="still-cli-friendly">Still CLI-Friendly<a class="headerlink" href="#still-cli-friendly" title="Permanent link">&para;</a></h2>
+<p>Everything still works from the terminal:</p>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>python3<span class="w"> </span>design-tracker.py<span class="w">               </span><span class="c1"># GUI (default)</span>
+</span><span id="__span-1-2"><a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>python3<span class="w"> </span>design-tracker.py<span class="w"> </span>--cli<span class="w">         </span><span class="c1"># terminal menu</span>
+</span><span id="__span-1-3"><a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>python3<span class="w"> </span>design-tracker.py<span class="w"> </span>snap<span class="w"> </span><span class="s2">&quot;msg&quot;</span><span class="w">    </span><span class="c1"># quick snapshot</span>
+</span><span id="__span-1-4"><a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a>python3<span class="w"> </span>design-tracker.py<span class="w"> </span>status<span class="w">        </span><span class="c1"># current state</span>
+</span></code></pre></div>
+<p>The CLI is useful for quick snapshots in the middle of a work session when you don't want to context-switch to a GUI window.</p>
+<p><a class="md-button" href="../../docs/tools/design-tracker/">Design Tracker docs <span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11z"/></svg></span></a></p>
+
+
+
+
+
+
+
+  
+  
+
+
+
+  
+
+
+  
+
+
+
       
-    </div>
+    </article>
   </div>
 
           
@@ -3262,10 +3415,12 @@
   
     
       
+        
+      
       <nav class="md-footer__inner md-grid" aria-label="Footer" >
         
           
-          <a href="../../.." class="md-footer__link md-footer__link--prev" aria-label="Previous: Home">
+          <a href="../the-dilder-gets-a-speaker-a-motion-sensor-and-a-better-joystick/" class="md-footer__link md-footer__link--prev" aria-label="Previous: The Dilder Gets a Speaker, a Motion Sensor, and a Better Joystick">
             <div class="md-footer__button md-icon">
               
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
@@ -3275,20 +3430,20 @@
                 Previous
               </span>
               <div class="md-ellipsis">
-                Home
+                The Dilder Gets a Speaker, a Motion Sensor, and a Better Joystick
               </div>
             </div>
           </a>
         
         
           
-          <a href="../../category/3d-printing/" class="md-footer__link md-footer__link--next" aria-label="Next: 3D Printing">
+          <a href="../how-to-stop-drowning-in-freecad-files-and-a-tool-to-help/" class="md-footer__link md-footer__link--next" aria-label="Next: How to Stop Drowning in FreeCAD Files (and a Tool to Help)">
             <div class="md-footer__title">
               <span class="md-footer__direction">
                 Next
               </span>
               <div class="md-ellipsis">
-                3D Printing
+                How to Stop Drowning in FreeCAD Files (and a Tool to Help)
               </div>
             </div>
             <div class="md-footer__button md-icon">
@@ -3362,12 +3517,12 @@
     
       
       
-      <script id="__config" type="application/json">{"annotate": null, "base": "../../..", "features": ["navigation.tabs", "navigation.sections", "navigation.top", "navigation.footer", "search.suggest", "search.highlight", "content.tabs.link", "content.code.annotation", "content.code.copy"], "search": "../../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.tabs", "navigation.sections", "navigation.top", "navigation.footer", "search.suggest", "search.highlight", "content.tabs.link", "content.code.annotation", "content.code.copy"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
     
     
-      <script src="../../../assets/javascripts/bundle.79ae519e.min.js"></script>
+      <script src="../../assets/javascripts/bundle.79ae519e.min.js"></script>
       
-        <script src="../../../javascripts/octopus-banner.js"></script>
+        <script src="../../javascripts/octopus-banner.js"></script>
       
     
   </body>
