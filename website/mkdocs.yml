@@ -147,6 +147,7 @@ nav:
           - Website Dev CLI: docs/tools/website-dev.md
           - DesignTool (SCAD): docs/tools/designtool.md
           - Build & Render Tool: docs/tools/build-render-tool.md
+          - Design Tracker: docs/tools/design-tracker.md
       - Reference:
           - Pico W: docs/reference/pico-w.md
           - Pico 2 W: docs/reference/pico-2-w.md

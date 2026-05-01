@@ -1,0 +1,29 @@
+{
+  "snapshots": [
+    {
+      "id": 1,
+      "timestamp": "2026-05-01T08:43:25.871096",
+      "git_hash": "09670d7",
+      "message": "Initial snapshot \u2014 joystick anchor, piezo, IMU, widened inlay",
+      "fcstd_count": 13,
+      "fcstd_newest": "Dilder_Rev2_Mk2.FCStd",
+      "fcstd_newest_hash": "33e42145b9e2",
+      "mf_count": 42,
+      "render_count": 73,
+      "renders": [
+        "aaa-cradle.png",
+        "assembled.png",
+        "assembly-with-pico-front.png",
+        "assembly-with-pico-iso.png",
+        "assembly-with-pico-no-cover.png",
+        "assembly-with-pico-on-base.png",
+        "base-plate-bottom.png",
+        "base-plate.png",
+        "comp-baseplate-bottom.png",
+        "comp-baseplate-iso.png"
+      ],
+      "macro_hash": "2a5113c54a93"
+    }
+  ],
+  "prints": []
+}
