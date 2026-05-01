@@ -2541,6 +2541,56 @@
     </span>
   </a>
   
+    <nav class="md-nav" aria-label="Usage">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#screen-1-model-picker" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Screen 1 — Model Picker
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#screen-2-render-set" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Screen 2 — Render Set
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#screen-3-render-style" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Screen 3 — Render Style
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#screen-4-confirmation" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Screen 4 — Confirmation
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
 </li>
       
         <li class="md-nav__item">
@@ -3184,6 +3234,56 @@
     </span>
   </a>
   
+    <nav class="md-nav" aria-label="Usage">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#screen-1-model-picker" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Screen 1 — Model Picker
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#screen-2-render-set" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Screen 2 — Render Set
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#screen-3-render-style" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Screen 3 — Render Style
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#screen-4-confirmation" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Screen 4 — Confirmation
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
 </li>
       
         <li class="md-nav__item">
@@ -3307,14 +3407,36 @@
 <div class="language-bash highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="nb">cd</span><span class="w"> </span>hardware-design
 </span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>./build_and_render.sh
 </span></code></pre></div>
-<p>The tool walks through 5 interactive screens:</p>
-<ol>
-<li><strong>Model picker</strong> — all <code>.FCStd</code> files sorted by date, newest first</li>
-<li><strong>Render set</strong> — 19 options from "Everything" to individual components</li>
-<li><strong>Style</strong> — resolution, background color, cover transparency</li>
-<li><strong>Confirmation</strong> — review your choices</li>
-<li><strong>Render</strong> — FreeCAD GUI opens, renders PNGs, copies to website</li>
-</ol>
+<p>The tool walks through 4 interactive screens:</p>
+<h3 id="screen-1-model-picker">Screen 1 — Model Picker<a class="headerlink" href="#screen-1-model-picker" title="Permanent link">&para;</a></h3>
+<p>All <code>.FCStd</code> files sorted by date modified (newest first), with file sizes.</p>
+<figure>
+  <img alt="Model picker screen" loading="lazy" src="../assets/images/tools/render-cli/screen-1-model-picker.png" width="700" />
+<br />
+<figcaption>Pick a model by number, or press r to rebuild from the parametric macro</figcaption>
+</figure>
+<h3 id="screen-2-render-set">Screen 2 — Render Set<a class="headerlink" href="#screen-2-render-set" title="Permanent link">&para;</a></h3>
+<p>19 options organized into full sets, individual bodies, peripherals, and special modes.</p>
+<figure>
+  <img alt="Render set screen" loading="lazy" src="../assets/images/tools/render-cli/screen-2-render-set.png" width="700" />
+<br />
+<figcaption>Choose from "Everything" (40+ images) down to a single component portrait</figcaption>
+</figure>
+<h3 id="screen-3-render-style">Screen 3 — Render Style<a class="headerlink" href="#screen-3-render-style" title="Permanent link">&para;</a></h3>
+<p>Resolution, background, and cover transparency.</p>
+<figure>
+  <img alt="Style picker screen" loading="lazy" src="../assets/images/tools/render-cli/screen-3-style-picker.png" width="700" />
+<br />
+<figcaption>Four resolutions, four backgrounds, four transparency levels</figcaption>
+</figure>
+<h3 id="screen-4-confirmation">Screen 4 — Confirmation<a class="headerlink" href="#screen-4-confirmation" title="Permanent link">&para;</a></h3>
+<p>Review all selections before rendering.</p>
+<figure>
+  <img alt="Confirmation screen" loading="lazy" src="../assets/images/tools/render-cli/screen-4-confirmation.png" width="700" />
+<br />
+<figcaption>Summary of model, render set, resolution, background, and cover transparency</figcaption>
+</figure>
+<p>After confirmation, FreeCAD GUI opens, renders all views, and copies PNGs to the website assets directory.</p>
 <h2 id="render-sets">Render Sets<a class="headerlink" href="#render-sets" title="Permanent link">&para;</a></h2>
 <h3 id="full-sets">Full Sets<a class="headerlink" href="#full-sets" title="Permanent link">&para;</a></h3>
 <table>
