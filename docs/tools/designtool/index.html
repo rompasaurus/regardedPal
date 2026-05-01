@@ -3552,7 +3552,7 @@
 <p>A Tkinter GUI for managing OpenSCAD hardware design files: browsing SCAD files and presets, diffing parameters, exporting to STL/3MF, 3D preview with orthographic views, and tracking the full export history.</p>
 <hr />
 <h2 id="usage">Usage<a class="headerlink" href="#usage" title="Permanent link">&para;</a></h2>
-<div class="language-bash highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>python3<span class="w"> </span>hardware-design/DesignTool/designtool.py
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>python3<span class="w"> </span>tools/designtool/designtool.py
 </span></code></pre></div>
 <hr />
 <h2 id="tab-1-browser">Tab 1 — Browser<a class="headerlink" href="#tab-1-browser" title="Permanent link">&para;</a></h2>
@@ -3599,7 +3599,7 @@
 <li><strong>Embedded label</strong>: optional text/date stamp baked into the export filename</li>
 <li><strong>Description</strong>: auto-generated markdown documenting the export parameters vs defaults</li>
 <li><strong>Export log</strong>: real-time output from the OpenSCAD CLI (<code>openscad</code> or <code>openscad-nightly</code>)</li>
-<li>All exports saved to <code>hardware-design/DesignTool/exports/</code> with timestamped filenames</li>
+<li>All exports saved to <code>tools/designtool/exports/</code> with timestamped filenames</li>
 </ul>
 <hr />
 <h2 id="tab-4-3d-preview">Tab 4 — 3D Preview<a class="headerlink" href="#tab-4-3d-preview" title="Permanent link">&para;</a></h2>
@@ -3634,7 +3634,7 @@
 </ul>
 <hr />
 <h2 id="architecture">Architecture<a class="headerlink" href="#architecture" title="Permanent link">&para;</a></h2>
-<div class="language-text highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>hardware-design/DesignTool/
+<div class="language-text highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>tools/designtool/
 </span><span id="__span-1-2"><a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>├── designtool.py         ← main application (1500+ lines)
 </span><span id="__span-1-3"><a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>├── exports/              ← exported STL/3MF files + descriptions
 </span><span id="__span-1-4"><a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a>└── history.json          ← full export audit trail
@@ -3719,7 +3719,7 @@
 <li>Python 3.9+ with Tkinter</li>
 <li>OpenSCAD (for preview and export)</li>
 </ul>
-<p>Source: <a href="https://github.com/rompasaurus/dilder/blob/main/hardware-design/DesignTool/designtool.py"><code>hardware-design/DesignTool/designtool.py</code></a></p>
+<p>Source: <a href="https://github.com/rompasaurus/dilder/blob/main/tools/designtool/designtool.py"><code>tools/designtool/designtool.py</code></a></p>
 
 
 

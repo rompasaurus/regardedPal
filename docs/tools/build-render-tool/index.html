@@ -3460,8 +3460,7 @@
 <p>Interactive CLI for rendering Dilder FreeCAD models into publication-quality PNGs. Supports 19 render presets, 4 resolutions, custom component combos, and frame-by-frame assembly animations.</p>
 <hr />
 <h2 id="usage">Usage<a class="headerlink" href="#usage" title="Permanent link">&para;</a></h2>
-<div class="language-bash highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="nb">cd</span><span class="w"> </span>hardware-design
-</span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>./build_and_render.sh
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>./tools/build-render/build_and_render.sh
 </span></code></pre></div>
 <p>The tool walks through 4 interactive screens:</p>
 <h3 id="screen-1-model-picker">Screen 1 — Model Picker<a class="headerlink" href="#screen-1-model-picker" title="Permanent link">&para;</a></h3>
@@ -3653,7 +3652,7 @@
 <li>Each screenshot pumps the Qt event loop 5 times with 300ms delays to ensure the viewport finishes drawing before capture</li>
 <li>Visibility toggling only affects top-level objects (Bodies and Part::Features), not internal PartDesign features — toggling those would make parent Bodies render blank</li>
 </ul>
-<p>Source: <a href="https://github.com/rompasaurus/dilder/blob/main/hardware-design/build_and_render.sh"><code>hardware-design/build_and_render.sh</code></a></p>
+<p>Source: <a href="https://github.com/rompasaurus/dilder/blob/main/tools/build-render/build_and_render.sh"><code>tools/build-render/build_and_render.sh</code></a></p>
 
 
 
