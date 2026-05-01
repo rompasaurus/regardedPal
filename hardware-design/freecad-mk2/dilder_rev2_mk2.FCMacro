@@ -127,7 +127,7 @@ def SP(alias):
 PARAMS = [
     # (alias, value, description)
     # ─── Enclosure ───
-    ("enc_x",         94.5,  "Enclosure width X"),
+    ("enc_x",         94.9,  "Enclosure width X"),
     ("enc_y",         46.0,  "Enclosure depth Y"),
     ("wall_mx",        3.0,  "-X wall thickness"),
     ("wall_px",        1.2,  "+X wall thickness"),
@@ -140,7 +140,7 @@ PARAMS = [
     ("bp_fillet",      2.0,  "Bottom fillet radius"),
     ("bp_floor",       2.6,  "Pocket floor thickness (thick floo preset)"),
     ("cpx0",           3.1,  "Pocket X start"),
-    ("cpx1",          93.2,  "Pocket X end"),
+    ("cpx1",          93.6,  "Pocket X end"),
     ("cpy0",           2.1,  "Pocket Y start"),
     ("cpy1",          43.9,  "Pocket Y end"),
     ("peg_d",          3.0,  "Peg diameter"),
@@ -194,7 +194,7 @@ PARAMS = [
     ("tp_xl",         28.0,  "TP4056 board X"),
     ("tp_yw",         17.0,  "TP4056 board Y"),
     ("tp_iz",          1.0,  "TP4056 indent depth"),
-    ("tp_slop",        0.2,  "TP4056 slop"),
+    ("tp_slop",        0.3,  "TP4056 slop"),
     ("disp_cz",        3.0,  "Display cutout depth Z"),
     ("clip_sz",        7.0,  "Clip plate size"),
     ("clip_tk",        0.5,  "Clip plate thickness"),
@@ -284,7 +284,7 @@ def build_base_plate(doc):
     print("  Building Base Plate...")
     body = doc.addObject("PartDesign::Body", "BasePlate")
 
-    W, H = 94.5, 46.0
+    W, H = 94.9, 46.0
     Z = 6.0           # effective height after shave (SCAD: 8mm - 2mm shave)
     Z_preshave = 8.0   # original pre-shave height (for USB-C Z calculation)
     floor_z = 2.6      # thick floo preset
@@ -342,7 +342,7 @@ def build_base_plate(doc):
         doc.recompute()
 
     # ── 5. Cradle pocket ── SubtractiveBox from top
-    cpx0, cpy0, cpx1, cpy1 = 3.1, 2.1, 93.2, 43.9
+    cpx0, cpy0, cpx1, cpy1 = 3.1, 2.1, 93.6, 43.9
     pocket_depth = Z - floor_z  # 5.5
     pock = body.newObject("PartDesign::SubtractiveBox", "Pocket_Cradle")
     pock.Length = cpx1 - cpx0
@@ -621,14 +621,14 @@ def build_cradle(doc):
     plug_thick = bay_d + 2 * 0.5      # 12.1
     plug_top = 7.0
     plug_bot = plug_top - plug_thick   # -5.1
-    plug_x0, plug_x1 = 3.3, 93.0
+    plug_x0, plug_x1 = 3.3, 93.4
     plug_y0, plug_y1 = 2.3, 43.7
     bay_cz = (plug_top + plug_bot) / 2  # 0.95
 
     # AAA bay X range — PRESET values
     aaa_len = 39.5   # PRESET: shortened from 44.5
     bay_len = aaa_len + 2*2.0 + 1.0   # = 44.5
-    px_pillar_cut_mx = 94.5 - 1.2 - 5.0 - 0.4   # 87.9
+    px_pillar_cut_mx = 94.9 - 1.2 - 5.0 - 0.4   # 88.3
     bay_px_end = px_pillar_cut_mx - 3.0 - 20.0   # 64.9
     bay_mx_start = bay_px_end - bay_len           # 20.4
 
@@ -649,8 +649,8 @@ def build_cradle(doc):
     # ── 2. Corner pillar cutouts (4) ──
     cs = ps + 2 * slop
     pillar_origins = [
-        (3.0, 2.0), (94.5 - 1.2 - ps, 2.0),
-        (3.0, 46.0 - 2.0 - ps), (94.5 - 1.2 - ps, 46.0 - 2.0 - ps),
+        (3.0, 2.0), (94.9 - 1.2 - ps, 2.0),
+        (3.0, 46.0 - 2.0 - ps), (94.9 - 1.2 - ps, 46.0 - 2.0 - ps),
     ]
     for i, (ox, oy) in enumerate(pillar_origins):
         cut = body.newObject("PartDesign::SubtractiveBox", f"PillarCut_{i+1}")
@@ -691,7 +691,7 @@ def build_cradle(doc):
 
     # ── 5. Pico nest ──
     pico_ny = 21.0 + 2 * 0.4   # 21.8
-    pico_nx = 78.0 + 2 * 0.4   # 78.8
+    pico_nx = 78.0 + 2 * 0.4 + 0.4   # 79.2 (+0.4 for extended +X enclosure)
     pico_y_start = 46.0 / 2 - pico_ny / 2
     pico_x_start = max(plug_x0 + 3.0,
         ((plug_x0 + 3.0 + bay_mx_start) / 2 - pico_nx / 2))
@@ -748,7 +748,7 @@ def build_cradle(doc):
 
     # TP4056 indent on connecting block top
     tp_len = 28.0 + 2 * 0.2   # 28.4
-    tp_wid = 17.0 + 2 * 0.2   # 17.4
+    tp_wid = 17.0 + 2 * 0.3   # 17.6
     tp_y = (pico_y_start + pico_y_start + pico_ny) / 2 - tp_wid / 2
     tp_indent = body.newObject("PartDesign::SubtractiveBox", "TP4056_Indent")
     tp_indent.Length = tp_len
@@ -810,7 +810,7 @@ def build_cradle(doc):
     joy_pit_size = 20.0   # board 19.6 + 0.2 mm/side clearance (no well)
     joy_cx_v = 79.35
     joy_pit_cy_local = 46.0 / 2           # enc_y/2 — centered on board bbox
-    joy_pit_cx_local = 96.3 - joy_cx_v   # global → local X
+    joy_pit_cx_local = 96.7 - joy_cx_v   # global → local X
     pit = body.newObject("PartDesign::SubtractiveBox", "JoystickPCBPit")
     pit.Length = joy_pit_size
     pit.Width = joy_pit_size
@@ -829,7 +829,7 @@ def build_cradle(doc):
     # ConnBlock only refills Y=12.1..33.9.  With the pit now 20 mm
     # (down from 23), the pit +Y edge may sit inside the ConnBlock,
     # making the +Y fill unnecessary.  Guard all fills with size checks.
-    fill_x0 = plug_x0 - 0.1                                # 3.2
+    fill_x0 = plug_x0                                       # 3.3 (flush with plug body)
     fill_x1 = joy_pit_cx_local - joy_pit_size / 2           # pit -X edge
     pit_top_z = plug_bot + joy_pit_depth_v + 0.05
     ceil_x1 = plug_x0 + 3.0                                  # 6.3 (FPC gap +X edge)
@@ -934,7 +934,7 @@ def build_top_cover(doc):
     print("  Building Top Cover...")
     body = doc.addObject("PartDesign::Body", "TopCover")
 
-    enc_x, enc_y = 94.5, 46.0
+    enc_x, enc_y = 94.9, 46.0
     wall_mx, wall_px, wall_y = 3.0, 1.2, 2.0
     ps = 5.0
     face_bot = 7.0
@@ -1209,8 +1209,8 @@ PICO_USB_PLUS_X = False
 # Anchor positions computed directly from cradle geometry so they don't
 # break when features are added/removed (face indices are fragile).
 # X-anchor: inner -X wall of PicoNest — cradle local X = pico_x_start +
-#   pico_nx = 6.3 + 78.8 = 85.1.  After 180° Y flip + translate(96.3):
-#   global X = 96.3 - 85.1 = 11.2.
+#   pico_nx = 6.3 + 79.2 = 85.5.  After 180° Y flip + translate(96.7):
+#   global X = 96.7 - 85.5 = 11.2.
 # Z-anchor: plug_top mating face — global Z = bp_top = 6.0.
 PICO_ANCHOR_X_GLOBAL = 11.2
 PICO_ANCHOR_Z_GLOBAL = 6.0
@@ -1296,7 +1296,7 @@ def add_pico_with_headers(doc):
     header_shape = header_shape.transformGeometry(m_flip_z)
 
     # ── Anchor combined assembly in global coords ──
-    enc_x_v, enc_y_v, wall_px_v = 94.5, 46.0, 1.2
+    enc_x_v, enc_y_v, wall_px_v = 94.9, 46.0, 1.2
 
     bb_b = shape.BoundBox
     bb_h = header_shape.BoundBox
@@ -1559,13 +1559,13 @@ def add_peripherals(doc):
     # In cradle local: bay_mx_start=20.4 to bay_px_end=64.9 (44.5mm bay),
     # cells centered with aaa_cspace=2.0 per end → cell X local 22.4..61.9.
     # bay_y locals: 7.85, 38.15. bay_cz local: 0.95.
-    # Cradle Placement: 180° about Y, then translate (96.3, 0, bp_top+7.0=13).
-    # → global cell X = [96.3-61.9, 96.3-22.4] = [34.4, 73.9]
+    # Cradle Placement: 180° about Y, then translate (96.7, 0, bp_top+7.0=13).
+    # → global cell X = [96.7-61.9, 96.7-22.4] = [34.8, 74.3]
     # → global cell Y = bay_y_local (Y unchanged by Y rotation)
     # → global cell Z = 13.0 - bay_cz_local = 12.05
     aaa_d = 10.5
     aaa_len = 39.5
-    cell_x_min_g = 96.3 - 61.9
+    cell_x_min_g = 96.7 - 61.9
     cell_y_g = {1: 7.85, 2: 38.15}
     cell_z_g = 13.0 - 0.95
     # Battery cylinder is along X axis, placed by cylinder center on -X end
@@ -1598,25 +1598,24 @@ def add_peripherals(doc):
     # ── TP4056 USB-C charger module ──
     # Standard module: 28 mm × 17 mm × 1.6 mm PCB + USB-C bump (~9×7×3.4)
     # Cradle's TP4056_Indent (cradle local): plug_x0=3.3 to plug_x0+tp_xl=31.3,
-    # tp_y=14.3 to tp_y+tp_yw=31.3, top face at plug_top=7 (board sits flush).
-    # After cradle 180° Y flip + translate: global X=64.6..93.0, Y=14.3..31.3,
-    # Z (board top, formerly local +Z=7) = 13-7 = 6 → board hangs DOWN from
-    # there to Z=6-1.6=4.4, components reach to ~3.0. USB-C connector points
-    # +X (toward base plate +X-wall cutout at X=93.3).
+    # tp_y=14.3 to tp_y+tp_yw=31.3, indent floor at local Z=6.0 (plug_top-tp_iz).
+    # After cradle 180° Y flip + translate: global X=65.4..93.4, Y=14.3..31.3,
+    # Indent floor (local Z=6.0) → global Z = 13-6 = 7.0 (Face69).
+    # Board sits flat on Face69, PCB extends upward Z=7.0..8.6, components on top.
     tp_xl_v = 28.0
     tp_yw_v = 17.0
     tp_pcb_t = 1.6
-    tp_x_min_g = 96.3 - (3.3 + tp_xl_v)        # = 65.0
+    tp_x_min_g = 96.7 - (3.3 + tp_xl_v)        # = 65.4
     tp_y_min_g = 14.3
-    tp_z_top_g = 13.0 - 7.0                    # = 6.0 (board top, mating)
-    # PCB body
+    tp_z_bot_g = 13.0 - 6.0                    # = 7.0 (indent floor = Face69)
+    # PCB body — sits flat on indent floor
     tp_pcb = Part.makeBox(tp_xl_v, tp_yw_v, tp_pcb_t,
-                          V(tp_x_min_g, tp_y_min_g, tp_z_top_g - tp_pcb_t))
+                          V(tp_x_min_g, tp_y_min_g, tp_z_bot_g))
     # (TP4056_USBC connector visualization removed — module shape only)
     # IC + capacitor lump (rough block representing the SOIC + caps)
     ic_lump = Part.makeBox(14, 8, 1.6,
                            V(tp_x_min_g + 8, tp_y_min_g + 4.5,
-                             tp_z_top_g - tp_pcb_t - 1.6))
+                             tp_z_bot_g + tp_pcb_t))
     tp_obj = doc.addObject("Part::Feature", "TP4056_Module")
     tp_obj.Shape = Part.Compound([tp_pcb, ic_lump])
     try:
@@ -1688,9 +1687,9 @@ def add_peripherals(doc):
     # In CRADLE LOCAL coords: 4 slots (computed in build_cradle):
     #   P slots at local sx = 65.9 (slot face cell-side at local x = 65.9)
     #   M slots at local sx = 18.5 (slot face cell-side at local x = 19.4)
-    # After cradle 180° Y flip + translate(96.3, 0, 13.0):
-    #   P slot face → global X = 96.3 - 65.9 = 30.4  (faces +X toward cell neg)
-    #   M slot face → global X = 96.3 - 19.4 = 76.9  (faces -X toward cell pos)
+    # After cradle 180° Y flip + translate(96.7, 0, 13.0):
+    #   P slot face → global X = 96.7 - 65.9 = 30.8  (faces +X toward cell neg)
+    #   M slot face → global X = 96.7 - 19.4 = 77.3  (faces -X toward cell pos)
     #
     # So GLOBAL roles by suffix:
     #   *P slots (global X=30.4) sit outboard of cell's NEGATIVE end (X=34.4)
@@ -1783,7 +1782,7 @@ def add_peripherals(doc):
     print(f"    Wiring:       POS bus at X={pos_bus_x:.1f} (red, both +→TP4056 BAT+)")
     print(f"                  NEG bus at X={neg_bus_x:.1f} (black, both −→TP4056 BAT−)")
     print(f"    TP4056:       X=[{tp_x_min_g:.1f},{tp_x_min_g+tp_xl_v:.1f}]  "
-          f"Y=[{tp_y_min_g:.1f},{tp_y_min_g+tp_yw_v:.1f}]  Z_top={tp_z_top_g:.2f}")
+          f"Y=[{tp_y_min_g:.1f},{tp_y_min_g+tp_yw_v:.1f}]  Z_bot={tp_z_bot_g:.2f}")
     print(f"    EInk display: X=[{disp_x_min_g:.1f},"
           f"{disp_x_min_g+disp_xl_v:.1f}]  "
           f"Y=[{disp_y_min_g:.1f},{disp_y_min_g+disp_yd_v:.1f}]  "
@@ -1811,7 +1810,7 @@ def add_piezo_speaker(doc):
 
     # Base plate pocket floor (global, base plate has identity placement)
     floor_z = 2.6
-    cx = 94.5 / 2   # = 47.25 — matches PiezoRing center
+    cx = 94.9 / 2   # = 47.45 — matches PiezoRing center
     cy = 46.0 / 2   # = 23.0
 
     brass_d = 20.0
@@ -1846,7 +1845,7 @@ def add_imu_module(doc):
     print("  Adding IMU module (GY-6500 / MPU-6500)...")
 
     floor_z = 2.6
-    piezo_cx = 94.5 / 2   # 47.25
+    piezo_cx = 94.9 / 2   # 47.45
     piezo_cy = 46.0 / 2   # 23.0
     piezo_ring_od = 22.2
 
@@ -1900,7 +1899,7 @@ def add_solar_panel(doc):
 
     # ── Geometry (global; base plate Placement is identity, so base
     # plate local coords = global coords) ──
-    enc_x_v = 94.5
+    enc_x_v = 94.9
     enc_y_v = 46.0
     sol_x_v = 62.4              # pit width (matches sol_x param)
     sol_y_v = 36.4              # pit depth
@@ -2026,7 +2025,7 @@ def main():
     # Former plug_top face (local Z=7.0) → rotated to Z=-7.0.
     # Flush with base plate top: -7.0 + Z_shift = bp_top → Z_shift = 13.0
     cr.Placement = App.Placement(
-        V(96.3, 0, bp_top + 7.0),
+        V(96.7, 0, bp_top + 7.0),
         App.Rotation(V(0, 1, 0), 180))
     doc.recompute()
 

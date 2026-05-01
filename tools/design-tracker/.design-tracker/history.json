@@ -23,6 +23,30 @@
         "comp-baseplate-iso.png"
       ],
       "macro_hash": "2a5113c54a93"
+    },
+    {
+      "id": 2,
+      "timestamp": "2026-05-01T12:25:09.479464",
+      "git_hash": "bcbe3ee",
+      "message": "extended board .4mm fixed extension lip on usb cutout and widened the usb c cutout by .2 mm",
+      "fcstd_count": 14,
+      "fcstd_newest": "Dilder_Rev2_Mk2 .4mm extension fixed lip and curved the thumbstick.FCStd",
+      "fcstd_newest_hash": "12a4a4d52c92",
+      "mf_count": 42,
+      "render_count": 73,
+      "renders": [
+        "aaa-cradle.png",
+        "assembled.png",
+        "assembly-with-pico-front.png",
+        "assembly-with-pico-iso.png",
+        "assembly-with-pico-no-cover.png",
+        "assembly-with-pico-on-base.png",
+        "base-plate-bottom.png",
+        "base-plate.png",
+        "comp-baseplate-bottom.png",
+        "comp-baseplate-iso.png"
+      ],
+      "macro_hash": "24d1b3436149"
     }
   ],
   "prints": []
