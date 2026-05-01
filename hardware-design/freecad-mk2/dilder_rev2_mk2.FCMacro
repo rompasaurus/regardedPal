@@ -209,7 +209,7 @@ PARAMS = [
     ("tc_edge_r",      2.2,  "Face plate edge curve radius (4-26-final)"),
     ("tc_fp_z",        1.0,  "Face plate thickness (4-26-final)"),
     ("tc_wext",        5.0,  "Wall ext below mating"),
-    ("disp_xl",       65.0,  "Display length X"),
+    ("disp_xl",       65.2,  "Display length X (+0.2 on +X for display fit)"),
     ("disp_yd",       30.0,  "Display depth Y"),
     ("disp_z",         7.0,  "Display thickness Z"),
     ("inlay_z",        3.0,  "Screen inlay depth"),
@@ -1059,7 +1059,7 @@ def build_top_cover(doc):
 
     # ── 7. Screen inlay pocket ──
     disp_x0 = wall_mx + 0.4   # 3.4
-    disp_x1 = disp_x0 + 65.0  # 68.4
+    disp_x1 = disp_x0 + 65.2  # 68.6
     disp_y0 = enc_y/2 - 30.0/2  # 8.0
     disp_y1 = disp_y0 + 30.0    # 38.0
     inlay_x0 = disp_x0 - 0.3    # 3.1
@@ -1108,7 +1108,7 @@ def build_top_cover(doc):
     # window follows so both stay on the same Y centerline.
     joy_pcb_y_offset_v = 0.67
     joy_cy_v = 46.0 / 2 + joy_pcb_y_offset_v
-    win_x0 = disp_x0 + (65.0 - win_w)/2 + 2.8
+    win_x0 = disp_x0 + (65.2 - win_w)/2 + 2.8
     win_y0 = joy_cy_v - win_h / 2
 
     win_z_height = total_h - face_bot + 0.2  # through face plate + dome
@@ -1632,7 +1632,7 @@ def add_peripherals(doc):
     # Inlay carves from local Z=face_bot=7 upward by inlay_depth=3 → global
     # Z = 11+7 = 18 (module bottom = back of display PCB) to Z = 11+10 = 21
     # (active screen surface visible through the window cut).
-    disp_xl_v, disp_yd_v = 65.0, 30.0
+    disp_xl_v, disp_yd_v = 65.2, 30.0
     disp_x_min_g = 3.4   # disp_x0 = wall_mx + 0.4
     disp_y_min_g = 8.0   # disp_y0 = enc_y/2 - disp_yd/2
     disp_z_back_g = 11.0 + 7.0   # module back (PCB) sits flush with inlay floor
