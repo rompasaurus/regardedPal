@@ -3719,3 +3719,19 @@ Every prompt entry below uses the following fields. Entries that don't yet list 
   - `hardware-design/freecad-mk2/Dilder_Rev2_Mk2-without solar panel.FCStd` (new) — iteration snapshot
   - `hardware-design/freecad-mk2/dilder_rev2_mk2.FCMacro` — minor modification
   - `hardware-design/freecad-mk2/DilderFull Case Print out 29.04.3mf` — updated print export
+
+---
+
+## Prompt #274 — 2026-05-03
+- **Prompt sequence:** "ok let update the dilder home page and make a new idea concept for the game play loop encorporating proximity detection dilder sholud make a uniques noise or action when another dilder is encountered in proximity and a collectible item can be received further there can be collectable geocaching challenges wher the user is given a dridldle and approximate location to find a collectable electronic physical gift of some sort this could play into a marketing router to get people interested in the device"
+- **Input Tokens (est):** ~150
+- **Output Tokens (est):** ~30,000
+- **Commit:** `6185e50` — Add Dilder Encounters, Geocaching & Collectibles gameplay concept
+- **Summary:** Designed a three-layer gameplay and marketing system extending the existing peer discovery BLE protocol and treasure hunt system. (1) Proximity encounters with unique 3-note piezo chimes (4,096 melodies from device_id hash), encounter screens, +25 XP / +15 happiness, optional collectible trading. (2) Riddle-based geocaching with physical electronic prizes in NFC-tagged capsules (Common LED packs to Mythic pre-assembled Dilders). Cache Keeper community program. (3) Collectible ecosystem with cosmetics, sound packs, personality fragments, genome traits, and lore fragments — real trading during encounters. Marketing viral loop: chime curiosity → demonstration → network effect. Patreon tier integration.
+- **Layman summary:** Designed a gameplay system where Dilder devices detect each other via Bluetooth and play unique musical chimes. Both owners earn rewards and can trade collectibles. Also designed geocaching treasure hunts with riddles and physical electronic prizes. The system doubles as marketing through public curiosity and network effects.
+- **Files:**
+  - `Gamplay Planning/14-encounters-geocaching-collectibles.md` (new) — full design doc
+  - `website/docs/blog/posts/encounters-geocaching-collectibles.md` (new) — blog post
+  - `website/docs/docs/design/encounters-geocaching.md` (new) — website design doc
+  - `website/docs/index.md` — new encounters section on home page
+  - `website/mkdocs.yml` — nav updated
