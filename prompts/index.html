@@ -5848,6 +5848,17 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#prompt-273-2026-05-02" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Prompt #273 — 2026-05-02
+      
+    </span>
+  </a>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -8659,6 +8670,17 @@
     <span class="md-ellipsis">
       
         Prompt #272 — 2026-05-01
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#prompt-273-2026-05-02" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Prompt #273 — 2026-05-02
       
     </span>
   </a>
@@ -12406,6 +12428,36 @@
 <li><strong>Related commits (context):</strong></li>
 <li><code>4439d5c</code> — folder and joystick relocation under <code>hardware-design/PCB Designs/</code> made room for this workspace</li>
 <li><code>a7a1eab</code> — Prompt #271 (DevTool move that preceded this work in the same session)</li>
+</ul>
+<hr />
+<h2 id="prompt-273-2026-05-02">Prompt #273 — 2026-05-02<a class="headerlink" href="#prompt-273-2026-05-02" title="Permanent link">&para;</a></h2>
+<ul>
+<li><strong>Prompt sequence:</strong> "ok summarize the staged changes update the documens and provide renders with the lates freecad file modified add it to the site as a lternative design update the docs and blog and I added heic pics to the root describe them follown pic descript stucture be detailed in description and convert to jpeg and put in the correct folders then update the fron home page with the choice pictures of the lates hardware progression then also update the docs and docs on the page and the hardware evolution as well note that the unit is solder and power via batter and usb charging works attach the pics to the pertinant docs as well commit and push then update prompts fix spelling and attach the commit hashes and commit and push"</li>
+<li><strong>Input Tokens (est):</strong> ~200</li>
+<li><strong>Output Tokens (est):</strong> ~25,000</li>
+<li><strong>Commit:</strong> <code>2f33b2d</code> — Add NoSolar variant, soldered unit photos, and hardware docs update</li>
+<li><strong>Summary:</strong> Multi-step documentation and media pipeline: converted 10 HEIC photos from root to JPEG with descriptive filenames, categorized and placed in <code>website/docs/assets/images/hardware/</code> and <code>website/docs/assets/images/enclosure/rev2-nosolar/</code>. Photos cover the full hardware progression: 3D-printed parts storage (2 photos), first battery power-on with e-ink display running (3 photos), NoSolar variant case open/closed/charging (3 photos), fully assembled unit running Conspiratorial Octopus (1 photo), solar variant back view for comparison (1 photo). Added the NoSolar FreeCAD variant as an alternative design with new blog post (<code>nosolar-variant-first-power.md</code>) documenting the variant differences, build session, and first power-on. Updated home page (<code>index.md</code>) with latest hardware progression photos replacing/augmenting the existing current build section, updated phase status to reflect soldered unit and battery power milestones, corrected blog/prompt counts. Updated <code>design-evolution.md</code> with two new sections (Soldered Unit + NoSolar Variant) including all 10 photos with detailed alt text, variant comparison table, and 4 new version history entries. The NoSolar macro (<code>dilder_rev2_mk2_no_solar.FCMacro</code>), FCStd, and 5 pre-exported 3MF files were already staged from user's manual work.</li>
+<li><strong>Layman summary:</strong> Took 10 raw iPhone photos showing the Dilder being built, soldered, and powered on for the first time. Converted them from Apple's HEIC format to standard JPEG, gave each a descriptive filename, and sorted them into the right website folders. Created a blog post about the new "no solar panel" case variant. Updated the home page with the best new photos showing the device actually running. Updated the hardware evolution documentation with full write-ups of the soldering milestone and the NoSolar alternative design. All the FreeCAD model files and 3D print exports for the new variant were already staged.</li>
+<li><strong>Files:</strong></li>
+<li><code>website/docs/assets/images/hardware/first-battery-power-display-on.jpg</code> (new) — first battery power-on, display showing Sassy Octopus</li>
+<li><code>website/docs/assets/images/hardware/first-battery-power-side-view.jpg</code> (new) — side view of soldered unit with battery and charger</li>
+<li><code>website/docs/assets/images/hardware/soldered-unit-battery-cradle.jpg</code> (new) — close-up of solder joints, Pico W, TP4056, 10440 cell in cradle</li>
+<li><code>website/docs/assets/images/hardware/fully-assembled-display-running.jpg</code> (new) — Conspiratorial Octopus running on fully assembled NoSolar unit</li>
+<li><code>website/docs/assets/images/hardware/build-session/printed-parts-storage-close.jpg</code> (new) — 3D-printed parts in printer storage drawer, close view</li>
+<li><code>website/docs/assets/images/hardware/build-session/printed-parts-storage-wide.jpg</code> (new) — storage drawer unit wide angle</li>
+<li><code>website/docs/assets/images/enclosure/rev2-nosolar/nosolar-open-internals-top-view.jpg</code> (new) — NoSolar case opened showing internals</li>
+<li><code>website/docs/assets/images/enclosure/rev2-nosolar/nosolar-base-and-unit-usb-charging.jpg</code> (new) — NoSolar variant assembled, USB charging</li>
+<li><code>website/docs/assets/images/enclosure/rev2-nosolar/nosolar-base-and-unit-wide-view.jpg</code> (new) — NoSolar variant wide view on bench</li>
+<li><code>website/docs/assets/images/enclosure/rev2-nosolar/solar-variant-back-view.jpg</code> (new) — solar variant back showing AK 62x36mm panel</li>
+<li><code>website/docs/blog/posts/nosolar-variant-first-power.md</code> (new) — blog post: NoSolar variant first power-on</li>
+<li><code>website/docs/index.md</code> — home page updated with 6 new hardware progression photos, phase status updated (soldered, battery, USB charging, NoSolar), blog/prompt counts corrected</li>
+<li><code>website/docs/docs/hardware/design-evolution.md</code> — two new sections (Soldered Unit, NoSolar Variant) with photos, comparison table, 4 version history entries, intro text updated</li>
+<li><code>hardware-design/freecad-mk2/dilder_rev2_mk2_no_solar.FCMacro</code> (new) — NoSolar variant FreeCAD macro</li>
+<li><code>hardware-design/freecad-mk2/Dilder_Rev2_Mk2_NoSolar.FCStd</code> (new) — NoSolar variant FreeCAD document</li>
+<li><code>hardware-design/freecad-mk2/Dilder_Rev2_Mk2_NoSolar-*.3mf</code> (5 new) — pre-exported 3MF parts</li>
+<li><code>hardware-design/freecad-mk2/Dilder_Rev2_Mk2-without solar panel.FCStd</code> (new) — iteration snapshot</li>
+<li><code>hardware-design/freecad-mk2/dilder_rev2_mk2.FCMacro</code> — minor modification</li>
+<li><code>hardware-design/freecad-mk2/DilderFull Case Print out 29.04.3mf</code> — updated print export</li>
 </ul>
 
 
