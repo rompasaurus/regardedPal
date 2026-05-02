@@ -136,6 +136,7 @@ nav:
           - Open-Source Board Designs: docs/design/open-board-designs.md
           - Breadboard Prototype: docs/design/breadboard-prototype.md
           - Motion & Location Detection: docs/design/motion-location-detection.md
+          - Encounters & Geocaching: docs/design/encounters-geocaching.md
       - Software:
           - Project Structure: docs/software/project-structure.md
           - Firmware Game Engine: docs/software/firmware-engine.md

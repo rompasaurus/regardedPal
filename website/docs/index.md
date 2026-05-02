@@ -131,6 +131,32 @@ The parametric FreeCAD macro gained three new systems: a **20 mm piezo speaker**
 
 ---
 
+## Dilder Encounters, Riddle Hunts & Collectibles
+
+The Dilder isn't just a desk pet — it's a device that comes alive when it meets other Dilders in the real world.
+
+### Proximity Encounters
+
+Every Dilder broadcasts a BLE beacon. When two devices come within range (~10-30m), both react automatically — a **unique 3-note chime** plays through the piezo speaker, the e-ink display shows the other pet's name and personality, and both players earn XP and collectibles. No buttons to press. The chime is generated from the device's unique ID, so every Dilder sounds different — and you play *the other one's* chime, not your own.
+
+### Riddle Hunts — Geocaching with Physical Prizes
+
+The device presents riddles hinting at real-world locations where **physical electronic prizes** are hidden in waterproof capsules:
+
+> *"Where iron horses once drank and the clock tower still watches, look beneath the bench that faces west."*
+
+Find the capsule, tap the NFC tag against your Dilder, and collect both a **digital unlock** (cosmetics, sounds, lore fragments) and a **physical electronic component** — anything from an LED pack to a full sensor breakout board. Legendary capsules might contain an actual Pico W or a pre-assembled Dilder unit.
+
+Community members become **Cache Keepers** — writing their own riddles, hiding capsules, and maintaining caches worldwide.
+
+### The Network Effect
+
+More Dilders = more encounters = more fun. The chime creates curiosity in public. Bystanders ask what the device is. Every encounter is a natural demonstration — and the device is free to build from GitHub or available as a kit on Patreon.
+
+[Read the full design doc :material-arrow-right:](blog/posts/encounters-geocaching-collectibles.md){ .md-button }
+
+---
+
 ## Meet the Octopus
 
 A tiny octopus lives on a 250x122 pixel e-ink display. It has **16 emotional states**, each with unique eyes, mouth expressions, body animations, and themed quotes. It's sassy. It's opinionated. It runs on 100KB of firmware and a coin cell's worth of ambition.
