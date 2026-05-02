@@ -38,13 +38,13 @@ Jamal still sits in the armchair. He still wears the hat. He watches us build hi
 <div class="grid" markdown>
 
 <figure markdown="span">
-  ![Dilder Rev 2 — assembled front view showing Sassy Octopus on e-ink display](assets/images/enclosure/rev2-current/rev2-assembled-front-view.jpg){ width="420" loading=lazy }
-  <figcaption>"COFFEE IS JUST BEAN BROTH FOR PEOPLE WHO HATE THEMSELVES." — Sassy Octopus, running on Pico 2 W</figcaption>
+  ![Fully assembled Dilder unit running the Conspiratorial Octopus personality — e-ink display shows MAY 2 2025 6:09 AM header and the quote DREAMS ARE LEAKED FOOTAGE FROM ALTERNATE DIMENSIONS with pixel-art octopus, housed in the black NoSolar 3D-printed case, USB-C cable connected for charging](assets/images/hardware/fully-assembled-display-running.jpg){ width="420" loading=lazy }
+  <figcaption>"DREAMS ARE LEAKED FOOTAGE FROM ALTERNATE DIMENSIONS." — Conspiratorial Octopus, fully soldered and battery-powered</figcaption>
 </figure>
 
 <figure markdown="span">
-  ![Dilder Rev 2 — three-quarter angle showing case depth and profile](assets/images/enclosure/rev2-current/rev2-assembled-three-quarter-view.jpg){ width="420" loading=lazy }
-  <figcaption>Rev 2 enclosure — 3D-printed case with bullnose top edge, joystick port, and display window inlay</figcaption>
+  ![Dilder Rev 2 — assembled front view showing Sassy Octopus on e-ink display](assets/images/enclosure/rev2-current/rev2-assembled-front-view.jpg){ width="420" loading=lazy }
+  <figcaption>"COFFEE IS JUST BEAN BROTH FOR PEOPLE WHO HATE THEMSELVES." — Sassy Octopus, running on Pico 2 W</figcaption>
 </figure>
 
 </div>
@@ -52,13 +52,27 @@ Jamal still sits in the armchair. He still wears the hat. He watches us build hi
 <div class="grid" markdown>
 
 <figure markdown="span">
-  ![Dilder Rev 2 — e-ink display close-up with Sassy Octopus and clock header](assets/images/enclosure/rev2-current/rev2-display-closeup-sassy-octopus.jpg){ width="420" loading=lazy }
-  <figcaption>Close-up — 250x122 e-ink display with RTC clock header, animated octopus, and speech bubble</figcaption>
+  ![Dilder NoSolar variant opened showing internals — black base plate without solar cutout separated from the assembled unit with Pico W, 10440 battery, and TP4056 USB-C charger with red LED lit](assets/images/enclosure/rev2-nosolar/nosolar-open-internals-top-view.jpg){ width="420" loading=lazy }
+  <figcaption>NoSolar variant opened — Pico W, 10440 battery, and TP4056 charger. Fully soldered, USB-C charging confirmed</figcaption>
 </figure>
 
 <figure markdown="span">
   ![Dilder Rev 2 — case parts disassembled showing top cover, base plate, and cradle](assets/images/enclosure/rev2-current/rev2-case-parts-disassembled.jpg){ width="420" loading=lazy }
   <figcaption>Disassembled — top cover with display inlay, base plate with solar cutout, battery cradle insert</figcaption>
+</figure>
+
+</div>
+
+<div class="grid" markdown>
+
+<figure markdown="span">
+  ![Dilder first battery power-on — e-ink display showing the Sassy Octopus with 10440 battery in cradle and TP4056 charging LED glowing red](assets/images/hardware/first-battery-power-display-on.jpg){ width="420" loading=lazy }
+  <figcaption>First battery power-on — soldered unit running off a single 10440 cell with TP4056 charge indicator</figcaption>
+</figure>
+
+<figure markdown="span">
+  ![Dilder solar variant back view showing the AK 62x36mm solar panel through the base plate cutout](assets/images/enclosure/rev2-nosolar/solar-variant-back-view.jpg){ width="420" loading=lazy }
+  <figcaption>Solar variant (alternative) — AK 62x36mm panel visible through the base plate. Same internals, plus solar trickle charging</figcaption>
 </figure>
 
 </div>
@@ -237,13 +251,13 @@ The STEP model of the finished board is imported directly into the FreeCAD assem
 ## Current Phase
 
 !!! info "Phase 2 — Firmware Foundation (C on Pico W)"
-    Phase 1 (hardware + tooling) is complete. The octopus has 16 emotional states, 18 standalone firmware programs, custom body shapes, and runtime math-based rendering — all in ~100KB. GPIO joystick input is now live.
+    Phase 1 (hardware + tooling) is complete. The unit is **fully soldered and battery-powered** — running off a 10440 Li-ion cell with USB-C charging via TP4056 confirmed working. Two enclosure variants available: **Solar** (with AK 62x36mm panel) and **NoSolar** (slimmer, USB-only).
 
-    **Done:** Runtime rendering engine | 16 emotions | Body animations | Custom fat/lazy bodies | 823 quotes | C-faithful preview renderer | DevTool with firmware size estimation | **GPIO joystick input** | On-screen input indicator
+    **Done:** Runtime rendering engine | 16 emotions | Body animations | Custom fat/lazy bodies | 823 quotes | C-faithful preview renderer | DevTool with firmware size estimation | **GPIO joystick input** | On-screen input indicator | **Soldered unit** | **Battery power** | **USB-C charging** | **NoSolar variant**
 
-    **In Progress:** Custom PCB design — switched from RP2040 to **ESP32-S3-WROOM-1-N16R8** (WiFi+BLE, 16MB flash, 8MB PSRAM). 4-layer board (45x80mm, 27 components) designed in KiCad, ready for interactive routing and JLCPCB fabrication. **Hand-routed joystick breakout PCB** (K1-1506SN-01, 19.6x19.6mm) designed from scratch in KiCad 10 with gerbers and BOM ready for JLCPCB.
+    **In Progress:** Custom PCB design — switched from RP2040 to **ESP32-S3-WROOM-1-N16R8** (WiFi+BLE, 16MB flash, 8MB PSRAM). 4-layer board (45x80mm, 27 components) designed in KiCad, ready for interactive routing and JLCPCB fabrication. **Hand-routed joystick breakout PCB** (K1-1506SN-01, 19.6x19.6mm) designed from scratch in KiCad 10 with gerbers and BOM ready for JLCPCB. **Full Board** all-in-one PCB design kicked off with component reference and KiCad import guide.
 
-    **Next:** Order joystick PCB from JLCPCB | Complete ESP32 PCB routing and order boards | Wire batteries to board | Game loop with state machine
+    **Next:** Order joystick PCB from JLCPCB | Complete ESP32 PCB routing and order boards | Game loop with state machine | Evaluate battery life
 
 ---
 
@@ -263,7 +277,7 @@ The STEP model of the finished board is imported directly into the FreeCAD assem
 
     ---
 
-    9 build journal posts — from planning to body animations.
+    Build journal posts — from planning to a soldered, battery-powered unit.
 
     [:octicons-arrow-right-24: Read the Blog](blog/index.md)
 
@@ -295,7 +309,7 @@ The STEP model of the finished board is imported directly into the FreeCAD assem
 
     ---
 
-    All firmware, tools, and docs. 104+ AI prompts logged.
+    All firmware, tools, and docs. 270+ AI prompts logged.
 
     [:octicons-arrow-right-24: GitHub Repo](https://github.com/rompasaurus/dilder)
 
@@ -307,9 +321,9 @@ The STEP model of the finished board is imported directly into the FreeCAD assem
 
 The entire development process is public:
 
-- **Every prompt** submitted to the AI assistant is logged in the [Prompt Log](prompts/index.md) — 150 and counting
+- **Every prompt** submitted to the AI assistant is logged in the [Prompt Log](prompts/index.md) — 270+ and counting
 - **Every hardware decision** is documented in the [Docs](docs/index.md)
-- **Every build step** is written up in the [Blog](blog/index.md) — 17 posts so far
+- **Every build step** is written up in the [Blog](blog/index.md)
 - **Every drawing function** is verified pixel-by-pixel between C firmware and Python DevTool
 - **All source files** are on [GitHub](https://github.com/rompasaurus/dilder)
 

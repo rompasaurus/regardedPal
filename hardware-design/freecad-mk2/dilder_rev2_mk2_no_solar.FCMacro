@@ -1,16 +1,20 @@
 """
-Dilder Rev 2 Mk2 — Full Parametric FreeCAD Model (PartDesign)
+Dilder Rev 2 Mk2 — NO SOLAR PANEL variant
 ==============================================================
 3 Bodies: BasePlate, AAACradle, TopCover
 Each built from constrained sketches + Pad/Pocket/Fillet/AdditivePrimitive chains.
 
+Variant: Solar panel pit, wire holes, and solar panel model removed.
+Base plate reduced by 2mm (sol_z depth) to 4mm total height.
+USB reinforcement block added under the USB-C cutout.
+
 Presets baked:
-  Base plate:  thick floo reduce negative space  (ext_x=30, floor=2.6, shave 8→6)
+  Base plate:  no solar, thinner back  (bp_h=4.0, floor=0.6, no solar pit/holes)
   AAA cradle:  04-27 shortened + open window  (cell_len = 39.5, clip_win_z_ext = 4)
   Top cover:   4-26-final-face-for-now  (fp_z = 1.0, edge_curve_r = 2.2)
 
 All values live in the Parameters spreadsheet — change any cell, Ctrl+Shift+R.
-Save path (auto):  hardware-design/freecad-mk2/Dilder_Rev2_Mk2.FCStd
+Save path (auto):  hardware-design/freecad-mk2/Dilder_Rev2_Mk2_NoSolar.FCStd
 
 Usage:
   FreeCAD ≥ 0.21 > Macro > Run Macro > select this file
@@ -136,15 +140,15 @@ PARAMS = [
     ("pillar",         5.0,  "Corner pillar side"),
     # ─── Base plate ───
     # SCAD builds at 8mm then shaves 2mm band (Z=4..6), effective height = 6
-    ("bp_h",           6.0,  "Base plate height Z (post-shave: 8 - 2)"),
+    ("bp_h",           4.0,  "Base plate height Z (no solar: 6 - 2)"),
     ("bp_fillet",      2.0,  "Bottom fillet radius"),
-    ("bp_floor",       2.6,  "Pocket floor thickness (thick floo preset)"),
+    ("bp_floor",       0.6,  "Pocket floor thickness (no solar: 2.6 - 2.0)"),
     ("cpx0",           3.1,  "Pocket X start"),
     ("cpx1",          95.6,  "Pocket X end (+2mm)"),
     ("cpy0",           2.1,  "Pocket Y start"),
     ("cpy1",          43.9,  "Pocket Y end"),
     ("peg_d",          3.0,  "Peg diameter"),
-    ("peg_h",          3.0,  "Peg height above plate"),
+    ("peg_h",          5.0,  "Peg height above plate (no-solar: +2mm)"),
     ("peg_cham",       0.4,  "Peg tip chamfer"),
     ("ext_x",         30.0,  "Pillar extension X (thick floo preset)"),
     ("ext_y",          0.0,  "Pillar extension Y (was 4.0; reduced wing Y from 9→5mm to free middle of base 05-01-2026)"),
@@ -285,9 +289,9 @@ def build_base_plate(doc):
     body = doc.addObject("PartDesign::Body", "BasePlate")
 
     W, H = 96.9, 46.0
-    Z = 6.0           # effective height after shave (SCAD: 8mm - 2mm shave)
-    Z_preshave = 8.0   # original pre-shave height (for USB-C Z calculation)
-    floor_z = 2.6      # thick floo preset
+    Z = 4.0           # no-solar: 6mm - 2mm (solar pit depth removed)
+    Z_preshave = 6.0   # adjusted pre-shave height (for USB-C Z calculation)
+    floor_z = 0.6      # no-solar: 2.6 - 2.0 (keeps same pocket depth)
 
     # ── 1. Outer profile sketch (constrained rectangle at origin) ──
     # Manual sketch — avoids over-constraining when pinned to origin
@@ -354,28 +358,17 @@ def build_base_plate(doc):
     pock.setExpression("Height", SP("bp_h") + " - " + SP("bp_floor"))
     doc.recompute()
 
-    # ── 6. Solar pit on bottom face ── SubtractiveBox (cuts upward from Z=0)
-    sol_w, sol_d, sol_z = 62.4, 36.4, 2.0
-    sx0 = W/2 - sol_w/2
-    sy0 = H/2 - sol_d/2
-    sol_cut = body.newObject("PartDesign::SubtractiveBox", "Cut_SolarPit")
-    sol_cut.Length = sol_w
-    sol_cut.Width = sol_d
-    sol_cut.Height = sol_z
-    sol_cut.Placement = App.Placement(V(sx0, sy0, 0), ROT0)
-    sol_cut.setExpression("Length", SP("sol_x"))
-    sol_cut.setExpression("Width", SP("sol_y"))
-    sol_cut.setExpression("Height", SP("sol_z"))
-    doc.recompute()
-
-    # (Wire holes moved to end — must cut through all additive features)
+    # ── 6. Solar pit REMOVED (no-solar variant) ──
+    # Solar pit, wire holes, and solar panel model all removed.
+    # Base plate is 2mm thinner (4mm instead of 6mm) since the pit
+    # no longer needs floor material above it.
 
     # ── 7. USB-C cutout (3 subtractive primitives for rounded opening) ──
     # USB-C Z position uses the PRE-SHAVE height (8mm) because the cutout
     # bottom (3.05) is below the shave band (Z=4). The shave doesn't move it.
     uw = 9.2
     ur = 1.0
-    usb_z_bot = Z_preshave - 4.45 - 0.5   # = 8 - 4.95 = 3.05
+    usb_z_bot = Z_preshave - 4.45 - 0.5   # no-solar: 6 - 4.95 = 1.05
     uc_y = H / 2
     wall_depth = 3.0   # cuts well through the 1.2mm +X wall
 
@@ -448,14 +441,14 @@ def build_base_plate(doc):
         # Peg cylinder
         peg = body.newObject("PartDesign::AdditiveCylinder", f"Peg_{i+1}")
         peg.Radius = 1.5
-        peg.Height = 3.0
+        peg.Height = 5.0
         peg.Placement = App.Placement(V(px, py, Z), ROT0)
         peg.setExpression("Radius", SP("peg_d") + " / 2")
         peg.setExpression("Height", SP("peg_h"))
         doc.recompute()
 
         # Peg tip chamfer
-        peg_top_z = Z + 3.0
+        peg_top_z = Z + 5.0
         ch_edges = edges_at_z(peg, peg_top_z)
         if ch_edges:
             cham = body.newObject("PartDesign::Chamfer", f"PegChamfer_{i+1}")
@@ -592,15 +585,22 @@ def build_base_plate(doc):
         V(imu_cx - ipx / 2, imu_cy - ipy / 2, floor_z - 0.1), ROT0)
     doc.recompute()
 
-    # ── 15. Solar wire holes (LAST — cuts through all additive features) ──
-    hole_r = 3.1 / 2
-    for hi, (hx, hy) in enumerate([(2.5, 2.0), (60.0, 2.4)]):
-        hole = body.newObject("PartDesign::SubtractiveCylinder", f"WireHole_{hi+1}")
-        hole.Radius = hole_r
-        hole.Height = Z + 2  # generous through-all
-        hole.Placement = App.Placement(V(sx0 + hx, sy0 + hy, -1.0), ROT0)
-        hole.setExpression("Radius", SP("sol_hd") + " / 2")
-        hole.setExpression("Height", SP("bp_h") + " + 2")
+    # ── 15. Solar wire holes REMOVED (no-solar variant) ──
+
+    # ── 16. USB reinforcement block ──
+    # Solid block under the USB-C cutout, from the base plate floor up to
+    # the bottom of the USB opening. Supports the USB-C port and prevents
+    # flex in the thinner (4mm) base plate wall.
+    usb_reinf_x = 5.0    # length along X (toward port)
+    usb_reinf_y = 10.0   # width along Y (centered on USB cutout)
+    usb_reinf_z = usb_z_bot - floor_z  # floor to USB bottom
+    if usb_reinf_z > 0.1:
+        reinf = body.newObject("PartDesign::AdditiveBox", "USB_Reinforcement")
+        reinf.Length = usb_reinf_x
+        reinf.Width = usb_reinf_y
+        reinf.Height = usb_reinf_z
+        reinf.Placement = App.Placement(
+            V(W - 1.2 - usb_reinf_x, H/2 - usb_reinf_y/2, floor_z), ROT0)
         doc.recompute()
 
     feats = [o.Name for o in body.Group if "Origin" not in o.Name]
@@ -1211,9 +1211,9 @@ PICO_USB_PLUS_X = False
 # X-anchor: inner -X wall of PicoNest — cradle local X = pico_x_start +
 #   pico_nx = 6.3 + 79.2 = 85.5.  After 180° Y flip + translate(96.7):
 #   global X = 96.7 - 85.5 = 11.2.
-# Z-anchor: plug_top mating face — global Z = bp_top = 6.0.
+# Z-anchor: plug_top mating face — global Z = bp_top = 4.0 (no-solar).
 PICO_ANCHOR_X_GLOBAL = 11.2
-PICO_ANCHOR_Z_GLOBAL = 6.0
+PICO_ANCHOR_Z_GLOBAL = 4.0   # no-solar: bp_top = 4.0
 
 
 def add_pico_with_headers(doc):
@@ -1559,15 +1559,15 @@ def add_peripherals(doc):
     # In cradle local: bay_mx_start=20.4 to bay_px_end=64.9 (44.5mm bay),
     # cells centered with aaa_cspace=2.0 per end → cell X local 22.4..61.9.
     # bay_y locals: 7.85, 38.15. bay_cz local: 0.95.
-    # Cradle Placement: 180° about Y, then translate (96.7, 0, bp_top+7.0=13).
+    # Cradle Placement: 180° about Y, then translate (96.7, 0, bp_top+7.0=11).
     # → global cell X = [96.7-61.9, 96.7-22.4] = [34.8, 74.3]
     # → global cell Y = bay_y_local (Y unchanged by Y rotation)
-    # → global cell Z = 13.0 - bay_cz_local = 12.05
+    # → global cell Z = 11.0 - bay_cz_local = 10.05
     aaa_d = 10.5
     aaa_len = 41.5
     cell_x_min_g = 98.7 - 63.9   # +2mm cradle translate, +2mm cell length → cell -X global stays put
     cell_y_g = {1: 7.85, 2: 38.15}
-    cell_z_g = 13.0 - 0.95
+    cell_z_g = 11.0 - 0.95
     # Battery cylinder is along X axis, placed by cylinder center on -X end
     # FreeCAD makeCylinder is along Z by default; rotate 90° about Y to align
     # with X, with the cylinder origin at one end of the cell.
@@ -1599,23 +1599,23 @@ def add_peripherals(doc):
     # Standard module: 28 mm × 17 mm × 1.6 mm PCB + USB-C bump (~9×7×3.4)
     # Cradle's TP4056_Indent (cradle local): plug_x0=3.3 to plug_x0+tp_xl=31.3,
     # tp_y=14.3 to tp_y+tp_yw=31.3, indent floor at local Z=6.0 (plug_top-tp_iz).
-    # After cradle 180° Y flip + translate: global X=65.4..93.4, Y=14.3..31.3,
-    # Indent floor (local Z=6.0) → global Z = 13-6 = 7.0 (Face69).
-    # Board sits flat on Face69, PCB extends upward Z=7.0..8.6, components on top.
+    # After cradle 180° Y flip + translate: indent floor → global Z = 11-6 = 5.0.
+    # Board sits flat on indent floor, PCB on top, components hang BELOW (-Z)
+    # into the open space beneath the cradle (toward base plate).
     tp_xl_v = 28.0
     tp_yw_v = 17.0
     tp_pcb_t = 1.6
     tp_x_min_g = 98.7 - (3.3 + tp_xl_v)        # = 67.4 (+2mm with enclosure extension)
     tp_y_min_g = 14.3
-    tp_z_bot_g = 13.0 - 6.0                    # = 7.0 (indent floor = Face69)
-    # PCB body — sits flat on indent floor
+    tp_z_bot_g = 11.0 - 6.0                    # = 5.0 (indent floor, no-solar)
+    # PCB top face mates with indent floor at tp_z_bot_g, PCB hangs below
     tp_pcb = Part.makeBox(tp_xl_v, tp_yw_v, tp_pcb_t,
-                          V(tp_x_min_g, tp_y_min_g, tp_z_bot_g))
+                          V(tp_x_min_g, tp_y_min_g, tp_z_bot_g - tp_pcb_t))
     # (TP4056_USBC connector visualization removed — module shape only)
-    # IC + capacitor lump (rough block representing the SOIC + caps)
+    # IC + capacitor lump — hangs below PCB (-Z), components face down
     ic_lump = Part.makeBox(14, 8, 1.6,
                            V(tp_x_min_g + 8, tp_y_min_g + 4.5,
-                             tp_z_bot_g + tp_pcb_t))
+                             tp_z_bot_g - tp_pcb_t - 1.6))
     tp_obj = doc.addObject("Part::Feature", "TP4056_Module")
     tp_obj.Shape = Part.Compound([tp_pcb, ic_lump])
     try:
@@ -1627,14 +1627,14 @@ def add_peripherals(doc):
     # Module sized to fit screen inlay (disp_xl=65, disp_yd=30, inlay_z=3).
     # Active e-paper area approx 48×22 mm centered with the win_shift toward
     # +X. Module thickness ~3.0 mm fitting the 3 mm inlay depth.
-    # TopCover Placement: V(0, 0, bp_top + tc_wall_ext = 11), no rotation.
+    # TopCover Placement: V(0, 0, bp_top + tc_wall_ext = 9), no rotation.
     # Inlay carves from local Z=face_bot=7 upward by inlay_depth=3 → global
     # Z = 11+7 = 18 (module bottom = back of display PCB) to Z = 11+10 = 21
     # (active screen surface visible through the window cut).
     disp_xl_v, disp_yd_v = 65.2, 30.0
     disp_x_min_g = 3.4   # disp_x0 = wall_mx + 0.4
     disp_y_min_g = 8.0   # disp_y0 = enc_y/2 - disp_yd/2
-    disp_z_back_g = 11.0 + 7.0   # module back (PCB) sits flush with inlay floor
+    disp_z_back_g = 9.0 + 7.0   # no-solar: bp_top(4) + wall_ext(5) = 9, + face_bot(7) = 16
     disp_module_h = 3.0          # full module thickness
     # Module body (PCB + plastic carrier)
     disp_pcb = Part.makeBox(disp_xl_v, disp_yd_v, disp_module_h,
@@ -1687,7 +1687,7 @@ def add_peripherals(doc):
     # In CRADLE LOCAL coords: 4 slots (computed in build_cradle):
     #   P slots at local sx = 65.9 (slot face cell-side at local x = 65.9)
     #   M slots at local sx = 18.5 (slot face cell-side at local x = 19.4)
-    # After cradle 180° Y flip + translate(96.7, 0, 13.0):
+    # After cradle 180° Y flip + translate(96.7, 0, 11.0):
     #   P slot face → global X = 96.7 - 65.9 = 30.8  (faces +X toward cell neg)
     #   M slot face → global X = 96.7 - 19.4 = 77.3  (faces -X toward cell pos)
     #
@@ -1809,7 +1809,7 @@ def add_piezo_speaker(doc):
     print("  Adding piezo speaker disc (20 mm FT-20T)...")
 
     # Base plate pocket floor (global, base plate has identity placement)
-    floor_z = 2.6
+    floor_z = 0.6   # no-solar: 2.6 - 2.0
     cx = 96.9 / 2   # = 48.45 — matches PiezoRing center (enc_x extended +2mm)
     cy = 46.0 / 2   # = 23.0
 
@@ -1844,7 +1844,7 @@ def add_imu_module(doc):
     shifted toward -X."""
     print("  Adding IMU module (GY-6500 / MPU-6500)...")
 
-    floor_z = 2.6
+    floor_z = 0.6   # no-solar: 2.6 - 2.0
     piezo_cx = 96.9 / 2   # 48.45 (enc_x extended +2mm)
     piezo_cy = 46.0 / 2   # 23.0
     piezo_ring_od = 22.2
@@ -1993,7 +1993,7 @@ def add_solar_panel(doc):
 # =====================================================================
 
 def main():
-    doc_name = "Dilder_Rev2_Mk2"
+    doc_name = "Dilder_Rev2_Mk2_NoSolar"
 
     # Close if already open
     if App.ActiveDocument and App.ActiveDocument.Name == doc_name:
@@ -2012,9 +2012,9 @@ def main():
     tc = build_top_cover(doc)
 
     # ── Assembly positioning ──
-    # Base plate top face is at Z = bp_h = 6.0 (post-shave)
+    # Base plate top face is at Z = bp_h = 4.0 (no-solar)
     # Both cover and cradle mate flush with that face.
-    bp_top = 6.0   # base plate top Z (8mm - 2mm shave)
+    bp_top = 4.0   # base plate top Z (no-solar: 6 - 2)
 
     # Cover: wall extension goes 5mm below local z=0.
     # Bottom face (local z=-5) flush with base plate top.
@@ -2023,7 +2023,7 @@ def main():
 
     # Cradle: flipped 180° around Y (mirrors X and Z).
     # Former plug_top face (local Z=7.0) → rotated to Z=-7.0.
-    # Flush with base plate top: -7.0 + Z_shift = bp_top → Z_shift = 13.0
+    # Flush with base plate top: -7.0 + Z_shift = bp_top → Z_shift = 11.0
     cr.Placement = App.Placement(
         V(98.7, 0, bp_top + 7.0),   # +2mm translate to keep cradle -X global flush at X=3.3 after enc_x extension
         App.Rotation(V(0, 1, 0), 180))
@@ -2051,9 +2051,7 @@ def main():
     # IMU — GY-6500 (MPU-6500) in the base plate's IMU_Pocket
     add_imu_module(doc)
 
-    # Solar panel — AK 62×36 mm, sits in the base plate's bottom solar pit
-    # with leads through the two wire holes
-    add_solar_panel(doc)
+    # Solar panel REMOVED (no-solar variant)
 
     # ── Body colors ──
     try:
@@ -2083,7 +2081,7 @@ def main():
 
     # ── Save ──
     save_dir = os.path.dirname(os.path.abspath(__file__))
-    save_path = os.path.join(save_dir, "Dilder_Rev2_Mk2.FCStd")
+    save_path = os.path.join(save_dir, "Dilder_Rev2_Mk2_NoSolar.FCStd")
     doc.saveAs(save_path)
     print(f"\nSaved: {save_path}")
 

@@ -1,6 +1,6 @@
 # Enclosure Design Evolution
 
-A living record of the Dilder enclosure's parametric CAD design as it evolves through prototyping and print iterations. All parts are designed in OpenSCAD and exported to 3MF for slicing.
+A living record of the Dilder enclosure's parametric CAD design as it evolves through prototyping and print iterations. Parts are designed in FreeCAD PartDesign (Mk2 macro) and OpenSCAD (legacy), exported to 3MF for slicing. Two enclosure variants are available: **Solar** (with AK 62x36mm panel cutout) and **NoSolar** (slimmer, USB-C only).
 
 ---
 
@@ -603,6 +603,90 @@ Provides a menu to browse .scad files, pick export format (3MF/STL), set output 
 
 ---
 
+## Rev 2 — Soldered Unit, First Battery Power (2026-05-01)
+
+The unit is fully soldered — no more breadboard or jumper wires. The Pico W sits in the AAA cradle's center nest, wired directly to the TP4056 charge board and a single 10440 Li-ion cell (3.7V, 350mAh). USB-C charging confirmed working: the TP4056's red LED indicates active charge, switching to blue/off when complete.
+
+### First battery power-on
+
+The e-ink display powered on for the first time running entirely from the 10440 battery. The Sassy Octopus personality loaded with the RTC clock header displaying the date.
+
+<div class="grid" markdown>
+
+![Dilder powered on for the first time on battery — e-ink display showing the Sassy Octopus emotion, 10440 battery in the 3D-printed AAA cradle, TP4056 charge board LED glowing red](../../assets/images/hardware/first-battery-power-display-on.jpg){ width="420" loading=lazy }
+
+![Side view showing the Waveshare e-ink display, soldered Pico W, 10440 battery seated in the cradle with battery clips, TP4056 USB-C charge board with red charging LED](../../assets/images/hardware/first-battery-power-side-view.jpg){ width="420" loading=lazy }
+
+</div>
+
+### Soldered internals close-up
+
+Close-up of the soldered connections: Pico W wired to TP4056 (red power, black ground), 10440 cell in the cradle with stamped metal battery clips, heat shrink over solder joints.
+
+![Soldered unit close-up — Pico W, TP4056, and 10440 battery in the AAA cradle with visible solder joints and wire routing](../../assets/images/hardware/soldered-unit-battery-cradle.jpg){ width="420" loading=lazy }
+
+---
+
+## Rev 2 — NoSolar Variant (2026-05-01)
+
+An alternative base plate design that removes the solar panel pit, wire pass-through holes, and solar panel model. The base plate height drops from 6 mm to 4 mm, and a USB reinforcement block is added under the USB-C cutout for structural support. All other parts (AAA cradle, top cover, thumbpiece) are shared between variants.
+
+Source: [`hardware-design/freecad-mk2/dilder_rev2_mk2_no_solar.FCMacro`](https://github.com/rompasaurus/dilder/blob/main/hardware-design/freecad-mk2/dilder_rev2_mk2_no_solar.FCMacro).
+
+### NoSolar case — opened
+
+The NoSolar base plate (left) separated from the assembled unit. The base plate's underside is smooth and flat — no solar panel recess, no wire holes.
+
+![NoSolar case opened — base plate without solar cutout next to assembled unit with Pico W, 10440 battery, and TP4056 charging via USB](../../assets/images/enclosure/rev2-nosolar/nosolar-open-internals-top-view.jpg){ width="420" loading=lazy }
+
+### NoSolar case — USB charging
+
+The NoSolar variant assembled and charging via USB-C. The slimmer profile is visible compared to the solar variant.
+
+<div class="grid" markdown>
+
+![NoSolar variant assembled — base plate and unit side by side on wooden surface, USB-C cable connected, TP4056 red LED lit](../../assets/images/enclosure/rev2-nosolar/nosolar-base-and-unit-usb-charging.jpg){ width="420" loading=lazy }
+
+![NoSolar variant wide view — thinner case on the workbench with soldering supplies](../../assets/images/enclosure/rev2-nosolar/nosolar-base-and-unit-wide-view.jpg){ width="420" loading=lazy }
+
+</div>
+
+### Fully assembled — display running
+
+The Conspiratorial Octopus personality running on the fully assembled NoSolar unit. RTC clock header shows "MAY 2, 2025 6:09 AM" with the quote "DREAMS ARE LEAKED FOOTAGE FROM ALTERNATE DIMENSIONS."
+
+![Fully assembled Dilder in NoSolar case — e-ink display showing Conspiratorial Octopus with date/time header and quote, USB-C cable connected](../../assets/images/hardware/fully-assembled-display-running.jpg){ width="420" loading=lazy }
+
+### Solar variant comparison
+
+The original solar variant from the back, showing the AK 62x36mm photovoltaic cells visible through the base plate's cutout window.
+
+![Solar variant back view — AK 62x36mm solar panel visible through the base plate cutout](../../assets/images/enclosure/rev2-nosolar/solar-variant-back-view.jpg){ width="420" loading=lazy }
+
+### Variant comparison table
+
+| Feature | Solar Variant | NoSolar Variant |
+|---------|--------------|-----------------|
+| Base plate height | 6 mm | 4 mm |
+| Solar panel pit | 62x36mm, 2mm deep | None |
+| Wire pass-through holes | 2x 3mm | None |
+| USB reinforcement | Standard | Added block |
+| Charging | USB-C + solar trickle | USB-C only |
+
+### 3D-printed parts inventory
+
+All printed parts from both variants organized in the printer's storage drawer.
+
+<div class="grid" markdown>
+
+![3D printer storage drawer with printed Dilder parts — white and black PLA base plates, top covers, cradles, and thumbpieces](../../assets/images/hardware/build-session/printed-parts-storage-close.jpg){ width="420" loading=lazy }
+
+![Storage drawer wide view showing three stacked drawers with printed parts](../../assets/images/hardware/build-session/printed-parts-storage-wide.jpg){ width="420" loading=lazy }
+
+</div>
+
+---
+
 ## Hand-Routed Joystick Breakout PCB (K1-1506SN-01)
 
 First PCB designed from scratch in KiCad 10, hand-routed. Uses the Korean Hroparts K1-1506SN-01 5-way navigation switch (LCSC C145910) on a 19.6x19.6mm board that drops into the Rev 2 top cover's 20x20mm joystick pocket.
@@ -693,4 +777,8 @@ Imported 3D model from LCSC showing the joystick knob mounted on the green PCB. 
 | 2026-04-27 | FreeCAD PartDesign model | v1 | Full translation of all three Rev 2 enclosure parts (base plate, AAA cradle, top cover) from OpenSCAD to FreeCAD PartDesign. 81 features across 3 Bodies, 90-parameter spreadsheet with expression links. Proper editable feature tree — double-click any Sketch/Pad/Pocket to change dimensions in the GUI. USB-C cutout uses stadium shape (rounded bottom corners, open top). Exported as `.FCStd` + per-part STLs |
 | 2026-04-27 | Working Model Rev 1 | snapshot | Organized working design into named part folders (Base Plate, AAA Cradle, Top Cover) with SCAD source, JSON presets, STL, 3MF, and description for each. First formal "frozen" working model checkpoint |
 | 2026-04-29 | FreeCAD Mk2 macro | Pico import + Z-flip mount | `dilder_rev2_mk2.FCMacro` now imports the official Raspberry Pi Pico 2 STEP file (mechanically identical to the Pico 2 W) and adds procedural 2×20 pin headers. Bbox-driven re-orientation makes the import robust to source-CAD axis conventions. The board is built right-side-up with headers below, then the entire stack rotates 180° about X so headers point up and components face the base plate. Position is anchored to named cradle faces — `AAACradle.Face44` for X (inner −X wall of PicoNest cavity, global X = 11.20) and `AAACradle.Face6` for Z (cradle mating plane, global Z = 6.00) — so changes to the cradle propagate to the Pico's seating without manual fixup. PCB component-side face sits flush at Z = 6.00, components hang into the base plate's cradle pocket, header pin tips reach Z = 18.14 |
+| 2026-05-01 | Rev 2 soldered unit | first battery power | Unit fully soldered — Pico W wired to TP4056 and single 10440 Li-ion cell (3.7V, 350mAh). USB-C charging confirmed working. No breadboard or jumper wires — solder joints and heat shrink only |
+| 2026-05-01 | Rev 2 NoSolar variant | base plate | New `dilder_rev2_mk2_no_solar.FCMacro` — fork of Mk2 design removing solar panel pit, wire holes, and solar model from base plate. Height reduced 6→4mm (`bp_h=4.0`, `floor=0.6`). USB reinforcement block added. All other parts (cradle, cover, thumbpiece) shared with solar variant |
+| 2026-05-01 | Rev 2 NoSolar variant | 3MF exports | 5 pre-exported 3MF files: AAACradle, BasePlate, JoystickPCB, Thumbpiece, TopCover |
+| 2026-05-02 | Rev 2 NoSolar variant | fully assembled | Unit fully assembled in NoSolar case running Conspiratorial Octopus personality on battery power with USB-C charging |
 | 2026-04-30 | Joystick thumbpiece | snap cap v1 | New `Thumbpiece` PartDesign Body in `dilder_rev2_mk2.FCMacro` — a printable snap cap that fits over the K1-1506SN-01 actuator peg. Single disc nested inside the cover's 12 mm joystick circle cutout: OD = `joy_d - 1.0` = 11 mm (0.5 mm radial clearance all around → 1 mm total for joystick directional swing), height 4.5 mm, top sitting 0.1 mm below the cover top face (Z = 22.9), bottom at Z = 18.4. Three features built with PartDesign primitives: `Thumb_Disc` (`AdditiveCylinder`), `Thumb_Dish` (`SubtractiveSphere` R = 12 mm, depth 0.6 mm — concave thumb contour, depth capped so the dish doesn't break into the snap cavity above the peg), `Thumb_Socket` (`SubtractiveBox` 3.3 × 3.3 × 3.5 mm, +0.1 mm fit clearance over the 3.2 mm peg). Socket centered on the **actuator** (`thumb_stick_cy = 24.35`) **not** on the disc axis — the SW1 stick is offset +0.68 mm in Y from the cover hole on the production PCB layout, so the disc reads visually centered while the snap pocket actually lands on the peg. Geometry verified against the JoystickPCB STEP face selections (peg X span 77.75–80.95, Y span 22.76–25.94, Z span 17.91–21.17). Result: peg covered with 0.35 mm solid skin above the socket, 2.77 mm of socket grip down the peg, concave dish on top. 9 new spreadsheet aliases (`thumb_od`, `thumb_h`, `thumb_top_clr`, `thumb_dish_r/d`, `thumb_sock_x/y/d`, `thumb_stick_cy`) — drop `thumb_sock_x/y` to 3.15–3.2 to convert friction-fit to interference-fit |
