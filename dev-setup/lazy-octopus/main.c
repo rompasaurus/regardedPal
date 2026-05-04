@@ -21,6 +21,7 @@
 #include "hardware/adc.h"
 #include "rtc_compat.h"
 #include "DEV_Config.h"
+#include "version.h"
 
 /* Display variant selection */
 #if defined(DISPLAY_V2)
@@ -30,6 +31,7 @@
   #define EPD_Init()     EPD_2in13_V2_Init()
   #define EPD_Clear()    EPD_2in13_V2_Clear()
   #define EPD_Display(b) EPD_2in13_V2_Display(b)
+  #define EPD_Base(b)    EPD_2in13_V2_Display(b)
   #define EPD_Partial(b) EPD_2in13_V2_Display_Partial(b)
   #define EPD_Sleep()    EPD_2in13_V2_Sleep()
   #define DISPLAY_NAME   "V2"
@@ -40,6 +42,7 @@
   #define EPD_Init()     EPD_2in13_V3a_Init()
   #define EPD_Clear()    EPD_2in13_V3a_Clear()
   #define EPD_Display(b) EPD_2in13_V3a_Display(b)
+  #define EPD_Base(b)    EPD_2in13_V3a_Display_Base(b)
   #define EPD_Partial(b) EPD_2in13_V3a_Display_Partial(b)
   #define EPD_Sleep()    EPD_2in13_V3a_Sleep()
   #define DISPLAY_NAME   "V3a"
@@ -50,6 +53,7 @@
   #define EPD_Init()     EPD_2in13_V4_Init()
   #define EPD_Clear()    EPD_2in13_V4_Clear()
   #define EPD_Display(b) EPD_2in13_V4_Display(b)
+  #define EPD_Base(b)    EPD_2in13_V4_Display_Base(b)
   #define EPD_Partial(b) EPD_2in13_V4_Display_Partial(b)
   #define EPD_Sleep()    EPD_2in13_V4_Sleep()
   #define DISPLAY_NAME   "V4"
@@ -60,6 +64,7 @@
   #define EPD_Init()     EPD_2in13_V3_Init()
   #define EPD_Clear()    EPD_2in13_V3_Clear()
   #define EPD_Display(b) EPD_2in13_V3_Display(b)
+  #define EPD_Base(b)    EPD_2in13_V3_Display_Base(b)
   #define EPD_Partial(b) EPD_2in13_V3_Display_Partial(b)
   #define EPD_Sleep()    EPD_2in13_V3_Sleep()
   #define DISPLAY_NAME   "V3"
@@ -1238,7 +1243,8 @@ static void init_rtc_from_compile_time(void) {
 int main(void) {
     stdio_init_all();
     sleep_ms(1000);
-    printf("%s starting (display: %s, %d quotes)...\n", TAGLINE, DISPLAY_NAME, QUOTE_COUNT);
+    printf("%s v%s (%s) | display: %s | %d quotes | built %s %s\n",
+           TAGLINE, DILDER_VERSION, DILDER_VERSION_DATE, DISPLAY_NAME, QUOTE_COUNT, __DATE__, __TIME__);
 
     /* Initialize RTC from compile time (keeps ticking from there) */
     init_rtc_from_compile_time();
@@ -1270,7 +1276,7 @@ int main(void) {
         transpose_to_display();
 
         if (frame_idx == 0)
-            EPD_Display(display_buf);
+            EPD_Base(display_buf);   /* seed both RAM buffers for partial diff */
         else
             EPD_Partial(display_buf);
 

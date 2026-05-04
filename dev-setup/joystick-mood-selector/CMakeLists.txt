@@ -10,9 +10,9 @@ set(CMAKE_CXX_STANDARD 17)
 pico_sdk_init()
 
 # Display variant: pass -DDISPLAY_VARIANT=V2|V3|V3a|V4 to cmake.
-# Default is V3 (standard).
+# Default is V4 (current hardware — SSD1680 internal LUT).
 if(NOT DEFINED DISPLAY_VARIANT)
-    set(DISPLAY_VARIANT "V3")
+    set(DISPLAY_VARIANT "V4")
 endif()
 
 if(DISPLAY_VARIANT STREQUAL "V2")
@@ -45,6 +45,7 @@ endif()
 
 target_include_directories(joystick_mood_selector PRIVATE
     ${CMAKE_CURRENT_SOURCE_DIR}
+    ${CMAKE_CURRENT_SOURCE_DIR}/lib
     ${CMAKE_CURRENT_SOURCE_DIR}/lib/Config
     ${CMAKE_CURRENT_SOURCE_DIR}/lib/e-Paper
 )

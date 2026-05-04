@@ -174,17 +174,20 @@
 #define PIN_EPD_RST         12   /* GP12             pin 16 */
 #define PIN_EPD_BUSY        13   /* GP13             pin 17 */
 
-/* 5-way joystick / buttons
+/* 5-way joystick / buttons (K1-1506SN-01 breakout PCB from JLCPCB)
  *
  * Each button gets its own GPIO pin.  The physical wiring
  * connects one side of the button to the GPIO and the other
- * side to GND.  When pressed, the pin gets pulled LOW.
+ * side to GND (Common pin on the breakout PCB).
+ * When pressed, the pin gets pulled LOW.
+ *
+ * PCB silkscreen labels: Com=GND, L=Left, D=Down, UP=Up, R=Right, C=Center
  */
-#define PIN_BTN_UP           2   /* GP2   pin 4  */
-#define PIN_BTN_DOWN         3   /* GP3   pin 5  */
-#define PIN_BTN_LEFT         4   /* GP4   pin 6  */
-#define PIN_BTN_RIGHT        5   /* GP5   pin 7  */
-#define PIN_BTN_CENTER       6   /* GP6   pin 9  */
+#define PIN_BTN_LEFT         2   /* GP2   pin 4  — PCB pad "L"  */
+#define PIN_BTN_DOWN         3   /* GP3   pin 5  — PCB pad "D"  */
+#define PIN_BTN_UP           4   /* GP4   pin 6  — PCB pad "UP" */
+#define PIN_BTN_RIGHT        5   /* GP5   pin 7  — PCB pad "R"  */
+#define PIN_BTN_CENTER       6   /* GP6   pin 9  — PCB pad "C"  */
 
 /* SPI controller selection.
  * On the Pico W, we use SPI1 (the second SPI controller).
@@ -221,12 +224,12 @@
 #define PIN_EPD_RST         12   /* GP12             pin 16 */
 #define PIN_EPD_BUSY        13   /* GP13             pin 17 */
 
-/* 5-way joystick / buttons (same pins as Pico W) */
-#define PIN_BTN_UP           2   /* GP2   pin 4  */
-#define PIN_BTN_DOWN         3   /* GP3   pin 5  */
-#define PIN_BTN_LEFT         4   /* GP4   pin 6  */
-#define PIN_BTN_RIGHT        5   /* GP5   pin 7  */
-#define PIN_BTN_CENTER       6   /* GP6   pin 9  */
+/* 5-way joystick / buttons (same pins as Pico W — K1-1506SN-01 breakout PCB) */
+#define PIN_BTN_LEFT         2   /* GP2   pin 4  — PCB pad "L"  */
+#define PIN_BTN_DOWN         3   /* GP3   pin 5  — PCB pad "D"  */
+#define PIN_BTN_UP           4   /* GP4   pin 6  — PCB pad "UP" */
+#define PIN_BTN_RIGHT        5   /* GP5   pin 7  — PCB pad "R"  */
+#define PIN_BTN_CENTER       6   /* GP6   pin 9  — PCB pad "C"  */
 
 /* SPI controller — same as Pico W (SPI1). */
 #define EPD_SPI_CONTROLLER   1   /* SPI1 */

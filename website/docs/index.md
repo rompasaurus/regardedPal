@@ -33,18 +33,20 @@ Jamal still sits in the armchair. He still wears the hat. He watches us build hi
 
 ---
 
-## The Current Build
+## The Current Build — Mk2 Translucent Prototype
+
+The latest revision: printed in **natural/clear PETG** so every internal component is visible through the case walls. Running the Conspiratorial Octopus personality on battery power.
 
 <div class="grid" markdown>
 
 <figure markdown="span">
-  ![Fully assembled Dilder unit running the Conspiratorial Octopus personality — e-ink display shows MAY 2 2025 6:09 AM header and the quote DREAMS ARE LEAKED FOOTAGE FROM ALTERNATE DIMENSIONS with pixel-art octopus, housed in the black NoSolar 3D-printed case, USB-C cable connected for charging](assets/images/hardware/fully-assembled-display-running.jpg){ width="420" loading=lazy }
-  <figcaption>"DREAMS ARE LEAKED FOOTAGE FROM ALTERNATE DIMENSIONS." — Conspiratorial Octopus, fully soldered and battery-powered</figcaption>
+  ![Mk2 translucent Dilder outdoors — hero front shot with Conspiratorial Octopus running on e-ink display, Claude Code terminal visible on laptop behind, blue sky and rooftops](assets/images/enclosure/mk2-translucent/mk2-translucent-outdoor-hero-front-claude-code.jpg){ width="420" loading=lazy }
+  <figcaption>"THE PYRAMIDS WERE BUILT BY CATS. EGYPTIANS JUST TOOK CREDIT." — e-ink perfectly readable in sunlight</figcaption>
 </figure>
 
 <figure markdown="span">
-  ![Dilder Rev 2 — assembled front view showing Sassy Octopus on e-ink display](assets/images/enclosure/rev2-current/rev2-assembled-front-view.jpg){ width="420" loading=lazy }
-  <figcaption>"COFFEE IS JUST BEAN BROTH FOR PEOPLE WHO HATE THEMSELVES." — Sassy Octopus, running on Pico 2 W</figcaption>
+  ![Mk2 translucent Dilder — front view showing THE MOON LANDING WAS REAL BUT THE MOON IS FAKE quote on e-ink display with joystick dome](assets/images/enclosure/mk2-translucent/mk2-translucent-front-moon-landing-quote.jpg){ width="420" loading=lazy }
+  <figcaption>"THE MOON LANDING WAS REAL BUT THE MOON IS FAKE." — front view, display sharp, joystick dome on right</figcaption>
 </figure>
 
 </div>
@@ -52,13 +54,13 @@ Jamal still sits in the armchair. He still wears the hat. He watches us build hi
 <div class="grid" markdown>
 
 <figure markdown="span">
-  ![Dilder NoSolar variant opened showing internals — black base plate without solar cutout separated from the assembled unit with Pico W, 10440 battery, and TP4056 USB-C charger with red LED lit](assets/images/enclosure/rev2-nosolar/nosolar-open-internals-top-view.jpg){ width="420" loading=lazy }
-  <figcaption>NoSolar variant opened — Pico W, 10440 battery, and TP4056 charger. Fully soldered, USB-C charging confirmed</figcaption>
+  ![Mk2 translucent Dilder — isometric view showing Conspiratorial Octopus on e-ink display, internals visible through clear PETG case](assets/images/enclosure/mk2-translucent/mk2-translucent-isometric-deja-vu-quote.jpg){ width="420" loading=lazy }
+  <figcaption>"DEJA VU IS THE SIMULATION BUFFERING." — translucent walls reveal battery, board, and wiring</figcaption>
 </figure>
 
 <figure markdown="span">
-  ![Dilder Rev 2 — case parts disassembled showing top cover, base plate, and cradle](assets/images/enclosure/rev2-current/rev2-case-parts-disassembled.jpg){ width="420" loading=lazy }
-  <figcaption>Disassembled — top cover with display inlay, base plate with solar cutout, battery cradle insert</figcaption>
+  ![Mk2 translucent Dilder — back view showing TP4056, battery, and piezo ring visible through translucent walls](assets/images/enclosure/mk2-translucent/mk2-translucent-back-internals-visible.jpg){ width="420" loading=lazy }
+  <figcaption>Back view — TP4056, 10440 battery, and piezo speaker ring all visible through the case</figcaption>
 </figure>
 
 </div>
@@ -66,16 +68,36 @@ Jamal still sits in the armchair. He still wears the hat. He watches us build hi
 <div class="grid" markdown>
 
 <figure markdown="span">
-  ![Dilder first battery power-on — e-ink display showing the Sassy Octopus with 10440 battery in cradle and TP4056 charging LED glowing red](assets/images/hardware/first-battery-power-display-on.jpg){ width="420" loading=lazy }
-  <figcaption>First battery power-on — soldered unit running off a single 10440 cell with TP4056 charge indicator</figcaption>
+  ![Joystick breakout PCB from JLCPCB with 3D-printed thumbpiece snap cap fitted on the K1-1506SN-01 switch actuator](assets/images/hardware/pcb/joystick-pcb-single-board-with-thumbpiece.jpg){ width="420" loading=lazy }
+  <figcaption>Joystick breakout PCB from JLCPCB — K1-1506SN-01 switch with 3D-printed thumbpiece snap cap</figcaption>
 </figure>
 
 <figure markdown="span">
-  ![Dilder solar variant back view showing the AK 62x36mm solar panel through the base plate cutout](assets/images/enclosure/rev2-nosolar/solar-variant-back-view.jpg){ width="420" loading=lazy }
-  <figcaption>Solar variant (alternative) — AK 62x36mm panel visible through the base plate. Same internals, plus solar trickle charging</figcaption>
+  ![JLCPCB blue shipping box with full panel of joystick breakout boards on pink antistatic foam](assets/images/hardware/pcb/joystick-pcb-jlcpcb-unboxing-full-panel.jpg){ width="420" loading=lazy }
+  <figcaption>JLCPCB delivery — full panel of hand-routed joystick breakout boards, switches pre-mounted</figcaption>
 </figure>
 
 </div>
+
+<div class="grid" markdown>
+
+<figure markdown="span">
+  ![Fully assembled Dilder in black NoSolar case — e-ink display showing Conspiratorial Octopus, battery powered](assets/images/enclosure/rev2-nosolar/nosolar-assembled-front-conspiratorial-octopus.jpg){ width="420" loading=lazy }
+  <figcaption>NoSolar variant (black PLA) — same internals, different look</figcaption>
+</figure>
+
+<figure markdown="span">
+  ![NoSolar variant open top-down — Pico W, 10440 battery, TP4056 charger with red LED visible](assets/images/enclosure/rev2-nosolar/nosolar-open-topdown-pico-battery-tp4056.jpg){ width="420" loading=lazy }
+  <figcaption>NoSolar internals — Pico W, 10440 battery, TP4056 charger (red LED = charging)</figcaption>
+</figure>
+
+</div>
+
+[Read the full Mk2 build post :material-arrow-right:](blog/posts/mk2-translucent-prototype-running.md){ .md-button }
+
+[View the design evolution timeline :material-arrow-right:](docs/hardware/design-evolution.md){ .md-button }
+
+[See the progress report :material-arrow-right:](docs/progress.md){ .md-button }
 
 ---
 
@@ -279,11 +301,11 @@ The STEP model of the finished board is imported directly into the FreeCAD assem
 !!! info "Phase 2 — Firmware Foundation (C on Pico W)"
     Phase 1 (hardware + tooling) is complete. The unit is **fully soldered and battery-powered** — running off a 10440 Li-ion cell with USB-C charging via TP4056 confirmed working. Two enclosure variants available: **Solar** (with AK 62x36mm panel) and **NoSolar** (slimmer, USB-only).
 
-    **Done:** Runtime rendering engine | 16 emotions | Body animations | Custom fat/lazy bodies | 823 quotes | C-faithful preview renderer | DevTool with firmware size estimation | **GPIO joystick input** | On-screen input indicator | **Soldered unit** | **Battery power** | **USB-C charging** | **NoSolar variant**
+    **Done:** Runtime rendering engine | 16 emotions | Body animations | Custom fat/lazy bodies | 823 quotes | C-faithful preview renderer | DevTool with firmware size estimation | **GPIO joystick input** | On-screen input indicator | **Soldered unit** | **Battery power** | **USB-C charging** | **NoSolar variant** | **Mk2 translucent case** | **Joystick PCB from JLCPCB** | **V4 display driver (two-pass partial refresh)** | **Firmware version system (v0.5.4)** | **KiCad pin swap fix**
 
-    **In Progress:** Custom PCB design — switched from RP2040 to **ESP32-S3-WROOM-1-N16R8** (WiFi+BLE, 16MB flash, 8MB PSRAM). 4-layer board (45x80mm, 27 components) designed in KiCad, ready for interactive routing and JLCPCB fabrication. **Hand-routed joystick breakout PCB** (K1-1506SN-01, 19.6x19.6mm) designed from scratch in KiCad 10 with gerbers and BOM ready for JLCPCB. **Full Board** all-in-one PCB design kicked off with component reference and KiCad import guide.
+    **In Progress:** V4 partial refresh tuning (blacks slightly washed vs V3). Custom PCB design — **ESP32-S3-WROOM-1-N16R8** (WiFi+BLE, 16MB flash, 8MB PSRAM), 4-layer board in KiCad. **Full Board** all-in-one PCB design.
 
-    **Next:** Order joystick PCB from JLCPCB | Complete ESP32 PCB routing and order boards | Game loop with state machine | Evaluate battery life
+    **Next:** Swap COM/UP wires and test all 5 joystick directions | Wire up piezo speaker | Implement menu system | Order corrected Rev 2 joystick PCB | Battery life benchmarks
 
 ---
 

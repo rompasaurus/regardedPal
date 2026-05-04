@@ -110,6 +110,7 @@ nav:
       - blog/index.md
   - Docs:
       - Overview: docs/index.md
+      - Progress Report: docs/progress.md
       - Hardware:
           - Materials List: docs/hardware/materials-list.md
           - Wiring & Pinout: docs/hardware/wiring-pinout.md

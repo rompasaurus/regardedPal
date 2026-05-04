@@ -57,6 +57,7 @@ endif()
 # ---------- Include paths ----------
 
 target_include_directories(hello_dilder PRIVATE
+    ${CMAKE_CURRENT_SOURCE_DIR}/lib
     ${CMAKE_CURRENT_SOURCE_DIR}/lib/Config
     ${CMAKE_CURRENT_SOURCE_DIR}/lib/e-Paper
     ${CMAKE_CURRENT_SOURCE_DIR}/lib/GUI

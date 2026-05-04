@@ -13,10 +13,11 @@
  *   CS   -> GP9      pin 12    DC   -> GP8      pin 11
  *   RST  -> GP12     pin 16    BUSY -> GP13     pin 17
  *
- * Joystick wiring (DollaTek 5-way):
- *   UP     -> GP2   pin 4     DOWN   -> GP3   pin 5
- *   LEFT   -> GP4   pin 6     RIGHT  -> GP5   pin 7
- *   CENTER -> GP6   pin 9     COM    -> GND   pin 8
+ * Joystick wiring (K1-1506SN-01 breakout PCB from JLCPCB):
+ *   COM    -> GND   pin 3
+ *   LEFT   -> GP2   pin 4     DOWN   -> GP3   pin 5
+ *   UP     -> GP4   pin 6     RIGHT  -> GP5   pin 7
+ *   CENTER -> GP6   pin 9
  */
 
 #include <stdio.h>
@@ -27,6 +28,7 @@
 #include "hardware/adc.h"
 #include "rtc_compat.h"
 #include "DEV_Config.h"
+#include "version.h"
 
 /* Display variant selection */
 #if defined(DISPLAY_V2)
@@ -36,6 +38,7 @@
   #define EPD_Init()     EPD_2in13_V2_Init()
   #define EPD_Clear()    EPD_2in13_V2_Clear()
   #define EPD_Display(b) EPD_2in13_V2_Display(b)
+  #define EPD_Base(b)    EPD_2in13_V2_Display(b)
   #define EPD_Partial(b) EPD_2in13_V2_Display_Partial(b)
   #define EPD_Sleep()    EPD_2in13_V2_Sleep()
   #define DISPLAY_NAME   "V2"
@@ -46,6 +49,7 @@
   #define EPD_Init()     EPD_2in13_V3a_Init()
   #define EPD_Clear()    EPD_2in13_V3a_Clear()
   #define EPD_Display(b) EPD_2in13_V3a_Display(b)
+  #define EPD_Base(b)    EPD_2in13_V3a_Display_Base(b)
   #define EPD_Partial(b) EPD_2in13_V3a_Display_Partial(b)
   #define EPD_Sleep()    EPD_2in13_V3a_Sleep()
   #define DISPLAY_NAME   "V3a"
@@ -56,6 +60,7 @@
   #define EPD_Init()     EPD_2in13_V4_Init()
   #define EPD_Clear()    EPD_2in13_V4_Clear()
   #define EPD_Display(b) EPD_2in13_V4_Display(b)
+  #define EPD_Base(b)    EPD_2in13_V4_Display_Base(b)
   #define EPD_Partial(b) EPD_2in13_V4_Display_Partial(b)
   #define EPD_Sleep()    EPD_2in13_V4_Sleep()
   #define DISPLAY_NAME   "V4"
@@ -66,6 +71,7 @@
   #define EPD_Init()     EPD_2in13_V3_Init()
   #define EPD_Clear()    EPD_2in13_V3_Clear()
   #define EPD_Display(b) EPD_2in13_V3_Display(b)
+  #define EPD_Base(b)    EPD_2in13_V3_Display_Base(b)
   #define EPD_Partial(b) EPD_2in13_V3_Display_Partial(b)
   #define EPD_Sleep()    EPD_2in13_V3_Sleep()
   #define DISPLAY_NAME   "V3"
@@ -98,10 +104,12 @@
 #define MOOD_HOMESICK  15
 #define MOOD_COUNT     16
 
-/* Joystick GPIO pins (active LOW with internal pull-ups) */
-#define JOY_UP     2
+/* Joystick GPIO pins (active LOW with internal pull-ups)
+ * K1-1506SN-01 breakout PCB — Com=GND(pin3), L=GP2, D=GP3, UP=GP4, R=GP5, C=GP6
+ */
+#define JOY_LEFT   2
 #define JOY_DOWN   3
-#define JOY_LEFT   4
+#define JOY_UP     4
 #define JOY_RIGHT  5
 #define JOY_CENTER 6
 
@@ -1230,8 +1238,13 @@ static void joystick_init(void) {
 int main(void) {
     stdio_init_all();
     sleep_ms(1000);
-    printf("~ JOYSTICK MOOD SELECTOR ~ starting (display: %s, %d quotes)...\n",
-           DISPLAY_NAME, QUOTE_COUNT);
+    printf("\n========================================\n");
+    printf("  DILDER — JOYSTICK MOOD SELECTOR\n");
+    printf("  Version:  %s (%s)\n", DILDER_VERSION, DILDER_VERSION_DATE);
+    printf("  Display:  %s\n", DISPLAY_NAME);
+    printf("  Quotes:   %d\n", QUOTE_COUNT);
+    printf("  Built:    %s %s\n", __DATE__, __TIME__);
+    printf("========================================\n\n");
 
     /* Print input options */
     print_help();
@@ -1247,8 +1260,24 @@ int main(void) {
     /* Initialize joystick GPIO pins */
     joystick_init();
 
+    /* GPIO diagnostic — read all 5 pins 3 times, 500ms apart */
+    printf("\n--- GPIO Diagnostic ---\n");
+    printf("Pins: L=GP%d D=GP%d U=GP%d R=GP%d C=GP%d\n",
+           JOY_LEFT, JOY_DOWN, JOY_UP, JOY_RIGHT, JOY_CENTER);
+    for (int t = 0; t < 3; t++) {
+        printf("  Read %d: L=%d D=%d U=%d R=%d C=%d  (1=HIGH/released, 0=LOW/pressed)\n",
+               t + 1,
+               gpio_get(JOY_LEFT), gpio_get(JOY_DOWN), gpio_get(JOY_UP),
+               gpio_get(JOY_RIGHT), gpio_get(JOY_CENTER));
+        sleep_ms(500);
+    }
+    printf("--- End GPIO Diagnostic ---\n\n");
+
+    printf("Display init (%s)...\n", DISPLAY_NAME);
     EPD_Init();
+    printf("Display clear...\n");
     EPD_Clear();
+    printf("Display ready.\n");
 
     rng_seed();
 
@@ -1273,7 +1302,7 @@ int main(void) {
         transpose_to_display();
 
         if (frame_idx == 0)
-            EPD_Display(display_buf);
+            EPD_Base(display_buf);   /* seed both RAM buffers for partial diff */
         else
             EPD_Partial(display_buf);
 
@@ -1291,9 +1320,22 @@ int main(void) {
         uint32_t frame_delay_ms = 4000;
         bool input_received = false;
 
+        static uint32_t last_gpio_dump = 0;
+
         while (elapsed < frame_delay_ms && !input_received) {
             uint8_t prev_mood = current_mood;
             uint32_t now = to_ms_since_boot(get_absolute_time());
+
+            /* ── GPIO raw state dump every 2s (unconditional) ── */
+            if (now - last_gpio_dump >= 2000) {
+                printf("  [GPIO] L(GP%d)=%d D(GP%d)=%d U(GP%d)=%d R(GP%d)=%d C(GP%d)=%d\n",
+                       JOY_LEFT,  gpio_get(JOY_LEFT),
+                       JOY_DOWN,  gpio_get(JOY_DOWN),
+                       JOY_UP,    gpio_get(JOY_UP),
+                       JOY_RIGHT, gpio_get(JOY_RIGHT),
+                       JOY_CENTER,gpio_get(JOY_CENTER));
+                last_gpio_dump = now;
+            }
 
             /* ── Joystick GPIO polling (active LOW, debounced) ── */
             if (now - last_joy_time >= DEBOUNCE_MS) {

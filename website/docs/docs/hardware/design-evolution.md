@@ -687,6 +687,113 @@ All printed parts from both variants organized in the printer's storage drawer.
 
 ---
 
+## Rev 2 Mk2 — Translucent Prototype (2026-05-03)
+
+The Mk2 case printed in **natural/clear PETG** — a translucent variant where every internal component (Pico W, 10440 battery, TP4056 charger, piezo speaker ring, wiring) is visible through the case walls. Thicker base plate with extended peg pillars for better snap retention. Running on battery with the Conspiratorial Octopus personality.
+
+### Indoor desk shots
+
+<div class="grid" markdown>
+
+<figure markdown="span">
+  ![Mk2 translucent — front view with THE MOON LANDING WAS REAL BUT THE MOON IS FAKE quote on e-ink display](../../assets/images/enclosure/mk2-translucent/mk2-translucent-front-moon-landing-quote.jpg){ width="420" loading=lazy }
+  <figcaption>"THE MOON LANDING WAS REAL BUT THE MOON IS FAKE." — display sharp and readable</figcaption>
+</figure>
+
+<figure markdown="span">
+  ![Mk2 translucent — isometric view showing internals through clear PETG](../../assets/images/enclosure/mk2-translucent/mk2-translucent-isometric-display-running.jpg){ width="420" loading=lazy }
+  <figcaption>Isometric — battery, board, and wiring visible through translucent walls</figcaption>
+</figure>
+
+</div>
+
+<div class="grid" markdown>
+
+<figure markdown="span">
+  ![Mk2 translucent — back view showing TP4056, battery, and piezo ring](../../assets/images/enclosure/mk2-translucent/mk2-translucent-back-internals-visible.jpg){ width="420" loading=lazy }
+  <figcaption>Back — all internals visible: TP4056, battery, piezo ring</figcaption>
+</figure>
+
+<figure markdown="span">
+  ![Mk2 translucent — bottom baseplate showing component layout](../../assets/images/enclosure/mk2-translucent/mk2-translucent-bottom-baseplate-layout.jpg){ width="420" loading=lazy }
+  <figcaption>Base plate underside — display pocket, piezo ring, battery trough</figcaption>
+</figure>
+
+</div>
+
+### Outdoor balcony shots — natural light
+
+<div class="grid" markdown>
+
+<figure markdown="span">
+  ![Mk2 translucent outdoors — hero front with Claude Code on laptop](../../assets/images/enclosure/mk2-translucent/mk2-translucent-outdoor-hero-front-claude-code.jpg){ width="420" loading=lazy }
+  <figcaption>Hero shot — e-ink perfectly readable in direct sunlight, Claude Code on laptop behind</figcaption>
+</figure>
+
+<figure markdown="span">
+  ![Mk2 translucent outdoors — front with THE PYRAMIDS WERE BUILT BY CATS quote](../../assets/images/enclosure/mk2-translucent/mk2-translucent-outdoor-front-pyramids-quote.jpg){ width="420" loading=lazy }
+  <figcaption>"THE PYRAMIDS WERE BUILT BY CATS. EGYPTIANS JUST TOOK CREDIT."</figcaption>
+</figure>
+
+</div>
+
+<div class="grid" markdown>
+
+<figure markdown="span">
+  ![Mk2 translucent outdoors — three-quarter right angle](../../assets/images/enclosure/mk2-translucent/mk2-translucent-outdoor-three-quarter-right.jpg){ width="420" loading=lazy }
+  <figcaption>Three-quarter right — case depth and joystick dome in natural light</figcaption>
+</figure>
+
+<figure markdown="span">
+  ![Mk2 translucent outdoors — back showing internals](../../assets/images/enclosure/mk2-translucent/mk2-translucent-outdoor-back-internals.jpg){ width="420" loading=lazy }
+  <figcaption>Back outdoors — TP4056 wiring (red), piezo, display pocket visible</figcaption>
+</figure>
+
+</div>
+
+[Read the full build post :material-arrow-right:](../../blog/posts/mk2-translucent-prototype-running.md){ .md-button }
+
+---
+
+## Joystick Breakout PCB — JLCPCB Delivery (2026-05-04)
+
+The hand-routed K1-1506SN-01 joystick breakout boards arrived from JLCPCB. Switches pre-mounted via PCBA service, silkscreen pin labels (Com, L, D, UP, R, C) confirmed correct. The 3D-printed thumbpiece snap cap fits the actuator peg — ready for wiring into the Mk2 translucent case.
+
+<div class="grid" markdown>
+
+<figure markdown="span">
+  ![JLCPCB blue shipping box with full panel of joystick breakout boards on pink antistatic foam](../../assets/images/hardware/pcb/joystick-pcb-jlcpcb-unboxing-full-panel.jpg){ width="420" loading=lazy }
+  <figcaption>JLCPCB delivery — full panel on antistatic foam</figcaption>
+</figure>
+
+<figure markdown="span">
+  ![Closeup of joystick breakout board panel showing K1-1506SN-01 switches mounted and silkscreen labels](../../assets/images/hardware/pcb/joystick-pcb-panel-closeup-switches-mounted.jpg){ width="420" loading=lazy }
+  <figcaption>Panel closeup — switches pre-mounted, silkscreen labels visible</figcaption>
+</figure>
+
+</div>
+
+<div class="grid" markdown>
+
+<figure markdown="span">
+  ![Macro closeup of individual joystick breakout boards showing Header1, Com, L, D, UP, R, C silkscreen labels and SW1 switch](../../assets/images/hardware/pcb/joystick-pcb-macro-silkscreen-labels.jpg){ width="420" loading=lazy }
+  <figcaption>Macro — silkscreen labels: Header1, Com, L, D, UP, R, C</figcaption>
+</figure>
+
+<figure markdown="span">
+  ![Single joystick breakout board snapped from panel — front angle showing K1-1506SN-01 switch actuator peg and solder pads](../../assets/images/hardware/pcb/joystick-pcb-single-board-front-angle.jpg){ width="420" loading=lazy }
+  <figcaption>Single board — switch actuator peg and 6-pin solder header</figcaption>
+</figure>
+
+</div>
+
+<figure markdown="span">
+  ![Joystick breakout board with 3D-printed thumbpiece snap cap fitted on the K1-1506SN-01 switch actuator](../../assets/images/hardware/pcb/joystick-pcb-single-board-with-thumbpiece.jpg){ width="420" loading=lazy }
+  <figcaption>Thumbpiece snap cap fitted — concave dish on top, socket grips the actuator peg</figcaption>
+</figure>
+
+---
+
 ## Hand-Routed Joystick Breakout PCB (K1-1506SN-01)
 
 First PCB designed from scratch in KiCad 10, hand-routed. Uses the Korean Hroparts K1-1506SN-01 5-way navigation switch (LCSC C145910) on a 19.6x19.6mm board that drops into the Rev 2 top cover's 20x20mm joystick pocket.
@@ -781,4 +888,11 @@ Imported 3D model from LCSC showing the joystick knob mounted on the green PCB. 
 | 2026-05-01 | Rev 2 NoSolar variant | base plate | New `dilder_rev2_mk2_no_solar.FCMacro` — fork of Mk2 design removing solar panel pit, wire holes, and solar model from base plate. Height reduced 6→4mm (`bp_h=4.0`, `floor=0.6`). USB reinforcement block added. All other parts (cradle, cover, thumbpiece) shared with solar variant |
 | 2026-05-01 | Rev 2 NoSolar variant | 3MF exports | 5 pre-exported 3MF files: AAACradle, BasePlate, JoystickPCB, Thumbpiece, TopCover |
 | 2026-05-02 | Rev 2 NoSolar variant | fully assembled | Unit fully assembled in NoSolar case running Conspiratorial Octopus personality on battery power with USB-C charging |
+| 2026-05-03 | Rev 2 Mk2 translucent | first print | Mk2 case printed in natural/clear PETG — translucent walls show all internals. Thicker base plate with extended peg pillars. Running on battery with Conspiratorial Octopus personality. Indoor desk and outdoor balcony photo sessions |
+| 2026-05-04 | Joystick breakout PCB | JLCPCB delivery | Hand-routed K1-1506SN-01 boards delivered from JLCPCB — switches pre-mounted via PCBA, silkscreen labels (Com/L/D/UP/R/C) confirmed correct. 3D-printed thumbpiece snap cap fits the actuator peg. Ready for wiring into the Mk2 case |
+| 2026-05-04 | Joystick breakout PCB | pin swap fix | Discovered COM (pin 1) and UP (pin 4) are swapped in the EasyEDA community library (C145910). KiCad symbol corrected — pin 1=UP, pin 4=COM. Interim fix: swap wires on current board. Rev 2 order will have correct silkscreen |
+| 2026-05-04 | Joystick GPIO mapping | confirmed | Final mapping: Com=GND(pin 3), L=GP2(pin 4), D=GP3(pin 5), UP=GP4(pin 6), R=GP5(pin 7), C=GP6(pin 9). Updated board_config.h for Pico W and Pico 2 W |
+| 2026-05-04 | Waveshare V4 display driver | V1.4 | Rewrote partial refresh 4 times (V1.0→V1.4). Final version uses two-pass diff-based approach: pass 1 clears changed pixels to white (fast waveform 0xff), pass 2 draws new content (full waveform 0xf7). Keeps prev_frame in RAM for pixel-level diffing. Zero ghosting, ~0.8s update time |
+| 2026-05-04 | Firmware version system | v0.5.4 | Added shared `version.h` across all 20 dev-setup programs. Startup banner prints version, display variant, quote count, and build timestamp. GPIO diagnostic at boot reads all 5 joystick pins |
+| 2026-05-04 | DevTool | V4 default + clean build | Display variant default changed from V3 to V4 across CMakeLists, Dockerfile, and DevTool GUI. New "Clean Build & Deploy" button in Programs tab |
 | 2026-04-30 | Joystick thumbpiece | snap cap v1 | New `Thumbpiece` PartDesign Body in `dilder_rev2_mk2.FCMacro` — a printable snap cap that fits over the K1-1506SN-01 actuator peg. Single disc nested inside the cover's 12 mm joystick circle cutout: OD = `joy_d - 1.0` = 11 mm (0.5 mm radial clearance all around → 1 mm total for joystick directional swing), height 4.5 mm, top sitting 0.1 mm below the cover top face (Z = 22.9), bottom at Z = 18.4. Three features built with PartDesign primitives: `Thumb_Disc` (`AdditiveCylinder`), `Thumb_Dish` (`SubtractiveSphere` R = 12 mm, depth 0.6 mm — concave thumb contour, depth capped so the dish doesn't break into the snap cavity above the peg), `Thumb_Socket` (`SubtractiveBox` 3.3 × 3.3 × 3.5 mm, +0.1 mm fit clearance over the 3.2 mm peg). Socket centered on the **actuator** (`thumb_stick_cy = 24.35`) **not** on the disc axis — the SW1 stick is offset +0.68 mm in Y from the cover hole on the production PCB layout, so the disc reads visually centered while the snap pocket actually lands on the peg. Geometry verified against the JoystickPCB STEP face selections (peg X span 77.75–80.95, Y span 22.76–25.94, Z span 17.91–21.17). Result: peg covered with 0.35 mm solid skin above the socket, 2.77 mm of socket grip down the peg, concave dish on top. 9 new spreadsheet aliases (`thumb_od`, `thumb_h`, `thumb_top_clr`, `thumb_dish_r/d`, `thumb_sock_x/y/d`, `thumb_stick_cy`) — drop `thumb_sock_x/y` to 3.15–3.2 to convert friction-fit to interference-fit |

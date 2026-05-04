@@ -23,6 +23,7 @@
 #include <string.h>
 #include "pico/stdlib.h"
 #include "DEV_Config.h"
+#include "version.h"
 #include "GUI_Paint.h"
 #include "fonts.h"
 

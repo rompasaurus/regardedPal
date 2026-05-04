@@ -5347,7 +5347,7 @@ class ProgramsTab(ttk.Frame):
         self.app = app
         self.running_program = None
         self._stop_event = threading.Event()
-        self._display_variant = tk.StringVar(value="V3")
+        self._display_variant = tk.StringVar(value="V4")
         self._build_ui()
 
     def _build_ui(self):
@@ -5437,7 +5437,7 @@ class ProgramsTab(ttk.Frame):
             values=[label for _, label in self.DISPLAY_VARIANTS],
             state="readonly", font=("JetBrains Mono", 9),
         )
-        self.display_combo.current(1)  # Default: V3
+        self.display_combo.current(3)  # Default: V4 (current hardware)
         self.display_combo.pack(fill=tk.X)
         self.display_combo.bind("<<ComboboxSelected>>", self._on_display_changed)
 
@@ -5454,6 +5454,10 @@ class ProgramsTab(ttk.Frame):
         self.standalone_btn = ttk.Button(flash_frame, text="Deploy Standalone",
                                           command=self._deploy_standalone)
         self.standalone_btn.pack(fill=tk.X, pady=2)
+
+        self.clean_build_btn = ttk.Button(flash_frame, text="Clean Build & Deploy",
+                                           command=self._clean_build_and_deploy)
+        self.clean_build_btn.pack(fill=tk.X, pady=2)
 
         self.flash_status = ttk.Label(flash_frame, text="",
                                        wraplength=200, foreground=FG_DIM,
@@ -5494,7 +5498,7 @@ class ProgramsTab(ttk.Frame):
         idx = self.display_combo.current()
         if 0 <= idx < len(self.DISPLAY_VARIANTS):
             return self.DISPLAY_VARIANTS[idx][0]
-        return "V3"
+        return "V4"
 
     def _on_programs_board_changed(self, event=None):
         """Handle board change from the Programs tab dropdown."""
@@ -6099,6 +6103,62 @@ class ProgramsTab(ttk.Frame):
 
         t = threading.Thread(target=self._do_deploy_standalone,
                              args=(key, mount, variant), daemon=True)
+        t.start()
+
+    def _clean_build_and_deploy(self):
+        """Nuke build dir + Docker cache, then do a fully clean standalone deploy."""
+        key = self._get_selected_key()
+        if not key:
+            messagebox.showinfo("Select Program", "Select a program from the list first.")
+            return
+
+        if key not in self._OCTOPUS_CONFIGS:
+            messagebox.showinfo("Not Supported",
+                                "Clean build is only available for octopus programs.")
+            return
+
+        board = self.app.target_board
+
+        if board == BOARD_ESP32S3:
+            self._deploy_standalone_esp32(key)
+            return
+
+        bn = BOARD_LABELS.get(board, "Pico")
+        mount = find_rpi_rp2_mount()
+        if not mount:
+            self.flash_status.config(
+                text=f"{bn} not in BOOTSEL mode.\n"
+                     f"1) Unplug {bn}\n"
+                     "2) Hold BOOTSEL button\n"
+                     "3) Plug in USB (keep holding)\n"
+                     "4) Release BOOTSEL\n"
+                     "5) Click this button again",
+                foreground=FG_YELLOW)
+            return
+
+        variant = self._get_display_variant()
+
+        # Nuke local build directory so Docker starts completely fresh
+        fw_dir = self._FIRMWARE_DIRS.get(key, "sassy-octopus")
+        build_dir = DEV_SETUP / fw_dir / "build"
+        if build_dir.exists():
+            self.app.log(f"[clean] Removing {build_dir}")
+            shutil.rmtree(build_dir, ignore_errors=True)
+
+        self.standalone_btn.config(state=tk.DISABLED)
+        self.clean_build_btn.config(state=tk.DISABLED)
+        self.flash_btn.config(state=tk.DISABLED)
+        self.flash_status.config(
+            text=f"Clean build ({variant})...\nRemoving cached build artifacts...",
+            foreground=FG_ACCENT)
+
+        def _do_clean_build():
+            try:
+                self._do_deploy_standalone(key, mount, variant)
+            finally:
+                self.after(0, lambda: self.clean_build_btn.config(state=tk.NORMAL))
+
+        t = threading.Thread(target=_do_clean_build, daemon=True)
         t.start()
 
     def _deploy_standalone_esp32(self, prog_key):

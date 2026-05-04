@@ -45,6 +45,7 @@ endif()
 
 target_include_directories(lazy_octopus PRIVATE
     ${CMAKE_CURRENT_SOURCE_DIR}
+    ${CMAKE_CURRENT_SOURCE_DIR}/lib
     ${CMAKE_CURRENT_SOURCE_DIR}/lib/Config
     ${CMAKE_CURRENT_SOURCE_DIR}/lib/e-Paper
 )

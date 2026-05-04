@@ -24,7 +24,7 @@ ENV PICO_SDK_PATH=/opt/pico-sdk
 WORKDIR /project
 
 # Display variant (V2, V3, V3a, V4) — override via docker compose environment
-ENV DISPLAY_VARIANT=V3
+ENV DISPLAY_VARIANT=V4
 
 # Pico board type — "pico_w" for Pico W (RP2040), "pico2_w" for Pico 2 W (RP2350)
 ENV PICO_BOARD=pico_w
