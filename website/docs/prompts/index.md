@@ -3693,7 +3693,7 @@ Every prompt entry below uses the following fields. Entries that don't yet list 
 ---
 
 ## Prompt #273 — 2026-05-02
-- **Prompt sequence:** "ok summarize the staged changes update the documens and provide renders with the lates freecad file modified add it to the site as a lternative design update the docs and blog and I added heic pics to the root describe them follown pic descript stucture be detailed in description and convert to jpeg and put in the correct folders then update the fron home page with the choice pictures of the lates hardware progression then also update the docs and docs on the page and the hardware evolution as well note that the unit is solder and power via batter and usb charging works attach the pics to the pertinant docs as well commit and push then update prompts fix spelling and attach the commit hashes and commit and push"
+- **Prompt sequence:** "ok summarize the staged changes, update the documents and provide renders with the latest FreeCAD file modified, add it to the site as an alternative design, update the docs and blog. I added HEIC pics to the root — describe them following the pic description structure, be detailed in description, convert to JPEG and put in the correct folders. Then update the front home page with the choice pictures of the latest hardware progression, also update the docs and the hardware evolution as well. Note that the unit is soldered and powered via battery and USB charging works. Attach the pics to the pertinent docs as well. Commit and push, then update prompts, fix spelling and attach the commit hashes, and commit and push."
 - **Input Tokens (est):** ~200
 - **Output Tokens (est):** ~25,000
 - **Commit:** `2f33b2d` — Add NoSolar variant, soldered unit photos, and hardware docs update
@@ -3723,7 +3723,7 @@ Every prompt entry below uses the following fields. Entries that don't yet list 
 ---
 
 ## Prompt #274 — 2026-05-03
-- **Prompt sequence:** "ok let update the dilder home page and make a new idea concept for the game play loop encorporating proximity detection dilder sholud make a uniques noise or action when another dilder is encountered in proximity and a collectible item can be received further there can be collectable geocaching challenges wher the user is given a dridldle and approximate location to find a collectable electronic physical gift of some sort this could play into a marketing router to get people interested in the device"
+- **Prompt sequence:** "ok let's update the Dilder home page and make a new idea concept for the gameplay loop incorporating proximity detection. Dilder should make a unique noise or action when another Dilder is encountered in proximity and a collectible item can be received. Further, there can be collectible geocaching challenges where the user is given a riddle and approximate location to find a collectible electronic physical gift of some sort. This could play into a marketing route to get people interested in the device."
 - **Input Tokens (est):** ~150
 - **Output Tokens (est):** ~30,000
 - **Commit:** `6185e50` — Add Dilder Encounters, Geocaching & Collectibles gameplay concept
@@ -3735,3 +3735,34 @@ Every prompt entry below uses the following fields. Entries that don't yet list 
   - `website/docs/docs/design/encounters-geocaching.md` (new) — website design doc
   - `website/docs/index.md` — new encounters section on home page
   - `website/mkdocs.yml` — nav updated
+
+---
+
+## Prompt #275 — 2026-05-04
+- **Prompt sequence:** "ok I have added a set of HEIC pics of the latest prints and prototype of Dilder running on hardware with a battery, and I have added a to-do list as well. Let's take all the pictures, convert them to JPEG, and retitle them based on what each picture is showing. Add them to the right pic directory and delete the originals. Let's also make a rolling daily to-do plan with a first entry in an MD file on the root of the project with an OCR of this picture I attached. Also with the picture of the new Dilder revision compose a gallery on the front page to highlight this with the latest pictures. The picture titles should be descriptive. Also update the website — the front page needs this gallery — but let's create another blog post and design evolution entry." [Session continued with 15+ follow-up prompts covering: joystick PCB unboxing photos, GPIO wiring and debugging, V4 display driver rewrite (4 iterations), firmware version system, DevTool clean build button, KiCad pin swap fix, progress report page, and final commit/push with prompt log update.]
+- **Input Tokens (est):** ~250
+- **Output Tokens (est):** ~35,000
+- **Commit:** `e11ba55` — Add joystick PCB arrival, V4 display driver, version system, Mk2 photos
+- **Summary:** Massive multi-part session covering the entire day's work. Started by converting 27 HEIC photos of the Mk2 translucent prototype to JPEG with descriptive filenames, organized into `enclosure/mk2-translucent/` (15 photos), `enclosure/rev2-nosolar/` (5 new), `hardware/bare-board-battery-test/` (3), `hardware/build-session/` (2), and `hardware/` (1 handwritten TODO list). OCR'd the handwritten TODO list into `TODO.md` at project root. Created blog post for the Mk2 translucent prototype. Updated design evolution with translucent section. Refreshed front page gallery with Mk2 and joystick PCB photos. Later in the same session: converted 5 JLCPCB joystick board photos, updated front page and design evolution. Then the technical deep dive began — fixed joystick GPIO mapping (Left=GP2, Down=GP3, Up=GP4, Right=GP5, Center=GP6), discovered and fixed COM/UP pin swap in EasyEDA-imported KiCad symbol, rewrote the Waveshare V4 e-ink display driver four times (V1.0→V1.4) to eliminate partial refresh ghosting using a two-pass diff-based approach. Added firmware version system (`version.h`, v0.5.4) across all 20 programs. Added GPIO diagnostic at startup. Changed all display defaults from V3 to V4. Added "Clean Build & Deploy" button to DevTool. Created progress report page. Second blog post for the joystick PCB arrival and V4 driver work.
+- **Layman summary:** Spent the full day on the Dilder. Converted and organized 32 photos of the new translucent case and joystick PCB delivery. The joystick board arrived from the factory but had a wiring bug — two pins were labeled backwards in the component library. Found and fixed it. The new V4 e-ink display wasn't refreshing properly, so the display driver was rewritten four times until a two-pass technique eliminated all ghosting. Added a version number system so you always know which firmware build is running. Updated the website, blog, and documentation with everything.
+- **Files:**
+  - 27 HEIC→JPEG photos in `website/docs/assets/images/enclosure/mk2-translucent/`, `rev2-nosolar/`, `hardware/bare-board-battery-test/`, `hardware/build-session/`, `hardware/pcb/`
+  - `TODO.md` (new) — rolling daily TODO with OCR'd handwritten list and session progress
+  - `dev-setup/version.h` (new) — shared firmware version header (v0.5.4)
+  - `dev-setup/hello-world/lib/e-Paper/EPD_2in13_V4.c` — V4 display driver rewritten (V1.4, two-pass diff partial refresh)
+  - `dev-setup/hello-world/lib/e-Paper/EPD_2in13_V4.h` — V4 driver header
+  - V4 driver + `version.h` copied to all 19 other program `lib/` directories
+  - `dev-setup/*/CMakeLists.txt` (20 files) — display default V3→V4, added `lib/` include path
+  - `dev-setup/*/main.c` (20 files) — added `EPD_Base` macro, version banner, GPIO diagnostic
+  - `dev-setup/Dockerfile` — `DISPLAY_VARIANT=V4` default
+  - `dev-setup/joystick-mood-selector/main.c` — GPIO mapping (L=GP2, D=GP3, UP=GP4, R=GP5, C=GP6), GPIO diagnostic, version banner, debug dumps
+  - `firmware/include/platform/board_config.h` — joystick pin mapping updated for Pico W and Pico 2 W
+  - `hardware-design/PCB Designs/joystick-pcb-by-hand/JoystickBoardDilder/JoystickBoardDilder.kicad_sym` — swapped pin 1 (COM→UP) and pin 4 (UP→COM)
+  - `hardware-design/PCB Designs/joystick-pcb-by-hand/JoystickBoardDilder/JoystickBoardDilder.kicad_sch` — matching schematic pin name corrections
+  - `tools/devtool/devtool.py` — V4 default, "Clean Build & Deploy" button, combobox index fix
+  - `website/docs/blog/posts/mk2-translucent-prototype-running.md` (new) — Mk2 translucent blog post
+  - `website/docs/blog/posts/joystick-pcb-arrival-v4-display-driver.md` (new) — joystick PCB + V4 driver blog post
+  - `website/docs/docs/progress.md` (new) — rolling progress report page
+  - `website/docs/docs/hardware/design-evolution.md` — Mk2 translucent section, joystick PCB delivery section, pin swap fix, V4 driver, version system, DevTool entries
+  - `website/docs/index.md` — gallery updated, phase status updated, progress report link
+  - `website/mkdocs.yml` — progress report added to nav
