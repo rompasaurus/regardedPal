@@ -6499,17 +6499,60 @@ class OTAUpdateTab(ttk.Frame):
     DEFAULT_AP_PASS = "dilderpass"
     DEFAULT_PORT = 4242
 
+    # Settings file — persists WiFi config across restarts
+    _SETTINGS_DIR = Path.home() / ".config" / "dilder-devtool"
+    _SETTINGS_FILE = _SETTINGS_DIR / "ota-settings.json"
+
     def __init__(self, parent, app):
         super().__init__(parent)
         self.app = app
-        self._wifi_mode = tk.StringVar(value="ap")  # "ap" or "sta"
-        self._ssid = tk.StringVar(value=self.DEFAULT_AP_SSID)
-        self._password = tk.StringVar(value=self.DEFAULT_AP_PASS)
-        self._device_ip = tk.StringVar(value="192.168.4.1")
-        self._sta_subnet = tk.StringVar(value="192.168.1")
-        self._firmware_path = tk.StringVar()
+
+        # Load saved settings or use defaults
+        saved = self._load_settings()
+
+        self._wifi_mode = tk.StringVar(value=saved.get("wifi_mode", "ap"))
+        self._ssid = tk.StringVar(value=saved.get("ssid", self.DEFAULT_AP_SSID))
+        self._password = tk.StringVar(value=saved.get("password", self.DEFAULT_AP_PASS))
+        self._device_ip = tk.StringVar(value=saved.get("device_ip", "192.168.4.1"))
+        self._sta_subnet = tk.StringVar(value=saved.get("subnet", "192.168.1"))
+        self._firmware_path = tk.StringVar(value=saved.get("firmware_path", ""))
         self._is_flashing = False
+
+        # Auto-save when any field changes
+        for var in (self._wifi_mode, self._ssid, self._password,
+                    self._device_ip, self._sta_subnet, self._firmware_path):
+            var.trace_add("write", lambda *_: self._save_settings())
+
         self._build_ui()
+
+        if saved:
+            self.app.log("[ota] WiFi config loaded from previous session")
+
+    def _load_settings(self) -> dict:
+        """Load OTA settings from disk."""
+        try:
+            if self._SETTINGS_FILE.exists():
+                return json.loads(self._SETTINGS_FILE.read_text())
+        except (json.JSONDecodeError, OSError):
+            pass
+        return {}
+
+    def _save_settings(self):
+        """Persist current OTA settings to disk."""
+        try:
+            self._SETTINGS_DIR.mkdir(parents=True, exist_ok=True)
+            settings = {
+                "wifi_mode": self._wifi_mode.get(),
+                "ssid": self._ssid.get(),
+                "password": self._password.get(),
+                "device_ip": self._device_ip.get(),
+                "subnet": self._sta_subnet.get(),
+                "firmware_path": self._firmware_path.get(),
+            }
+            self._SETTINGS_FILE.write_text(
+                json.dumps(settings, indent=2) + "\n")
+        except OSError:
+            pass  # non-critical — silently skip if can't write
 
     def _build_ui(self):
         self.configure(style="TFrame")
@@ -6594,6 +6637,11 @@ class OTAUpdateTab(ttk.Frame):
         self._subnet_entry = ttk.Entry(fields,
                                         textvariable=self._sta_subnet, width=30)
 
+        # Show subnet row if saved mode is STA
+        if self._wifi_mode.get() == "sta":
+            self._subnet_label.grid(row=2, column=0, sticky=tk.W)
+            self._subnet_entry.grid(row=2, column=1, sticky=tk.EW, padx=(0, 4))
+
         fields.columnconfigure(1, weight=1)
 
         # --- Section 3: Device Discovery ---
@@ -6638,8 +6686,22 @@ class OTAUpdateTab(ttk.Frame):
         tree_scroll = ttk.Scrollbar(tree_frame)
         tree_scroll.pack(side=tk.RIGHT, fill=tk.Y)
 
+        style = ttk.Style()
+        style.configure("OTA.Treeview",
+                         background=BG_DARK, foreground=FG_TEXT,
+                         fieldbackground=BG_DARK,
+                         font=("JetBrains Mono", 9),
+                         rowheight=22)
+        style.map("OTA.Treeview",
+                   background=[("selected", FG_ACCENT)],
+                   foreground=[("selected", BG_DARK)])
+        style.configure("OTA.Treeview.Heading",
+                         background=BG_PANEL, foreground=FG_DIM,
+                         font=("JetBrains Mono", 8, "bold"))
+
         self._fw_tree = ttk.Treeview(
             tree_frame, columns=("status", "size"),
+            style="OTA.Treeview",
             show="tree headings", height=10,
             yscrollcommand=tree_scroll.set,
             selectmode="browse")
@@ -6747,9 +6809,12 @@ class OTAUpdateTab(ttk.Frame):
             self._subnet_label.grid_forget()
             self._subnet_entry.grid_forget()
         else:
-            self._ssid.set("")
-            self._password.set("")
-            self._device_ip.set("")
+            # Only clear fields if they still hold AP defaults
+            if self._ssid.get() == self.DEFAULT_AP_SSID:
+                saved = self._load_settings()
+                self._ssid.set(saved.get("ssid", "") if saved.get("wifi_mode") == "sta" else "")
+                self._password.set(saved.get("password", "") if saved.get("wifi_mode") == "sta" else "")
+                self._device_ip.set(saved.get("device_ip", "") if saved.get("wifi_mode") == "sta" else "")
             self._subnet_label.grid(row=2, column=0, sticky=tk.W)
             self._subnet_entry.grid(row=2, column=1, sticky=tk.EW, padx=(0, 4))
 
@@ -6911,65 +6976,103 @@ class OTAUpdateTab(ttk.Frame):
             self._firmware_path.set(path)
 
     def _populate_guide(self):
-        guide = """OTA UPDATE WORKFLOW
-══════════════════
+        guide = """HOW OTA UPDATES WORK
+════════════════════
 
-FIRST-TIME SETUP (once per Pico):
+The Pico normally needs you to hold BOOTSEL, plug
+in USB, and copy a .uf2 file. OTA replaces that
+with WiFi — no USB cable, no button.
 
-  1. Install picowota submodule
-     Click "Install picowota Submodule" to clone
-     the WiFi bootloader into the project.
+It works by putting a tiny WiFi bootloader
+(picowota) on your Pico ONCE via USB. After that,
+picowota listens for firmware updates over WiFi.
+You send new firmware from this tab.
 
-  2. Configure WiFi mode
-     • AP mode (default): The Pico creates its own
-       WiFi network. Connect your laptop to it.
-       Default: SSID "dilder-ota", pass "dilderpass"
-       Pico IP: 192.168.4.1
+════════════════════
+FIRST-TIME SETUP (USB — you only do this once)
+════════════════════
 
-     • STA mode: The Pico joins your existing WiFi.
-       Enter your network SSID and password.
-       Use "Scan Network" to find the Pico's IP.
+Step 1: INSTALL SUBMODULE
+  Downloads the picowota bootloader code into your
+  project. Just click the button — it runs git.
 
-  3. Build the combined bootloader
-     Click "Build Bootloader" — this compiles the
-     picowota bootloader with your WiFi settings
-     and your current firmware into one .uf2 file.
+Step 2: CONFIGURE WIFI
+  Tell picowota how to connect to WiFi.
 
-  4. Flash via USB (one time)
-     Hold BOOTSEL, plug in, click "Flash Bootloader".
-     The combined .uf2 writes both the bootloader
-     and your app. After this, USB is optional.
+  • AP mode (recommended for getting started):
+    The Pico creates its OWN WiFi network.
+    You connect your laptop to it.
+    Default network: "dilder-ota" / "dilderpass"
+    The Pico is always at 192.168.4.1
 
-WIRELESS UPDATES (every time after):
+  • STA mode (better for daily use):
+    The Pico joins YOUR existing WiFi network.
+    Enter your home WiFi SSID and password.
+    You'll need to scan to find the Pico's IP.
 
-  1. Reboot to bootloader
-     Either: pull GPIO15 low and reset, or click
-     "Reboot to Bootloader" (sends picowota_reboot
-     command via serial if connected).
+Step 3: BUILD BOOTLOADER
+  What it does: Compiles the picowota bootloader
+  with YOUR WiFi credentials baked in. The output
+  is a .uf2 file that contains:
+    - The picowota WiFi bootloader
+    - Your WiFi SSID/password (so it can connect)
+  This is NOT your firmware — it's just the
+  bootloader that enables wireless updates.
 
-  2. Connect to Pico's WiFi (AP mode)
-     Or ensure you're on the same network (STA mode).
+Step 4: FLASH BOOTLOADER (USB)
+  What it does: Copies the bootloader .uf2 to your
+  Pico via the normal BOOTSEL method.
+  Hold BOOTSEL → plug in USB → click the button.
+  THIS IS THE LAST TIME you need USB.
+  After this, the Pico has WiFi update capability.
 
-  3. Probe the device
-     Enter the IP and click "Probe" to verify the
-     bootloader is listening. Or "Scan Network".
+════════════════════
+WIRELESS UPDATES (no USB needed — every time)
+════════════════════
 
-  4. Select firmware and Flash OTA
-     Browse to your .elf or .uf2 file and click
-     "Flash OTA". Progress bar shows erase/write.
-     The Pico reboots into the new firmware
-     automatically when done.
+Step 1: PUT PICO IN BOOTLOADER MODE
+  The Pico needs to be running picowota (not your
+  firmware) to accept OTA updates. Two ways:
+  • Pull GPIO15 low and press reset
+  • Click "Reboot to Bootloader" (if USB connected)
 
-BOOTLOADER RE-ENTRY:
-  • GPIO15 low at boot → stays in bootloader
-  • picowota_reboot(true) from firmware code
-  • "Reboot to Bootloader" button (via USB serial)
+Step 2: CONNECT TO THE PICO
+  • AP mode: Connect your laptop to the Pico's
+    WiFi network ("dilder-ota")
+  • STA mode: Both devices are on your home WiFi
 
-TROUBLESHOOTING:
-  • Can't connect? Check WiFi mode and credentials.
-  • Probe fails? Pico may not be in bootloader mode.
-  • Flash fails? Try erasing and re-flashing via USB.
-  • Bricked? BOOTSEL + USB always works as fallback.
+Step 3: FIND THE DEVICE
+  Click "Probe" (if you know the IP) or
+  "Scan Network" (to search the subnet).
+  Green = bootloader found and ready.
+
+Step 4: PICK FIRMWARE AND FLASH
+  Select a program from the list, then:
+  • "Flash OTA" — sends an already-built firmware
+  • "Clean Build & Flash OTA" — rebuilds from
+    scratch via Docker, then sends it wirelessly
+
+  The progress bar shows erase → write → seal.
+  When done, the Pico reboots into your firmware.
+
+════════════════════
+ALWAYS WORKS: USB FALLBACK
+════════════════════
+
+If anything goes wrong, BOOTSEL + USB still works.
+You can never brick the Pico — worst case, you
+hold BOOTSEL, plug in USB, and flash a .uf2 file
+the old-fashioned way. picowota doesn't touch the
+hardware bootloader.
+
+════════════════════
+SETTINGS PERSISTENCE
+════════════════════
+
+Your WiFi config (SSID, password, mode, IP, subnet)
+is automatically saved to:
+  ~/.config/dilder-devtool/ota-settings.json
+and restored when you reopen the DevTool.
 """
         self._guide_text.insert("1.0", guide)
 
