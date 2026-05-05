@@ -17,12 +17,18 @@
 #include <stdlib.h>
 #include <string.h>
 #include <math.h>
+#include <time.h>
 #include "pico/stdlib.h"
+#include "pico/cyw43_arch.h"
 #include "hardware/pwm.h"
 #include "hardware/adc.h"
+#include "lwip/dns.h"
+#include "lwip/pbuf.h"
+#include "lwip/udp.h"
 #include "rtc_compat.h"
 #include "DEV_Config.h"
 #include "version.h"
+#include "wifi_config.h"
 
 /* ─── Joystick pins ─── */
 #define JOY_LEFT   2
@@ -90,10 +96,39 @@ static uint8_t read_joystick(void) {
 }
 
 /* ─── App states ─── */
-#define STATE_OCTOPUS  0   /* main screen — octopus + quote + clock */
-#define STATE_MENU     1   /* menu overlay */
-#define STATE_SOUND    2   /* sound test sub-screen */
-#define STATE_INFO     3   /* device info sub-screen */
+#define STATE_OCTOPUS     0   /* main screen — octopus + quote + clock */
+#define STATE_MENU        1   /* menu overlay */
+#define STATE_SOUND       2   /* sound test sub-screen */
+#define STATE_INFO        3   /* device info sub-screen */
+#define STATE_MOOD_SELECT 4   /* mood picker */
+#define STATE_NETWORK     5   /* WiFi status + toggle */
+
+/* ─── WiFi state ─── */
+static bool wifi_enabled = false;
+static bool wifi_connected = false;
+static bool ntp_synced = false;
+static int32_t wifi_rssi = 0;
+static char wifi_ssid_display[33] = "---";
+static char wifi_ip_str[20] = "---";
+
+/* ─── NTP ─── */
+#define NTP_PORT 123
+#define NTP_MSG_LEN 48
+#define NTP_DELTA 2208988800ULL
+
+static struct udp_pcb *ntp_pcb = NULL;
+static ip_addr_t ntp_server_addr;
+static volatile bool ntp_time_received = false;
+
+/* ─── Mood names for the selector ─── */
+static const char *mood_names[] = {
+    "NORMAL", "WEIRD", "UNHINGED", "ANGRY",
+    "SAD", "CHAOTIC", "HUNGRY", "TIRED",
+    "SLAP HAPPY", "LAZY", "FAT", "CHILL",
+    "CREEPY", "EXCITED", "NOSTALGIC", "HOMESICK",
+};
+#define MOOD_COUNT 16
+static int current_mood = -1;  /* -1 = all moods (random) */
 
 /* Display variant selection */
 #if defined(DISPLAY_V2)
@@ -1273,56 +1308,54 @@ static void init_rtc_from_compile_time(void) {
 
 /* ─── Menu items ─── */
 static const char *menu_items[] = {
+    "MOOD SELECT",
+    "NETWORK",
     "SOUND TEST",
     "DEVICE INFO",
     "BACK",
 };
-#define MENU_COUNT 3
+#define MENU_COUNT 5
 
-/* ─── Draw menu overlay on the bottom portion of the screen ─── */
+/* ─── Helper: draw inverted text (white on black bar) ─── */
+static void draw_inverted_line(int y, const char *text) {
+    for (int hy = y - 1; hy < y + 8; hy++)
+        for (int hx = 6; hx < 244; hx++)
+            px_set(hx, hy);
+    int cx = 10;
+    for (const char *c = text; *c; c++) {
+        char up = *c;
+        if (up >= 'a' && up <= 'z') up -= 32;
+        const char *pos = strchr(font_chars, up);
+        if (pos) {
+            int idx = (int)(pos - font_chars);
+            for (int row = 0; row < 7; row++) {
+                uint8_t bits = font5x7[idx][row];
+                for (int col = 0; col < 5; col++)
+                    if (bits & (0x10 >> col))
+                        px_clr(cx + col, y + row);
+            }
+        }
+        cx += 6;
+    }
+}
+
+/* ─── Draw menu overlay ─── */
 static void render_menu(int selected) {
-    /* Clear bottom 40 rows */
-    for (int y = 82; y < IMG_H; y++)
+    for (int y = 76; y < IMG_H; y++)
         for (int x = 0; x < IMG_ROW_BYTES; x++)
             frame[y * IMG_ROW_BYTES + x] = 0;
 
-    /* Divider line */
-    for (int x = 5; x < 245; x++) px_set(x, 83);
+    for (int x = 5; x < 245; x++) px_set(x, 77);
+    draw_text(8, 79, "MENU", IMG_W);
 
-    /* Menu title */
-    draw_text(8, 86, "MENU", IMG_W);
-
-    /* Menu items */
     for (int i = 0; i < MENU_COUNT; i++) {
-        int y = 96 + i * 9;
+        int y = 88 + i * 9;
+        if (y + 8 > IMG_H) break;
+        char line[40];
         if (i == selected) {
-            /* Highlight bar */
-            for (int hy = y - 1; hy < y + 8; hy++)
-                for (int hx = 6; hx < 244; hx++)
-                    px_set(hx, hy);
-            /* Invert text — draw white on black by clearing pixels */
-            /* Arrow + text */
-            char line[40];
             snprintf(line, sizeof(line), "> %s", menu_items[i]);
-            /* Draw in black first, then we invert */
-            int cx = 10;
-            for (const char *c = line; *c; c++) {
-                char up = *c;
-                if (up >= 'a' && up <= 'z') up -= 32;
-                const char *pos = strchr(font_chars, up);
-                if (pos) {
-                    int idx = (int)(pos - font_chars);
-                    for (int row = 0; row < 7; row++) {
-                        uint8_t bits = font5x7[idx][row];
-                        for (int col = 0; col < 5; col++)
-                            if (bits & (0x10 >> col))
-                                px_clr(cx + col, y + row); /* clear = white on black */
-                    }
-                }
-                cx += 6;
-            }
+            draw_inverted_line(y, line);
         } else {
-            char line[40];
             snprintf(line, sizeof(line), "  %s", menu_items[i]);
             draw_text(10, y, line, IMG_W);
         }
@@ -1332,81 +1365,239 @@ static void render_menu(int selected) {
 /* ─── Draw sound test screen ─── */
 static void render_sound_screen(const char *last_dir, uint16_t freq, int presses) {
     memset(frame, 0, sizeof(frame));
-
     draw_text(30, 3, "SOUND TEST", IMG_W);
     for (int x = 10; x < 240; x++) px_set(x, 14);
 
     char buf[40];
     snprintf(buf, sizeof(buf), "DIRECTION: %s", last_dir);
     draw_text(10, 22, buf, IMG_W);
-
-    if (freq > 0)
-        snprintf(buf, sizeof(buf), "TONE: %d HZ", freq);
-    else
-        snprintf(buf, sizeof(buf), "TONE: ---");
+    snprintf(buf, sizeof(buf), freq > 0 ? "TONE: %d HZ" : "TONE: ---", freq);
     draw_text(10, 35, buf, IMG_W);
-
     snprintf(buf, sizeof(buf), "PRESSES: %d", presses);
     draw_text(10, 48, buf, IMG_W);
 
-    /* GPIO status */
-    draw_text(10, 65, "GPIO:", IMG_W);
     const char *labels[] = {"L", "D", "U", "R", "C"};
     const int pins[] = {JOY_LEFT, JOY_DOWN, JOY_UP, JOY_RIGHT, JOY_CENTER};
     for (int i = 0; i < 5; i++) {
         int bx = 10 + i * 46;
         int pressed = !gpio_get(pins[i]);
-        draw_text(bx + 8, 78, labels[i], IMG_W);
-        if (pressed)
-            for (int hy = 88; hy < 98; hy++)
-                for (int hx = bx; hx < bx + 40; hx++)
-                    px_set(hx, hy);
-        else {
-            for (int x = bx; x < bx + 40; x++) { px_set(x, 88); px_set(x, 97); }
-            for (int y = 88; y < 98; y++) { px_set(bx, y); px_set(bx + 39, y); }
+        draw_text(bx + 8, 68, labels[i], IMG_W);
+        if (pressed) {
+            for (int hy = 78; hy < 88; hy++)
+                for (int hx = bx; hx < bx + 40; hx++) px_set(hx, hy);
+        } else {
+            for (int x = bx; x < bx + 40; x++) { px_set(x, 78); px_set(x, 87); }
+            for (int y = 78; y < 88; y++) { px_set(bx, y); px_set(bx + 39, y); }
         }
     }
-
-    draw_text(10, 108, "SPEAKER: GP15  PIN 20", IMG_W);
-    draw_text(180, 108, "LEFT:BACK", IMG_W);
+    draw_text(10, 108, "SPEAKER: GP14-GP15", IMG_W);
+    draw_text(175, 108, "LEFT:BACK", IMG_W);
 }
 
 /* ─── Draw device info screen ─── */
 static void render_info_screen(void) {
     memset(frame, 0, sizeof(frame));
-
     draw_text(30, 3, "DEVICE INFO", IMG_W);
     for (int x = 10; x < 240; x++) px_set(x, 14);
-
     char buf[48];
-
     snprintf(buf, sizeof(buf), "FIRMWARE: V%s", DILDER_VERSION);
     draw_text(10, 22, buf, IMG_W);
-
     snprintf(buf, sizeof(buf), "BUILT: %s %s", __DATE__, __TIME__);
     draw_text(10, 35, buf, IMG_W);
-
-    snprintf(buf, sizeof(buf), "DISPLAY: %s", DISPLAY_NAME);
+    snprintf(buf, sizeof(buf), "DISPLAY: %s  QUOTES: %d", DISPLAY_NAME, QUOTE_COUNT);
     draw_text(10, 48, buf, IMG_W);
+    datetime_t t; rtc_get_datetime(&t);
+    int hr12 = t.hour % 12; if (hr12 == 0) hr12 = 12;
+    snprintf(buf, sizeof(buf), "%s %d, %d  %d:%02d %s",
+             month_names[t.month - 1], t.day, t.year, hr12, t.min,
+             t.hour < 12 ? "AM" : "PM");
+    draw_text(10, 65, buf, IMG_W);
+    snprintf(buf, sizeof(buf), "MOOD: %s",
+             current_mood < 0 ? "ALL (RANDOM)" : mood_names[current_mood]);
+    draw_text(10, 78, buf, IMG_W);
+    snprintf(buf, sizeof(buf), "WIFI: %s", wifi_connected ? wifi_ip_str : "OFF");
+    draw_text(10, 91, buf, IMG_W);
+    draw_text(10, 108, "PICO 2 W  RP2350", IMG_W);
+    draw_text(175, 108, "LEFT:BACK", IMG_W);
+}
 
-    snprintf(buf, sizeof(buf), "QUOTES: %d", QUOTE_COUNT);
-    draw_text(10, 61, buf, IMG_W);
+/* ─── Draw mood select screen ─── */
+static void render_mood_select(int selected) {
+    memset(frame, 0, sizeof(frame));
+    draw_text(30, 3, "SELECT MOOD", IMG_W);
+    for (int x = 10; x < 240; x++) px_set(x, 14);
 
-    /* RTC time */
-    datetime_t t;
-    rtc_get_datetime(&t);
-    int hr12 = t.hour % 12;
-    if (hr12 == 0) hr12 = 12;
-    const char *ampm = (t.hour < 12) ? "AM" : "PM";
-    snprintf(buf, sizeof(buf), "TIME: %d:%02d %s", hr12, t.min, ampm);
-    draw_text(10, 74, buf, IMG_W);
+    /* Show 8 moods at a time (scrolling window) */
+    int start = 0;
+    /* +1 for "ALL (RANDOM)" option */
+    int total = MOOD_COUNT + 1;
+    if (selected > 6) start = selected - 6;
+    if (start + 8 > total) start = total - 8;
+    if (start < 0) start = 0;
 
-    snprintf(buf, sizeof(buf), "DATE: %s %d, %d",
-             month_names[t.month - 1], t.day, t.year);
-    draw_text(10, 87, buf, IMG_W);
+    for (int i = 0; i < 8 && (start + i) < total; i++) {
+        int idx = start + i;
+        int y = 20 + i * 11;
+        char line[40];
+        if (idx == 0) {
+            snprintf(line, sizeof(line), idx == selected ? "> ALL MOODS (RANDOM)" : "  ALL MOODS (RANDOM)");
+        } else {
+            int mood_idx = idx - 1;
+            snprintf(line, sizeof(line), idx == selected ? "> %s" : "  %s", mood_names[mood_idx]);
+        }
+        if (idx == selected)
+            draw_inverted_line(y, line);
+        else
+            draw_text(10, y, line, IMG_W);
+    }
 
-    draw_text(10, 108, "BOARD: PICO 2 W  RP2350", IMG_W);
-    draw_text(180, 108, "LEFT:BACK", IMG_W);
+    char hint[40];
+    snprintf(hint, sizeof(hint), "CURRENT: %s",
+             current_mood < 0 ? "ALL" : mood_names[current_mood]);
+    draw_text(10, 110, hint, IMG_W);
+    draw_text(175, 110, "LEFT:BACK", IMG_W);
+}
+
+/* ─── Draw network screen ─── */
+static void render_network_screen(void) {
+    memset(frame, 0, sizeof(frame));
+    draw_text(30, 3, "NETWORK", IMG_W);
+    for (int x = 10; x < 240; x++) px_set(x, 14);
+    char buf[48];
+
+    snprintf(buf, sizeof(buf), "WIFI: %s", wifi_enabled ? "ON" : "OFF");
+    draw_text(10, 22, buf, IMG_W);
+    draw_text(160, 22, "CENTER:TOGGLE", IMG_W);
+
+    snprintf(buf, sizeof(buf), "SSID: %s", wifi_ssid_display);
+    draw_text(10, 38, buf, IMG_W);
+
+    snprintf(buf, sizeof(buf), "STATUS: %s",
+             !wifi_enabled ? "DISABLED" :
+             wifi_connected ? "CONNECTED" : "CONNECTING...");
+    draw_text(10, 51, buf, IMG_W);
+
+    snprintf(buf, sizeof(buf), "IP: %s", wifi_connected ? wifi_ip_str : "---");
+    draw_text(10, 64, buf, IMG_W);
+
+    if (wifi_connected) {
+        snprintf(buf, sizeof(buf), "SIGNAL: %d DBM", (int)wifi_rssi);
+        draw_text(10, 77, buf, IMG_W);
+    }
+
+    snprintf(buf, sizeof(buf), "NTP: %s", ntp_synced ? "SYNCED" : "NOT SYNCED");
+    draw_text(10, 90, buf, IMG_W);
+
+    draw_text(175, 110, "LEFT:BACK", IMG_W);
+}
+
+/* ─── WiFi / NTP functions ─── */
+
+static void ntp_recv_cb(void *arg, struct udp_pcb *pcb, struct pbuf *p,
+                         const ip_addr_t *addr, u16_t port) {
+    (void)arg; (void)pcb; (void)addr; (void)port;
+    if (p->tot_len >= NTP_MSG_LEN) {
+        uint8_t *buf = (uint8_t *)p->payload;
+        uint32_t secs = (buf[40] << 24) | (buf[41] << 16) | (buf[42] << 8) | buf[43];
+        time_t epoch = (time_t)(secs - NTP_DELTA) + TIMEZONE_OFFSET_SEC;
+        struct tm *t = gmtime(&epoch);
+        datetime_t dt = {
+            .year  = (int16_t)(t->tm_year + 1900),
+            .month = (int8_t)(t->tm_mon + 1),
+            .day   = (int8_t)t->tm_mday,
+            .dotw  = (int8_t)t->tm_wday,
+            .hour  = (int8_t)t->tm_hour,
+            .min   = (int8_t)t->tm_min,
+            .sec   = (int8_t)t->tm_sec,
+        };
+        rtc_set_datetime(&dt);
+        ntp_synced = true;
+        ntp_time_received = true;
+        printf("[NTP] Synced: %04d-%02d-%02d %02d:%02d:%02d\n",
+               dt.year, dt.month, dt.day, dt.hour, dt.min, dt.sec);
+    }
+    pbuf_free(p);
+}
+
+static void ntp_dns_cb(const char *name, const ip_addr_t *addr, void *arg) {
+    (void)arg;
+    if (addr) {
+        ntp_server_addr = *addr;
+        struct pbuf *p = pbuf_alloc(PBUF_TRANSPORT, NTP_MSG_LEN, PBUF_RAM);
+        if (p) {
+            memset(p->payload, 0, NTP_MSG_LEN);
+            ((uint8_t *)p->payload)[0] = 0x1b;
+            udp_sendto(ntp_pcb, p, &ntp_server_addr, NTP_PORT);
+            pbuf_free(p);
+            printf("[NTP] Request sent to %s\n", ipaddr_ntoa(addr));
+        }
+    }
+}
+
+static void ntp_request(void) {
+    if (!ntp_pcb) {
+        ntp_pcb = udp_new();
+        if (!ntp_pcb) return;
+        udp_recv(ntp_pcb, ntp_recv_cb, NULL);
+    }
+    dns_gethostbyname(NTP_SERVER, &ntp_server_addr, ntp_dns_cb, NULL);
+}
+
+static void wifi_connect(void) {
+    printf("[WiFi] Connecting to \"%s\"...\n", WIFI_SSID);
+    strncpy(wifi_ssid_display, WIFI_SSID, sizeof(wifi_ssid_display) - 1);
+    wifi_enabled = true;
+
+    if (cyw43_arch_init()) {
+        printf("[WiFi] CYW43 init failed\n");
+        wifi_connected = false;
+        return;
+    }
+    cyw43_arch_enable_sta_mode();
+
+    int err = cyw43_arch_wifi_connect_timeout_ms(
+        WIFI_SSID, WIFI_PASS, CYW43_AUTH_WPA2_AES_PSK, 15000);
+    if (err) {
+        printf("[WiFi] Connection failed (err=%d)\n", err);
+        wifi_connected = false;
+        return;
+    }
+
+    wifi_connected = true;
+    struct netif *netif = &cyw43_state.netif[CYW43_ITF_STA];
+    snprintf(wifi_ip_str, sizeof(wifi_ip_str), "%s", ipaddr_ntoa(&netif->ip_addr));
+    cyw43_wifi_get_rssi(&cyw43_state, &wifi_rssi);
+    printf("[WiFi] Connected: %s  RSSI: %d\n", wifi_ip_str, (int)wifi_rssi);
+
+    /* Sync time via NTP */
+    ntp_request();
+}
+
+static void wifi_disconnect(void) {
+    printf("[WiFi] Disconnecting...\n");
+    cyw43_arch_deinit();
+    wifi_connected = false;
+    wifi_enabled = false;
+    ntp_synced = false;
+    strncpy(wifi_ssid_display, "---", sizeof(wifi_ssid_display));
+    strncpy(wifi_ip_str, "---", sizeof(wifi_ip_str));
+}
+
+/* ─── Pick a quote matching current_mood, or random if -1 ─── */
+static int pick_quote(void) {
+    if (current_mood < 0)
+        return rng_next() % QUOTE_COUNT;
+
+    /* Collect indices matching the mood */
+    int matches[QUOTE_COUNT];
+    int count = 0;
+    for (int i = 0; i < QUOTE_COUNT; i++) {
+        if (quotes[i].mood == (uint8_t)current_mood)
+            matches[count++] = i;
+    }
+    if (count == 0)
+        return rng_next() % QUOTE_COUNT;  /* fallback */
+    return matches[rng_next() % count];
 }
 
 /* ─── Tone frequencies for sound test ─── */
@@ -1416,13 +1607,13 @@ static void render_info_screen(void) {
 #define TONE_RIGHT   988
 #define TONE_CENTER 1319
 
+/* ─── Main ─── */
 int main(void) {
     stdio_init_all();
     sleep_ms(1000);
     printf("DILDER HUB v%s (%s) | display: %s | %d quotes | built %s %s\n",
            DILDER_VERSION, DILDER_VERSION_DATE, DISPLAY_NAME, QUOTE_COUNT, __DATE__, __TIME__);
 
-    /* Initialize RTC from compile time */
     init_rtc_from_compile_time();
 
     if (DEV_Module_Init() != 0) {
@@ -1434,25 +1625,22 @@ int main(void) {
     speaker_init();
 
     /* Startup chime */
-    speaker_tone(1000, 80);
-    sleep_ms(30);
-    speaker_tone(1500, 80);
-    sleep_ms(30);
+    speaker_tone(1000, 80); sleep_ms(30);
+    speaker_tone(1500, 80); sleep_ms(30);
     speaker_tone(2000, 120);
 
     EPD_Init();
     EPD_Clear();
-
     rng_seed();
 
     /* ─── State machine ─── */
     uint8_t state = STATE_OCTOPUS;
     uint32_t frame_idx = 0;
-    int qi = rng_next() % QUOTE_COUNT;
+    int qi = pick_quote();
     int menu_sel = 0;
+    int mood_sel = 0;  /* 0 = ALL, 1-16 = specific mood */
     bool needs_full_refresh = true;
 
-    /* Sound test state */
     const char *snd_dir = "NONE";
     uint16_t snd_freq = 0;
     int snd_presses = 0;
@@ -1460,16 +1648,23 @@ int main(void) {
     uint32_t last_input_ms = 0;
     #define INPUT_DEBOUNCE 200
 
+    /* Helper macro for polling input in sub-screens */
+    #define POLL_INPUT(ms) \
+        for (int _pi = 0; _pi < ((ms)/20); _pi++) { \
+            sleep_ms(20); \
+            if (wifi_enabled) cyw43_arch_poll(); \
+            if (to_ms_since_boot(get_absolute_time()) - last_input_ms < INPUT_DEBOUNCE) continue; \
+            uint8_t inp = read_joystick(); \
+            if (inp == INPUT_NONE) continue; \
+            last_input_ms = to_ms_since_boot(get_absolute_time());
+
+    #define POLL_END break; }
+
     while (true) {
         uint32_t now = to_ms_since_boot(get_absolute_time());
-        uint8_t input = INPUT_NONE;
 
-        /* Debounced input read */
-        if (now - last_input_ms >= INPUT_DEBOUNCE) {
-            input = read_joystick();
-            if (input != INPUT_NONE)
-                last_input_ms = now;
-        }
+        /* Poll WiFi if connected */
+        if (wifi_enabled) cyw43_arch_poll();
 
         switch (state) {
 
@@ -1480,48 +1675,29 @@ int main(void) {
             uint8_t expr = cycle[frame_idx % 4];
 
             if (expr == EXPR_OPEN && frame_idx > 0)
-                qi = rng_next() % QUOTE_COUNT;
+                qi = pick_quote();
 
             render_frame(&quotes[qi], expr, frame_idx);
-
-            /* Menu hint at bottom-right */
             draw_text(175, 113, "DOWN:MENU", IMG_W);
-
             transpose_to_display();
 
-            if (needs_full_refresh) {
-                EPD_Base(display_buf);
-                needs_full_refresh = false;
-            } else {
-                EPD_Partial(display_buf);
-            }
-
+            if (needs_full_refresh) { EPD_Base(display_buf); needs_full_refresh = false; }
+            else EPD_Partial(display_buf);
             frame_idx++;
 
-            /* Handle input — DOWN opens menu, CENTER plays chime */
-            if (input == INPUT_DOWN) {
-                state = STATE_MENU;
-                menu_sel = 0;
-                speaker_tone(800, 50);
-                printf("[state] OCTOPUS -> MENU\n");
-                break;
-            }
-            if (input == INPUT_CENTER) {
-                speaker_tone(1319, 100);
-            }
-
-            /* Wait ~3 seconds but poll joystick */
+            /* Poll 3 seconds for joystick */
             for (int i = 0; i < 150 && state == STATE_OCTOPUS; i++) {
                 sleep_ms(20);
-                if (to_ms_since_boot(get_absolute_time()) - last_input_ms >= INPUT_DEBOUNCE) {
-                    uint8_t inp = read_joystick();
-                    if (inp == INPUT_DOWN) {
-                        last_input_ms = to_ms_since_boot(get_absolute_time());
-                        state = STATE_MENU;
-                        menu_sel = 0;
-                        speaker_tone(800, 50);
-                        printf("[state] OCTOPUS -> MENU\n");
-                    }
+                if (wifi_enabled) cyw43_arch_poll();
+                if (to_ms_since_boot(get_absolute_time()) - last_input_ms < INPUT_DEBOUNCE) continue;
+                uint8_t inp = read_joystick();
+                if (inp == INPUT_DOWN) {
+                    last_input_ms = to_ms_since_boot(get_absolute_time());
+                    state = STATE_MENU; menu_sel = 0;
+                    speaker_tone(800, 50);
+                } else if (inp == INPUT_CENTER) {
+                    last_input_ms = to_ms_since_boot(get_absolute_time());
+                    speaker_tone(1319, 100);
                 }
             }
             break;
@@ -1529,59 +1705,86 @@ int main(void) {
 
         /* ════════ MENU ════════ */
         case STATE_MENU: {
-            /* Re-render octopus in background + menu overlay */
             const Quote *q = &quotes[qi];
-            const uint8_t *cycle = mood_cycle(q->mood);
-            uint8_t expr = cycle[frame_idx % 4];
-            render_frame(q, expr, frame_idx);
+            render_frame(q, mood_cycle(q->mood)[frame_idx % 4], frame_idx);
             render_menu(menu_sel);
             transpose_to_display();
             EPD_Partial(display_buf);
 
-            printf("[menu] Selected: %d (%s)\n", menu_sel, menu_items[menu_sel]);
-
-            /* Wait for input */
-            for (int i = 0; i < 200; i++) {
-                sleep_ms(20);
-                if (to_ms_since_boot(get_absolute_time()) - last_input_ms < INPUT_DEBOUNCE)
-                    continue;
-                uint8_t inp = read_joystick();
-                if (inp == INPUT_NONE) continue;
-                last_input_ms = to_ms_since_boot(get_absolute_time());
-
+            POLL_INPUT(4000)
                 if (inp == INPUT_UP) {
                     menu_sel = (menu_sel - 1 + MENU_COUNT) % MENU_COUNT;
-                    speaker_tone(600, 30);
-                    break;
+                    speaker_tone(600, 30); break;
                 } else if (inp == INPUT_DOWN) {
                     menu_sel = (menu_sel + 1) % MENU_COUNT;
-                    speaker_tone(600, 30);
-                    break;
+                    speaker_tone(600, 30); break;
                 } else if (inp == INPUT_CENTER) {
                     speaker_tone(1000, 50);
-                    if (menu_sel == 0) {
-                        state = STATE_SOUND;
-                        snd_dir = "NONE"; snd_freq = 0; snd_presses = 0;
-                        needs_full_refresh = true;
-                        printf("[state] MENU -> SOUND\n");
-                    } else if (menu_sel == 1) {
-                        state = STATE_INFO;
-                        needs_full_refresh = true;
-                        printf("[state] MENU -> INFO\n");
-                    } else {
-                        state = STATE_OCTOPUS;
-                        needs_full_refresh = true;
-                        printf("[state] MENU -> OCTOPUS\n");
+                    needs_full_refresh = true;
+                    switch (menu_sel) {
+                        case 0: state = STATE_MOOD_SELECT; mood_sel = current_mood + 1; break;
+                        case 1: state = STATE_NETWORK; break;
+                        case 2: state = STATE_SOUND; snd_dir="NONE"; snd_freq=0; snd_presses=0; break;
+                        case 3: state = STATE_INFO; break;
+                        default: state = STATE_OCTOPUS; break;
                     }
                     break;
                 } else if (inp == INPUT_LEFT) {
-                    state = STATE_OCTOPUS;
-                    needs_full_refresh = true;
-                    speaker_tone(500, 50);
-                    printf("[state] MENU -> OCTOPUS (back)\n");
-                    break;
+                    state = STATE_OCTOPUS; needs_full_refresh = true;
+                    speaker_tone(500, 50); break;
                 }
-            }
+            POLL_END
+            break;
+        }
+
+        /* ════════ MOOD SELECT ════════ */
+        case STATE_MOOD_SELECT: {
+            render_mood_select(mood_sel);
+            transpose_to_display();
+            if (needs_full_refresh) { EPD_Base(display_buf); needs_full_refresh = false; }
+            else EPD_Partial(display_buf);
+
+            POLL_INPUT(4000)
+                if (inp == INPUT_UP) {
+                    mood_sel = (mood_sel - 1 + MOOD_COUNT + 1) % (MOOD_COUNT + 1);
+                    speaker_tone(600, 30); break;
+                } else if (inp == INPUT_DOWN) {
+                    mood_sel = (mood_sel + 1) % (MOOD_COUNT + 1);
+                    speaker_tone(600, 30); break;
+                } else if (inp == INPUT_CENTER) {
+                    current_mood = mood_sel == 0 ? -1 : mood_sel - 1;
+                    qi = pick_quote();
+                    speaker_tone(1200, 80);
+                    printf("[mood] Selected: %s\n",
+                           current_mood < 0 ? "ALL" : mood_names[current_mood]);
+                    break;
+                } else if (inp == INPUT_LEFT) {
+                    state = STATE_MENU; needs_full_refresh = true;
+                    speaker_tone(500, 50); break;
+                }
+            POLL_END
+            break;
+        }
+
+        /* ════════ NETWORK ════════ */
+        case STATE_NETWORK: {
+            render_network_screen();
+            transpose_to_display();
+            if (needs_full_refresh) { EPD_Base(display_buf); needs_full_refresh = false; }
+            else EPD_Partial(display_buf);
+
+            POLL_INPUT(4000)
+                if (inp == INPUT_CENTER) {
+                    speaker_tone(1000, 50);
+                    if (wifi_enabled) wifi_disconnect();
+                    else wifi_connect();
+                    needs_full_refresh = true;
+                    break;
+                } else if (inp == INPUT_LEFT) {
+                    state = STATE_MENU; needs_full_refresh = true;
+                    speaker_tone(500, 50); break;
+                }
+            POLL_END
             break;
         }
 
@@ -1589,36 +1792,20 @@ int main(void) {
         case STATE_SOUND: {
             render_sound_screen(snd_dir, snd_freq, snd_presses);
             transpose_to_display();
-            if (needs_full_refresh) {
-                EPD_Base(display_buf);
-                needs_full_refresh = false;
-            } else {
-                EPD_Partial(display_buf);
-            }
+            if (needs_full_refresh) { EPD_Base(display_buf); needs_full_refresh = false; }
+            else EPD_Partial(display_buf);
 
-            /* Poll for input for 2 seconds */
-            for (int i = 0; i < 100; i++) {
-                sleep_ms(20);
-                if (to_ms_since_boot(get_absolute_time()) - last_input_ms < INPUT_DEBOUNCE)
-                    continue;
-                uint8_t inp = read_joystick();
-                if (inp == INPUT_NONE) continue;
-                last_input_ms = to_ms_since_boot(get_absolute_time());
-
+            POLL_INPUT(2000)
                 if (inp == INPUT_LEFT) {
-                    state = STATE_MENU;
-                    needs_full_refresh = true;
-                    speaker_tone(500, 50);
-                    printf("[state] SOUND -> MENU (back)\n");
-                    break;
+                    state = STATE_MENU; needs_full_refresh = true;
+                    speaker_tone(500, 50); break;
                 }
                 snd_presses++;
-                if (inp == INPUT_UP)     { snd_dir = "UP";     snd_freq = TONE_UP;     speaker_tone(TONE_UP, 150); }
-                if (inp == INPUT_DOWN)   { snd_dir = "DOWN";   snd_freq = TONE_DOWN;   speaker_tone(TONE_DOWN, 150); }
-                if (inp == INPUT_RIGHT)  { snd_dir = "RIGHT";  snd_freq = TONE_RIGHT;  speaker_tone(TONE_RIGHT, 150); }
-                if (inp == INPUT_CENTER) { snd_dir = "CENTER"; snd_freq = TONE_CENTER; speaker_tone(TONE_CENTER, 200); }
-                break; /* refresh display after input */
-            }
+                if (inp == INPUT_UP)     { snd_dir="UP";     snd_freq=TONE_UP;     speaker_tone(TONE_UP, 150); }
+                if (inp == INPUT_DOWN)   { snd_dir="DOWN";   snd_freq=TONE_DOWN;   speaker_tone(TONE_DOWN, 150); }
+                if (inp == INPUT_RIGHT)  { snd_dir="RIGHT";  snd_freq=TONE_RIGHT;  speaker_tone(TONE_RIGHT, 150); }
+                if (inp == INPUT_CENTER) { snd_dir="CENTER"; snd_freq=TONE_CENTER; speaker_tone(TONE_CENTER, 200); }
+            POLL_END
             break;
         }
 
@@ -1626,30 +1813,15 @@ int main(void) {
         case STATE_INFO: {
             render_info_screen();
             transpose_to_display();
-            if (needs_full_refresh) {
-                EPD_Base(display_buf);
-                needs_full_refresh = false;
-            } else {
-                EPD_Partial(display_buf);
-            }
+            if (needs_full_refresh) { EPD_Base(display_buf); needs_full_refresh = false; }
+            else EPD_Partial(display_buf);
 
-            /* Wait for back */
-            for (int i = 0; i < 200; i++) {
-                sleep_ms(20);
-                if (to_ms_since_boot(get_absolute_time()) - last_input_ms < INPUT_DEBOUNCE)
-                    continue;
-                uint8_t inp = read_joystick();
-                if (inp == INPUT_NONE) continue;
-                last_input_ms = to_ms_since_boot(get_absolute_time());
-
+            POLL_INPUT(4000)
                 if (inp == INPUT_LEFT || inp == INPUT_CENTER) {
-                    state = STATE_MENU;
-                    needs_full_refresh = true;
-                    speaker_tone(500, 50);
-                    printf("[state] INFO -> MENU (back)\n");
-                    break;
+                    state = STATE_MENU; needs_full_refresh = true;
+                    speaker_tone(500, 50); break;
                 }
-            }
+            POLL_END
             break;
         }
 

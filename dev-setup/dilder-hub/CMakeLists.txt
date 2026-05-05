@@ -55,8 +55,17 @@ target_link_libraries(dilder_hub
     hardware_gpio
     hardware_adc
     hardware_pwm
+    pico_cyw43_arch_lwip_poll
     m
 )
+
+# WiFi credentials — pass via cmake -D or edit wifi_config.h
+if(DEFINED WIFI_SSID)
+    target_compile_definitions(dilder_hub PRIVATE WIFI_SSID="${WIFI_SSID}")
+endif()
+if(DEFINED WIFI_PASS)
+    target_compile_definitions(dilder_hub PRIVATE WIFI_PASS="${WIFI_PASS}")
+endif()
 
 # hardware_rtc only exists on RP2040 — RP2350 uses software fallback
 if(PICO_PLATFORM STREQUAL "rp2040")
