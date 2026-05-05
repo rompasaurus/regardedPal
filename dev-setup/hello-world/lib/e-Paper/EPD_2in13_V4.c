@@ -133,37 +133,45 @@ static void EPD_2in13_V4_WriteRAM(UBYTE cmd, UBYTE *Image)
             EPD_2in13_V4_SendData(Image[i + j * Width]);
 }
 
-/* Core partial diff helper.  Writes old→0x26, new→0x24, then triggers
- * a display update with the given update_cmd byte.
- *   0xff = fast (weaker drive, ~0.3s) — good for clearing to white
- *   0xf7 = full internal LUT (stronger drive, ~0.5s) — solid blacks   */
-static void EPD_2in13_V4_DoPartialDiff(UBYTE *old_image, UBYTE *new_image, UBYTE update_cmd)
+static UBYTE partial_mode_ready = 0;
+
+/* Prepare the controller for partial updates (waveform + border config).
+ * Called once, then partial updates just write data + trigger. */
+static void EPD_2in13_V4_EnterPartialMode(void)
 {
+    if (partial_mode_ready) return;
+
     /* Load waveform via internal temp sensor */
     EPD_2in13_V4_SendCommand(0x18);
     EPD_2in13_V4_SendData(0x80);
 
-    EPD_2in13_V4_SendCommand(0x22);  /* Load temperature + waveform */
+    EPD_2in13_V4_SendCommand(0x22);
     EPD_2in13_V4_SendData(0xB1);
     EPD_2in13_V4_SendCommand(0x20);
     EPD_2in13_V4_ReadBusy();
 
-    /* Border waveform for partial mode */
+    /* Border waveform: 0x80 = follow LUT (no border flash) */
     EPD_2in13_V4_SendCommand(0x3C);
     EPD_2in13_V4_SendData(0x80);
 
-    /* Set full window and cursor */
+    partial_mode_ready = 1;
+}
+
+/* Core partial diff — writes old→0x26, new→0x24, triggers update.
+ * Waveform must already be loaded via EnterPartialMode(). */
+static void EPD_2in13_V4_DoPartialDiff(UBYTE *old_image, UBYTE *new_image)
+{
+    EPD_2in13_V4_EnterPartialMode();
+
     EPD_2in13_V4_SetWindows(0, 0, EPD_2in13_V4_WIDTH-1, EPD_2in13_V4_HEIGHT-1);
     EPD_2in13_V4_SetCursor(0, 0);
 
-    /* Old frame in 0x26, new frame in 0x24.
-     * Controller diffs them and applies voltage only to changed pixels. */
     EPD_2in13_V4_WriteRAM(0x26, old_image);
     EPD_2in13_V4_WriteRAM(0x24, new_image);
 
-    /* Trigger display update with specified waveform strength */
+    /* 0xC7 = partial update with display on — fast, no flicker */
     EPD_2in13_V4_SendCommand(0x22);
-    EPD_2in13_V4_SendData(update_cmd);
+    EPD_2in13_V4_SendData(0xC7);
     EPD_2in13_V4_SendCommand(0x20);
     EPD_2in13_V4_ReadBusy();
 }
@@ -284,6 +292,7 @@ void EPD_2in13_V4_Display_Base(UBYTE *Image)
     memcpy(prev_frame, Image, EPD_BUF_SIZE);
     base_seeded = 1;
     partial_count = 0;
+    partial_mode_ready = 0;  /* force waveform reload on next partial */
 }
 
 /******************************************************************************
@@ -320,12 +329,8 @@ void EPD_2in13_V4_Display_Partial(UBYTE *Image)
 
     /* Single-pass partial refresh: old frame → new frame directly.
      * The SSD1680 controller diffs the two buffers and only drives
-     * pixels that actually changed. No intermediate white flash.
-     *
-     * Uses 0xf7 (full internal LUT) for solid blacks on changed pixels.
-     * Some mild ghosting may appear after many updates — the periodic
-     * full refresh above cleans it up. */
-    EPD_2in13_V4_DoPartialDiff(prev_frame, Image, 0xf7);
+     * pixels that actually changed. No intermediate white flash. */
+    EPD_2in13_V4_DoPartialDiff(prev_frame, Image);
 
     /* Save for next cycle */
     memcpy(prev_frame, Image, EPD_BUF_SIZE);

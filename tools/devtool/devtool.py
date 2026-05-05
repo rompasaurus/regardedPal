@@ -8725,7 +8725,7 @@ REQUIREMENTS
 
                 # Step 5: Compile
                 pico_board = "pico2_w"
-                variant = "V4"
+                variant = self.app._display_variant.get() or "V4"
                 self.after(0, lambda: self._flash_status.config(
                     text=f"Compiling ({pico_board}, {variant})...",
                     foreground=FG_YELLOW))
@@ -9397,6 +9397,18 @@ class DilderDevTool(tk.Tk):
         self.board_status = ttk.Label(toolbar, text="", foreground=FG_DIM,
                                        font=("JetBrains Mono", 9))
         self.board_status.pack(side=tk.LEFT, padx=(12, 0))
+
+        # ── Display variant selector ──
+        ttk.Label(toolbar, text="Display:", foreground=FG_DIM,
+                  font=("JetBrains Mono", 9)).pack(side=tk.LEFT, padx=(12, 2))
+        self._display_variant = tk.StringVar(value="V4")
+        self.display_combo = ttk.Combobox(
+            toolbar, textvariable=self._display_variant,
+            values=["V2", "V3", "V3a", "V4"],
+            state="readonly", font=("JetBrains Mono", 10), width=4,
+        )
+        self.display_combo.set("V4")
+        self.display_combo.pack(side=tk.LEFT, padx=2)
 
         # ── Vertical PanedWindow (notebook on top, log on bottom, resizable) ──
         paned = tk.PanedWindow(

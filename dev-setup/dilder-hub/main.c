@@ -1306,6 +1306,51 @@ static void init_rtc_from_compile_time(void) {
            dt.year, dt.month, dt.day, dt.hour, dt.min, dt.sec);
 }
 
+/* ─── Battery voltage reading via ADC ─── */
+/* GP29/ADC3 reads VSYS through a 3:1 divider on the Pico W/Pico 2 W.
+ * USB = ~5.0V → ADC reads ~1.67V → raw ~2067
+ * Full 10440 = ~4.2V → ADC reads ~1.40V → raw ~1736
+ * Empty 10440 = ~3.0V → ADC reads ~1.00V → raw ~1240
+ * Returns percentage 0-100 or -1 if USB powered (>4.5V) */
+static int read_battery_percent(void) {
+    adc_select_input(3);  /* ADC3 = GP29 = VSYS/3 */
+    uint16_t raw = adc_read();
+    float vsys = raw * 3.3f / 4095.0f * 3.0f;  /* 3:1 divider */
+
+    if (vsys > 4.5f) return -1;  /* USB powered */
+    if (vsys >= 4.2f) return 100;
+    if (vsys <= 3.0f) return 0;
+    return (int)((vsys - 3.0f) / 1.2f * 100.0f);
+}
+
+/* ─── Battery icon (16x10 pixels) ─── */
+static void draw_battery_icon(int x0, int y0) {
+    int pct = read_battery_percent();
+
+    /* Battery outline: 14x8 rectangle + 2x4 terminal nub */
+    for (int x = x0; x < x0 + 14; x++) { px_set(x, y0); px_set(x, y0 + 7); }
+    for (int y = y0; y < y0 + 8; y++) { px_set(x0, y); px_set(x0 + 13, y); }
+    /* Terminal nub on right */
+    for (int y = y0 + 2; y < y0 + 6; y++) { px_set(x0 + 14, y); px_set(x0 + 15, y); }
+
+    if (pct < 0) {
+        /* USB powered — draw plug symbol inside */
+        px_set(x0 + 5, y0 + 2); px_set(x0 + 5, y0 + 3);
+        px_set(x0 + 8, y0 + 2); px_set(x0 + 8, y0 + 3);
+        for (int x = x0 + 4; x < x0 + 10; x++) px_set(x, y0 + 4);
+        px_set(x0 + 6, y0 + 5); px_set(x0 + 7, y0 + 5);
+    } else {
+        /* Fill bars based on percentage (4 bars max) */
+        int bars = (pct + 12) / 25;  /* 0-4 bars */
+        for (int b = 0; b < bars && b < 4; b++) {
+            int bx = x0 + 2 + b * 3;
+            for (int y = y0 + 2; y < y0 + 6; y++)
+                for (int x = bx; x < bx + 2; x++)
+                    px_set(x, y);
+        }
+    }
+}
+
 /* ─── WiFi icon (16x12 pixels) ─── */
 static void draw_wifi_icon(int x0, int y0, bool connected) {
     for (int i = -6; i <= 6; i++) {
@@ -1707,8 +1752,9 @@ int main(void) {
                 qi = pick_quote();
 
             render_frame(&quotes[qi], expr, frame_idx);
-            /* WiFi icon top-right of octopus screen */
-            draw_wifi_icon(232, 1, wifi_connected);
+            /* WiFi icon top-left, battery icon top-right */
+            draw_wifi_icon(0, 1, wifi_connected);
+            draw_battery_icon(234, 1);
             draw_text(175, 113, "DOWN:MENU", IMG_W);
             transpose_to_display();
 
