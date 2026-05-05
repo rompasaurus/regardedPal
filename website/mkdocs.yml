@@ -144,8 +144,10 @@ nav:
           - Joystick Mood Selector Guide: docs/software/joystick-mood-selector-guide.md
           - ESP32-S3 Firmware: docs/software/esp32-firmware.md
           - Emotion States: docs/software/emotion-states.md
+          - Dilder Hub Firmware: docs/software/dilder-hub.md
       - Tools:
           - DevTool (GUI): docs/tools/devtool.md
+          - Picotool & OTA: docs/tools/picotool-ota.md
           - Setup CLI: docs/tools/setup-cli.md
           - Website Dev CLI: docs/tools/website-dev.md
           - DesignTool (SCAD): docs/tools/designtool.md
