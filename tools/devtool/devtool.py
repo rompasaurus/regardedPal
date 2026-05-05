@@ -7152,31 +7152,55 @@ and restored when you reopen the DevTool.
         def _run():
             try:
                 pw_dir = PROJECT_ROOT / self.PICOWOTA_DIR
+                if not pw_dir.exists() or not (pw_dir / "CMakeLists.txt").exists():
+                    self.after(0, lambda: self.app.log(
+                        "[ota] ERROR: picowota submodule not found — click 'Install picowota Submodule' first"))
+                    self.after(0, lambda: self._boot_status.config(
+                        text="picowota not installed", foreground=FG_RED))
+                    return
+
                 build_dir = pw_dir / "build"
                 build_dir.mkdir(exist_ok=True)
 
                 # Determine board
                 board = self.app.target_board
                 pico_board = "pico2_w" if board == BOARD_PICO2_W else "pico_w"
+                self.after(0, lambda: self.app.log(
+                    f"[ota] Target board: {pico_board}"))
 
-                # Find Pico SDK
+                # Find Pico SDK — check env var first, then common locations
                 sdk_path = os.environ.get("PICO_SDK_PATH", "")
-                if not sdk_path:
-                    # Try common locations
-                    for candidate in [
+                if sdk_path:
+                    self.after(0, lambda: self.app.log(
+                        f"[ota] Using PICO_SDK_PATH from environment: {sdk_path}"))
+                else:
+                    search_paths = [
+                        Path.home() / "pico" / "pico-sdk",
                         Path.home() / "pico-sdk",
                         Path("/opt/pico-sdk"),
                         PROJECT_ROOT / "pico-sdk",
-                    ]:
+                    ]
+                    for candidate in search_paths:
                         if (candidate / "pico_sdk_init.cmake").exists():
                             sdk_path = str(candidate)
+                            self.after(0, lambda sp=sdk_path: self.app.log(
+                                f"[ota] Found Pico SDK at: {sp}"))
                             break
 
                 if not sdk_path:
+                    searched = ", ".join(str(p) for p in search_paths)
                     self.after(0, lambda: self.app.log(
-                        "[ota] ERROR: PICO_SDK_PATH not set and SDK not found"))
+                        f"[ota] ERROR: Pico SDK not found. Set PICO_SDK_PATH or install to one of: {searched}"))
                     self.after(0, lambda: self._boot_status.config(
-                        text="Error: Pico SDK not found", foreground=FG_RED))
+                        text="Error: Pico SDK not found — see log", foreground=FG_RED))
+                    return
+
+                # Verify SDK has the required file
+                if not Path(sdk_path, "pico_sdk_init.cmake").exists():
+                    self.after(0, lambda: self.app.log(
+                        f"[ota] ERROR: PICO_SDK_PATH={sdk_path} exists but pico_sdk_init.cmake is missing"))
+                    self.after(0, lambda: self._boot_status.config(
+                        text="Error: SDK path invalid — see log", foreground=FG_RED))
                     return
 
                 env = os.environ.copy()
@@ -7185,42 +7209,59 @@ and restored when you reopen the DevTool.
                 env["PICOWOTA_WIFI_PASS"] = password
                 env["PICOWOTA_WIFI_AP"] = "1" if mode == "ap" else "0"
 
+                self.after(0, lambda: self.app.log(
+                    f"[ota] WiFi: mode={'AP' if mode == 'ap' else 'STA'}, ssid={ssid}"))
+
                 # CMake configure
                 self.after(0, lambda: self._boot_status.config(
                     text="CMake configure...", foreground=FG_YELLOW))
+                self.after(0, lambda: self.app.log(
+                    f"[ota] Running cmake in {build_dir}..."))
 
+                cmake_cmd = [
+                    "cmake", "-G", "Ninja",
+                    f"-DPICO_BOARD={pico_board}",
+                    f"-DPICO_SDK_PATH={sdk_path}",
+                    ".."]
                 result = subprocess.run(
-                    ["cmake", "-G", "Ninja",
-                     f"-DPICO_BOARD={pico_board}",
-                     f"-DPICO_SDK_PATH={sdk_path}",
-                     ".."],
+                    cmake_cmd,
                     cwd=str(build_dir), env=env,
-                    capture_output=True, text=True, timeout=120)
+                    stdout=subprocess.PIPE, stderr=subprocess.STDOUT,
+                    text=True, timeout=120)
 
                 if result.returncode != 0:
-                    err = result.stderr.strip()[-200:]
-                    self.after(0, lambda: self.app.log(
-                        f"[ota] CMake failed: {err}"))
-                    self.after(0, lambda: self._boot_status.config(
-                        text="CMake failed — check log", foreground=FG_RED))
+                    # Show last 10 lines of combined output
+                    output_lines = result.stdout.strip().split("\n") if result.stdout else []
+                    for line in output_lines[-10:]:
+                        self.after(0, lambda l=line: self.app.log(f"[cmake] {l}"))
+                    err_summary = output_lines[-1] if output_lines else "unknown error"
+                    self.after(0, lambda e=err_summary: self._boot_status.config(
+                        text=f"CMake failed: {e[:60]}", foreground=FG_RED))
                     return
+
+                self.after(0, lambda: self.app.log("[ota] CMake configure OK"))
 
                 # Ninja build
                 self.after(0, lambda: self._boot_status.config(
                     text="Building (ninja)...", foreground=FG_YELLOW))
+                self.after(0, lambda: self.app.log("[ota] Running ninja build..."))
 
                 result = subprocess.run(
                     ["ninja"],
                     cwd=str(build_dir), env=env,
-                    capture_output=True, text=True, timeout=300)
+                    stdout=subprocess.PIPE, stderr=subprocess.STDOUT,
+                    text=True, timeout=300)
 
                 if result.returncode != 0:
-                    err = result.stderr.strip()[-200:]
-                    self.after(0, lambda: self.app.log(
-                        f"[ota] Build failed: {err}"))
-                    self.after(0, lambda: self._boot_status.config(
-                        text="Build failed — check log", foreground=FG_RED))
+                    output_lines = result.stdout.strip().split("\n") if result.stdout else []
+                    for line in output_lines[-15:]:
+                        self.after(0, lambda l=line: self.app.log(f"[ninja] {l}"))
+                    err_summary = output_lines[-1] if output_lines else "unknown error"
+                    self.after(0, lambda e=err_summary: self._boot_status.config(
+                        text=f"Build failed: {e[:60]}", foreground=FG_RED))
                     return
+
+                self.after(0, lambda: self.app.log("[ota] Ninja build OK"))
 
                 # Find the combined .uf2
                 uf2_files = list(build_dir.glob("picowota*.uf2"))
