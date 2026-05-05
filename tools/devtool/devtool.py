@@ -7203,16 +7203,27 @@ and restored when you reopen the DevTool.
                         text="Error: SDK path invalid — see log", foreground=FG_RED))
                     return
 
+                ap_flag = "1" if mode == "ap" else "0"
+
                 env = os.environ.copy()
                 env["PICO_SDK_PATH"] = sdk_path
                 env["PICOWOTA_WIFI_SSID"] = ssid
                 env["PICOWOTA_WIFI_PASS"] = password
-                env["PICOWOTA_WIFI_AP"] = "1" if mode == "ap" else "0"
+                env["PICOWOTA_WIFI_AP"] = ap_flag
 
                 self.after(0, lambda: self.app.log(
                     f"[ota] WiFi: mode={'AP' if mode == 'ap' else 'STA'}, ssid={ssid}"))
 
-                # CMake configure
+                # Nuke stale build to prevent ninja cmake re-run without env vars
+                if build_dir.exists():
+                    self.after(0, lambda: self.app.log(
+                        "[ota] Cleaning stale build directory..."))
+                    shutil.rmtree(str(build_dir))
+                    build_dir.mkdir()
+
+                # CMake configure — pass WiFi creds as both env vars AND
+                # -D cache variables so ninja's auto-reconfigure doesn't
+                # lose them (ninja re-runs cmake without our env)
                 self.after(0, lambda: self._boot_status.config(
                     text="CMake configure...", foreground=FG_YELLOW))
                 self.after(0, lambda: self.app.log(
@@ -7222,6 +7233,9 @@ and restored when you reopen the DevTool.
                     "cmake", "-G", "Ninja",
                     f"-DPICO_BOARD={pico_board}",
                     f"-DPICO_SDK_PATH={sdk_path}",
+                    f"-DPICOWOTA_WIFI_SSID={ssid}",
+                    f"-DPICOWOTA_WIFI_PASS={password}",
+                    f"-DPICOWOTA_WIFI_AP={ap_flag}",
                     ".."]
                 result = subprocess.run(
                     cmake_cmd,
