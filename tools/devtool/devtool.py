@@ -8501,6 +8501,40 @@ REQUIREMENTS
             time.sleep(0.25)
         return None
 
+    @staticmethod
+    def _eject_bootsel(mount_path):
+        """Sync and unmount/eject the BOOTSEL drive to trigger Pico reboot."""
+        try:
+            # Sync to flush writes
+            subprocess.run(["sync"], timeout=5)
+            # Try udisksctl (most desktop Linux)
+            r = subprocess.run(
+                ["udisksctl", "unmount", "-b",
+                 subprocess.run(
+                     ["findmnt", "-n", "-o", "SOURCE", str(mount_path)],
+                     capture_output=True, text=True, timeout=5
+                 ).stdout.strip()],
+                capture_output=True, text=True, timeout=10)
+            if r.returncode == 0:
+                return True
+        except Exception:
+            pass
+        try:
+            # Fallback: umount
+            subprocess.run(["umount", str(mount_path)],
+                           capture_output=True, timeout=10)
+            return True
+        except Exception:
+            pass
+        try:
+            # Fallback: eject
+            subprocess.run(["eject", str(mount_path)],
+                           capture_output=True, timeout=10)
+            return True
+        except Exception:
+            pass
+        return False
+
     def _flash_firmware(self):
         """Flash selected firmware: reboot to BOOTSEL → copy .uf2."""
         key, uf2_path, _ = self._get_selected_fw()
@@ -8566,13 +8600,24 @@ REQUIREMENTS
                 dest = Path(mount) / fw_name
                 shutil.copy2(uf2_path, str(dest))
 
-                self.after(0, lambda: self._progress_var.set(90))
+                self.after(0, lambda: self._progress_var.set(80))
 
-                # Step 4: Wait for Pico to reboot
+                # Step 4: Eject drive to trigger Pico reboot
                 self.after(0, lambda: self._flash_status.config(
-                    text="Firmware copied — Pico rebooting...",
+                    text="Ejecting drive — Pico will reboot...",
                     foreground=FG_YELLOW))
-                time.sleep(2)
+                self.after(0, lambda: self.app.log(
+                    "[picotool] Ejecting BOOTSEL drive..."))
+
+                if self._eject_bootsel(mount):
+                    self.after(0, lambda: self.app.log(
+                        "[picotool] Drive ejected — Pico rebooting"))
+                else:
+                    self.after(0, lambda: self.app.log(
+                        "[picotool] Auto-eject failed — unplug USB to reboot"))
+
+                self.after(0, lambda: self._progress_var.set(90))
+                time.sleep(3)
 
                 self.after(0, lambda: self._progress_var.set(100))
                 size_kb = Path(uf2_path).stat().st_size // 1024
@@ -8726,7 +8771,13 @@ REQUIREMENTS
                 shutil.copy2(str(uf2_path),
                              str(Path(mount) / f"{fw_name}.uf2"))
 
-                time.sleep(2)
+                # Eject to trigger reboot
+                self.after(0, lambda: self._flash_status.config(
+                    text="Ejecting drive...", foreground=FG_YELLOW))
+                self.after(0, lambda: self._progress_var.set(90))
+                self._eject_bootsel(mount)
+                time.sleep(3)
+
                 self.after(0, lambda: self._progress_var.set(100))
                 self.after(0, lambda: self._flash_status.config(
                     text=f"Done! {fw_name} ({size_kb}KB) built and flashed",
