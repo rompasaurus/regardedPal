@@ -8,7 +8,7 @@
  * Wiring (same as joystick-sound-test):
  *   Display SPI1: CLK=GP10, DIN=GP11, CS=GP9, DC=GP8, RST=GP12, BUSY=GP13
  *   Joystick:     COM=GND(pin3), L=GP2, D=GP3, UP=GP4, R=GP5, C=GP6
- *   Speaker:      +=GP7(pin10), -=GND(pin8)
+ *   Speaker:      +=GP15(pin20), -=GND(pin23 or any GND)
  */
 
 #include <stdio.h>
@@ -60,7 +60,7 @@
 #define JOY_UP     4
 #define JOY_RIGHT  5
 #define JOY_CENTER 6
-#define SPEAKER    7
+#define SPEAKER    15  /* GP15 = pin 20 (PWM) */
 
 #define DEBOUNCE_MS 200
 
