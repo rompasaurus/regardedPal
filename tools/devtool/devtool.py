@@ -5419,7 +5419,7 @@ class ProgramsTab(ttk.Frame):
             values=list(BOARD_LABELS.values()),
             state="readonly", font=("JetBrains Mono", 9),
         )
-        self.board_combo.set(BOARD_LABELS[BOARD_PICO_W])
+        self.board_combo.set(BOARD_LABELS[BOARD_PICO2_W])
         self.board_combo.pack(fill=tk.X)
         self.board_combo.bind("<<ComboboxSelected>>", self._on_programs_board_changed)
 
@@ -8353,7 +8353,7 @@ class DilderDevTool(tk.Tk):
         self.minsize(900, 600)
 
         # Target board state
-        self._target_board = tk.StringVar(value=BOARD_PICO_W)
+        self._target_board = tk.StringVar(value=BOARD_PICO2_W)
 
         # Style
         style = ttk.Style()
@@ -8422,7 +8422,7 @@ class DilderDevTool(tk.Tk):
             state="readonly", font=("JetBrains Mono", 10), width=22,
         )
         # Set the display value to the label for the default board
-        self.board_combo.set(BOARD_LABELS[BOARD_PICO_W])
+        self.board_combo.set(BOARD_LABELS[BOARD_PICO2_W])
         self.board_combo.pack(side=tk.LEFT, padx=2)
         self.board_combo.bind("<<ComboboxSelected>>", self._on_board_changed)
 
