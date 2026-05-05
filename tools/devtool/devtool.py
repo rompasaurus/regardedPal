@@ -8628,11 +8628,12 @@ REQUIREMENTS
                 self.after(0, lambda: self.app.log(
                     f"[picotool] Flashed {fw_name} ({size_kb}KB)"))
 
-            except Exception as e:
-                self.after(0, lambda: self._flash_status.config(
-                    text=f"Error: {e}", foreground=FG_RED))
-                self.after(0, lambda: self.app.log(
-                    f"[picotool] Error: {e}"))
+            except Exception as exc:
+                err_msg = str(exc)
+                self.after(0, lambda m=err_msg: self._flash_status.config(
+                    text=f"Error: {m}", foreground=FG_RED))
+                self.after(0, lambda m=err_msg: self.app.log(
+                    f"[picotool] Error: {m}"))
             finally:
                 self._is_flashing = False
                 self.after(0, lambda: self._flash_btn.config(
@@ -8664,10 +8665,22 @@ REQUIREMENTS
 
         def _run():
             try:
-                # Step 1: Nuke build dir
+                # Step 1: Nuke build dir (may be root-owned from Docker)
                 build_dir = DEV_SETUP / fw_dir / "build"
                 if build_dir.exists():
-                    shutil.rmtree(str(build_dir))
+                    try:
+                        shutil.rmtree(str(build_dir))
+                    except PermissionError:
+                        # Docker creates root-owned files — use docker to clean
+                        self.after(0, lambda: self.app.log(
+                            "[picotool] Build dir is root-owned, cleaning via docker..."))
+                        subprocess.run(
+                            ["docker", "run", "--rm",
+                             "-v", f"{build_dir}:/clean",
+                             "alpine", "rm", "-rf", "/clean"],
+                            capture_output=True, timeout=30)
+                        if build_dir.exists():
+                            shutil.rmtree(str(build_dir), ignore_errors=True)
 
                 # Step 2: Docker check
                 self.after(0, lambda: self._progress_var.set(5))
@@ -8790,11 +8803,12 @@ REQUIREMENTS
             except subprocess.TimeoutExpired:
                 self.after(0, lambda: self._flash_status.config(
                     text="Build timed out", foreground=FG_RED))
-            except Exception as e:
-                self.after(0, lambda: self._flash_status.config(
-                    text=f"Error: {e}", foreground=FG_RED))
-                self.after(0, lambda: self.app.log(
-                    f"[picotool] Error: {e}"))
+            except Exception as exc:
+                err_msg = str(exc)
+                self.after(0, lambda m=err_msg: self._flash_status.config(
+                    text=f"Error: {m}", foreground=FG_RED))
+                self.after(0, lambda m=err_msg: self.app.log(
+                    f"[picotool] Error: {m}"))
             finally:
                 self._is_flashing = False
                 self.after(0, lambda: self._build_flash_btn.config(
