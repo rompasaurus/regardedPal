@@ -7858,6 +7858,793 @@ and restored when you reopen the DevTool.
 
 
 # ─────────────────────────────────────────────────────────────────────────────
+# Picotool Tab — USB flash without BOOTSEL button
+# ─────────────────────────────────────────────────────────────────────────────
+
+class PicotoolTab(ttk.Frame):
+    """
+    Flash firmware to Pico 2 W via picotool — no BOOTSEL button needed.
+
+    picotool can reboot a running Pico into BOOTSEL mode over USB,
+    then load a .uf2 file directly. The entire flash cycle happens
+    without unplugging cables or pressing buttons.
+    """
+
+    def __init__(self, parent, app):
+        super().__init__(parent)
+        self.app = app
+        self._firmware_path = tk.StringVar()
+        self._is_flashing = False
+        self._picotool_path = None  # resolved on first use
+        self._build_ui()
+        # Check picotool on startup
+        self.after(500, self._check_picotool)
+
+    def _find_picotool(self):
+        """Find picotool binary. Returns path or None."""
+        # Check system PATH
+        result = shutil.which("picotool")
+        if result:
+            return result
+        # Check if built inside pico-sdk
+        sdk = os.environ.get("PICO_SDK_PATH", "")
+        if sdk:
+            candidate = Path(sdk).parent / "picotool" / "build" / "picotool"
+            if candidate.exists():
+                return str(candidate)
+        # Check common locations
+        for p in [
+            Path.home() / "pico" / "picotool" / "build" / "picotool",
+            Path.home() / "picotool" / "build" / "picotool",
+            Path("/usr/local/bin/picotool"),
+        ]:
+            if p.exists():
+                return str(p)
+        return None
+
+    def _check_picotool(self):
+        """Check if picotool is available and update status."""
+        self._picotool_path = self._find_picotool()
+        if self._picotool_path:
+            self._tool_status.config(
+                text=f"picotool found: {self._picotool_path}",
+                foreground=FG_GREEN)
+            self._install_btn.config(state=tk.DISABLED)
+            self.app.log(f"[picotool] Found: {self._picotool_path}")
+            # Get version
+            try:
+                r = subprocess.run([self._picotool_path, "version"],
+                                   capture_output=True, text=True, timeout=5)
+                ver = r.stdout.strip().split("\n")[0] if r.stdout else "unknown"
+                self._tool_status.config(text=f"{ver}")
+            except Exception:
+                pass
+        else:
+            self._tool_status.config(
+                text="picotool not found — click Install to build from SDK",
+                foreground=FG_YELLOW)
+            self.app.log("[picotool] Not found on system")
+
+    def _build_ui(self):
+        self.configure(style="TFrame")
+        main_pw = ttk.PanedWindow(self, orient=tk.HORIZONTAL)
+        main_pw.pack(fill=tk.BOTH, expand=True, padx=4, pady=4)
+
+        left = ttk.Frame(main_pw)
+
+        # --- Section 1: picotool setup ---
+        setup_frame = ttk.LabelFrame(left, text="  1. picotool Setup  ",
+                                      padding=8)
+        setup_frame.pack(fill=tk.X, padx=4, pady=(4, 2))
+
+        ttk.Label(setup_frame,
+                  text="picotool lets you reboot and flash the Pico 2 W\n"
+                       "over USB without pressing the BOOTSEL button.",
+                  foreground=FG_DIM, wraplength=380,
+                  font=("JetBrains Mono", 8)).pack(anchor=tk.W)
+
+        tool_row = ttk.Frame(setup_frame)
+        tool_row.pack(fill=tk.X, pady=(6, 0))
+
+        self._install_btn = ttk.Button(
+            tool_row, text="Install picotool (build from SDK)",
+            command=self._install_picotool)
+        self._install_btn.pack(side=tk.LEFT, padx=(0, 4))
+
+        ttk.Button(tool_row, text="Refresh",
+                   command=self._check_picotool).pack(side=tk.LEFT)
+
+        self._tool_status = ttk.Label(setup_frame, text="Checking...",
+                                       foreground=FG_DIM,
+                                       font=("JetBrains Mono", 9))
+        self._tool_status.pack(anchor=tk.W, pady=(4, 0))
+
+        # --- Section 2: Device status ---
+        dev_frame = ttk.LabelFrame(left, text="  2. Device  ", padding=8)
+        dev_frame.pack(fill=tk.X, padx=4, pady=2)
+
+        dev_row = ttk.Frame(dev_frame)
+        dev_row.pack(fill=tk.X)
+
+        self._info_btn = ttk.Button(dev_row, text="Device Info",
+                                     command=self._device_info)
+        self._info_btn.pack(side=tk.LEFT, padx=(0, 4))
+
+        self._reboot_btn = ttk.Button(dev_row, text="Reboot to BOOTSEL",
+                                       command=self._reboot_to_bootsel)
+        self._reboot_btn.pack(side=tk.LEFT, padx=(0, 4))
+
+        self._dev_status = ttk.Label(dev_frame, text="Plug in Pico 2 W via USB",
+                                      foreground=FG_DIM,
+                                      font=("JetBrains Mono", 9))
+        self._dev_status.pack(anchor=tk.W, pady=(4, 0))
+
+        # Device info text
+        self._dev_info_text = tk.Text(
+            dev_frame, height=4, wrap=tk.WORD, bg=BG_DARK, fg=FG_TEXT,
+            font=("JetBrains Mono", 8), relief=tk.FLAT, borderwidth=0)
+        self._dev_info_text.pack(fill=tk.X, pady=(4, 0))
+        self._dev_info_text.configure(state=tk.DISABLED)
+
+        # --- Section 3: Flash firmware ---
+        flash_frame = ttk.LabelFrame(
+            left, text="  3. Flash Firmware (no BOOTSEL needed)  ",
+            padding=8)
+        flash_frame.pack(fill=tk.BOTH, expand=True, padx=4, pady=2)
+
+        # Firmware tree (reuse auto-discover from OTA tab)
+        tree_frame = ttk.Frame(flash_frame)
+        tree_frame.pack(fill=tk.BOTH, expand=True)
+
+        tree_scroll = ttk.Scrollbar(tree_frame)
+        tree_scroll.pack(side=tk.RIGHT, fill=tk.Y)
+
+        style = ttk.Style()
+        style.configure("Pico.Treeview",
+                         background=BG_DARK, foreground=FG_TEXT,
+                         fieldbackground=BG_DARK,
+                         font=("JetBrains Mono", 9), rowheight=22)
+        style.map("Pico.Treeview",
+                   background=[("selected", FG_ACCENT)],
+                   foreground=[("selected", BG_DARK)])
+        style.configure("Pico.Treeview.Heading",
+                         background=BG_PANEL, foreground=FG_DIM,
+                         font=("JetBrains Mono", 8, "bold"))
+
+        self._fw_tree = ttk.Treeview(
+            tree_frame, columns=("status", "size"),
+            style="Pico.Treeview",
+            show="tree headings", height=10,
+            yscrollcommand=tree_scroll.set,
+            selectmode="browse")
+        tree_scroll.config(command=self._fw_tree.yview)
+        self._fw_tree.heading("#0", text="Firmware", anchor=tk.W)
+        self._fw_tree.heading("status", text="Status", anchor=tk.W)
+        self._fw_tree.heading("size", text="Size", anchor=tk.W)
+        self._fw_tree.column("#0", width=200, minwidth=150)
+        self._fw_tree.column("status", width=100, minwidth=80)
+        self._fw_tree.column("size", width=70, minwidth=50)
+        self._fw_tree.pack(fill=tk.BOTH, expand=True)
+
+        self._populate_firmware_tree()
+
+        # Custom firmware path
+        fw_row = ttk.Frame(flash_frame)
+        fw_row.pack(fill=tk.X, pady=(4, 0))
+        ttk.Label(fw_row, text="Custom:", width=8).pack(side=tk.LEFT)
+        ttk.Entry(fw_row, textvariable=self._firmware_path,
+                  width=30).pack(side=tk.LEFT, fill=tk.X, expand=True,
+                                 padx=(0, 4))
+        ttk.Button(fw_row, text="Browse",
+                   command=self._browse_firmware).pack(side=tk.LEFT)
+
+        # Action buttons
+        action_row = ttk.Frame(flash_frame)
+        action_row.pack(fill=tk.X, pady=(8, 0))
+
+        self._flash_btn = ttk.Button(
+            action_row, text="Flash (existing build)",
+            command=self._flash_firmware)
+        self._flash_btn.pack(side=tk.LEFT, padx=(0, 4))
+
+        self._build_flash_btn = ttk.Button(
+            action_row, text="Clean Build & Flash",
+            command=self._clean_build_and_flash)
+        self._build_flash_btn.pack(side=tk.LEFT, padx=(0, 4))
+
+        ttk.Button(action_row, text="Refresh List",
+                   command=self._populate_firmware_tree).pack(side=tk.RIGHT)
+
+        # Progress
+        self._progress_var = tk.DoubleVar(value=0)
+        self._progress = ttk.Progressbar(flash_frame,
+                                          variable=self._progress_var,
+                                          maximum=100, length=380)
+        self._progress.pack(fill=tk.X, pady=(6, 0))
+
+        self._flash_status = ttk.Label(flash_frame, text="Ready",
+                                        foreground=FG_DIM,
+                                        font=("JetBrains Mono", 9))
+        self._flash_status.pack(anchor=tk.W, pady=(4, 0))
+
+        main_pw.add(left, weight=3)
+
+        # --- Right panel: guide ---
+        right = ttk.Frame(main_pw)
+        guide_frame = ttk.LabelFrame(right, text="  Picotool Guide  ",
+                                      padding=8)
+        guide_frame.pack(fill=tk.BOTH, expand=True, padx=4, pady=4)
+
+        guide_text = tk.Text(
+            guide_frame, wrap=tk.WORD, bg=BG_DARK, fg=FG_TEXT,
+            insertbackground=FG_TEXT, font=("JetBrains Mono", 9),
+            relief=tk.FLAT, borderwidth=0, padx=8, pady=8)
+        guide_scroll = ttk.Scrollbar(guide_frame,
+                                      command=guide_text.yview)
+        guide_text.configure(yscrollcommand=guide_scroll.set)
+        guide_scroll.pack(side=tk.RIGHT, fill=tk.Y)
+        guide_text.pack(fill=tk.BOTH, expand=True)
+
+        guide_text.insert("1.0", """PICOTOOL — FLASH WITHOUT BOOTSEL
+═════════════════════════════════
+
+picotool talks to the Pico 2 W over USB. It can
+reboot the board into BOOTSEL mode and flash
+firmware — all without pressing any buttons or
+unplugging cables.
+
+HOW IT WORKS
+════════════
+
+1. Pico is plugged in via USB, running firmware
+2. picotool sends a reboot command over USB
+3. Pico enters BOOTSEL mode (mounts as drive)
+4. picotool loads the new .uf2 firmware
+5. Pico reboots into the new firmware
+
+You never touch the BOOTSEL button again.
+
+WORKFLOW
+════════
+
+Option A: Flash an existing build
+  Select a firmware from the list and click
+  "Flash (existing build)". picotool will:
+  → Reboot Pico to BOOTSEL
+  → Wait for the drive to mount
+  → Copy the .uf2 file
+  → Pico reboots automatically
+
+Option B: Clean build + flash
+  Select a firmware and click "Clean Build & Flash".
+  Docker builds the firmware from scratch, then
+  picotool flashes it automatically.
+
+Option C: Just reboot
+  Click "Reboot to BOOTSEL" to put the Pico in
+  BOOTSEL mode. Then flash however you want
+  (drag-and-drop, cp, etc.)
+
+INSTALLING PICOTOOL
+═══════════════════
+
+Click "Install picotool" to build it from your
+Pico SDK. This compiles picotool with full USB
+support — takes about 30 seconds.
+
+Or install manually:
+  sudo pacman -S picotool     (Arch)
+  sudo apt install picotool   (Debian/Ubuntu)
+  brew install picotool       (macOS)
+
+REQUIREMENTS
+════════════
+
+• Pico 2 W connected via USB
+• Firmware must have USB stdio enabled
+  (pico_enable_stdio_usb in CMakeLists.txt)
+• For the reboot command to work, the Pico must
+  be running — if it's hung, use BOOTSEL manually
+  one last time, flash working firmware, then
+  picotool works from there on.
+""")
+        guide_text.configure(state=tk.DISABLED)
+
+        main_pw.add(right, weight=2)
+
+    # ── Firmware tree (same auto-discover as OTA tab) ──
+
+    _FIRMWARE_CATEGORIES = OTAUpdateTab._FIRMWARE_CATEGORIES
+
+    def _populate_firmware_tree(self):
+        self._fw_tree.delete(*self._fw_tree.get_children())
+        all_dirs = {}
+        if DEV_SETUP.exists():
+            for d in sorted(DEV_SETUP.iterdir()):
+                if d.is_dir() and (d / "CMakeLists.txt").exists():
+                    all_dirs[d.name.replace("-", "_")] = d.name
+        placed = set()
+        for group_name, dir_list in self._FIRMWARE_CATEGORIES:
+            existing = [d for d in dir_list
+                        if d.replace("-", "_") in all_dirs]
+            if not existing:
+                continue
+            gid = self._fw_tree.insert("", tk.END, text=group_name,
+                                        open=True, values=("", ""))
+            for fw_dir in dir_list:
+                key = fw_dir.replace("-", "_")
+                if key not in all_dirs:
+                    continue
+                placed.add(key)
+                self._insert_fw_row(gid, key, fw_dir)
+        other = [(k, v) for k, v in all_dirs.items() if k not in placed]
+        if other:
+            gid = self._fw_tree.insert("", tk.END, text="Other",
+                                        open=True, values=("", ""))
+            for key, fw_dir in other:
+                self._insert_fw_row(gid, key, fw_dir)
+        self._all_fw_dirs = all_dirs
+
+    def _insert_fw_row(self, parent, key, fw_dir):
+        fw_name = fw_dir.replace("-", "_")
+        display = fw_dir.replace("-", " ").title()
+        build_dir = DEV_SETUP / fw_dir / "build"
+        uf2 = build_dir / f"{fw_name}.uf2"
+        if uf2.exists():
+            sz = uf2.stat().st_size // 1024
+            status, size_str = "Built", f"{sz}KB"
+        else:
+            status, size_str = "Not built", "—"
+        self._fw_tree.insert(parent, tk.END, iid=key,
+                              text=f"  {display}",
+                              values=(status, size_str))
+
+    def _get_selected_fw(self):
+        """Returns (key, uf2_path_or_none, fw_dir)."""
+        sel = self._fw_tree.selection()
+        if not sel:
+            return None, None, None
+        key = sel[0]
+        dirs = getattr(self, "_all_fw_dirs", {})
+        if key not in dirs:
+            return None, None, None
+        fw_dir = dirs[key]
+        fw_name = fw_dir.replace("-", "_")
+        uf2 = DEV_SETUP / fw_dir / "build" / f"{fw_name}.uf2"
+        return key, (str(uf2) if uf2.exists() else None), fw_dir
+
+    def _browse_firmware(self):
+        from tkinter import filedialog
+        path = filedialog.askopenfilename(
+            title="Select firmware file",
+            filetypes=[("UF2 files", "*.uf2"), ("All files", "*.*")],
+            initialdir=str(DEV_SETUP))
+        if path:
+            self._firmware_path.set(path)
+
+    # ── picotool actions ──
+
+    def _run_picotool(self, args, timeout=10):
+        """Run picotool with args. Returns (returncode, stdout, stderr)."""
+        if not self._picotool_path:
+            self._check_picotool()
+        if not self._picotool_path:
+            return -1, "", "picotool not found"
+        cmd = [self._picotool_path] + args
+        self.app.log(f"[picotool] Running: {' '.join(cmd)}")
+        try:
+            r = subprocess.run(cmd, capture_output=True, text=True,
+                               timeout=timeout)
+            return r.returncode, r.stdout, r.stderr
+        except subprocess.TimeoutExpired:
+            return -1, "", "Timeout"
+        except Exception as e:
+            return -1, "", str(e)
+
+    def _install_picotool(self):
+        """Build picotool from the Pico SDK source."""
+        self.app.log("[picotool] Building from SDK...")
+        self._tool_status.config(text="Building picotool...",
+                                  foreground=FG_YELLOW)
+        self._install_btn.config(state=tk.DISABLED)
+
+        def _run():
+            try:
+                sdk = os.environ.get("PICO_SDK_PATH", "")
+                if not sdk:
+                    for c in [Path.home() / "pico" / "pico-sdk",
+                              Path.home() / "pico-sdk",
+                              Path("/opt/pico-sdk")]:
+                        if (c / "pico_sdk_init.cmake").exists():
+                            sdk = str(c)
+                            break
+                if not sdk:
+                    self.after(0, lambda: self._tool_status.config(
+                        text="Pico SDK not found", foreground=FG_RED))
+                    return
+
+                # Build picotool from SDK
+                pt_src = Path(sdk).parent / "picotool"
+                if not pt_src.exists():
+                    # Clone it
+                    self.after(0, lambda: self.app.log(
+                        "[picotool] Cloning picotool repo..."))
+                    subprocess.run(
+                        ["git", "clone",
+                         "https://github.com/raspberrypi/picotool.git",
+                         str(pt_src)],
+                        capture_output=True, timeout=120)
+
+                build_dir = pt_src / "build"
+                build_dir.mkdir(exist_ok=True)
+
+                self.after(0, lambda: self.app.log(
+                    "[picotool] CMake configure..."))
+                r = subprocess.run(
+                    ["cmake", "-G", "Ninja",
+                     f"-DPICO_SDK_PATH={sdk}", ".."],
+                    cwd=str(build_dir),
+                    capture_output=True, text=True, timeout=60)
+                if r.returncode != 0:
+                    err = r.stderr[-200:] if r.stderr else r.stdout[-200:]
+                    self.after(0, lambda: self.app.log(
+                        f"[picotool] CMake failed: {err}"))
+                    self.after(0, lambda: self._tool_status.config(
+                        text="CMake failed — see log", foreground=FG_RED))
+                    return
+
+                self.after(0, lambda: self.app.log(
+                    "[picotool] Building with ninja..."))
+                r = subprocess.run(
+                    ["ninja"], cwd=str(build_dir),
+                    capture_output=True, text=True, timeout=120)
+                if r.returncode != 0:
+                    err = r.stderr[-200:] if r.stderr else r.stdout[-200:]
+                    self.after(0, lambda: self.app.log(
+                        f"[picotool] Build failed: {err}"))
+                    self.after(0, lambda: self._tool_status.config(
+                        text="Build failed — see log", foreground=FG_RED))
+                    return
+
+                pt_bin = build_dir / "picotool"
+                if pt_bin.exists():
+                    self.after(0, lambda: self.app.log(
+                        f"[picotool] Built successfully: {pt_bin}"))
+                    self.after(0, self._check_picotool)
+                else:
+                    self.after(0, lambda: self._tool_status.config(
+                        text="Build OK but binary not found",
+                        foreground=FG_RED))
+            except Exception as e:
+                self.after(0, lambda: self.app.log(
+                    f"[picotool] Error: {e}"))
+                self.after(0, lambda: self._tool_status.config(
+                    text=f"Error: {e}", foreground=FG_RED))
+            finally:
+                self.after(0, lambda: self._install_btn.config(
+                    state=tk.NORMAL))
+
+        threading.Thread(target=_run, daemon=True).start()
+
+    def _device_info(self):
+        """Query device info via picotool."""
+        if not self._picotool_path:
+            messagebox.showwarning("picotool", "Install picotool first.")
+            return
+
+        def _run():
+            rc, out, err = self._run_picotool(["info", "-a"], timeout=5)
+            def _update():
+                self._dev_info_text.configure(state=tk.NORMAL)
+                self._dev_info_text.delete("1.0", tk.END)
+                if rc == 0 and out.strip():
+                    self._dev_info_text.insert("1.0", out.strip())
+                    self._dev_status.config(text="Device connected",
+                                             foreground=FG_GREEN)
+                else:
+                    msg = err.strip() or out.strip() or "No device found"
+                    self._dev_info_text.insert("1.0", msg)
+                    self._dev_status.config(
+                        text="No device — plug in Pico via USB",
+                        foreground=FG_YELLOW)
+                self._dev_info_text.configure(state=tk.DISABLED)
+            self.after(0, _update)
+
+        threading.Thread(target=_run, daemon=True).start()
+
+    def _reboot_to_bootsel(self):
+        """Reboot Pico into BOOTSEL mode via picotool."""
+        if not self._picotool_path:
+            messagebox.showwarning("picotool", "Install picotool first.")
+            return
+
+        self.app.log("[picotool] Rebooting to BOOTSEL...")
+        self._dev_status.config(text="Rebooting...", foreground=FG_YELLOW)
+
+        def _run():
+            rc, out, err = self._run_picotool(["reboot", "-f", "-u"],
+                                                timeout=5)
+            if rc == 0:
+                self.after(0, lambda: self._dev_status.config(
+                    text="Pico in BOOTSEL mode — ready for flash",
+                    foreground=FG_GREEN))
+                self.after(0, lambda: self.app.log(
+                    "[picotool] Rebooted to BOOTSEL"))
+            else:
+                msg = err.strip() or "Failed — is the Pico running firmware?"
+                self.after(0, lambda: self._dev_status.config(
+                    text=msg[:60], foreground=FG_RED))
+                self.after(0, lambda: self.app.log(
+                    f"[picotool] Reboot failed: {msg}"))
+
+        threading.Thread(target=_run, daemon=True).start()
+
+    def _wait_for_bootsel_mount(self, timeout=8):
+        """Wait for the BOOTSEL drive to appear. Returns mount path or None."""
+        for _ in range(timeout * 4):
+            mount = find_rpi_rp2_mount()
+            if mount:
+                return mount
+            time.sleep(0.25)
+        return None
+
+    def _flash_firmware(self):
+        """Flash selected firmware: reboot to BOOTSEL → copy .uf2."""
+        key, uf2_path, _ = self._get_selected_fw()
+        custom = self._firmware_path.get().strip()
+        if custom and Path(custom).exists():
+            uf2_path = custom
+        if not uf2_path:
+            messagebox.showwarning(
+                "Firmware",
+                "Select a built firmware or browse for a .uf2 file.")
+            return
+        if not self._picotool_path:
+            messagebox.showwarning("picotool", "Install picotool first.")
+            return
+        if self._is_flashing:
+            return
+
+        self._is_flashing = True
+        self._flash_btn.config(state=tk.DISABLED)
+        self._progress_var.set(0)
+        fw_name = Path(uf2_path).name
+
+        self.app.log(f"[picotool] Flashing {fw_name}...")
+        self._flash_status.config(text="Rebooting to BOOTSEL...",
+                                   foreground=FG_YELLOW)
+
+        def _run():
+            try:
+                # Step 1: Reboot to BOOTSEL
+                self.after(0, lambda: self._progress_var.set(10))
+                rc, out, err = self._run_picotool(["reboot", "-f", "-u"], 5)
+
+                # If reboot fails, maybe already in BOOTSEL
+                if rc != 0:
+                    mount = find_rpi_rp2_mount()
+                    if not mount:
+                        self.after(0, lambda: self._flash_status.config(
+                            text="Reboot failed — try BOOTSEL button",
+                            foreground=FG_RED))
+                        return
+
+                # Step 2: Wait for BOOTSEL drive
+                self.after(0, lambda: self._flash_status.config(
+                    text="Waiting for BOOTSEL drive...",
+                    foreground=FG_YELLOW))
+                self.after(0, lambda: self._progress_var.set(30))
+
+                mount = self._wait_for_bootsel_mount(timeout=10)
+                if not mount:
+                    self.after(0, lambda: self._flash_status.config(
+                        text="BOOTSEL drive didn't appear — try manually",
+                        foreground=FG_RED))
+                    return
+
+                self.after(0, lambda: self.app.log(
+                    f"[picotool] BOOTSEL mounted at {mount}"))
+
+                # Step 3: Copy .uf2
+                self.after(0, lambda: self._flash_status.config(
+                    text=f"Copying {fw_name}...", foreground=FG_YELLOW))
+                self.after(0, lambda: self._progress_var.set(60))
+
+                dest = Path(mount) / fw_name
+                shutil.copy2(uf2_path, str(dest))
+
+                self.after(0, lambda: self._progress_var.set(90))
+
+                # Step 4: Wait for Pico to reboot
+                self.after(0, lambda: self._flash_status.config(
+                    text="Firmware copied — Pico rebooting...",
+                    foreground=FG_YELLOW))
+                time.sleep(2)
+
+                self.after(0, lambda: self._progress_var.set(100))
+                size_kb = Path(uf2_path).stat().st_size // 1024
+                self.after(0, lambda: self._flash_status.config(
+                    text=f"Done! {fw_name} ({size_kb}KB) flashed",
+                    foreground=FG_GREEN))
+                self.after(0, lambda: self.app.log(
+                    f"[picotool] Flashed {fw_name} ({size_kb}KB)"))
+
+            except Exception as e:
+                self.after(0, lambda: self._flash_status.config(
+                    text=f"Error: {e}", foreground=FG_RED))
+                self.after(0, lambda: self.app.log(
+                    f"[picotool] Error: {e}"))
+            finally:
+                self._is_flashing = False
+                self.after(0, lambda: self._flash_btn.config(
+                    state=tk.NORMAL))
+
+        threading.Thread(target=_run, daemon=True).start()
+
+    def _clean_build_and_flash(self):
+        """Docker build then flash via picotool."""
+        key, _, fw_dir = self._get_selected_fw()
+        if not key:
+            messagebox.showwarning("Select", "Select a firmware first.")
+            return
+        if not self._picotool_path:
+            messagebox.showwarning("picotool", "Install picotool first.")
+            return
+        if self._is_flashing:
+            return
+
+        self._is_flashing = True
+        self._build_flash_btn.config(state=tk.DISABLED)
+        self._flash_btn.config(state=tk.DISABLED)
+        self._progress_var.set(0)
+
+        fw_name = fw_dir.replace("-", "_")
+        self.app.log(f"[picotool] Clean build + flash: {fw_name}")
+        self._flash_status.config(text="Starting build...",
+                                   foreground=FG_YELLOW)
+
+        def _run():
+            try:
+                # Step 1: Nuke build dir
+                build_dir = DEV_SETUP / fw_dir / "build"
+                if build_dir.exists():
+                    shutil.rmtree(str(build_dir))
+
+                # Step 2: Docker check
+                self.after(0, lambda: self._progress_var.set(5))
+                r = subprocess.run(["docker", "info"], capture_output=True,
+                                   timeout=10)
+                if r.returncode != 0:
+                    self.after(0, lambda: self._flash_status.config(
+                        text="Docker not running", foreground=FG_RED))
+                    return
+
+                # Step 3: Generate quotes if octopus program
+                if hasattr(self.app, "programs_tab"):
+                    pt = self.app.programs_tab
+                    if key in getattr(pt, "_OCTOPUS_CONFIGS", {}):
+                        self.after(0, lambda: self._flash_status.config(
+                            text="Generating quotes.h..."))
+                        self.after(0, lambda: self._progress_var.set(8))
+                        pt._generate_quotes_header(key)
+
+                # Step 4: Docker build image
+                self.after(0, lambda: self._flash_status.config(
+                    text="Docker build...", foreground=FG_YELLOW))
+                self.after(0, lambda: self._progress_var.set(10))
+                docker_svc = f"build-{fw_dir}"
+
+                proc = subprocess.Popen(
+                    ["docker", "compose", "build", "--progress=plain",
+                     docker_svc],
+                    cwd=str(DEV_SETUP),
+                    stdout=subprocess.PIPE, stderr=subprocess.STDOUT,
+                    text=True)
+                for line in proc.stdout:
+                    line = line.rstrip()
+                    if line:
+                        self.after(0, lambda l=line: self.app.log(
+                            f"[docker] {l}"))
+                proc.wait(timeout=600)
+                if proc.returncode != 0:
+                    self.after(0, lambda: self._flash_status.config(
+                        text="Docker build failed", foreground=FG_RED))
+                    return
+
+                # Step 5: Compile
+                pico_board = "pico2_w"
+                variant = "V4"
+                self.after(0, lambda: self._flash_status.config(
+                    text=f"Compiling ({pico_board}, {variant})...",
+                    foreground=FG_YELLOW))
+                self.after(0, lambda: self._progress_var.set(25))
+
+                proc = subprocess.Popen(
+                    ["docker", "compose", "run", "--rm",
+                     "-e", f"DISPLAY_VARIANT={variant}",
+                     "-e", f"PICO_BOARD={pico_board}",
+                     docker_svc],
+                    cwd=str(DEV_SETUP),
+                    stdout=subprocess.PIPE, stderr=subprocess.STDOUT,
+                    text=True)
+                for line in proc.stdout:
+                    line = line.rstrip()
+                    if line:
+                        self.after(0, lambda l=line: self.app.log(
+                            f"[build] {l}"))
+                proc.wait(timeout=300)
+                if proc.returncode != 0:
+                    self.after(0, lambda: self._flash_status.config(
+                        text="Build failed — check log",
+                        foreground=FG_RED))
+                    return
+
+                # Step 6: Verify .uf2
+                uf2_path = DEV_SETUP / fw_dir / "build" / f"{fw_name}.uf2"
+                if not uf2_path.exists():
+                    self.after(0, lambda: self._flash_status.config(
+                        text="Build OK but .uf2 not found",
+                        foreground=FG_RED))
+                    return
+
+                size_kb = uf2_path.stat().st_size // 1024
+                self.after(0, lambda: self.app.log(
+                    f"[picotool] Built: {fw_name}.uf2 ({size_kb}KB)"))
+                self.after(0, lambda: self._progress_var.set(50))
+
+                # Step 7: Reboot + flash
+                self.after(0, lambda: self._flash_status.config(
+                    text="Rebooting to BOOTSEL...", foreground=FG_YELLOW))
+
+                self._run_picotool(["reboot", "-f", "-u"], 5)
+                self.after(0, lambda: self._progress_var.set(60))
+
+                mount = self._wait_for_bootsel_mount(timeout=10)
+                if not mount:
+                    self.after(0, lambda: self._flash_status.config(
+                        text="BOOTSEL drive didn't mount — flash .uf2 manually",
+                        foreground=FG_YELLOW))
+                    return
+
+                self.after(0, lambda: self._flash_status.config(
+                    text="Copying firmware...", foreground=FG_YELLOW))
+                self.after(0, lambda: self._progress_var.set(80))
+
+                shutil.copy2(str(uf2_path),
+                             str(Path(mount) / f"{fw_name}.uf2"))
+
+                time.sleep(2)
+                self.after(0, lambda: self._progress_var.set(100))
+                self.after(0, lambda: self._flash_status.config(
+                    text=f"Done! {fw_name} ({size_kb}KB) built and flashed",
+                    foreground=FG_GREEN))
+                self.after(0, lambda: self.app.log(
+                    f"[picotool] Built and flashed {fw_name} ({size_kb}KB)"))
+                self.after(0, self._populate_firmware_tree)
+
+            except subprocess.TimeoutExpired:
+                self.after(0, lambda: self._flash_status.config(
+                    text="Build timed out", foreground=FG_RED))
+            except Exception as e:
+                self.after(0, lambda: self._flash_status.config(
+                    text=f"Error: {e}", foreground=FG_RED))
+                self.after(0, lambda: self.app.log(
+                    f"[picotool] Error: {e}"))
+            finally:
+                self._is_flashing = False
+                self.after(0, lambda: self._build_flash_btn.config(
+                    state=tk.NORMAL))
+                self.after(0, lambda: self._flash_btn.config(
+                    state=tk.NORMAL))
+
+        threading.Thread(target=_run, daemon=True).start()
+
+    def refresh_for_board(self, board):
+        """Update UI for board change."""
+        self._populate_firmware_tree()
+
+
+# ─────────────────────────────────────────────────────────────────────────────
 # Dilder Game Emulator Tab
 # ─────────────────────────────────────────────────────────────────────────────
 
@@ -8478,7 +9265,11 @@ class DilderDevTool(tk.Tk):
         self.ota_tab = OTAUpdateTab(self.notebook, self)
         self.notebook.add(self.ota_tab, text="  Pico 2 W OTA  ")
 
-        # Tab 9: Documentation
+        # Tab 9: Picotool
+        self.picotool_tab = PicotoolTab(self.notebook, self)
+        self.notebook.add(self.picotool_tab, text="  Picotool  ")
+
+        # Tab 10: Documentation
         self.docs_tab = DocumentationTab(self.notebook, self)
         self.notebook.add(self.docs_tab, text="  Docs  ")
 
@@ -8627,6 +9418,10 @@ class DilderDevTool(tk.Tk):
         # Refresh OTA tab
         if hasattr(self, "ota_tab"):
             self.ota_tab.refresh_for_board(board_key)
+
+        # Refresh Picotool tab
+        if hasattr(self, "picotool_tab"):
+            self.picotool_tab.refresh_for_board(board_key)
 
         # Refresh documentation tab
         if hasattr(self, "docs_tab"):
