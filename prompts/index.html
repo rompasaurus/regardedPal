@@ -6021,6 +6021,17 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#prompt-275-2026-05-05" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Prompt #275 — 2026-05-05
+      
+    </span>
+  </a>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -8865,6 +8876,17 @@
     <span class="md-ellipsis">
       
         Prompt #275 — 2026-05-04
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#prompt-275-2026-05-05" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Prompt #275 — 2026-05-05
       
     </span>
   </a>
@@ -12689,6 +12711,15 @@
 <li><code>website/docs/docs/hardware/design-evolution.md</code> — Mk2 translucent section, joystick PCB delivery section, pin swap fix, V4 driver, version system, DevTool entries</li>
 <li><code>website/docs/index.md</code> — gallery updated, phase status updated, progress report link</li>
 <li><code>website/mkdocs.yml</code> — progress report added to nav</li>
+</ul>
+<hr />
+<h2 id="prompt-275-2026-05-05">Prompt #275 — 2026-05-05<a class="headerlink" href="#prompt-275-2026-05-05" title="Permanent link">&para;</a></h2>
+<ul>
+<li><strong>Prompt sequence:</strong> OTA wireless firmware updates → picowota port to RP2350 → picotool USB flash tab → install-deps.sh → Dilder Hub firmware (octopus + mood selector + WiFi/NTP + speaker + battery) → V4 display driver flicker fix → documentation sprint</li>
+<li><strong>Input Tokens (est):</strong> ~5,000</li>
+<li><strong>Output Tokens (est):</strong> ~150,000</li>
+<li><strong>Commits:</strong> <code>f57f2fb</code> through <code>8275da9</code> (32 commits) — OTA tab, Picotool tab, picowota RP2350 patches, Dilder Hub firmware, V4 display driver rewrite, install-deps.sh, sprint documentation, .gitignore cleanup</li>
+<li><strong>Summary:</strong> Massive sprint: (1) WiFi OTA attempt via picowota — worked for WiFi connection but flash operations failed on RP2350. (2) Pivoted to picotool for BOOTSEL-free USB flash. (3) Dilder Hub combined firmware with 16-mood selector, WiFi/NTP, sound test, battery monitoring. (4) V4 display driver rewritten with V3's custom partial LUT — eliminated the black screen flash. (5) Full documentation: blog post, tool guides, firmware docs.</li>
 </ul>
 
 
