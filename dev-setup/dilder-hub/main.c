@@ -1306,6 +1306,35 @@ static void init_rtc_from_compile_time(void) {
            dt.year, dt.month, dt.day, dt.hour, dt.min, dt.sec);
 }
 
+/* ─── WiFi icon (16x12 pixels) ─── */
+static void draw_wifi_icon(int x0, int y0, bool connected) {
+    for (int i = -6; i <= 6; i++) {
+        int ay = y0 + 1;
+        if (i >= -5 && i <= 5) ay = y0;
+        if (i >= -3 && i <= 3) ay = y0 - 1;
+        px_set(x0 + 8 + i, ay);
+    }
+    for (int i = -4; i <= 4; i++) {
+        int ay = y0 + 4;
+        if (i >= -3 && i <= 3) ay = y0 + 3;
+        if (i >= -1 && i <= 1) ay = y0 + 2;
+        px_set(x0 + 8 + i, ay);
+    }
+    for (int i = -2; i <= 2; i++) {
+        int ay = y0 + 6;
+        if (i >= -1 && i <= 1) ay = y0 + 5;
+        px_set(x0 + 8 + i, ay);
+    }
+    px_set(x0 + 7, y0 + 8); px_set(x0 + 8, y0 + 8);
+    px_set(x0 + 9, y0 + 8); px_set(x0 + 8, y0 + 9);
+    if (!connected) {
+        for (int i = 0; i < 11; i++) {
+            px_set(x0 + 2 + i, y0 + i);
+            px_set(x0 + 3 + i, y0 + i);
+        }
+    }
+}
+
 /* ─── Menu items ─── */
 static const char *menu_items[] = {
     "MOOD SELECT",
@@ -1639,7 +1668,7 @@ int main(void) {
     int qi = pick_quote();
     int menu_sel = 0;
     int mood_sel = 0;  /* 0 = ALL, 1-16 = specific mood */
-    bool needs_full_refresh = true;
+    bool first_frame = true;
 
     const char *snd_dir = "NONE";
     uint16_t snd_freq = 0;
@@ -1678,10 +1707,12 @@ int main(void) {
                 qi = pick_quote();
 
             render_frame(&quotes[qi], expr, frame_idx);
+            /* WiFi icon top-right of octopus screen */
+            draw_wifi_icon(232, 1, wifi_connected);
             draw_text(175, 113, "DOWN:MENU", IMG_W);
             transpose_to_display();
 
-            if (needs_full_refresh) { EPD_Base(display_buf); needs_full_refresh = false; }
+            if (first_frame) { EPD_Base(display_buf); first_frame = false; }
             else EPD_Partial(display_buf);
             frame_idx++;
 
@@ -1720,7 +1751,7 @@ int main(void) {
                     speaker_tone(600, 30); break;
                 } else if (inp == INPUT_CENTER) {
                     speaker_tone(1000, 50);
-                    needs_full_refresh = true;
+                    
                     switch (menu_sel) {
                         case 0: state = STATE_MOOD_SELECT; mood_sel = current_mood + 1; break;
                         case 1: state = STATE_NETWORK; break;
@@ -1730,7 +1761,7 @@ int main(void) {
                     }
                     break;
                 } else if (inp == INPUT_LEFT) {
-                    state = STATE_OCTOPUS; needs_full_refresh = true;
+                    state = STATE_OCTOPUS; 
                     speaker_tone(500, 50); break;
                 }
             POLL_END
@@ -1741,7 +1772,7 @@ int main(void) {
         case STATE_MOOD_SELECT: {
             render_mood_select(mood_sel);
             transpose_to_display();
-            if (needs_full_refresh) { EPD_Base(display_buf); needs_full_refresh = false; }
+            if (first_frame) { EPD_Base(display_buf); first_frame = false; }
             else EPD_Partial(display_buf);
 
             POLL_INPUT(4000)
@@ -1759,7 +1790,7 @@ int main(void) {
                            current_mood < 0 ? "ALL" : mood_names[current_mood]);
                     break;
                 } else if (inp == INPUT_LEFT) {
-                    state = STATE_MENU; needs_full_refresh = true;
+                    state = STATE_MENU; 
                     speaker_tone(500, 50); break;
                 }
             POLL_END
@@ -1770,7 +1801,7 @@ int main(void) {
         case STATE_NETWORK: {
             render_network_screen();
             transpose_to_display();
-            if (needs_full_refresh) { EPD_Base(display_buf); needs_full_refresh = false; }
+            if (first_frame) { EPD_Base(display_buf); first_frame = false; }
             else EPD_Partial(display_buf);
 
             POLL_INPUT(4000)
@@ -1778,10 +1809,10 @@ int main(void) {
                     speaker_tone(1000, 50);
                     if (wifi_enabled) wifi_disconnect();
                     else wifi_connect();
-                    needs_full_refresh = true;
+                    
                     break;
                 } else if (inp == INPUT_LEFT) {
-                    state = STATE_MENU; needs_full_refresh = true;
+                    state = STATE_MENU; 
                     speaker_tone(500, 50); break;
                 }
             POLL_END
@@ -1792,12 +1823,12 @@ int main(void) {
         case STATE_SOUND: {
             render_sound_screen(snd_dir, snd_freq, snd_presses);
             transpose_to_display();
-            if (needs_full_refresh) { EPD_Base(display_buf); needs_full_refresh = false; }
+            if (first_frame) { EPD_Base(display_buf); first_frame = false; }
             else EPD_Partial(display_buf);
 
             POLL_INPUT(2000)
                 if (inp == INPUT_LEFT) {
-                    state = STATE_MENU; needs_full_refresh = true;
+                    state = STATE_MENU; 
                     speaker_tone(500, 50); break;
                 }
                 snd_presses++;
@@ -1813,12 +1844,12 @@ int main(void) {
         case STATE_INFO: {
             render_info_screen();
             transpose_to_display();
-            if (needs_full_refresh) { EPD_Base(display_buf); needs_full_refresh = false; }
+            if (first_frame) { EPD_Base(display_buf); first_frame = false; }
             else EPD_Partial(display_buf);
 
             POLL_INPUT(4000)
                 if (inp == INPUT_LEFT || inp == INPUT_CENTER) {
-                    state = STATE_MENU; needs_full_refresh = true;
+                    state = STATE_MENU; 
                     speaker_tone(500, 50); break;
                 }
             POLL_END
