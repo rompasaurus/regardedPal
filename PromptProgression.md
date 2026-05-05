@@ -3735,3 +3735,60 @@ Every prompt entry below uses the following fields. Entries that don't yet list 
   - `website/docs/docs/design/encounters-geocaching.md` (new) — website design doc with packet specs, UI mockups, tables, implementation phases
   - `website/docs/index.md` — new "Encounters, Riddle Hunts & Collectibles" section on home page with encounter/riddle/trading overview
   - `website/mkdocs.yml` — nav updated with Encounters & Geocaching under Design
+
+---
+
+## Prompt #275 — 2026-05-05
+- **Prompt sequence:** "how would I go about easily update the program code and firmware for the pico 2 can I do this wirelessly it is tiring to connect usb and hit boot select" -> "lets do the picowota route lets make a new tab in the dev tool and implement a deployment and update process" -> "I also want the devtool to retain my wifi config on reload" -> "the firmware list you made is washed out white background I cant read it at all" -> "also the ota setup guide you made is confusing what does the build bootloader and flash bootloader do" -> "also I need this to be specific to the pico 2 w board ensure that is clear on the tab title" -> [multiple debugging rounds for picowota build: CMSIS header RP2350 fix, disable_interrupts rename, SSID quoting fix, SDK path discovery, stale build cleanup] -> "still not found after proper flash" -> "the pico never reboot after the flash" -> "ok its there now that worked now how do I push the program on this thing" -> "permission denied when trying a clean build and flash" -> [picowota flash failed: INFO returns garbage addresses, ERASE returns ERR on RP2350] -> "get me a picotool added to the devtool as a tab" -> "give me a script to install the dependencies in the root" -> "give that in the devtool as well to install the dep if not exists" -> "have it launch like this by default I dont want to type args I will forget" -> "ok tried the sound program cant get any sound" -> "sorry pin 11" -> "10 is already taken" -> "with the waveshare" -> "lets do pin 20" -> "fix sound on both programs and fix the wifi too" -> "give a menu option for the sound at the bottom I can navigate to and for the wifi with a back button" -> "yea build it into a new program I can test" -> "permission denied when trying to deploy" -> "do I need a resistor for this?" -> "still really faint with resistor will more ohm equal louder?" -> "would this work?" [active buzzer link] -> "ok ordered lets work a bit more on dilder hub I want it to be able to select all the moods" -> "permission denied the log error shows in the 3 box" -> "ok the emotion program should show at the bottom not dilder hub also when I change the emotion on the menu it should return back to the octopus" -> "we still have flashing on this display please let utilize the partial refresh like the display is specced for" -> "the v4 screen is what I'm using" -> "perfection!!!! write a detailed md document and blog entry for this" -> "alright commit and push the change gitignore the build nonsense make sure my wifi pw isnt put in the repo update the site and docs"
+- **Input Tokens (est):** ~5,000 across the sequence
+- **Output Tokens (est):** ~150,000
+- **Commits:**
+  - `f57f2fb` — Add OTA Update tab to DevTool with picowota WiFi bootloader integration
+  - `8460184` — Add full firmware list and clean build + OTA flash to DevTool OTA tab
+  - `8ead4d3` — Persist OTA WiFi config, fix Treeview dark theme, rewrite guide
+  - `409bdd8` — Rename OTA tab to 'Pico 2 W OTA' and make board-specific
+  - `d119710` — Fix OTA bootloader build: SDK path discovery, error logging, stale cache
+  - `8578da4` — Patch picowota for Pico 2 W (RP2350) and fix OTA build flow
+  - `3fe68d4` — Auto-discover firmware projects in OTA tab
+  - `a1816c0` — Fix find_rpi_rp2_mount() call
+  - `b40ba8c` — Fix picowota SSID with spaces
+  - `cbfc503` — Fix RP2350 RTC compat and add missing firmware
+  - `ec1f20c` — Default board selector to Pico 2 W (RP2350)
+  - `b587a2f` — Force picowota bootloader to build as pico_w (RP2040 compat mode)
+  - `55c23d8` — Fix picowota SSID quoting that broke WiFi
+  - `ea3d908` — Add Picotool tab to DevTool — USB flash without BOOTSEL button
+  - `1843655` — Add install-deps.sh for one-command development setup
+  - `6e8d5f2` — Add dependency checker and Install All Dependencies button
+  - `b64042c` — Fix install-deps.sh: heif-convert to libheif on Arch
+  - `2953feb` — Install picotool via AUR on Arch
+  - `7005e97` — Auto-eject BOOTSEL drive after flash to trigger Pico reboot
+  - `fa84405` — Move speaker pin from GP7 to GP15 in both sound firmwares
+  - `31c85f6` — Add Dilder Hub firmware — octopus + joystick menu + speaker + device info
+  - `fb69b9f` — Push-pull piezo driver for 2x volume
+  - `bf0bc63` — Auto-relaunch DevTool with docker group if not active
+  - `150f84b` — Fix permission denied on clean build and lambda NameError
+  - `90cb19b` — Dilder Hub v2 — mood selector, WiFi/NTP, network screen, all 823 quotes
+  - `57d8939` — WiFi icon on octopus screen + single-pass partial refresh
+  - `2437a5e` — WiFi icon left, battery icon right, display variant selector
+  - `3552e07` — Fix black flash, battery lightning bolt, menu fits on screen
+  - `2e8285f` — Fix V4 display flash, mood tagline, battery info
+  - `1c68e71` — Rewrite V4 display driver — V3-style custom LUT partial refresh
+  - `b97be53` — Add sprint documentation: blog post, Picotool & OTA guide, Dilder Hub docs
+  - `8275da9` — Scrub WiFi credentials and simplify .gitignore
+- **Summary:** Massive development sprint across firmware updates, DevTool expansion, and display driver fixes. (1) **OTA/Picotool**: attempted WiFi OTA via picowota — ported to RP2350 (CMSIS header, function rename), built Python TCP client (580 lines), added DevTool tab with WiFi config persistence, device discovery, firmware list. Discovered picowota's flash operations don't work on RP2350 due to hardware abstraction differences. Pivoted to picotool (Tab 9) for BOOTSEL-free USB flashing with auto-eject. (2) **Dilder Hub firmware**: new combined firmware (1,935 lines) with animated octopus (823 quotes, 16 moods), joystick menu system (6 states), mood selector, WiFi/NTP network screen with on/off toggle, sound test, device info with battery voltage, push-pull piezo driver (GP14+GP15 opposite phase, 6.6Vpp). (3) **V4 display driver**: traced flicker root cause through 6 iterations — the SSD1680's internal OTP LUT has no proper partial waveform. Complete rewrite using the V3's custom 159-byte partial LUT (WF_PARTIAL) with RAM ping-pong and 0x0F trigger. Zero flicker, only changed pixels update. (4) **Dev workflow**: install-deps.sh for one-command setup, Docker group auto-detection, display variant selector in toolbar, auto-discover firmware projects. (5) **Documentation**: blog post covering the full sprint narrative, Picotool & OTA reference guide, Dilder Hub firmware docs. WiFi credentials scrubbed, .gitignore simplified with glob patterns.
+- **Layman summary:** Started by trying to eliminate the annoying USB plug-unplug cycle for firmware updates. First tried wireless updates over WiFi — got it connecting but the actual flash writing didn't work on the newer Pico 2 W chip. Switched to a simpler approach using picotool which reboots the device over USB without pressing buttons. Built a combined firmware that shows an animated octopus with 16 different moods you can switch between using a joystick menu, connects to WiFi to get the real time, plays sounds through a tiny speaker, and shows battery status. Fixed the e-ink display flashing problem that had been plaguing the project — the screen was doing a full black refresh every few seconds instead of just updating the pixels that changed. The fix was loading a custom display waveform that only drives changed pixels. Added complete documentation covering everything built.
+- **Files:**
+  - `tools/devtool/devtool.py` — 3 new tabs (OTA, Picotool, display selector), Docker group auto-relaunch, dependency checker, firmware auto-discovery
+  - `tools/devtool/picowota_client.py` (new) — Python TCP client for picowota protocol
+  - `dev-setup/dilder-hub/` (new) — combined firmware: main.c, CMakeLists.txt, wifi_config.h, lwipopts.h, quotes.h
+  - `dev-setup/hello-world/lib/e-Paper/EPD_2in13_V4.c` — complete rewrite with V3 custom LUT
+  - `dev-setup/moodselector-sound/main.c` — speaker pin GP7 to GP15
+  - `dev-setup/moodselector-sound-wifi/main.c` — speaker pin + RTC compat
+  - `dev-setup/docker-compose.yml` — dilder-hub service added
+  - `install-deps.sh` (new) — one-command dev setup for Arch/Debian/Fedora
+  - `picowota/` — submodule with RP2350 patches (CMSIS, disable_interrupts, SSID quoting)
+  - `.gitignore` — simplified with glob patterns, WiFi creds excluded
+  - `website/docs/blog/posts/devtool-ota-display-hub-sprint.md` (new) — sprint blog post
+  - `website/docs/docs/tools/picotool-ota.md` (new) — Picotool & OTA reference
+  - `website/docs/docs/software/dilder-hub.md` (new) — Dilder Hub firmware docs
+  - `website/mkdocs.yml` — nav updated with new pages

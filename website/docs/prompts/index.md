@@ -3766,3 +3766,12 @@ Every prompt entry below uses the following fields. Entries that don't yet list 
   - `website/docs/docs/hardware/design-evolution.md` — Mk2 translucent section, joystick PCB delivery section, pin swap fix, V4 driver, version system, DevTool entries
   - `website/docs/index.md` — gallery updated, phase status updated, progress report link
   - `website/mkdocs.yml` — progress report added to nav
+
+---
+
+## Prompt #275 — 2026-05-05
+- **Prompt sequence:** OTA wireless firmware updates → picowota port to RP2350 → picotool USB flash tab → install-deps.sh → Dilder Hub firmware (octopus + mood selector + WiFi/NTP + speaker + battery) → V4 display driver flicker fix → documentation sprint
+- **Input Tokens (est):** ~5,000
+- **Output Tokens (est):** ~150,000
+- **Commits:** `f57f2fb` through `8275da9` (32 commits) — OTA tab, Picotool tab, picowota RP2350 patches, Dilder Hub firmware, V4 display driver rewrite, install-deps.sh, sprint documentation, .gitignore cleanup
+- **Summary:** Massive sprint: (1) WiFi OTA attempt via picowota — worked for WiFi connection but flash operations failed on RP2350. (2) Pivoted to picotool for BOOTSEL-free USB flash. (3) Dilder Hub combined firmware with 16-mood selector, WiFi/NTP, sound test, battery monitoring. (4) V4 display driver rewritten with V3's custom partial LUT — eliminated the black screen flash. (5) Full documentation: blog post, tool guides, firmware docs.
