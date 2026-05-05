@@ -7354,7 +7354,7 @@ and restored when you reopen the DevTool.
         uf2_path = uf2_files[0]
 
         # Find BOOTSEL mount
-        mount = find_rpi_rp2_mount(self.app.target_board)
+        mount = find_rpi_rp2_mount()
         if not mount:
             board = self.app.target_board
             drive = "RP2350" if board == BOARD_PICO2_W else "RPI-RP2"
