@@ -1182,10 +1182,17 @@ static void render_frame(const Quote *q, int expr, uint32_t frame_idx) {
     /* 6. Quote text inside bubble (manually offset) */
     draw_text(81, 11 + Y_OFF, q->text, 158);
 
-    /* 7. Tagline below bubble (manually offset) */
+    /* 7. Tagline — show current mood/emotion name */
     int tag_y = 5 + 70 + 5 + Y_OFF;
-    if (tag_y + 7 < IMG_H)
-        draw_text(81, tag_y, TAGLINE, 170);
+    if (tag_y + 7 < IMG_H) {
+        char mood_tag[40];
+        snprintf(mood_tag, sizeof(mood_tag), "- %s -",
+                 current_mood < 0 ? mood_names[q->mood] : mood_names[current_mood]);
+        /* Uppercase it */
+        for (char *p = mood_tag; *p; p++)
+            if (*p >= 'a' && *p <= 'z') *p -= 32;
+        draw_text(81, tag_y, mood_tag, 170);
+    }
 }
 
 /* ─── Transpose landscape → portrait for e-ink driver ─── */
@@ -1479,25 +1486,43 @@ static void render_info_screen(void) {
     draw_text(30, 3, "DEVICE INFO", IMG_W);
     for (int x = 10; x < 240; x++) px_set(x, 14);
     char buf[48];
-    snprintf(buf, sizeof(buf), "FIRMWARE: V%s", DILDER_VERSION);
-    draw_text(10, 22, buf, IMG_W);
+    int y = 20;
+
+    snprintf(buf, sizeof(buf), "FW: V%s  %s", DILDER_VERSION, DISPLAY_NAME);
+    draw_text(10, y, buf, IMG_W); y += 11;
+
     snprintf(buf, sizeof(buf), "BUILT: %s %s", __DATE__, __TIME__);
-    draw_text(10, 35, buf, IMG_W);
-    snprintf(buf, sizeof(buf), "DISPLAY: %s  QUOTES: %d", DISPLAY_NAME, QUOTE_COUNT);
-    draw_text(10, 48, buf, IMG_W);
+    draw_text(10, y, buf, IMG_W); y += 11;
+
     datetime_t t; rtc_get_datetime(&t);
     int hr12 = t.hour % 12; if (hr12 == 0) hr12 = 12;
     snprintf(buf, sizeof(buf), "%s %d, %d  %d:%02d %s",
              month_names[t.month - 1], t.day, t.year, hr12, t.min,
              t.hour < 12 ? "AM" : "PM");
-    draw_text(10, 65, buf, IMG_W);
-    snprintf(buf, sizeof(buf), "MOOD: %s",
-             current_mood < 0 ? "ALL (RANDOM)" : mood_names[current_mood]);
-    draw_text(10, 78, buf, IMG_W);
+    draw_text(10, y, buf, IMG_W); y += 11;
+
+    snprintf(buf, sizeof(buf), "MOOD: %s  QUOTES: %d",
+             current_mood < 0 ? "ALL" : mood_names[current_mood], QUOTE_COUNT);
+    draw_text(10, y, buf, IMG_W); y += 11;
+
     snprintf(buf, sizeof(buf), "WIFI: %s", wifi_connected ? wifi_ip_str : "OFF");
-    draw_text(10, 91, buf, IMG_W);
-    draw_text(10, 108, "PICO 2 W  RP2350", IMG_W);
-    draw_text(175, 108, "LEFT:BACK", IMG_W);
+    draw_text(10, y, buf, IMG_W); y += 11;
+
+    /* Battery / power status */
+    int pct = read_battery_percent();
+    if (pct < 0) {
+        adc_select_input(3);
+        float vsys = adc_read() * 3.3f / 4095.0f * 3.0f;
+        snprintf(buf, sizeof(buf), "POWER: USB (%.1fV)", (double)vsys);
+    } else {
+        adc_select_input(3);
+        float vsys = adc_read() * 3.3f / 4095.0f * 3.0f;
+        snprintf(buf, sizeof(buf), "BATTERY: %d%% (%.1fV)", pct, (double)vsys);
+    }
+    draw_text(10, y, buf, IMG_W); y += 11;
+
+    draw_text(10, 110, "PICO 2 W  RP2350", IMG_W);
+    draw_text(175, 110, "LEFT:BACK", IMG_W);
 }
 
 /* ─── Draw mood select screen ─── */
@@ -1718,7 +1743,6 @@ int main(void) {
     int qi = pick_quote();
     int menu_sel = 0;
     int mood_sel = 0;  /* 0 = ALL, 1-16 = specific mood */
-    bool first_frame = true;
 
     const char *snd_dir = "NONE";
     uint16_t snd_freq = 0;
@@ -1763,8 +1787,7 @@ int main(void) {
             draw_text(175, 113, "DOWN:MENU", IMG_W);
             transpose_to_display();
 
-            if (first_frame) { EPD_Base(display_buf); first_frame = false; }
-            else EPD_Partial(display_buf);
+            EPD_Partial(display_buf);
             frame_idx++;
 
             /* Poll 3 seconds for joystick */
@@ -1823,8 +1846,7 @@ int main(void) {
         case STATE_MOOD_SELECT: {
             render_mood_select(mood_sel);
             transpose_to_display();
-            if (first_frame) { EPD_Base(display_buf); first_frame = false; }
-            else EPD_Partial(display_buf);
+            EPD_Partial(display_buf);
 
             POLL_INPUT(4000)
                 if (inp == INPUT_UP) {
@@ -1836,8 +1858,10 @@ int main(void) {
                 } else if (inp == INPUT_CENTER) {
                     current_mood = mood_sel == 0 ? -1 : mood_sel - 1;
                     qi = pick_quote();
+                    frame_idx = 0;  /* reset animation */
+                    state = STATE_OCTOPUS;  /* return to octopus */
                     speaker_tone(1200, 80);
-                    printf("[mood] Selected: %s\n",
+                    printf("[mood] Selected: %s → back to octopus\n",
                            current_mood < 0 ? "ALL" : mood_names[current_mood]);
                     break;
                 } else if (inp == INPUT_LEFT) {
@@ -1852,8 +1876,7 @@ int main(void) {
         case STATE_NETWORK: {
             render_network_screen();
             transpose_to_display();
-            if (first_frame) { EPD_Base(display_buf); first_frame = false; }
-            else EPD_Partial(display_buf);
+            EPD_Partial(display_buf);
 
             POLL_INPUT(4000)
                 if (inp == INPUT_CENTER) {
@@ -1874,8 +1897,7 @@ int main(void) {
         case STATE_SOUND: {
             render_sound_screen(snd_dir, snd_freq, snd_presses);
             transpose_to_display();
-            if (first_frame) { EPD_Base(display_buf); first_frame = false; }
-            else EPD_Partial(display_buf);
+            EPD_Partial(display_buf);
 
             POLL_INPUT(2000)
                 if (inp == INPUT_LEFT) {
@@ -1895,8 +1917,7 @@ int main(void) {
         case STATE_INFO: {
             render_info_screen();
             transpose_to_display();
-            if (first_frame) { EPD_Base(display_buf); first_frame = false; }
-            else EPD_Partial(display_buf);
+            EPD_Partial(display_buf);
 
             POLL_INPUT(4000)
                 if (inp == INPUT_LEFT || inp == INPUT_CENTER) {

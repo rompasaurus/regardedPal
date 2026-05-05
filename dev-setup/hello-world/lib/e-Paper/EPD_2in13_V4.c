@@ -258,15 +258,24 @@ void EPD_2in13_V4_Clear(void)
     UWORD Width = (EPD_2in13_V4_WIDTH + 7) / 8;
     UWORD Height = EPD_2in13_V4_HEIGHT;
 
+    /* Write white to BOTH RAM buffers so they match.
+     * If only 0x24 is written, the controller sees a diff between
+     * 0x24 (white) and 0x26 (old garbage) on the next partial update
+     * and redraws everything — causing a full-screen flash. */
     EPD_2in13_V4_SendCommand(0x24);
+    for (UWORD j = 0; j < Height; j++)
+        for (UWORD i = 0; i < Width; i++)
+            EPD_2in13_V4_SendData(0xFF);
+    EPD_2in13_V4_SendCommand(0x26);
     for (UWORD j = 0; j < Height; j++)
         for (UWORD i = 0; i < Width; i++)
             EPD_2in13_V4_SendData(0xFF);
 
     EPD_2in13_V4_TurnOnDisplay();
     memset(prev_frame, 0xFF, EPD_BUF_SIZE);
-    base_seeded = 0;
+    base_seeded = 1;   /* both buffers are synced — partials work immediately */
     partial_count = 0;
+    partial_mode_ready = 0;
 }
 
 /******************************************************************************
