@@ -7925,6 +7925,107 @@ class PicotoolTab(ttk.Frame):
                 foreground=FG_YELLOW)
             self.app.log("[picotool] Not found on system")
 
+    def _check_deps(self):
+        """Check all development dependencies and show status."""
+        missing = []
+        found = []
+
+        checks = [
+            ("cmake",              shutil.which("cmake")),
+            ("ninja",              shutil.which("ninja")),
+            ("arm-none-eabi-gcc",  shutil.which("arm-none-eabi-gcc")),
+            ("docker",             shutil.which("docker")),
+            ("git",                shutil.which("git")),
+            ("picotool",           self._find_picotool()),
+        ]
+
+        # Pico SDK
+        sdk = os.environ.get("PICO_SDK_PATH", "")
+        if not sdk:
+            for c in [Path.home() / "pico" / "pico-sdk",
+                      Path.home() / "pico-sdk", Path("/opt/pico-sdk")]:
+                if (c / "pico_sdk_init.cmake").exists():
+                    sdk = str(c)
+                    break
+        checks.append(("pico-sdk", sdk if sdk else None))
+
+        for name, path in checks:
+            if path:
+                found.append(name)
+            else:
+                missing.append(name)
+
+        if missing:
+            self._deps_status.config(
+                text=f"Missing: {', '.join(missing)}  |  OK: {', '.join(found)}",
+                foreground=FG_YELLOW)
+            self.app.log(f"[picotool] Missing deps: {', '.join(missing)}")
+        else:
+            self._deps_status.config(
+                text=f"All dependencies OK: {', '.join(found)}",
+                foreground=FG_GREEN)
+
+    def _install_all_deps(self):
+        """Run the install-deps.sh script in a terminal."""
+        script = PROJECT_ROOT / "install-deps.sh"
+        if not script.exists():
+            messagebox.showerror("Missing Script",
+                                 f"install-deps.sh not found at:\n{script}")
+            return
+
+        self.app.log("[picotool] Launching install-deps.sh in terminal...")
+        self._deps_status.config(text="Running installer...",
+                                  foreground=FG_YELLOW)
+
+        def _run():
+            try:
+                # Try to open in a visible terminal so the user can
+                # enter their sudo password
+                terminal_cmds = [
+                    # Try common terminal emulators
+                    ["kitty", "--hold", "bash", str(script)],
+                    ["alacritty", "-e", "bash", str(script)],
+                    ["gnome-terminal", "--", "bash", str(script)],
+                    ["xfce4-terminal", "-e", f"bash {script}"],
+                    ["konsole", "-e", "bash", str(script)],
+                    ["xterm", "-e", f"bash {script}"],
+                ]
+
+                launched = False
+                for cmd in terminal_cmds:
+                    if shutil.which(cmd[0]):
+                        self.after(0, lambda c=cmd[0]: self.app.log(
+                            f"[picotool] Opening {c}..."))
+                        subprocess.Popen(cmd, cwd=str(PROJECT_ROOT))
+                        launched = True
+                        break
+
+                if not launched:
+                    # Fallback: run inline (won't work for sudo)
+                    self.after(0, lambda: messagebox.showinfo(
+                        "Run Manually",
+                        f"No terminal emulator found.\n\n"
+                        f"Open a terminal and run:\n"
+                        f"  cd {PROJECT_ROOT}\n"
+                        f"  ./install-deps.sh"))
+                    return
+
+                self.after(0, lambda: self._deps_status.config(
+                    text="Installer running in terminal — enter sudo password there",
+                    foreground=FG_YELLOW))
+
+                # After a delay, recheck
+                self.after(30000, self._check_deps)
+                self.after(30000, self._check_picotool)
+
+            except Exception as e:
+                self.after(0, lambda: self.app.log(
+                    f"[picotool] Error launching installer: {e}"))
+                self.after(0, lambda: self._deps_status.config(
+                    text=f"Error: {e}", foreground=FG_RED))
+
+        threading.Thread(target=_run, daemon=True).start()
+
     def _build_ui(self):
         self.configure(style="TFrame")
         main_pw = ttk.PanedWindow(self, orient=tk.HORIZONTAL)
@@ -7951,6 +8052,9 @@ class PicotoolTab(ttk.Frame):
             command=self._install_picotool)
         self._install_btn.pack(side=tk.LEFT, padx=(0, 4))
 
+        ttk.Button(tool_row, text="Install All Dependencies",
+                   command=self._install_all_deps).pack(side=tk.LEFT, padx=(0, 4))
+
         ttk.Button(tool_row, text="Refresh",
                    command=self._check_picotool).pack(side=tk.LEFT)
 
@@ -7958,6 +8062,15 @@ class PicotoolTab(ttk.Frame):
                                        foreground=FG_DIM,
                                        font=("JetBrains Mono", 9))
         self._tool_status.pack(anchor=tk.W, pady=(4, 0))
+
+        # Dependency status
+        self._deps_status = ttk.Label(setup_frame, text="",
+                                       foreground=FG_DIM,
+                                       font=("JetBrains Mono", 8))
+        self._deps_status.pack(anchor=tk.W, pady=(2, 0))
+
+        # Check deps on startup
+        self.after(600, self._check_deps)
 
         # --- Section 2: Device status ---
         dev_frame = ttk.LabelFrame(left, text="  2. Device  ", padding=8)
