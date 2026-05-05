@@ -1313,18 +1313,45 @@ static void init_rtc_from_compile_time(void) {
            dt.year, dt.month, dt.day, dt.hour, dt.min, dt.sec);
 }
 
-/* ─── Battery voltage reading via ADC ─── */
-/* GP29/ADC3 reads VSYS through a 3:1 divider on the Pico W/Pico 2 W.
- * USB = ~5.0V → ADC reads ~1.67V → raw ~2067
- * Full 10440 = ~4.2V → ADC reads ~1.40V → raw ~1736
- * Empty 10440 = ~3.0V → ADC reads ~1.00V → raw ~1240
- * Returns percentage 0-100 or -1 if USB powered (>4.5V) */
-static int read_battery_percent(void) {
-    adc_select_input(3);  /* ADC3 = GP29 = VSYS/3 */
-    uint16_t raw = adc_read();
-    float vsys = raw * 3.3f / 4095.0f * 3.0f;  /* 3:1 divider */
+/* ─── Battery / power monitoring ─── */
+/* On Pico W / Pico 2 W:
+ *   - VSYS/3 sits on GPIO 29 / ADC3, but GPIO 29 is shared with the CYW43
+ *     SPI bus, so we average many samples to fight the SPI-induced noise.
+ *   - USB presence is detected via CYW43_WL_GPIO_VBUS_PIN (CYW43 GPIO 2)
+ *     when the wireless stack has been brought up; otherwise we fall back
+ *     to a VSYS threshold. */
+static bool battery_adc_ready = false;
 
-    if (vsys > 4.5f) return -1;  /* USB powered */
+static void battery_init(void) {
+    adc_gpio_init(29);          /* disable digital pulls on ADC3 */
+    battery_adc_ready = true;
+}
+
+static float read_vsys_volts(void) {
+    if (!battery_adc_ready) battery_init();
+    adc_select_input(3);        /* ADC3 = GP29 = VSYS/3 */
+    uint32_t acc = 0;
+    const int N = 32;
+    for (int i = 0; i < N; i++) acc += adc_read();
+    float raw = (float)acc / (float)N;
+    return raw * 3.3f / 4095.0f * 3.0f;   /* 3:1 divider */
+}
+
+static bool is_usb_powered(void) {
+    if (wifi_enabled) {
+        /* CYW43 is initialized — VBUS sense is reliable */
+        bool vbus = false;
+        cyw43_arch_gpio_get(CYW43_WL_GPIO_VBUS_PIN, &vbus);
+        return vbus;
+    }
+    /* Fallback: VSYS rises above battery voltage when USB is attached */
+    return read_vsys_volts() > 4.5f;
+}
+
+/* Returns 0..100 from VSYS, or -1 if running on USB. */
+static int read_battery_percent(void) {
+    if (is_usb_powered()) return -1;
+    float vsys = read_vsys_volts();
     if (vsys >= 4.2f) return 100;
     if (vsys <= 3.0f) return 0;
     return (int)((vsys - 3.0f) / 1.2f * 100.0f);
@@ -1510,13 +1537,10 @@ static void render_info_screen(void) {
 
     /* Battery / power status */
     int pct = read_battery_percent();
+    float vsys = read_vsys_volts();
     if (pct < 0) {
-        adc_select_input(3);
-        float vsys = adc_read() * 3.3f / 4095.0f * 3.0f;
         snprintf(buf, sizeof(buf), "POWER: USB (%.1fV)", (double)vsys);
     } else {
-        adc_select_input(3);
-        float vsys = adc_read() * 3.3f / 4095.0f * 3.0f;
         snprintf(buf, sizeof(buf), "BATTERY: %d%% (%.1fV)", pct, (double)vsys);
     }
     draw_text(10, y, buf, IMG_W); y += 11;
@@ -1736,6 +1760,7 @@ int main(void) {
     EPD_Init();
     EPD_Clear();
     rng_seed();
+    battery_init();
 
     /* ─── State machine ─── */
     uint8_t state = STATE_OCTOPUS;
