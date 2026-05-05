@@ -51,7 +51,7 @@ case $PM in
             docker docker-compose \
             tk python-pyserial python-pillow \
             libusb hidapi \
-            heif-convert
+            libheif
         ;;
     apt)
         $INSTALL \
