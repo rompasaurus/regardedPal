@@ -7196,11 +7196,13 @@ and restored when you reopen the DevTool.
                 build_dir = pw_dir / "build"
                 build_dir.mkdir(exist_ok=True)
 
-                # Determine board
-                board = self.app.target_board
-                pico_board = "pico2_w" if board == BOARD_PICO2_W else "pico_w"
+                # picowota bootloader always builds as pico_w (RP2040).
+                # The Pico 2 W runs RP2040 binaries in compatibility mode.
+                # Building as pico2_w compiles but the TCP server doesn't
+                # start — the RP2350-native picowota port is incomplete.
+                pico_board = "pico_w"
                 self.after(0, lambda: self.app.log(
-                    f"[ota] Target board: {pico_board}"))
+                    f"[ota] Bootloader target: {pico_board} (RP2040 compat — works on Pico 2 W)"))
 
                 # Find Pico SDK — check env var first, then common locations
                 sdk_path = os.environ.get("PICO_SDK_PATH", "")
