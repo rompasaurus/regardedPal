@@ -9609,4 +9609,17 @@ def main():
 
 
 if __name__ == "__main__":
+    # If the docker group isn't active in this process, re-exec with it.
+    # This handles the common case where the user was added to the docker
+    # group but hasn't logged out/in yet.
+    import grp
+    try:
+        docker_gid = grp.getgrnam("docker").gr_gid
+        if docker_gid not in os.getgroups() and shutil.which("sg"):
+            print("  Docker group not active — re-launching with 'sg docker'...")
+            os.execvp("sg", ["sg", "docker", "-c",
+                              f"{sys.executable} {' '.join(sys.argv)}"])
+    except (KeyError, OSError):
+        pass  # no docker group on system — skip
+
     main()
