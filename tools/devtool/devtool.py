@@ -6477,6 +6477,865 @@ class ProgramsTab(ttk.Frame):
 
 
 # ─────────────────────────────────────────────────────────────────────────────
+# OTA Update Tab — WiFi firmware updates via picowota bootloader
+# ─────────────────────────────────────────────────────────────────────────────
+
+class OTAUpdateTab(ttk.Frame):
+    """
+    WiFi over-the-air firmware update tab using the picowota bootloader.
+
+    Workflow:
+      1. Initial Setup — flash the picowota combined bootloader via USB (once)
+      2. Configure WiFi — set SSID/password for the Pico W's connection
+      3. Discover — scan network for picowota devices
+      4. Flash OTA — push firmware wirelessly via TCP
+    """
+
+    # Picowota submodule path (relative to project root)
+    PICOWOTA_DIR = "picowota"
+
+    # Default AP-mode settings
+    DEFAULT_AP_SSID = "dilder-ota"
+    DEFAULT_AP_PASS = "dilderpass"
+    DEFAULT_PORT = 4242
+
+    def __init__(self, parent, app):
+        super().__init__(parent)
+        self.app = app
+        self._wifi_mode = tk.StringVar(value="ap")  # "ap" or "sta"
+        self._ssid = tk.StringVar(value=self.DEFAULT_AP_SSID)
+        self._password = tk.StringVar(value=self.DEFAULT_AP_PASS)
+        self._device_ip = tk.StringVar(value="192.168.4.1")
+        self._sta_subnet = tk.StringVar(value="192.168.1")
+        self._firmware_path = tk.StringVar()
+        self._is_flashing = False
+        self._build_ui()
+
+    def _build_ui(self):
+        self.configure(style="TFrame")
+        # Two-column layout: left = controls, right = status/log
+        main_pw = ttk.PanedWindow(self, orient=tk.HORIZONTAL)
+        main_pw.pack(fill=tk.BOTH, expand=True, padx=4, pady=4)
+
+        # ── Left panel: controls ──
+        left = ttk.Frame(main_pw)
+
+        # --- Section 1: Bootloader Setup ---
+        boot_frame = ttk.LabelFrame(left, text="  1. Bootloader Setup  ",
+                                     padding=8)
+        boot_frame.pack(fill=tk.X, padx=4, pady=(4, 2))
+
+        ttk.Label(boot_frame,
+                  text="Flash the picowota bootloader to the Pico via USB.\n"
+                       "This is a one-time step — hold BOOTSEL and plug in.",
+                  foreground=FG_DIM, wraplength=380,
+                  font=("JetBrains Mono", 8)).pack(anchor=tk.W)
+
+        boot_btns = ttk.Frame(boot_frame)
+        boot_btns.pack(fill=tk.X, pady=(6, 0))
+
+        self._setup_btn = ttk.Button(
+            boot_btns, text="Install picowota Submodule",
+            command=self._install_submodule)
+        self._setup_btn.pack(side=tk.LEFT, padx=(0, 4))
+
+        self._build_bl_btn = ttk.Button(
+            boot_btns, text="Build Bootloader",
+            command=self._build_bootloader)
+        self._build_bl_btn.pack(side=tk.LEFT, padx=(0, 4))
+
+        self._flash_bl_btn = ttk.Button(
+            boot_btns, text="Flash Bootloader (USB)",
+            command=self._flash_bootloader_usb)
+        self._flash_bl_btn.pack(side=tk.LEFT)
+
+        self._boot_status = ttk.Label(boot_frame, text="", foreground=FG_DIM,
+                                       font=("JetBrains Mono", 8))
+        self._boot_status.pack(anchor=tk.W, pady=(4, 0))
+
+        # Check if picowota is already set up
+        self._check_picowota_status()
+
+        # --- Section 2: WiFi Configuration ---
+        wifi_frame = ttk.LabelFrame(left, text="  2. WiFi Configuration  ",
+                                     padding=8)
+        wifi_frame.pack(fill=tk.X, padx=4, pady=2)
+
+        mode_row = ttk.Frame(wifi_frame)
+        mode_row.pack(fill=tk.X)
+        ttk.Radiobutton(mode_row, text="Access Point (Pico creates its own WiFi)",
+                        variable=self._wifi_mode, value="ap",
+                        command=self._on_mode_change).pack(anchor=tk.W)
+        ttk.Radiobutton(mode_row, text="Station (Pico joins your WiFi network)",
+                        variable=self._wifi_mode, value="sta",
+                        command=self._on_mode_change).pack(anchor=tk.W)
+
+        fields = ttk.Frame(wifi_frame)
+        fields.pack(fill=tk.X, pady=(6, 0))
+
+        ttk.Label(fields, text="SSID:", width=10).grid(row=0, column=0,
+                                                         sticky=tk.W)
+        self._ssid_entry = ttk.Entry(fields, textvariable=self._ssid, width=30)
+        self._ssid_entry.grid(row=0, column=1, sticky=tk.EW, padx=(0, 4))
+
+        ttk.Label(fields, text="Password:", width=10).grid(row=1, column=0,
+                                                             sticky=tk.W)
+        self._pass_entry = ttk.Entry(fields, textvariable=self._password,
+                                      width=30, show="*")
+        self._pass_entry.grid(row=1, column=1, sticky=tk.EW, padx=(0, 4))
+
+        self._show_pass_var = tk.BooleanVar(value=False)
+        ttk.Checkbutton(fields, text="Show", variable=self._show_pass_var,
+                        command=self._toggle_pass_visibility).grid(
+            row=1, column=2)
+
+        # STA subnet field (only visible in STA mode)
+        self._subnet_label = ttk.Label(fields, text="Subnet:", width=10)
+        self._subnet_entry = ttk.Entry(fields,
+                                        textvariable=self._sta_subnet, width=30)
+
+        fields.columnconfigure(1, weight=1)
+
+        # --- Section 3: Device Discovery ---
+        disc_frame = ttk.LabelFrame(left, text="  3. Device Discovery  ",
+                                     padding=8)
+        disc_frame.pack(fill=tk.X, padx=4, pady=2)
+
+        disc_row = ttk.Frame(disc_frame)
+        disc_row.pack(fill=tk.X)
+
+        ttk.Label(disc_row, text="IP:", width=4).pack(side=tk.LEFT)
+        self._ip_entry = ttk.Entry(disc_row, textvariable=self._device_ip,
+                                    width=20)
+        self._ip_entry.pack(side=tk.LEFT, padx=(0, 4))
+
+        self._probe_btn = ttk.Button(disc_row, text="Probe",
+                                      command=self._probe_device)
+        self._probe_btn.pack(side=tk.LEFT, padx=(0, 4))
+
+        self._scan_btn = ttk.Button(disc_row, text="Scan Network",
+                                     command=self._scan_network)
+        self._scan_btn.pack(side=tk.LEFT)
+
+        self._disc_status = ttk.Label(disc_frame, text="Not connected",
+                                       foreground=FG_YELLOW,
+                                       font=("JetBrains Mono", 9))
+        self._disc_status.pack(anchor=tk.W, pady=(4, 0))
+
+        # Found devices list
+        self._devices_frame = ttk.Frame(disc_frame)
+        self._devices_frame.pack(fill=tk.X, pady=(4, 0))
+
+        # --- Section 4: OTA Flash ---
+        flash_frame = ttk.LabelFrame(left, text="  4. Flash Firmware (OTA)  ",
+                                      padding=8)
+        flash_frame.pack(fill=tk.X, padx=4, pady=2)
+
+        fw_row = ttk.Frame(flash_frame)
+        fw_row.pack(fill=tk.X)
+
+        ttk.Label(fw_row, text="Firmware:", width=10).pack(side=tk.LEFT)
+        fw_entry = ttk.Entry(fw_row, textvariable=self._firmware_path, width=30)
+        fw_entry.pack(side=tk.LEFT, fill=tk.X, expand=True, padx=(0, 4))
+        ttk.Button(fw_row, text="Browse",
+                   command=self._browse_firmware).pack(side=tk.LEFT)
+
+        # Quick flash buttons for built firmware
+        quick_frame = ttk.Frame(flash_frame)
+        quick_frame.pack(fill=tk.X, pady=(6, 0))
+        ttk.Label(quick_frame, text="Quick Flash:",
+                  foreground=FG_DIM).pack(side=tk.LEFT)
+        self._quick_btns_frame = ttk.Frame(quick_frame)
+        self._quick_btns_frame.pack(side=tk.LEFT, fill=tk.X, padx=(4, 0))
+        self._populate_quick_flash()
+
+        # Flash + Reboot buttons
+        action_row = ttk.Frame(flash_frame)
+        action_row.pack(fill=tk.X, pady=(8, 0))
+
+        self._ota_flash_btn = ttk.Button(
+            action_row, text="Flash OTA",
+            command=self._flash_ota)
+        self._ota_flash_btn.pack(side=tk.LEFT, padx=(0, 4))
+
+        self._reboot_bl_btn = ttk.Button(
+            action_row, text="Reboot to Bootloader",
+            command=self._reboot_to_bootloader)
+        self._reboot_bl_btn.pack(side=tk.LEFT, padx=(0, 4))
+
+        # Progress bar
+        self._progress_var = tk.DoubleVar(value=0)
+        self._progress = ttk.Progressbar(flash_frame,
+                                          variable=self._progress_var,
+                                          maximum=100, length=380)
+        self._progress.pack(fill=tk.X, pady=(6, 0))
+
+        self._flash_status = ttk.Label(flash_frame, text="Ready",
+                                        foreground=FG_DIM,
+                                        font=("JetBrains Mono", 9))
+        self._flash_status.pack(anchor=tk.W, pady=(4, 0))
+
+        main_pw.add(left, weight=3)
+
+        # ── Right panel: guide + status log ──
+        right = ttk.Frame(main_pw)
+
+        guide_frame = ttk.LabelFrame(right, text="  OTA Update Guide  ",
+                                      padding=8)
+        guide_frame.pack(fill=tk.BOTH, expand=True, padx=4, pady=4)
+
+        self._guide_text = tk.Text(
+            guide_frame, wrap=tk.WORD, bg=BG_DARK, fg=FG_TEXT,
+            insertbackground=FG_TEXT, font=("JetBrains Mono", 9),
+            relief=tk.FLAT, borderwidth=0, padx=8, pady=8)
+        guide_scroll = ttk.Scrollbar(guide_frame,
+                                      command=self._guide_text.yview)
+        self._guide_text.configure(yscrollcommand=guide_scroll.set)
+        guide_scroll.pack(side=tk.RIGHT, fill=tk.Y)
+        self._guide_text.pack(fill=tk.BOTH, expand=True)
+
+        self._populate_guide()
+        self._guide_text.configure(state=tk.DISABLED)
+
+        main_pw.add(right, weight=2)
+
+    # ── UI helpers ──
+
+    def _on_mode_change(self):
+        mode = self._wifi_mode.get()
+        if mode == "ap":
+            self._ssid.set(self.DEFAULT_AP_SSID)
+            self._password.set(self.DEFAULT_AP_PASS)
+            self._device_ip.set("192.168.4.1")
+            self._subnet_label.grid_forget()
+            self._subnet_entry.grid_forget()
+        else:
+            self._ssid.set("")
+            self._password.set("")
+            self._device_ip.set("")
+            self._subnet_label.grid(row=2, column=0, sticky=tk.W)
+            self._subnet_entry.grid(row=2, column=1, sticky=tk.EW, padx=(0, 4))
+
+    def _toggle_pass_visibility(self):
+        self._pass_entry.configure(
+            show="" if self._show_pass_var.get() else "*")
+
+    def _check_picowota_status(self):
+        pw_dir = PROJECT_ROOT / self.PICOWOTA_DIR
+        if pw_dir.exists() and (pw_dir / "CMakeLists.txt").exists():
+            self._boot_status.config(
+                text="picowota submodule found",
+                foreground=FG_GREEN)
+            self._setup_btn.config(state=tk.DISABLED)
+        else:
+            self._boot_status.config(
+                text="picowota not installed — click Install",
+                foreground=FG_YELLOW)
+
+    def _populate_quick_flash(self):
+        """Populate quick-flash buttons from available .elf/.uf2 files."""
+        for w in self._quick_btns_frame.winfo_children():
+            w.destroy()
+
+        # Search for built firmware
+        search_dirs = [
+            DEV_SETUP / "hello-world" / "build",
+            DEV_SETUP / "sassy-octopus" / "build",
+            DEV_SETUP / "mood-selector" / "build",
+        ]
+
+        found = []
+        for d in search_dirs:
+            if not d.exists():
+                continue
+            for ext in ("*.elf", "*.uf2"):
+                for f in d.glob(ext):
+                    size_kb = f.stat().st_size // 1024
+                    found.append((f.stem, f, size_kb))
+
+        if not found:
+            ttk.Label(self._quick_btns_frame,
+                      text="No built firmware found (build first)",
+                      foreground=FG_DIM,
+                      font=("JetBrains Mono", 8)).pack(side=tk.LEFT)
+            return
+
+        for name, path, size_kb in found[:6]:
+            btn = ttk.Button(
+                self._quick_btns_frame,
+                text=f"{name} ({size_kb}KB)",
+                command=lambda p=str(path): self._firmware_path.set(p))
+            btn.pack(side=tk.LEFT, padx=(0, 2))
+
+    def _browse_firmware(self):
+        from tkinter import filedialog
+        path = filedialog.askopenfilename(
+            title="Select firmware file",
+            filetypes=[
+                ("ELF files", "*.elf"),
+                ("UF2 files", "*.uf2"),
+                ("Binary files", "*.bin"),
+                ("All files", "*.*"),
+            ],
+            initialdir=str(DEV_SETUP))
+        if path:
+            self._firmware_path.set(path)
+
+    def _populate_guide(self):
+        guide = """OTA UPDATE WORKFLOW
+══════════════════
+
+FIRST-TIME SETUP (once per Pico):
+
+  1. Install picowota submodule
+     Click "Install picowota Submodule" to clone
+     the WiFi bootloader into the project.
+
+  2. Configure WiFi mode
+     • AP mode (default): The Pico creates its own
+       WiFi network. Connect your laptop to it.
+       Default: SSID "dilder-ota", pass "dilderpass"
+       Pico IP: 192.168.4.1
+
+     • STA mode: The Pico joins your existing WiFi.
+       Enter your network SSID and password.
+       Use "Scan Network" to find the Pico's IP.
+
+  3. Build the combined bootloader
+     Click "Build Bootloader" — this compiles the
+     picowota bootloader with your WiFi settings
+     and your current firmware into one .uf2 file.
+
+  4. Flash via USB (one time)
+     Hold BOOTSEL, plug in, click "Flash Bootloader".
+     The combined .uf2 writes both the bootloader
+     and your app. After this, USB is optional.
+
+WIRELESS UPDATES (every time after):
+
+  1. Reboot to bootloader
+     Either: pull GPIO15 low and reset, or click
+     "Reboot to Bootloader" (sends picowota_reboot
+     command via serial if connected).
+
+  2. Connect to Pico's WiFi (AP mode)
+     Or ensure you're on the same network (STA mode).
+
+  3. Probe the device
+     Enter the IP and click "Probe" to verify the
+     bootloader is listening. Or "Scan Network".
+
+  4. Select firmware and Flash OTA
+     Browse to your .elf or .uf2 file and click
+     "Flash OTA". Progress bar shows erase/write.
+     The Pico reboots into the new firmware
+     automatically when done.
+
+BOOTLOADER RE-ENTRY:
+  • GPIO15 low at boot → stays in bootloader
+  • picowota_reboot(true) from firmware code
+  • "Reboot to Bootloader" button (via USB serial)
+
+TROUBLESHOOTING:
+  • Can't connect? Check WiFi mode and credentials.
+  • Probe fails? Pico may not be in bootloader mode.
+  • Flash fails? Try erasing and re-flashing via USB.
+  • Bricked? BOOTSEL + USB always works as fallback.
+"""
+        self._guide_text.insert("1.0", guide)
+
+    # ── Bootloader setup actions ──
+
+    def _install_submodule(self):
+        """Clone picowota as a git submodule."""
+        self.app.log("[ota] Installing picowota submodule...")
+        self._boot_status.config(text="Cloning picowota...", foreground=FG_YELLOW)
+
+        def _run():
+            try:
+                pw_dir = PROJECT_ROOT / self.PICOWOTA_DIR
+                if pw_dir.exists() and (pw_dir / "CMakeLists.txt").exists():
+                    self.after(0, lambda: self.app.log(
+                        "[ota] picowota already installed"))
+                    self.after(0, lambda: self._boot_status.config(
+                        text="picowota already installed", foreground=FG_GREEN))
+                    return
+
+                result = subprocess.run(
+                    ["git", "submodule", "add",
+                     "https://github.com/usedbytes/picowota",
+                     str(self.PICOWOTA_DIR)],
+                    cwd=str(PROJECT_ROOT),
+                    capture_output=True, text=True, timeout=120)
+
+                if result.returncode != 0:
+                    # May already be in .gitmodules but not initialized
+                    pass
+
+                result = subprocess.run(
+                    ["git", "submodule", "update", "--init", "--recursive",
+                     str(self.PICOWOTA_DIR)],
+                    cwd=str(PROJECT_ROOT),
+                    capture_output=True, text=True, timeout=120)
+
+                if result.returncode == 0:
+                    self.after(0, lambda: self.app.log(
+                        "[ota] picowota submodule installed successfully"))
+                    self.after(0, lambda: self._boot_status.config(
+                        text="picowota installed", foreground=FG_GREEN))
+                    self.after(0, lambda: self._setup_btn.config(
+                        state=tk.DISABLED))
+                else:
+                    err = result.stderr.strip()
+                    self.after(0, lambda: self.app.log(
+                        f"[ota] Submodule error: {err}"))
+                    self.after(0, lambda: self._boot_status.config(
+                        text=f"Error: {err[:60]}", foreground=FG_RED))
+            except Exception as e:
+                self.after(0, lambda: self.app.log(f"[ota] Error: {e}"))
+                self.after(0, lambda: self._boot_status.config(
+                    text=f"Error: {e}", foreground=FG_RED))
+
+        threading.Thread(target=_run, daemon=True).start()
+
+    def _build_bootloader(self):
+        """Build picowota combined bootloader with WiFi config."""
+        ssid = self._ssid.get().strip()
+        password = self._password.get().strip()
+        mode = self._wifi_mode.get()
+
+        if not ssid:
+            messagebox.showwarning("WiFi Config", "Enter a WiFi SSID first.")
+            return
+
+        self.app.log(f"[ota] Building bootloader: mode={mode}, ssid={ssid}")
+        self._boot_status.config(text="Building bootloader...",
+                                  foreground=FG_YELLOW)
+        self._build_bl_btn.config(state=tk.DISABLED)
+
+        def _run():
+            try:
+                pw_dir = PROJECT_ROOT / self.PICOWOTA_DIR
+                build_dir = pw_dir / "build"
+                build_dir.mkdir(exist_ok=True)
+
+                # Determine board
+                board = self.app.target_board
+                pico_board = "pico2_w" if board == BOARD_PICO2_W else "pico_w"
+
+                # Find Pico SDK
+                sdk_path = os.environ.get("PICO_SDK_PATH", "")
+                if not sdk_path:
+                    # Try common locations
+                    for candidate in [
+                        Path.home() / "pico-sdk",
+                        Path("/opt/pico-sdk"),
+                        PROJECT_ROOT / "pico-sdk",
+                    ]:
+                        if (candidate / "pico_sdk_init.cmake").exists():
+                            sdk_path = str(candidate)
+                            break
+
+                if not sdk_path:
+                    self.after(0, lambda: self.app.log(
+                        "[ota] ERROR: PICO_SDK_PATH not set and SDK not found"))
+                    self.after(0, lambda: self._boot_status.config(
+                        text="Error: Pico SDK not found", foreground=FG_RED))
+                    return
+
+                env = os.environ.copy()
+                env["PICO_SDK_PATH"] = sdk_path
+                env["PICOWOTA_WIFI_SSID"] = ssid
+                env["PICOWOTA_WIFI_PASS"] = password
+                env["PICOWOTA_WIFI_AP"] = "1" if mode == "ap" else "0"
+
+                # CMake configure
+                self.after(0, lambda: self._boot_status.config(
+                    text="CMake configure...", foreground=FG_YELLOW))
+
+                result = subprocess.run(
+                    ["cmake", "-G", "Ninja",
+                     f"-DPICO_BOARD={pico_board}",
+                     f"-DPICO_SDK_PATH={sdk_path}",
+                     ".."],
+                    cwd=str(build_dir), env=env,
+                    capture_output=True, text=True, timeout=120)
+
+                if result.returncode != 0:
+                    err = result.stderr.strip()[-200:]
+                    self.after(0, lambda: self.app.log(
+                        f"[ota] CMake failed: {err}"))
+                    self.after(0, lambda: self._boot_status.config(
+                        text="CMake failed — check log", foreground=FG_RED))
+                    return
+
+                # Ninja build
+                self.after(0, lambda: self._boot_status.config(
+                    text="Building (ninja)...", foreground=FG_YELLOW))
+
+                result = subprocess.run(
+                    ["ninja"],
+                    cwd=str(build_dir), env=env,
+                    capture_output=True, text=True, timeout=300)
+
+                if result.returncode != 0:
+                    err = result.stderr.strip()[-200:]
+                    self.after(0, lambda: self.app.log(
+                        f"[ota] Build failed: {err}"))
+                    self.after(0, lambda: self._boot_status.config(
+                        text="Build failed — check log", foreground=FG_RED))
+                    return
+
+                # Find the combined .uf2
+                uf2_files = list(build_dir.glob("picowota*.uf2"))
+                if uf2_files:
+                    uf2 = uf2_files[0]
+                    size_kb = uf2.stat().st_size // 1024
+                    self.after(0, lambda: self.app.log(
+                        f"[ota] Bootloader built: {uf2.name} ({size_kb}KB)"))
+                    self.after(0, lambda: self._boot_status.config(
+                        text=f"Built: {uf2.name} ({size_kb}KB)",
+                        foreground=FG_GREEN))
+                else:
+                    self.after(0, lambda: self.app.log(
+                        "[ota] Build completed but no .uf2 found"))
+                    self.after(0, lambda: self._boot_status.config(
+                        text="Built but no .uf2 found", foreground=FG_YELLOW))
+
+            except subprocess.TimeoutExpired:
+                self.after(0, lambda: self.app.log("[ota] Build timed out"))
+                self.after(0, lambda: self._boot_status.config(
+                    text="Build timed out", foreground=FG_RED))
+            except Exception as e:
+                self.after(0, lambda: self.app.log(f"[ota] Error: {e}"))
+                self.after(0, lambda: self._boot_status.config(
+                    text=f"Error: {e}", foreground=FG_RED))
+            finally:
+                self.after(0, lambda: self._build_bl_btn.config(
+                    state=tk.NORMAL))
+
+        threading.Thread(target=_run, daemon=True).start()
+
+    def _flash_bootloader_usb(self):
+        """Flash the combined bootloader via USB BOOTSEL."""
+        pw_dir = PROJECT_ROOT / self.PICOWOTA_DIR / "build"
+        uf2_files = list(pw_dir.glob("picowota*.uf2")) if pw_dir.exists() else []
+
+        if not uf2_files:
+            messagebox.showwarning(
+                "No Bootloader",
+                "Build the bootloader first (step 3).")
+            return
+
+        uf2_path = uf2_files[0]
+
+        # Find BOOTSEL mount
+        mount = find_rpi_rp2_mount(self.app.target_board)
+        if not mount:
+            board = self.app.target_board
+            drive = "RP2350" if board == BOARD_PICO2_W else "RPI-RP2"
+            messagebox.showwarning(
+                "No BOOTSEL Drive",
+                f"Hold BOOTSEL, plug in the Pico, then try again.\n"
+                f"Looking for: {drive}")
+            return
+
+        self.app.log(f"[ota] Flashing bootloader {uf2_path.name} to {mount}")
+        self._boot_status.config(text="Flashing...", foreground=FG_YELLOW)
+
+        def _run():
+            try:
+                shutil.copy2(str(uf2_path), str(Path(mount) / uf2_path.name))
+                self.after(0, lambda: self.app.log(
+                    "[ota] Bootloader flashed! Pico will reboot."))
+                self.after(0, lambda: self._boot_status.config(
+                    text="Bootloader flashed — Pico rebooting",
+                    foreground=FG_GREEN))
+                self.after(0, lambda: messagebox.showinfo(
+                    "Success",
+                    "Bootloader flashed!\n\n"
+                    "The Pico will reboot into the bootloader.\n"
+                    "Connect to its WiFi network to proceed."))
+            except Exception as e:
+                self.after(0, lambda: self.app.log(
+                    f"[ota] Flash error: {e}"))
+                self.after(0, lambda: self._boot_status.config(
+                    text=f"Flash error: {e}", foreground=FG_RED))
+
+        threading.Thread(target=_run, daemon=True).start()
+
+    # ── Device discovery ──
+
+    def _probe_device(self):
+        """Probe a single IP for picowota bootloader."""
+        ip = self._device_ip.get().strip()
+        if not ip:
+            messagebox.showwarning("Probe", "Enter an IP address first.")
+            return
+
+        self.app.log(f"[ota] Probing {ip}:{self.DEFAULT_PORT}...")
+        self._disc_status.config(text=f"Probing {ip}...", foreground=FG_YELLOW)
+        self._probe_btn.config(state=tk.DISABLED)
+
+        def _run():
+            try:
+                # Import our client module
+                sys.path.insert(0, str(Path(__file__).parent))
+                from picowota_client import probe_picowota
+
+                result = probe_picowota(ip, self.DEFAULT_PORT)
+                if result:
+                    self.after(0, lambda: self._disc_status.config(
+                        text=f"Connected: {ip} ({result} bootloader)",
+                        foreground=FG_GREEN))
+                    self.after(0, lambda: self.app.log(
+                        f"[ota] Found {result} bootloader at {ip}"))
+                else:
+                    self.after(0, lambda: self._disc_status.config(
+                        text=f"No bootloader at {ip}",
+                        foreground=FG_RED))
+                    self.after(0, lambda: self.app.log(
+                        f"[ota] No bootloader at {ip}"))
+            except Exception as e:
+                self.after(0, lambda: self._disc_status.config(
+                    text=f"Error: {e}", foreground=FG_RED))
+            finally:
+                self.after(0, lambda: self._probe_btn.config(
+                    state=tk.NORMAL))
+
+        threading.Thread(target=_run, daemon=True).start()
+
+    def _scan_network(self):
+        """Scan subnet for picowota devices."""
+        mode = self._wifi_mode.get()
+        subnet = "192.168.4" if mode == "ap" else self._sta_subnet.get().strip()
+
+        if not subnet:
+            messagebox.showwarning("Scan", "Enter a subnet first.")
+            return
+
+        self.app.log(f"[ota] Scanning {subnet}.0/24 for picowota devices...")
+        self._disc_status.config(text=f"Scanning {subnet}.0/24...",
+                                  foreground=FG_YELLOW)
+        self._scan_btn.config(state=tk.DISABLED)
+
+        # Clear old device buttons
+        for w in self._devices_frame.winfo_children():
+            w.destroy()
+
+        def _run():
+            try:
+                sys.path.insert(0, str(Path(__file__).parent))
+                from picowota_client import scan_for_picowota
+
+                devices = scan_for_picowota(timeout=2.0, subnet=subnet)
+
+                def _update():
+                    for w in self._devices_frame.winfo_children():
+                        w.destroy()
+
+                    if devices:
+                        for ip, ms in devices:
+                            btn = ttk.Button(
+                                self._devices_frame,
+                                text=f"{ip} ({ms:.0f}ms)",
+                                command=lambda i=ip: self._device_ip.set(i))
+                            btn.pack(side=tk.LEFT, padx=(0, 4))
+                        self._disc_status.config(
+                            text=f"Found {len(devices)} device(s)",
+                            foreground=FG_GREEN)
+                        # Auto-select first
+                        self._device_ip.set(devices[0][0])
+                        self.app.log(
+                            f"[ota] Found {len(devices)} device(s): "
+                            + ", ".join(f"{ip}" for ip, _ in devices))
+                    else:
+                        self._disc_status.config(
+                            text="No devices found",
+                            foreground=FG_RED)
+                        self.app.log("[ota] No picowota devices found")
+
+                self.after(0, _update)
+            except Exception as e:
+                self.after(0, lambda: self._disc_status.config(
+                    text=f"Scan error: {e}", foreground=FG_RED))
+            finally:
+                self.after(0, lambda: self._scan_btn.config(
+                    state=tk.NORMAL))
+
+        threading.Thread(target=_run, daemon=True).start()
+
+    # ── OTA flash ──
+
+    def _flash_ota(self):
+        """Flash firmware wirelessly via picowota TCP protocol."""
+        fw_path = self._firmware_path.get().strip()
+        if not fw_path or not Path(fw_path).exists():
+            messagebox.showwarning("Firmware",
+                                   "Select a firmware file first.")
+            return
+
+        ip = self._device_ip.get().strip()
+        if not ip:
+            messagebox.showwarning("Device",
+                                   "Enter or discover a device IP first.")
+            return
+
+        if self._is_flashing:
+            return
+        self._is_flashing = True
+        self._ota_flash_btn.config(state=tk.DISABLED)
+        self._progress_var.set(0)
+
+        self.app.log(f"[ota] Flashing {Path(fw_path).name} to {ip} over WiFi...")
+        self._flash_status.config(text="Connecting...", foreground=FG_YELLOW)
+
+        def _run():
+            try:
+                sys.path.insert(0, str(Path(__file__).parent))
+                from picowota_client import (PicowotaClient, load_elf,
+                                              load_uf2, load_bin,
+                                              PicowotaError)
+
+                # Load firmware
+                ext = Path(fw_path).suffix.lower()
+                if ext == ".elf":
+                    image = load_elf(fw_path)
+                elif ext == ".uf2":
+                    image = load_uf2(fw_path)
+                else:
+                    image = load_bin(fw_path)
+
+                size_kb = len(image.data) / 1024
+                self.after(0, lambda: self.app.log(
+                    f"[ota] Image: {size_kb:.1f}KB at 0x{image.addr:08X}"))
+
+                # Progress tracking
+                stage_weights = {
+                    "Syncing": 2, "Querying device": 2,
+                    "Erasing": 30, "Writing": 60,
+                    "Sealing": 3, "Launching": 2, "Done": 1,
+                }
+                total_weight = sum(stage_weights.values())
+                base_pct = {}
+                cumulative = 0
+                for stage, weight in stage_weights.items():
+                    base_pct[stage] = cumulative
+                    cumulative += weight
+
+                def on_progress(stage, current, total):
+                    if total > 0:
+                        stage_pct = (current / total) * stage_weights.get(
+                            stage, 1)
+                        pct = ((base_pct.get(stage, 0) + stage_pct)
+                               / total_weight * 100)
+                    else:
+                        pct = base_pct.get(stage, 0) / total_weight * 100
+
+                    self.after(0, lambda p=pct, s=stage:
+                               (self._progress_var.set(p),
+                                self._flash_status.config(
+                                    text=f"{s}...",
+                                    foreground=FG_YELLOW)))
+
+                # Connect and program
+                client = PicowotaClient(ip, self.DEFAULT_PORT)
+                client.connect()
+                client.program(image, progress_cb=on_progress)
+                client.close()
+
+                self.after(0, lambda: self._progress_var.set(100))
+                self.after(0, lambda: self._flash_status.config(
+                    text=f"Done! {size_kb:.1f}KB flashed to {ip}",
+                    foreground=FG_GREEN))
+                self.after(0, lambda: self.app.log(
+                    f"[ota] Success: {size_kb:.1f}KB flashed to {ip}"))
+                self.after(0, lambda: messagebox.showinfo(
+                    "OTA Flash Complete",
+                    f"Firmware flashed successfully!\n"
+                    f"{size_kb:.1f}KB sent to {ip}\n"
+                    f"The Pico has rebooted into the new firmware."))
+
+            except PicowotaError as e:
+                self.after(0, lambda: self._flash_status.config(
+                    text=f"Flash error: {e}", foreground=FG_RED))
+                self.after(0, lambda: self.app.log(
+                    f"[ota] Flash error: {e}"))
+            except (ConnectionRefusedError, OSError) as e:
+                self.after(0, lambda: self._flash_status.config(
+                    text=f"Connection failed: {e}", foreground=FG_RED))
+                self.after(0, lambda: self.app.log(
+                    f"[ota] Connection failed: {e}"))
+            except Exception as e:
+                self.after(0, lambda: self._flash_status.config(
+                    text=f"Error: {e}", foreground=FG_RED))
+                self.after(0, lambda: self.app.log(
+                    f"[ota] Error: {e}"))
+            finally:
+                self._is_flashing = False
+                self.after(0, lambda: self._ota_flash_btn.config(
+                    state=tk.NORMAL))
+
+        threading.Thread(target=_run, daemon=True).start()
+
+    def _reboot_to_bootloader(self):
+        """Send reboot-to-bootloader command via USB serial."""
+        board = self.app.target_board
+        if board not in PICO_BOARDS:
+            messagebox.showinfo("OTA", "OTA updates are for Pico W / Pico 2 W only.")
+            return
+
+        port = find_serial_for_board(board)
+        if not port:
+            messagebox.showwarning(
+                "No Serial",
+                "No Pico detected on USB serial.\n\n"
+                "Alternative: pull GPIO15 low and reset the Pico\n"
+                "to enter bootloader mode.")
+            return
+
+        self.app.log(f"[ota] Sending reboot-to-bootloader via {port}")
+
+        def _run():
+            try:
+                import serial as pyserial
+                ser = pyserial.Serial(port, DEFAULT_BAUD, timeout=2)
+                # Send the picowota reboot magic command
+                # The firmware must include picowota_reboot support
+                ser.write(b"REBOOT_OTA\n")
+                ser.flush()
+                time.sleep(0.5)
+                ser.close()
+                self.after(0, lambda: self.app.log(
+                    "[ota] Reboot command sent. Pico entering bootloader..."))
+                self.after(0, lambda: self._disc_status.config(
+                    text="Pico rebooting to bootloader...",
+                    foreground=FG_YELLOW))
+                # Wait a moment then probe
+                time.sleep(3)
+                self.after(0, self._probe_device)
+            except Exception as e:
+                self.after(0, lambda: self.app.log(
+                    f"[ota] Reboot error: {e}"))
+                self.after(0, lambda: messagebox.showwarning(
+                    "Reboot Failed",
+                    f"Could not send reboot command: {e}\n\n"
+                    "Try pulling GPIO15 low and resetting the Pico."))
+
+        threading.Thread(target=_run, daemon=True).start()
+
+    def refresh_for_board(self, board):
+        """Update UI when target board changes."""
+        if board not in PICO_BOARDS:
+            self._flash_status.config(
+                text="OTA updates are for Pico W / Pico 2 W only",
+                foreground=FG_DIM)
+        else:
+            self._flash_status.config(text="Ready", foreground=FG_DIM)
+        self._populate_quick_flash()
+
+
+# ─────────────────────────────────────────────────────────────────────────────
 # Dilder Game Emulator Tab
 # ─────────────────────────────────────────────────────────────────────────────
 
@@ -7093,7 +7952,11 @@ class DilderDevTool(tk.Tk):
         self.conn_tab = ConnectionUtility(self.notebook, self)
         self.notebook.add(self.conn_tab, text="  Connect  ")
 
-        # Tab 8: Documentation
+        # Tab 8: OTA Update
+        self.ota_tab = OTAUpdateTab(self.notebook, self)
+        self.notebook.add(self.ota_tab, text="  OTA Update  ")
+
+        # Tab 9: Documentation
         self.docs_tab = DocumentationTab(self.notebook, self)
         self.notebook.add(self.docs_tab, text="  Docs  ")
 
@@ -7238,6 +8101,10 @@ class DilderDevTool(tk.Tk):
         # Refresh connect tab
         if hasattr(self, "conn_tab"):
             self.conn_tab.refresh_for_board(board_key)
+
+        # Refresh OTA tab
+        if hasattr(self, "ota_tab"):
+            self.ota_tab.refresh_for_board(board_key)
 
         # Refresh documentation tab
         if hasattr(self, "docs_tab"):

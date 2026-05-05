@@ -141,6 +141,7 @@ nav:
       - Software:
           - Project Structure: docs/software/project-structure.md
           - Firmware Game Engine: docs/software/firmware-engine.md
+          - Joystick Mood Selector Guide: docs/software/joystick-mood-selector-guide.md
           - ESP32-S3 Firmware: docs/software/esp32-firmware.md
           - Emotion States: docs/software/emotion-states.md
       - Tools:
