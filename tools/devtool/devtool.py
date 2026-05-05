@@ -6629,39 +6629,76 @@ class OTAUpdateTab(ttk.Frame):
         # --- Section 4: OTA Flash ---
         flash_frame = ttk.LabelFrame(left, text="  4. Flash Firmware (OTA)  ",
                                       padding=8)
-        flash_frame.pack(fill=tk.X, padx=4, pady=2)
+        flash_frame.pack(fill=tk.BOTH, expand=True, padx=4, pady=2)
 
+        # Firmware selector — Treeview listing all available programs
+        tree_frame = ttk.Frame(flash_frame)
+        tree_frame.pack(fill=tk.BOTH, expand=True)
+
+        tree_scroll = ttk.Scrollbar(tree_frame)
+        tree_scroll.pack(side=tk.RIGHT, fill=tk.Y)
+
+        self._fw_tree = ttk.Treeview(
+            tree_frame, columns=("status", "size"),
+            show="tree headings", height=10,
+            yscrollcommand=tree_scroll.set,
+            selectmode="browse")
+        tree_scroll.config(command=self._fw_tree.yview)
+        self._fw_tree.heading("#0", text="Firmware", anchor=tk.W)
+        self._fw_tree.heading("status", text="Status", anchor=tk.W)
+        self._fw_tree.heading("size", text="Size", anchor=tk.W)
+        self._fw_tree.column("#0", width=200, minwidth=150)
+        self._fw_tree.column("status", width=100, minwidth=80)
+        self._fw_tree.column("size", width=70, minwidth=50)
+        self._fw_tree.pack(fill=tk.BOTH, expand=True)
+
+        self._populate_firmware_tree()
+
+        # Display variant selector
+        variant_row = ttk.Frame(flash_frame)
+        variant_row.pack(fill=tk.X, pady=(4, 0))
+        ttk.Label(variant_row, text="Display:", width=8).pack(side=tk.LEFT)
+        self._display_variant = tk.StringVar(value="V4")
+        self._variant_combo = ttk.Combobox(
+            variant_row, textvariable=self._display_variant,
+            values=["V2 — 2.13\" V2 (SSD1675B)",
+                    "V3 — 2.13\" V3 (SSD1680)",
+                    "V3a — 2.13\" V3a (SSD1680, rev A)",
+                    "V4 — 2.13\" V4 (SSD1680, internal LUT)"],
+            state="readonly", width=36)
+        self._variant_combo.set("V4 — 2.13\" V4 (SSD1680, internal LUT)")
+        self._variant_combo.pack(side=tk.LEFT, padx=(0, 4))
+
+        # Custom firmware path
         fw_row = ttk.Frame(flash_frame)
-        fw_row.pack(fill=tk.X)
-
-        ttk.Label(fw_row, text="Firmware:", width=10).pack(side=tk.LEFT)
+        fw_row.pack(fill=tk.X, pady=(4, 0))
+        ttk.Label(fw_row, text="Custom:", width=8).pack(side=tk.LEFT)
         fw_entry = ttk.Entry(fw_row, textvariable=self._firmware_path, width=30)
         fw_entry.pack(side=tk.LEFT, fill=tk.X, expand=True, padx=(0, 4))
         ttk.Button(fw_row, text="Browse",
                    command=self._browse_firmware).pack(side=tk.LEFT)
 
-        # Quick flash buttons for built firmware
-        quick_frame = ttk.Frame(flash_frame)
-        quick_frame.pack(fill=tk.X, pady=(6, 0))
-        ttk.Label(quick_frame, text="Quick Flash:",
-                  foreground=FG_DIM).pack(side=tk.LEFT)
-        self._quick_btns_frame = ttk.Frame(quick_frame)
-        self._quick_btns_frame.pack(side=tk.LEFT, fill=tk.X, padx=(4, 0))
-        self._populate_quick_flash()
-
-        # Flash + Reboot buttons
+        # Action buttons
         action_row = ttk.Frame(flash_frame)
         action_row.pack(fill=tk.X, pady=(8, 0))
 
         self._ota_flash_btn = ttk.Button(
-            action_row, text="Flash OTA",
+            action_row, text="Flash OTA (existing build)",
             command=self._flash_ota)
         self._ota_flash_btn.pack(side=tk.LEFT, padx=(0, 4))
+
+        self._build_flash_btn = ttk.Button(
+            action_row, text="Clean Build & Flash OTA",
+            command=self._clean_build_and_flash_ota)
+        self._build_flash_btn.pack(side=tk.LEFT, padx=(0, 4))
 
         self._reboot_bl_btn = ttk.Button(
             action_row, text="Reboot to Bootloader",
             command=self._reboot_to_bootloader)
         self._reboot_bl_btn.pack(side=tk.LEFT, padx=(0, 4))
+
+        ttk.Button(action_row, text="Refresh List",
+                   command=self._populate_firmware_tree).pack(side=tk.RIGHT)
 
         # Progress bar
         self._progress_var = tk.DoubleVar(value=0)
@@ -6732,40 +6769,132 @@ class OTAUpdateTab(ttk.Frame):
                 text="picowota not installed — click Install",
                 foreground=FG_YELLOW)
 
-    def _populate_quick_flash(self):
-        """Populate quick-flash buttons from available .elf/.uf2 files."""
-        for w in self._quick_btns_frame.winfo_children():
-            w.destroy()
+    # Firmware directory mapping (matches ProgramsTab._FIRMWARE_DIRS)
+    _FIRMWARE_DIRS = {
+        "hello_world":            "hello-world",
+        "hello_world_serial":     "hello-world-serial",
+        "img_receiver":           "img-receiver",
+        "sassy_octopus":          "sassy-octopus",
+        "supportive_octopus":     "supportive-octopus",
+        "angry_octopus":          "angry-octopus",
+        "conspiratorial_octopus": "conspiratorial-octopus",
+        "sad_octopus":            "sad-octopus",
+        "chaotic_octopus":        "chaotic-octopus",
+        "hungry_octopus":         "hungry-octopus",
+        "tired_octopus":          "tired-octopus",
+        "slaphappy_octopus":      "slaphappy-octopus",
+        "lazy_octopus":           "lazy-octopus",
+        "fat_octopus":            "fat-octopus",
+        "chill_octopus":          "chill-octopus",
+        "creepy_octopus":         "creepy-octopus",
+        "excited_octopus":        "excited-octopus",
+        "nostalgic_octopus":      "nostalgic-octopus",
+        "homesick_octopus":       "homesick-octopus",
+        "mood_selector":          "mood-selector",
+        "joystick_mood_selector": "joystick-mood-selector",
+    }
 
-        # Search for built firmware
-        search_dirs = [
-            DEV_SETUP / "hello-world" / "build",
-            DEV_SETUP / "sassy-octopus" / "build",
-            DEV_SETUP / "mood-selector" / "build",
-        ]
+    _FIRMWARE_TREE = [
+        ("Tools", [
+            ("hello_world",        "Hello World"),
+            ("hello_world_serial", "Hello World Serial"),
+            ("img_receiver",       "Image Receiver"),
+        ]),
+        ("Classic", [
+            ("sassy_octopus",      "Sassy Octopus"),
+            ("supportive_octopus", "Supportive Octopus"),
+        ]),
+        ("Intense", [
+            ("angry_octopus",          "Angry Octopus"),
+            ("chaotic_octopus",        "Chaotic Octopus"),
+            ("conspiratorial_octopus", "Conspiratorial Octopus"),
+        ]),
+        ("Melancholy", [
+            ("sad_octopus",       "Sad Octopus"),
+            ("tired_octopus",     "Tired Octopus"),
+            ("nostalgic_octopus", "Nostalgic Octopus"),
+            ("homesick_octopus",  "Homesick Octopus"),
+        ]),
+        ("Playful", [
+            ("slaphappy_octopus", "Slap Happy Octopus"),
+            ("excited_octopus",   "Excited Octopus"),
+            ("creepy_octopus",    "Creepy Octopus"),
+        ]),
+        ("Relaxed", [
+            ("chill_octopus",   "Chill Octopus"),
+            ("lazy_octopus",    "Lazy Octopus"),
+            ("fat_octopus",     "Fat Octopus"),
+            ("hungry_octopus",  "Hungry Octopus"),
+        ]),
+        ("Interactive", [
+            ("mood_selector",          "Mood Selector"),
+            ("joystick_mood_selector", "Joystick Mood Selector"),
+        ]),
+    ]
 
-        found = []
-        for d in search_dirs:
-            if not d.exists():
-                continue
-            for ext in ("*.elf", "*.uf2"):
-                for f in d.glob(ext):
-                    size_kb = f.stat().st_size // 1024
-                    found.append((f.stem, f, size_kb))
+    def _populate_firmware_tree(self):
+        """Populate the firmware Treeview with all programs and their build status."""
+        self._fw_tree.delete(*self._fw_tree.get_children())
 
-        if not found:
-            ttk.Label(self._quick_btns_frame,
-                      text="No built firmware found (build first)",
-                      foreground=FG_DIM,
-                      font=("JetBrains Mono", 8)).pack(side=tk.LEFT)
-            return
+        for group_name, items in self._FIRMWARE_TREE:
+            group_id = self._fw_tree.insert(
+                "", tk.END, text=group_name, open=True,
+                values=("", ""))
 
-        for name, path, size_kb in found[:6]:
-            btn = ttk.Button(
-                self._quick_btns_frame,
-                text=f"{name} ({size_kb}KB)",
-                command=lambda p=str(path): self._firmware_path.set(p))
-            btn.pack(side=tk.LEFT, padx=(0, 2))
+            for key, display_name in items:
+                fw_dir = self._FIRMWARE_DIRS.get(key, "")
+                fw_name = fw_dir.replace("-", "_")
+
+                # Check for existing .elf and .uf2
+                build_dir = DEV_SETUP / fw_dir / "build"
+                elf_path = build_dir / f"{fw_name}.elf"
+                uf2_path = build_dir / f"{fw_name}.uf2"
+
+                if elf_path.exists():
+                    size_kb = elf_path.stat().st_size // 1024
+                    status = "Built"
+                    size_str = f"{size_kb}KB"
+                elif uf2_path.exists():
+                    size_kb = uf2_path.stat().st_size // 1024
+                    status = "Built"
+                    size_str = f"{size_kb}KB"
+                else:
+                    status = "Not built"
+                    size_str = "—"
+
+                self._fw_tree.insert(
+                    group_id, tk.END, iid=key, text=f"  {display_name}",
+                    values=(status, size_str))
+
+    def _get_selected_firmware(self):
+        """Get the selected firmware key and its .elf path (if built).
+        Returns (key, elf_path_or_none, fw_dir, fw_name)."""
+        sel = self._fw_tree.selection()
+        if not sel:
+            return None, None, None, None
+
+        key = sel[0]
+        if key not in self._FIRMWARE_DIRS:
+            return None, None, None, None
+
+        fw_dir = self._FIRMWARE_DIRS[key]
+        fw_name = fw_dir.replace("-", "_")
+        build_dir = DEV_SETUP / fw_dir / "build"
+
+        # Prefer .elf for OTA (picowota needs ELF), fall back to .uf2
+        elf_path = build_dir / f"{fw_name}.elf"
+        uf2_path = build_dir / f"{fw_name}.uf2"
+
+        if elf_path.exists():
+            return key, str(elf_path), fw_dir, fw_name
+        elif uf2_path.exists():
+            return key, str(uf2_path), fw_dir, fw_name
+        return key, None, fw_dir, fw_name
+
+    def _get_variant_key(self):
+        """Extract the short variant key (V2, V3, V3a, V4) from the combo."""
+        val = self._display_variant.get()
+        return val.split(" ")[0] if val else "V4"
 
     def _browse_firmware(self):
         from tkinter import filedialog
@@ -7167,12 +7296,185 @@ TROUBLESHOOTING:
 
     # ── OTA flash ──
 
+    def _clean_build_and_flash_ota(self):
+        """Clean build the selected firmware via Docker, then flash OTA."""
+        key, _, fw_dir, fw_name = self._get_selected_firmware()
+        if not key:
+            messagebox.showwarning("Select Firmware",
+                                   "Select a firmware from the list first.")
+            return
+
+        ip = self._device_ip.get().strip()
+        if not ip:
+            messagebox.showwarning("Device",
+                                   "Enter or discover a device IP first.")
+            return
+
+        if self._is_flashing:
+            return
+        self._is_flashing = True
+        self._build_flash_btn.config(state=tk.DISABLED)
+        self._ota_flash_btn.config(state=tk.DISABLED)
+        self._progress_var.set(0)
+
+        variant = self._get_variant_key()
+        self.app.log(f"[ota] Clean build + OTA flash: {fw_name} ({variant}) → {ip}")
+        self._flash_status.config(text="Starting clean build...",
+                                   foreground=FG_YELLOW)
+
+        def _run():
+            try:
+                # Step 1: Nuke existing build dir
+                build_dir = DEV_SETUP / fw_dir / "build"
+                if build_dir.exists():
+                    shutil.rmtree(str(build_dir))
+                    self.after(0, lambda: self.app.log(
+                        f"[ota] Cleaned {build_dir}"))
+
+                # Step 2: Check Docker
+                self.after(0, lambda: self._flash_status.config(
+                    text="Checking Docker...", foreground=FG_YELLOW))
+                self.after(0, lambda: self._progress_var.set(5))
+
+                docker_check = subprocess.run(
+                    ["docker", "info"], capture_output=True, timeout=10)
+                if docker_check.returncode != 0:
+                    self.after(0, lambda: self._flash_status.config(
+                        text="Docker not running. Start Docker first.",
+                        foreground=FG_RED))
+                    return
+
+                # Step 3: Generate quotes.h if this is an octopus program
+                # (tool programs don't need it)
+                if hasattr(self.app, "programs_tab"):
+                    programs_tab = self.app.programs_tab
+                    if key in getattr(programs_tab, "_OCTOPUS_CONFIGS", {}):
+                        self.after(0, lambda: self._flash_status.config(
+                            text="Generating quotes.h...",
+                            foreground=FG_YELLOW))
+                        self.after(0, lambda: self._progress_var.set(8))
+                        programs_tab._generate_quotes_header(key)
+
+                # Step 4: Build Docker image
+                self.after(0, lambda: self._flash_status.config(
+                    text="Building Docker image...", foreground=FG_YELLOW))
+                self.after(0, lambda: self._progress_var.set(10))
+
+                docker_svc = f"build-{fw_dir}"
+
+                img_proc = subprocess.Popen(
+                    ["docker", "compose", "build", "--progress=plain",
+                     docker_svc],
+                    cwd=str(DEV_SETUP),
+                    stdout=subprocess.PIPE, stderr=subprocess.STDOUT,
+                    text=True)
+                for line in img_proc.stdout:
+                    line = line.rstrip()
+                    if line:
+                        self.after(0, lambda l=line: self.app.log(
+                            f"[docker] {l}"))
+                img_proc.wait(timeout=600)
+
+                if img_proc.returncode != 0:
+                    self.after(0, lambda: self._flash_status.config(
+                        text="Docker image build failed.", foreground=FG_RED))
+                    return
+
+                # Step 5: Compile firmware
+                pico_board = ("pico2_w" if self.app.target_board == BOARD_PICO2_W
+                              else "pico_w")
+                self.after(0, lambda: self._flash_status.config(
+                    text=f"Compiling {fw_name} ({pico_board}, {variant})...",
+                    foreground=FG_YELLOW))
+                self.after(0, lambda: self._progress_var.set(25))
+
+                proc = subprocess.Popen(
+                    ["docker", "compose", "run", "--rm",
+                     "-e", f"DISPLAY_VARIANT={variant}",
+                     "-e", f"PICO_BOARD={pico_board}",
+                     docker_svc],
+                    cwd=str(DEV_SETUP),
+                    stdout=subprocess.PIPE, stderr=subprocess.STDOUT,
+                    text=True)
+
+                for line in proc.stdout:
+                    line = line.rstrip()
+                    if line:
+                        self.after(0, lambda l=line: self.app.log(
+                            f"[build] {l}"))
+                        self.after(0, lambda l=line:
+                                   self._flash_status.config(
+                                       text=f"Compiling...\n{l[:50]}"))
+
+                proc.wait(timeout=300)
+
+                if proc.returncode != 0:
+                    self.after(0, lambda: self._flash_status.config(
+                        text="Build failed — check log.", foreground=FG_RED))
+                    return
+
+                # Step 6: Verify output
+                elf_path = DEV_SETUP / fw_dir / "build" / f"{fw_name}.elf"
+                uf2_path = DEV_SETUP / fw_dir / "build" / f"{fw_name}.uf2"
+
+                if elf_path.exists():
+                    flash_path = str(elf_path)
+                    size_kb = elf_path.stat().st_size // 1024
+                elif uf2_path.exists():
+                    flash_path = str(uf2_path)
+                    size_kb = uf2_path.stat().st_size // 1024
+                else:
+                    self.after(0, lambda: self._flash_status.config(
+                        text="Build OK but no .elf/.uf2 found.",
+                        foreground=FG_RED))
+                    return
+
+                self.after(0, lambda: self.app.log(
+                    f"[ota] Build complete: {size_kb}KB. Flashing OTA..."))
+                self.after(0, lambda: self._flash_status.config(
+                    text=f"Built {size_kb}KB — connecting to {ip}...",
+                    foreground=FG_YELLOW))
+                self.after(0, lambda: self._progress_var.set(50))
+
+                # Step 7: OTA flash
+                self._do_ota_flash(flash_path, ip, progress_offset=50)
+
+                # Refresh the tree to show updated build status
+                self.after(0, self._populate_firmware_tree)
+
+            except subprocess.TimeoutExpired:
+                self.after(0, lambda: self._flash_status.config(
+                    text="Build timed out.", foreground=FG_RED))
+            except FileNotFoundError:
+                self.after(0, lambda: self._flash_status.config(
+                    text="Docker not found. Install Docker first.",
+                    foreground=FG_RED))
+            except Exception as e:
+                self.after(0, lambda: self._flash_status.config(
+                    text=f"Error: {str(e)[:100]}", foreground=FG_RED))
+                self.after(0, lambda: self.app.log(f"[ota] Error: {e}"))
+            finally:
+                self._is_flashing = False
+                self.after(0, lambda: self._build_flash_btn.config(
+                    state=tk.NORMAL))
+                self.after(0, lambda: self._ota_flash_btn.config(
+                    state=tk.NORMAL))
+
+        threading.Thread(target=_run, daemon=True).start()
+
     def _flash_ota(self):
         """Flash firmware wirelessly via picowota TCP protocol."""
-        fw_path = self._firmware_path.get().strip()
-        if not fw_path or not Path(fw_path).exists():
-            messagebox.showwarning("Firmware",
-                                   "Select a firmware file first.")
+        # Check tree selection first, then custom path
+        key, fw_path, _, _ = self._get_selected_firmware()
+        custom_path = self._firmware_path.get().strip()
+
+        if custom_path and Path(custom_path).exists():
+            fw_path = custom_path
+        elif fw_path is None:
+            messagebox.showwarning(
+                "Firmware",
+                "Select a built firmware from the list,\n"
+                "or browse to a custom .elf/.uf2 file.")
             return
 
         ip = self._device_ip.get().strip()
@@ -7192,91 +7494,107 @@ TROUBLESHOOTING:
 
         def _run():
             try:
-                sys.path.insert(0, str(Path(__file__).parent))
-                from picowota_client import (PicowotaClient, load_elf,
-                                              load_uf2, load_bin,
-                                              PicowotaError)
-
-                # Load firmware
-                ext = Path(fw_path).suffix.lower()
-                if ext == ".elf":
-                    image = load_elf(fw_path)
-                elif ext == ".uf2":
-                    image = load_uf2(fw_path)
-                else:
-                    image = load_bin(fw_path)
-
-                size_kb = len(image.data) / 1024
-                self.after(0, lambda: self.app.log(
-                    f"[ota] Image: {size_kb:.1f}KB at 0x{image.addr:08X}"))
-
-                # Progress tracking
-                stage_weights = {
-                    "Syncing": 2, "Querying device": 2,
-                    "Erasing": 30, "Writing": 60,
-                    "Sealing": 3, "Launching": 2, "Done": 1,
-                }
-                total_weight = sum(stage_weights.values())
-                base_pct = {}
-                cumulative = 0
-                for stage, weight in stage_weights.items():
-                    base_pct[stage] = cumulative
-                    cumulative += weight
-
-                def on_progress(stage, current, total):
-                    if total > 0:
-                        stage_pct = (current / total) * stage_weights.get(
-                            stage, 1)
-                        pct = ((base_pct.get(stage, 0) + stage_pct)
-                               / total_weight * 100)
-                    else:
-                        pct = base_pct.get(stage, 0) / total_weight * 100
-
-                    self.after(0, lambda p=pct, s=stage:
-                               (self._progress_var.set(p),
-                                self._flash_status.config(
-                                    text=f"{s}...",
-                                    foreground=FG_YELLOW)))
-
-                # Connect and program
-                client = PicowotaClient(ip, self.DEFAULT_PORT)
-                client.connect()
-                client.program(image, progress_cb=on_progress)
-                client.close()
-
-                self.after(0, lambda: self._progress_var.set(100))
-                self.after(0, lambda: self._flash_status.config(
-                    text=f"Done! {size_kb:.1f}KB flashed to {ip}",
-                    foreground=FG_GREEN))
-                self.after(0, lambda: self.app.log(
-                    f"[ota] Success: {size_kb:.1f}KB flashed to {ip}"))
-                self.after(0, lambda: messagebox.showinfo(
-                    "OTA Flash Complete",
-                    f"Firmware flashed successfully!\n"
-                    f"{size_kb:.1f}KB sent to {ip}\n"
-                    f"The Pico has rebooted into the new firmware."))
-
-            except PicowotaError as e:
-                self.after(0, lambda: self._flash_status.config(
-                    text=f"Flash error: {e}", foreground=FG_RED))
-                self.after(0, lambda: self.app.log(
-                    f"[ota] Flash error: {e}"))
-            except (ConnectionRefusedError, OSError) as e:
-                self.after(0, lambda: self._flash_status.config(
-                    text=f"Connection failed: {e}", foreground=FG_RED))
-                self.after(0, lambda: self.app.log(
-                    f"[ota] Connection failed: {e}"))
-            except Exception as e:
-                self.after(0, lambda: self._flash_status.config(
-                    text=f"Error: {e}", foreground=FG_RED))
-                self.after(0, lambda: self.app.log(
-                    f"[ota] Error: {e}"))
+                self._do_ota_flash(fw_path, ip)
             finally:
                 self._is_flashing = False
                 self.after(0, lambda: self._ota_flash_btn.config(
                     state=tk.NORMAL))
 
         threading.Thread(target=_run, daemon=True).start()
+
+    def _do_ota_flash(self, fw_path, ip, progress_offset=0):
+        """Shared OTA flash logic. Called from _flash_ota and _clean_build_and_flash_ota.
+
+        Args:
+            fw_path: Path to .elf, .uf2, or .bin file
+            ip: Target device IP
+            progress_offset: Starting percentage for the progress bar (0 for standalone,
+                             50 for build+flash where build took 0-50%)
+        """
+        sys.path.insert(0, str(Path(__file__).parent))
+        from picowota_client import (PicowotaClient, load_elf,
+                                      load_uf2, load_bin,
+                                      PicowotaError)
+
+        # Load firmware
+        ext = Path(fw_path).suffix.lower()
+        if ext == ".elf":
+            image = load_elf(fw_path)
+        elif ext == ".uf2":
+            image = load_uf2(fw_path)
+        else:
+            image = load_bin(fw_path)
+
+        size_kb = len(image.data) / 1024
+        self.after(0, lambda: self.app.log(
+            f"[ota] Image: {size_kb:.1f}KB at 0x{image.addr:08X}"))
+
+        # Progress tracking — maps OTA stages to the remaining % of the bar
+        remaining_pct = 100 - progress_offset
+        stage_weights = {
+            "Syncing": 2, "Querying device": 2,
+            "Erasing": 30, "Writing": 60,
+            "Sealing": 3, "Launching": 2, "Done": 1,
+        }
+        total_weight = sum(stage_weights.values())
+        base_pct = {}
+        cumulative = 0
+        for stage, weight in stage_weights.items():
+            base_pct[stage] = cumulative
+            cumulative += weight
+
+        def on_progress(stage, current, total):
+            if total > 0:
+                stage_pct = (current / total) * stage_weights.get(stage, 1)
+                raw_pct = (base_pct.get(stage, 0) + stage_pct) / total_weight
+            else:
+                raw_pct = base_pct.get(stage, 0) / total_weight
+
+            pct = progress_offset + raw_pct * remaining_pct
+
+            self.after(0, lambda p=pct, s=stage:
+                       (self._progress_var.set(p),
+                        self._flash_status.config(
+                            text=f"{s}...",
+                            foreground=FG_YELLOW)))
+
+        try:
+            # Connect and program
+            client = PicowotaClient(ip, self.DEFAULT_PORT)
+            client.connect()
+            client.program(image, progress_cb=on_progress)
+            client.close()
+
+            self.after(0, lambda: self._progress_var.set(100))
+            self.after(0, lambda: self._flash_status.config(
+                text=f"Done! {size_kb:.1f}KB flashed to {ip}",
+                foreground=FG_GREEN))
+            self.after(0, lambda: self.app.log(
+                f"[ota] Success: {size_kb:.1f}KB flashed to {ip}"))
+            self.after(0, lambda: messagebox.showinfo(
+                "OTA Flash Complete",
+                f"Firmware flashed successfully!\n"
+                f"{size_kb:.1f}KB sent to {ip}\n"
+                f"The Pico has rebooted into the new firmware."))
+
+        except PicowotaError as e:
+            self.after(0, lambda: self._flash_status.config(
+                text=f"Flash error: {e}", foreground=FG_RED))
+            self.after(0, lambda: self.app.log(
+                f"[ota] Flash error: {e}"))
+            raise
+        except (ConnectionRefusedError, OSError) as e:
+            self.after(0, lambda: self._flash_status.config(
+                text=f"Connection failed: {e}", foreground=FG_RED))
+            self.after(0, lambda: self.app.log(
+                f"[ota] Connection failed: {e}"))
+            raise
+        except Exception as e:
+            self.after(0, lambda: self._flash_status.config(
+                text=f"Error: {e}", foreground=FG_RED))
+            self.after(0, lambda: self.app.log(
+                f"[ota] Error: {e}"))
+            raise
 
     def _reboot_to_bootloader(self):
         """Send reboot-to-bootloader command via USB serial."""
