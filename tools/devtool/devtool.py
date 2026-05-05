@@ -6837,101 +6837,133 @@ class OTAUpdateTab(ttk.Frame):
                 foreground=FG_YELLOW)
 
     # Firmware directory mapping (matches ProgramsTab._FIRMWARE_DIRS)
-    _FIRMWARE_DIRS = {
-        "hello_world":            "hello-world",
-        "hello_world_serial":     "hello-world-serial",
-        "img_receiver":           "img-receiver",
-        "sassy_octopus":          "sassy-octopus",
-        "supportive_octopus":     "supportive-octopus",
-        "angry_octopus":          "angry-octopus",
-        "conspiratorial_octopus": "conspiratorial-octopus",
-        "sad_octopus":            "sad-octopus",
-        "chaotic_octopus":        "chaotic-octopus",
-        "hungry_octopus":         "hungry-octopus",
-        "tired_octopus":          "tired-octopus",
-        "slaphappy_octopus":      "slaphappy-octopus",
-        "lazy_octopus":           "lazy-octopus",
-        "fat_octopus":            "fat-octopus",
-        "chill_octopus":          "chill-octopus",
-        "creepy_octopus":         "creepy-octopus",
-        "excited_octopus":        "excited-octopus",
-        "nostalgic_octopus":      "nostalgic-octopus",
-        "homesick_octopus":       "homesick-octopus",
-        "mood_selector":          "mood-selector",
-        "joystick_mood_selector": "joystick-mood-selector",
-    }
-
-    _FIRMWARE_TREE = [
+    # Categorized firmware tree — known programs grouped by category.
+    # display_name is derived from the directory name if not listed here.
+    _FIRMWARE_CATEGORIES = [
         ("Tools", [
-            ("hello_world",        "Hello World"),
-            ("hello_world_serial", "Hello World Serial"),
-            ("img_receiver",       "Image Receiver"),
+            "hello-world",
+            "hello-world-serial",
+            "img-receiver",
         ]),
         ("Classic", [
-            ("sassy_octopus",      "Sassy Octopus"),
-            ("supportive_octopus", "Supportive Octopus"),
+            "sassy-octopus",
+            "supportive-octopus",
         ]),
         ("Intense", [
-            ("angry_octopus",          "Angry Octopus"),
-            ("chaotic_octopus",        "Chaotic Octopus"),
-            ("conspiratorial_octopus", "Conspiratorial Octopus"),
+            "angry-octopus",
+            "chaotic-octopus",
+            "conspiratorial-octopus",
         ]),
         ("Melancholy", [
-            ("sad_octopus",       "Sad Octopus"),
-            ("tired_octopus",     "Tired Octopus"),
-            ("nostalgic_octopus", "Nostalgic Octopus"),
-            ("homesick_octopus",  "Homesick Octopus"),
+            "sad-octopus",
+            "tired-octopus",
+            "nostalgic-octopus",
+            "homesick-octopus",
         ]),
         ("Playful", [
-            ("slaphappy_octopus", "Slap Happy Octopus"),
-            ("excited_octopus",   "Excited Octopus"),
-            ("creepy_octopus",    "Creepy Octopus"),
+            "slaphappy-octopus",
+            "excited-octopus",
+            "creepy-octopus",
         ]),
         ("Relaxed", [
-            ("chill_octopus",   "Chill Octopus"),
-            ("lazy_octopus",    "Lazy Octopus"),
-            ("fat_octopus",     "Fat Octopus"),
-            ("hungry_octopus",  "Hungry Octopus"),
+            "chill-octopus",
+            "lazy-octopus",
+            "fat-octopus",
+            "hungry-octopus",
         ]),
         ("Interactive", [
-            ("mood_selector",          "Mood Selector"),
-            ("joystick_mood_selector", "Joystick Mood Selector"),
+            "mood-selector",
+            "joystick-mood-selector",
+            "joystick-sound-test",
         ]),
     ]
 
+    @staticmethod
+    def _dir_to_key(fw_dir):
+        """Convert a firmware directory name to an internal key."""
+        return fw_dir.replace("-", "_")
+
+    @staticmethod
+    def _dir_to_display(fw_dir):
+        """Convert a firmware directory name to a human-readable display name."""
+        return fw_dir.replace("-", " ").title()
+
+    def _discover_firmware_dirs(self):
+        """Auto-discover all firmware project directories under dev-setup/.
+        Returns a dict of {key: fw_dir} for all dirs containing CMakeLists.txt."""
+        dirs = {}
+        if not DEV_SETUP.exists():
+            return dirs
+        for d in sorted(DEV_SETUP.iterdir()):
+            if d.is_dir() and (d / "CMakeLists.txt").exists():
+                key = self._dir_to_key(d.name)
+                dirs[key] = d.name
+        return dirs
+
     def _populate_firmware_tree(self):
-        """Populate the firmware Treeview with all programs and their build status."""
+        """Populate the firmware Treeview with all programs and their build status.
+        Known programs go into their category; new/unknown programs go into 'Other'."""
         self._fw_tree.delete(*self._fw_tree.get_children())
 
-        for group_name, items in self._FIRMWARE_TREE:
+        # Discover all available firmware on disk
+        all_dirs = self._discover_firmware_dirs()
+        # Track which dirs have been placed in a category
+        placed = set()
+
+        # Populate known categories
+        for group_name, dir_list in self._FIRMWARE_CATEGORIES:
+            # Only show category if at least one dir exists
+            existing = [d for d in dir_list if self._dir_to_key(d) in all_dirs]
+            if not existing:
+                continue
+
             group_id = self._fw_tree.insert(
                 "", tk.END, text=group_name, open=True,
                 values=("", ""))
 
-            for key, display_name in items:
-                fw_dir = self._FIRMWARE_DIRS.get(key, "")
-                fw_name = fw_dir.replace("-", "_")
+            for fw_dir in dir_list:
+                key = self._dir_to_key(fw_dir)
+                if key not in all_dirs:
+                    continue
+                placed.add(key)
+                self._insert_firmware_row(group_id, key, fw_dir)
 
-                # Check for existing .elf and .uf2
-                build_dir = DEV_SETUP / fw_dir / "build"
-                elf_path = build_dir / f"{fw_name}.elf"
-                uf2_path = build_dir / f"{fw_name}.uf2"
+        # Auto-discover anything not in a known category → "Other"
+        other_dirs = [(k, v) for k, v in all_dirs.items() if k not in placed]
+        if other_dirs:
+            group_id = self._fw_tree.insert(
+                "", tk.END, text="Other", open=True,
+                values=("", ""))
+            for key, fw_dir in other_dirs:
+                self._insert_firmware_row(group_id, key, fw_dir)
 
-                if elf_path.exists():
-                    size_kb = elf_path.stat().st_size // 1024
-                    status = "Built"
-                    size_str = f"{size_kb}KB"
-                elif uf2_path.exists():
-                    size_kb = uf2_path.stat().st_size // 1024
-                    status = "Built"
-                    size_str = f"{size_kb}KB"
-                else:
-                    status = "Not built"
-                    size_str = "—"
+        # Store the full discovered map for _get_selected_firmware
+        self._all_firmware_dirs = all_dirs
 
-                self._fw_tree.insert(
-                    group_id, tk.END, iid=key, text=f"  {display_name}",
-                    values=(status, size_str))
+    def _insert_firmware_row(self, parent_id, key, fw_dir):
+        """Insert a single firmware entry into the Treeview."""
+        fw_name = fw_dir.replace("-", "_")
+        display_name = self._dir_to_display(fw_dir)
+
+        build_dir = DEV_SETUP / fw_dir / "build"
+        elf_path = build_dir / f"{fw_name}.elf"
+        uf2_path = build_dir / f"{fw_name}.uf2"
+
+        if elf_path.exists():
+            size_kb = elf_path.stat().st_size // 1024
+            status = "Built"
+            size_str = f"{size_kb}KB"
+        elif uf2_path.exists():
+            size_kb = uf2_path.stat().st_size // 1024
+            status = "Built"
+            size_str = f"{size_kb}KB"
+        else:
+            status = "Not built"
+            size_str = "—"
+
+        self._fw_tree.insert(
+            parent_id, tk.END, iid=key, text=f"  {display_name}",
+            values=(status, size_str))
 
     def _get_selected_firmware(self):
         """Get the selected firmware key and its .elf path (if built).
@@ -6941,10 +6973,11 @@ class OTAUpdateTab(ttk.Frame):
             return None, None, None, None
 
         key = sel[0]
-        if key not in self._FIRMWARE_DIRS:
+        all_dirs = getattr(self, "_all_firmware_dirs", {})
+        if key not in all_dirs:
             return None, None, None, None
 
-        fw_dir = self._FIRMWARE_DIRS[key]
+        fw_dir = all_dirs[key]
         fw_name = fw_dir.replace("-", "_")
         build_dir = DEV_SETUP / fw_dir / "build"
 
