@@ -6874,7 +6874,8 @@ class OTAUpdateTab(ttk.Frame):
         ("Interactive", [
             "mood-selector",
             "joystick-mood-selector",
-            "joystick-sound-test",
+            "moodselector-sound",
+            "moodselector-sound-wifi",
         ]),
     ]
 
