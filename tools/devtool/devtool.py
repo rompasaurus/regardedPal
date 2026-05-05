@@ -6477,16 +6477,18 @@ class ProgramsTab(ttk.Frame):
 
 
 # ─────────────────────────────────────────────────────────────────────────────
-# OTA Update Tab — WiFi firmware updates via picowota bootloader
+# Pico 2 W OTA Tab — WiFi firmware updates via picowota bootloader
 # ─────────────────────────────────────────────────────────────────────────────
 
 class OTAUpdateTab(ttk.Frame):
     """
-    WiFi over-the-air firmware update tab using the picowota bootloader.
+    Pico 2 W WiFi over-the-air firmware update tab using the picowota bootloader.
+
+    Target board: Raspberry Pi Pico 2 W (RP2350, 4MB flash, WiFi + BLE)
 
     Workflow:
       1. Initial Setup — flash the picowota combined bootloader via USB (once)
-      2. Configure WiFi — set SSID/password for the Pico W's connection
+      2. Configure WiFi — set SSID/password for the Pico 2 W's connection
       3. Discover — scan network for picowota devices
       4. Flash OTA — push firmware wirelessly via TCP
     """
@@ -6564,12 +6566,12 @@ class OTAUpdateTab(ttk.Frame):
         left = ttk.Frame(main_pw)
 
         # --- Section 1: Bootloader Setup ---
-        boot_frame = ttk.LabelFrame(left, text="  1. Bootloader Setup  ",
+        boot_frame = ttk.LabelFrame(left, text="  1. Pico 2 W Bootloader Setup  ",
                                      padding=8)
         boot_frame.pack(fill=tk.X, padx=4, pady=(4, 2))
 
         ttk.Label(boot_frame,
-                  text="Flash the picowota bootloader to the Pico via USB.\n"
+                  text="Flash the picowota bootloader to the Pico 2 W via USB.\n"
                        "This is a one-time step — hold BOOTSEL and plug in.",
                   foreground=FG_DIM, wraplength=380,
                   font=("JetBrains Mono", 8)).pack(anchor=tk.W)
@@ -6779,7 +6781,7 @@ class OTAUpdateTab(ttk.Frame):
         # ── Right panel: guide + status log ──
         right = ttk.Frame(main_pw)
 
-        guide_frame = ttk.LabelFrame(right, text="  OTA Update Guide  ",
+        guide_frame = ttk.LabelFrame(right, text="  Pico 2 W OTA Guide  ",
                                       padding=8)
         guide_frame.pack(fill=tk.BOTH, expand=True, padx=4, pady=4)
 
@@ -6976,17 +6978,19 @@ class OTAUpdateTab(ttk.Frame):
             self._firmware_path.set(path)
 
     def _populate_guide(self):
-        guide = """HOW OTA UPDATES WORK
-════════════════════
+        guide = """PICO 2 W — WIRELESS FIRMWARE UPDATES
+══════════════════════════════════════
 
-The Pico normally needs you to hold BOOTSEL, plug
-in USB, and copy a .uf2 file. OTA replaces that
-with WiFi — no USB cable, no button.
+The Pico 2 W normally needs you to hold BOOTSEL,
+plug in USB, and copy a .uf2 file. OTA replaces
+that with WiFi — no USB cable, no button.
 
 It works by putting a tiny WiFi bootloader
-(picowota) on your Pico ONCE via USB. After that,
-picowota listens for firmware updates over WiFi.
-You send new firmware from this tab.
+(picowota) on your Pico 2 W ONCE via USB. After
+that, picowota listens for firmware updates over
+WiFi. You send new firmware from this tab.
+
+Target: Raspberry Pi Pico 2 W (RP2350, 4MB flash)
 
 ════════════════════
 FIRST-TIME SETUP (USB — you only do this once)
@@ -7749,11 +7753,17 @@ and restored when you reopen the DevTool.
         """Update UI when target board changes."""
         if board not in PICO_BOARDS:
             self._flash_status.config(
-                text="OTA updates are for Pico W / Pico 2 W only",
+                text="OTA updates are for Pico 2 W / Pico W only",
                 foreground=FG_DIM)
+            for btn in (self._ota_flash_btn, self._build_flash_btn,
+                        self._build_bl_btn, self._flash_bl_btn):
+                btn.config(state=tk.DISABLED)
         else:
             self._flash_status.config(text="Ready", foreground=FG_DIM)
-        self._populate_quick_flash()
+            for btn in (self._ota_flash_btn, self._build_flash_btn,
+                        self._build_bl_btn, self._flash_bl_btn):
+                btn.config(state=tk.NORMAL)
+        self._populate_firmware_tree()
 
 
 # ─────────────────────────────────────────────────────────────────────────────
@@ -8375,7 +8385,7 @@ class DilderDevTool(tk.Tk):
 
         # Tab 8: OTA Update
         self.ota_tab = OTAUpdateTab(self.notebook, self)
-        self.notebook.add(self.ota_tab, text="  OTA Update  ")
+        self.notebook.add(self.ota_tab, text="  Pico 2 W OTA  ")
 
         # Tab 9: Documentation
         self.docs_tab = DocumentationTab(self.notebook, self)
