@@ -114,32 +114,65 @@ fi
 export PICO_SDK_PATH="$SDK_DIR"
 
 # ── Picotool ──
-PICOTOOL_DIR="$PICO_DIR/picotool"
-
 if command -v picotool &>/dev/null; then
     ok "picotool already installed: $(which picotool)"
-elif [ -f "$PICOTOOL_DIR/build/picotool" ]; then
-    ok "picotool already built at $PICOTOOL_DIR/build/picotool"
 else
-    info "Building picotool from source..."
-    if [ ! -d "$PICOTOOL_DIR" ]; then
-        git clone https://github.com/raspberrypi/picotool.git "$PICOTOOL_DIR"
-    fi
-    mkdir -p "$PICOTOOL_DIR/build"
-    cmake -G Ninja -DPICO_SDK_PATH="$SDK_DIR" -S "$PICOTOOL_DIR" -B "$PICOTOOL_DIR/build"
-    ninja -C "$PICOTOOL_DIR/build"
+    info "Installing picotool..."
+    case $PM in
+        pacman)
+            # Use AUR — handles GCC 15 compat issues on Arch/CachyOS
+            if command -v yay &>/dev/null; then
+                yay -S --needed --noconfirm picotool
+            elif command -v paru &>/dev/null; then
+                paru -S --needed --noconfirm picotool
+            else
+                warn "No AUR helper (yay/paru) found — installing yay first..."
+                sudo pacman -S --needed --noconfirm go
+                TMPYAY=$(mktemp -d)
+                git clone https://aur.archlinux.org/yay-bin.git "$TMPYAY"
+                (cd "$TMPYAY" && makepkg -si --noconfirm)
+                rm -rf "$TMPYAY"
+                yay -S --needed --noconfirm picotool
+            fi
+            ;;
+        apt)
+            # Build from source on Debian/Ubuntu
+            PICOTOOL_DIR="$PICO_DIR/picotool"
+            if [ ! -d "$PICOTOOL_DIR" ]; then
+                git clone https://github.com/raspberrypi/picotool.git "$PICOTOOL_DIR"
+            fi
+            mkdir -p "$PICOTOOL_DIR/build"
+            cmake -G Ninja -DPICO_SDK_PATH="$SDK_DIR" -S "$PICOTOOL_DIR" -B "$PICOTOOL_DIR/build"
+            ninja -C "$PICOTOOL_DIR/build"
+            if [ -f "$PICOTOOL_DIR/build/picotool" ]; then
+                sudo cp "$PICOTOOL_DIR/build/picotool" /usr/local/bin/
+                ok "picotool installed to /usr/local/bin/"
+            else
+                fail "picotool build failed"
+            fi
+            ;;
+        dnf)
+            # Build from source on Fedora
+            PICOTOOL_DIR="$PICO_DIR/picotool"
+            if [ ! -d "$PICOTOOL_DIR" ]; then
+                git clone https://github.com/raspberrypi/picotool.git "$PICOTOOL_DIR"
+            fi
+            mkdir -p "$PICOTOOL_DIR/build"
+            cmake -G Ninja -DPICO_SDK_PATH="$SDK_DIR" -S "$PICOTOOL_DIR" -B "$PICOTOOL_DIR/build"
+            ninja -C "$PICOTOOL_DIR/build"
+            if [ -f "$PICOTOOL_DIR/build/picotool" ]; then
+                sudo cp "$PICOTOOL_DIR/build/picotool" /usr/local/bin/
+                ok "picotool installed to /usr/local/bin/"
+            else
+                fail "picotool build failed"
+            fi
+            ;;
+    esac
 
-    if [ -f "$PICOTOOL_DIR/build/picotool" ]; then
-        ok "picotool built: $PICOTOOL_DIR/build/picotool"
-        info "Adding to PATH..."
-        SHELL_RC="$HOME/.bashrc"
-        [ -f "$HOME/.zshrc" ] && SHELL_RC="$HOME/.zshrc"
-        if ! grep -q "picotool" "$SHELL_RC" 2>/dev/null; then
-            echo "export PATH=\"$PICOTOOL_DIR/build:\$PATH\"" >> "$SHELL_RC"
-            ok "Added picotool to PATH in $SHELL_RC"
-        fi
+    if command -v picotool &>/dev/null; then
+        ok "picotool installed: $(picotool version 2>&1 | head -1)"
     else
-        fail "picotool build failed"
+        fail "picotool installation failed"
     fi
 fi
 
