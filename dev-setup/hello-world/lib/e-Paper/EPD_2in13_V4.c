@@ -1,48 +1,57 @@
 /*****************************************************************************
 * | File        :   EPD_2in13_V4.c
-* | Author      :   Waveshare team
-* | Function    :   2.13inch e-paper V4
+* | Author      :   Waveshare team + Dilder project
+* | Function    :   2.13inch e-paper V4 (SSD1680)
 * | Info        :
-*   V4 uses SSD1680 with internal LUT — no custom waveform tables.
-*----------------
-* | This version:   V1.4
-* | Date        :   2026-05-04
-* | Info        :
-*   V1.4 — Two-pass partial refresh for ghost-free updates.
+*   V1.5 — Flicker-free partial refresh using V3's custom LUT approach.
 *
-*   Root cause of ghosting: e-ink partial waveforms use short, weak
-*   voltage pulses.  Black→white transitions don't fully discharge,
-*   leaving ghost traces of old content.
+*   The V4's internal LUT has no proper partial waveform — its partial
+*   mode still drives a full black-white-black cycle, causing visible
+*   flashing every frame.
 *
-*   Fix: every partial update is done in two passes:
-*     Pass 1: Send a "clear" frame — pixels that WILL change are set
-*             to white, unchanged pixels stay as-is.  Partial refresh.
-*             This explicitly drives old-black→white for every pixel
-*             that's about to be redrawn.
-*     Pass 2: Send the actual new frame.  Partial refresh.
-*             White→black transitions are clean because all changed
-*             pixels are now genuinely white on the physical display.
+*   Fix: load the same custom partial waveform used by the V3 driver
+*   (WF_PARTIAL). This waveform only drives changed pixels with minimal
+*   voltage — no black flash, no full-screen redraw.
 *
-*   Cost: ~0.6s per update (2x ~0.3s partials) instead of ~0.3s.
-*   Benefit: zero ghosting, zero text overlap, clean redraws.
-*
-*   Requires ~3.9KB extra RAM for the previous-frame buffer.
+*   The SSD1680 chip is identical between V3 and V4. The only difference
+*   is that V4 was intended to use the internal OTP LUT. We override it.
 * -----------------------------------------------------------------------------
 ******************************************************************************/
 #include "EPD_2in13_V4.h"
 #include "Debug.h"
 #include <string.h>
 
-#ifndef EPD_2IN13_V4_MAX_PARTIAL
-#define EPD_2IN13_V4_MAX_PARTIAL 100   /* full refresh every ~100 partial updates */
-#endif
-
 #define EPD_BUF_SIZE  ((((EPD_2in13_V4_WIDTH + 7) / 8)) * EPD_2in13_V4_HEIGHT)
 
-static UBYTE partial_count = 0;
-static UBYTE prev_frame[EPD_BUF_SIZE];  /* last frame sent to display */
-static UBYTE clear_buf[EPD_BUF_SIZE];   /* intermediate clear frame */
-static UBYTE base_seeded = 0;           /* has Display_Base been called? */
+static UBYTE base_seeded = 0;
+
+/* Custom partial-refresh waveform — borrowed from V3 driver.
+ * This waveform drives only changed pixels with short, weak pulses.
+ * No black flash, no full-screen redraw.
+ * 153 bytes LUT + 6 bytes config (gate voltage, source voltage, VCOM) */
+static const UBYTE WF_PARTIAL[159] = {
+    0x0,0x40,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,
+    0x80,0x80,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,
+    0x40,0x40,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,
+    0x0,0x80,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,
+    0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,
+    0x14,0x0,0x0,0x0,0x0,0x0,0x0,
+    0x1,0x0,0x0,0x0,0x0,0x0,0x0,
+    0x1,0x0,0x0,0x0,0x0,0x0,0x0,
+    0x0,0x0,0x0,0x0,0x0,0x0,0x0,
+    0x0,0x0,0x0,0x0,0x0,0x0,0x0,
+    0x0,0x0,0x0,0x0,0x0,0x0,0x0,
+    0x0,0x0,0x0,0x0,0x0,0x0,0x0,
+    0x0,0x0,0x0,0x0,0x0,0x0,0x0,
+    0x0,0x0,0x0,0x0,0x0,0x0,0x0,
+    0x0,0x0,0x0,0x0,0x0,0x0,0x0,
+    0x0,0x0,0x0,0x0,0x0,0x0,0x0,
+    0x0,0x0,0x0,0x0,0x0,0x0,0x0,
+    0x22,0x22,0x22,0x22,0x22,0x22,0x0,0x0,0x0,
+    0x22,0x17,0x41,0x00,0x32,0x36,
+};
+
+/* ─── Low-level helpers ─── */
 
 static void EPD_2in13_V4_Reset(void)
 {
@@ -72,15 +81,9 @@ static void EPD_2in13_V4_SendData(UBYTE Data)
 
 static void EPD_2in13_V4_ReadBusy(void)
 {
-    Debug("e-Paper busy\r\n");
-    while(1)
-    {
-        if(DEV_Digital_Read(EPD_BUSY_PIN)==0)
-            break;
+    while (DEV_Digital_Read(EPD_BUSY_PIN) == 1)
         DEV_Delay_ms(10);
-    }
     DEV_Delay_ms(10);
-    Debug("e-Paper busy release\r\n");
 }
 
 static void EPD_2in13_V4_TurnOnDisplay(void)
@@ -91,10 +94,10 @@ static void EPD_2in13_V4_TurnOnDisplay(void)
     EPD_2in13_V4_ReadBusy();
 }
 
-static void EPD_2in13_V4_TurnOnDisplay_Fast(void)
+static void EPD_2in13_V4_TurnOnDisplay_Partial(void)
 {
     EPD_2in13_V4_SendCommand(0x22);
-    EPD_2in13_V4_SendData(0xff);
+    EPD_2in13_V4_SendData(0x0f);   /* same as V3 — minimal drive */
     EPD_2in13_V4_SendCommand(0x20);
     EPD_2in13_V4_ReadBusy();
 }
@@ -104,7 +107,6 @@ static void EPD_2in13_V4_SetWindows(UWORD Xstart, UWORD Ystart, UWORD Xend, UWOR
     EPD_2in13_V4_SendCommand(0x44);
     EPD_2in13_V4_SendData((Xstart>>3) & 0xFF);
     EPD_2in13_V4_SendData((Xend>>3) & 0xFF);
-
     EPD_2in13_V4_SendCommand(0x45);
     EPD_2in13_V4_SendData(Ystart & 0xFF);
     EPD_2in13_V4_SendData((Ystart >> 8) & 0xFF);
@@ -116,69 +118,38 @@ static void EPD_2in13_V4_SetCursor(UWORD Xstart, UWORD Ystart)
 {
     EPD_2in13_V4_SendCommand(0x4E);
     EPD_2in13_V4_SendData(Xstart & 0xFF);
-
     EPD_2in13_V4_SendCommand(0x4F);
     EPD_2in13_V4_SendData(Ystart & 0xFF);
     EPD_2in13_V4_SendData((Ystart >> 8) & 0xFF);
 }
 
-static void EPD_2in13_V4_WriteRAM(UBYTE cmd, UBYTE *Image)
+/* Load the custom partial waveform LUT + voltage config */
+static void EPD_2in13_V4_LoadPartialLUT(void)
 {
-    UWORD Width = (EPD_2in13_V4_WIDTH + 7) / 8;
-    UWORD Height = EPD_2in13_V4_HEIGHT;
-
-    EPD_2in13_V4_SendCommand(cmd);
-    for (UWORD j = 0; j < Height; j++)
-        for (UWORD i = 0; i < Width; i++)
-            EPD_2in13_V4_SendData(Image[i + j * Width]);
-}
-
-static UBYTE partial_mode_ready = 0;
-
-/* Prepare the controller for partial updates (waveform + border config).
- * Called once, then partial updates just write data + trigger. */
-static void EPD_2in13_V4_EnterPartialMode(void)
-{
-    if (partial_mode_ready) return;
-
-    /* Load waveform via internal temp sensor */
-    EPD_2in13_V4_SendCommand(0x18);
-    EPD_2in13_V4_SendData(0x80);
-
-    EPD_2in13_V4_SendCommand(0x22);
-    EPD_2in13_V4_SendData(0xB1);
-    EPD_2in13_V4_SendCommand(0x20);
+    /* LUT register 0x32 — 153 bytes */
+    EPD_2in13_V4_SendCommand(0x32);
+    for (int i = 0; i < 153; i++)
+        EPD_2in13_V4_SendData(WF_PARTIAL[i]);
     EPD_2in13_V4_ReadBusy();
 
-    /* Border waveform: 0x80 = follow LUT (no border flash) */
-    EPD_2in13_V4_SendCommand(0x3C);
-    EPD_2in13_V4_SendData(0x80);
+    /* Additional config from the LUT data */
+    EPD_2in13_V4_SendCommand(0x3f);
+    EPD_2in13_V4_SendData(WF_PARTIAL[153]);
 
-    partial_mode_ready = 1;
+    EPD_2in13_V4_SendCommand(0x03);   /* Gate voltage */
+    EPD_2in13_V4_SendData(WF_PARTIAL[154]);
+
+    EPD_2in13_V4_SendCommand(0x04);   /* Source voltage */
+    EPD_2in13_V4_SendData(WF_PARTIAL[155]);  /* VSH */
+    EPD_2in13_V4_SendData(WF_PARTIAL[156]);  /* VSH2 */
+    EPD_2in13_V4_SendData(WF_PARTIAL[157]);  /* VSL */
+
+    EPD_2in13_V4_SendCommand(0x2c);   /* VCOM */
+    EPD_2in13_V4_SendData(WF_PARTIAL[158]);
 }
 
-/* Core partial diff — writes old→0x26, new→0x24, triggers update.
- * Waveform must already be loaded via EnterPartialMode(). */
-static void EPD_2in13_V4_DoPartialDiff(UBYTE *old_image, UBYTE *new_image)
-{
-    EPD_2in13_V4_EnterPartialMode();
+/* ─── Public API ─── */
 
-    EPD_2in13_V4_SetWindows(0, 0, EPD_2in13_V4_WIDTH-1, EPD_2in13_V4_HEIGHT-1);
-    EPD_2in13_V4_SetCursor(0, 0);
-
-    EPD_2in13_V4_WriteRAM(0x26, old_image);
-    EPD_2in13_V4_WriteRAM(0x24, new_image);
-
-    /* 0xC7 = partial update with display on — fast, no flicker */
-    EPD_2in13_V4_SendCommand(0x22);
-    EPD_2in13_V4_SendData(0xC7);
-    EPD_2in13_V4_SendCommand(0x20);
-    EPD_2in13_V4_ReadBusy();
-}
-
-/******************************************************************************
-function :  Initialize (normal/full refresh mode)
-******************************************************************************/
 void EPD_2in13_V4_Init(void)
 {
     EPD_2in13_V4_Reset();
@@ -206,62 +177,23 @@ void EPD_2in13_V4_Init(void)
     EPD_2in13_V4_SendData(0x00);
     EPD_2in13_V4_SendData(0x80);
 
-    EPD_2in13_V4_SendCommand(0x18);  /* Use internal temperature sensor */
+    EPD_2in13_V4_SendCommand(0x18);  /* Internal temperature sensor */
     EPD_2in13_V4_SendData(0x80);
 
     EPD_2in13_V4_ReadBusy();
-    partial_count = 0;
+    base_seeded = 0;
 }
 
-/******************************************************************************
-function :  Initialize for fast refresh mode (with SWRESET)
-******************************************************************************/
 void EPD_2in13_V4_Init_Fast(void)
 {
-    EPD_2in13_V4_Reset();
-    DEV_Delay_ms(100);
-
-    EPD_2in13_V4_ReadBusy();
-    EPD_2in13_V4_SendCommand(0x12);
-    EPD_2in13_V4_ReadBusy();
-
-    EPD_2in13_V4_SendCommand(0x01);
-    EPD_2in13_V4_SendData(0xf9);
-    EPD_2in13_V4_SendData(0x00);
-    EPD_2in13_V4_SendData(0x00);
-
-    EPD_2in13_V4_SendCommand(0x11);
-    EPD_2in13_V4_SendData(0x03);
-
-    EPD_2in13_V4_SetWindows(0, 0, EPD_2in13_V4_WIDTH-1, EPD_2in13_V4_HEIGHT-1);
-    EPD_2in13_V4_SetCursor(0, 0);
-
-    EPD_2in13_V4_SendCommand(0x3C);
-    EPD_2in13_V4_SendData(0x01);
-
-    EPD_2in13_V4_SendCommand(0x18);
-    EPD_2in13_V4_SendData(0x80);
-
-    EPD_2in13_V4_SendCommand(0x22);
-    EPD_2in13_V4_SendData(0xB1);
-    EPD_2in13_V4_SendCommand(0x20);
-    EPD_2in13_V4_ReadBusy();
-
-    partial_count = 0;
+    EPD_2in13_V4_Init();
 }
 
-/******************************************************************************
-function :  Clear screen
-******************************************************************************/
 void EPD_2in13_V4_Clear(void)
 {
     UWORD Width = (EPD_2in13_V4_WIDTH + 7) / 8;
     UWORD Height = EPD_2in13_V4_HEIGHT;
 
-    /* Write white to BOTH RAM buffers so they match.
-     * If only 0x24 is written, the controller sees a diff between
-     * 0x24 (white) and 0x26 (old garbage) on the next partial update
-     * and redraws everything — causing a full-screen flash. */
     EPD_2in13_V4_SendCommand(0x24);
     for (UWORD j = 0; j < Height; j++)
         for (UWORD i = 0; i < Width; i++)
@@ -272,71 +204,114 @@ void EPD_2in13_V4_Clear(void)
             EPD_2in13_V4_SendData(0xFF);
 
     EPD_2in13_V4_TurnOnDisplay();
-    memset(prev_frame, 0xFF, EPD_BUF_SIZE);
-    base_seeded = 1;   /* both buffers are synced — partials work immediately */
-    partial_count = 0;
-    partial_mode_ready = 0;
+    base_seeded = 1;
 }
 
-/******************************************************************************
-function :  Full refresh display
-******************************************************************************/
 void EPD_2in13_V4_Display(UBYTE *Image)
 {
-    EPD_2in13_V4_WriteRAM(0x24, Image);
+    UWORD Width = (EPD_2in13_V4_WIDTH + 7) / 8;
+    UWORD Height = EPD_2in13_V4_HEIGHT;
+
+    EPD_2in13_V4_SendCommand(0x24);
+    for (UWORD j = 0; j < Height; j++)
+        for (UWORD i = 0; i < Width; i++)
+            EPD_2in13_V4_SendData(Image[i + j * Width]);
+
     EPD_2in13_V4_TurnOnDisplay();
-    memcpy(prev_frame, Image, EPD_BUF_SIZE);
-    partial_count = 0;
 }
 
-/******************************************************************************
-function :  Base image — seeds both RAM buffers + saves to prev_frame.
-    MUST be called for the first frame before Display_Partial().
-******************************************************************************/
 void EPD_2in13_V4_Display_Base(UBYTE *Image)
 {
-    EPD_2in13_V4_WriteRAM(0x24, Image);
-    EPD_2in13_V4_WriteRAM(0x26, Image);
+    UWORD Width = (EPD_2in13_V4_WIDTH + 7) / 8;
+    UWORD Height = EPD_2in13_V4_HEIGHT;
+
+    /* Seed both RAM buffers with the same image */
+    EPD_2in13_V4_SendCommand(0x24);
+    for (UWORD j = 0; j < Height; j++)
+        for (UWORD i = 0; i < Width; i++)
+            EPD_2in13_V4_SendData(Image[i + j * Width]);
+    EPD_2in13_V4_SendCommand(0x26);
+    for (UWORD j = 0; j < Height; j++)
+        for (UWORD i = 0; i < Width; i++)
+            EPD_2in13_V4_SendData(Image[i + j * Width]);
+
     EPD_2in13_V4_TurnOnDisplay();
-    memcpy(prev_frame, Image, EPD_BUF_SIZE);
     base_seeded = 1;
-    partial_count = 0;
-    partial_mode_ready = 0;  /* force waveform reload on next partial */
 }
 
 /******************************************************************************
-function :  Two-pass partial refresh — ghost-free updates.
-
-    Pass 1 ("clear"): builds an intermediate frame where every pixel
-    that DIFFERS between prev_frame and the new Image is set to WHITE.
-    Pixels that haven't changed stay as they were.  Partial-refreshing
-    this frame explicitly drives old-black→white for every pixel that's
-    about to be redrawn, eliminating ghosting.
-
-    Pass 2 ("draw"): sends the actual new Image.  Partial-refreshing
-    this frame draws white→black for new content on a clean white
-    background — crisp, no residue.
-
-    After both passes, prev_frame is updated for the next cycle.
-******************************************************************************/
+ * Partial refresh — V3-style with custom LUT.
+ *
+ * The V3 approach:
+ *   1. Hardware reset (clears controller state)
+ *   2. Load the custom partial waveform LUT
+ *   3. Enable RAM ping-pong (controller auto-tracks old/new)
+ *   4. Write ONLY the new image to 0x24
+ *   5. Trigger with 0x0F (minimal partial drive)
+ *
+ * The controller diffs 0x24 (new) against 0x26 (previous — auto-copied
+ * by ping-pong) and only drives pixels that actually changed. No black
+ * flash, no full-screen redraw.
+ ******************************************************************************/
 void EPD_2in13_V4_Display_Partial(UBYTE *Image)
 {
-    /* If base was never seeded, do a full refresh first */
+    UWORD Width = (EPD_2in13_V4_WIDTH + 7) / 8;
+    UWORD Height = EPD_2in13_V4_HEIGHT;
+
     if (!base_seeded) {
         EPD_2in13_V4_Init();
         EPD_2in13_V4_Display_Base(Image);
         return;
     }
 
-    /* No periodic full refresh — partial updates only.
-     * If ghosting accumulates, user can power cycle to reset. */
-    EPD_2in13_V4_DoPartialDiff(prev_frame, Image);
-    memcpy(prev_frame, Image, EPD_BUF_SIZE);
+    /* Hardware reset — clears controller state for clean partial */
+    DEV_Digital_Write(EPD_RST_PIN, 0);
+    DEV_Delay_ms(2);
+    DEV_Digital_Write(EPD_RST_PIN, 1);
+
+    /* Load the custom partial waveform (no black pulse) */
+    EPD_2in13_V4_LoadPartialLUT();
+
+    /* Enable RAM ping-pong: after each update, the controller
+     * auto-copies 0x24 → 0x26, so next time 0x26 has the "old" frame.
+     * No need to manually write old data to 0x26 each frame. */
+    EPD_2in13_V4_SendCommand(0x37);
+    EPD_2in13_V4_SendData(0x00);
+    EPD_2in13_V4_SendData(0x00);
+    EPD_2in13_V4_SendData(0x00);
+    EPD_2in13_V4_SendData(0x00);
+    EPD_2in13_V4_SendData(0x00);
+    EPD_2in13_V4_SendData(0x40);   /* bit 6 = ping-pong enable */
+    EPD_2in13_V4_SendData(0x00);
+    EPD_2in13_V4_SendData(0x00);
+    EPD_2in13_V4_SendData(0x00);
+    EPD_2in13_V4_SendData(0x00);
+
+    /* Border waveform: follow LUT (no border flash) */
+    EPD_2in13_V4_SendCommand(0x3C);
+    EPD_2in13_V4_SendData(0x80);
+
+    /* Enable clock + analog for partial mode setup */
+    EPD_2in13_V4_SendCommand(0x22);
+    EPD_2in13_V4_SendData(0xC0);
+    EPD_2in13_V4_SendCommand(0x20);
+    EPD_2in13_V4_ReadBusy();
+
+    /* Set window and cursor */
+    EPD_2in13_V4_SetWindows(0, 0, EPD_2in13_V4_WIDTH-1, EPD_2in13_V4_HEIGHT-1);
+    EPD_2in13_V4_SetCursor(0, 0);
+
+    /* Write ONLY the new image to 0x24.
+     * 0x26 already has the previous frame (from ping-pong or base seed). */
+    EPD_2in13_V4_SendCommand(0x24);
+    for (UWORD j = 0; j < Height; j++)
+        for (UWORD i = 0; i < Width; i++)
+            EPD_2in13_V4_SendData(Image[i + j * Width]);
+
+    /* Trigger partial update — 0x0F = minimal drive, only changed pixels */
+    EPD_2in13_V4_TurnOnDisplay_Partial();
 }
 
-/******************************************************************************
-function :  Enter sleep mode
-******************************************************************************/
 void EPD_2in13_V4_Sleep(void)
 {
     EPD_2in13_V4_SendCommand(0x10);
