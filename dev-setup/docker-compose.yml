@@ -176,3 +176,30 @@ services:
       - ./joystick-mood-selector:/project
       - ./hello-world/lib:/project/lib
     working_dir: /project
+
+  build-moodselector-sound:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    volumes:
+      - ./moodselector-sound:/project
+      - ./hello-world/lib:/project/lib
+    working_dir: /project
+
+  build-moodselector-sound-wifi:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    volumes:
+      - ./moodselector-sound-wifi:/project
+      - ./hello-world/lib:/project/lib
+    working_dir: /project
+
+  build-dilder-hub:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    volumes:
+      - ./dilder-hub:/project
+      - ./hello-world/lib:/project/lib
+    working_dir: /project

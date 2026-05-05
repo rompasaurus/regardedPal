@@ -6876,6 +6876,7 @@ class OTAUpdateTab(ttk.Frame):
             "joystick-mood-selector",
             "moodselector-sound",
             "moodselector-sound-wifi",
+            "dilder-hub",
         ]),
     ]
 
