@@ -31,14 +31,22 @@
 #define JOY_RIGHT  5
 #define JOY_CENTER 6
 
-/* ─── Speaker ─── */
-#define SPEAKER    15  /* GP15 = pin 20 (PWM) */
+/* ─── Speaker (push-pull for 2x volume) ─── */
+/* GP14 (pin 19) and GP15 (pin 20) share PWM slice 7, channels A and B.
+ * By driving them in opposite phase, the piezo sees ~6.6Vpp instead of 3.3V.
+ * Wire: piezo + → pin 20 (GP15), piezo - → pin 19 (GP14). No resistor needed. */
+#define SPEAKER_A  14  /* GP14 = pin 19 (PWM7A) — inverted phase */
+#define SPEAKER_B  15  /* GP15 = pin 20 (PWM7B) — normal phase */
 static uint speaker_slice;
 
 static void speaker_init(void) {
-    gpio_set_function(SPEAKER, GPIO_FUNC_PWM);
-    speaker_slice = pwm_gpio_to_slice_num(SPEAKER);
+    gpio_set_function(SPEAKER_A, GPIO_FUNC_PWM);
+    gpio_set_function(SPEAKER_B, GPIO_FUNC_PWM);
+    speaker_slice = pwm_gpio_to_slice_num(SPEAKER_A);  /* same slice for both */
     pwm_set_enabled(speaker_slice, false);
+
+    /* Invert channel A so it's opposite phase from channel B */
+    pwm_set_output_polarity(speaker_slice, true, false);
 }
 
 static void speaker_tone(uint16_t freq_hz, uint16_t duration_ms) {
@@ -46,7 +54,9 @@ static void speaker_tone(uint16_t freq_hz, uint16_t duration_ms) {
     uint32_t wrap = 125000000 / freq_hz;
     if (wrap > 65535) wrap = 65535;
     pwm_set_wrap(speaker_slice, (uint16_t)wrap);
-    pwm_set_chan_level(speaker_slice, pwm_gpio_to_channel(SPEAKER), (uint16_t)(wrap / 2));
+    /* Both channels at 50% duty — but A is inverted, so piezo sees full swing */
+    pwm_set_chan_level(speaker_slice, PWM_CHAN_A, (uint16_t)(wrap / 2));
+    pwm_set_chan_level(speaker_slice, PWM_CHAN_B, (uint16_t)(wrap / 2));
     pwm_set_enabled(speaker_slice, true);
     sleep_ms(duration_ms);
     pwm_set_enabled(speaker_slice, false);
