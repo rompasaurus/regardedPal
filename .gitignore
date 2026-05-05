@@ -1,74 +1,27 @@
 website/venv/
 website/site/
 
-# Pico SDK build artifacts
-dev-setup/hello-world-serial/build/
-dev-setup/hello-world/build/
-dev-setup/img-receiver/build/
-dev-setup/sassy-octopus/build/
-dev-setup/supportive-octopus/build/
-dev-setup/angry-octopus/build/
-dev-setup/conspiratorial-octopus/build/
-dev-setup/sad-octopus/build/
-dev-setup/chaotic-octopus/build/
-dev-setup/hungry-octopus/build/
-dev-setup/tired-octopus/build/
-dev-setup/slaphappy-octopus/build/
-dev-setup/lazy-octopus/build/
-dev-setup/fat-octopus/build/
-dev-setup/chill-octopus/build/
-dev-setup/creepy-octopus/build/
-dev-setup/excited-octopus/build/
-dev-setup/nostalgic-octopus/build/
-dev-setup/homesick-octopus/build/
-dev-setup/mood-selector/build/
-dev-setup/joystick-mood-selector/build/
+# Pico SDK build artifacts (all firmware projects)
+dev-setup/*/build/
+
+# picowota bootloader build
+picowota/build/
 
 # Generated quote data (DevTool generates at build time)
 dev-setup/*/quotes.h
 
-# Waveshare library files (copied from hello-world per setup guide)
-dev-setup/hello-world/lib/
-dev-setup/hello-world/pico_sdk_import.cmake
-dev-setup/hello-world-serial/pico_sdk_import.cmake
-dev-setup/img-receiver/lib/
-dev-setup/img-receiver/pico_sdk_import.cmake
-dev-setup/sassy-octopus/lib/
-dev-setup/sassy-octopus/pico_sdk_import.cmake
-dev-setup/supportive-octopus/lib/
-dev-setup/supportive-octopus/pico_sdk_import.cmake
-dev-setup/angry-octopus/lib/
-dev-setup/angry-octopus/pico_sdk_import.cmake
-dev-setup/conspiratorial-octopus/lib/
-dev-setup/conspiratorial-octopus/pico_sdk_import.cmake
-dev-setup/sad-octopus/lib/
-dev-setup/sad-octopus/pico_sdk_import.cmake
-dev-setup/chaotic-octopus/lib/
-dev-setup/chaotic-octopus/pico_sdk_import.cmake
-dev-setup/hungry-octopus/lib/
-dev-setup/hungry-octopus/pico_sdk_import.cmake
-dev-setup/tired-octopus/lib/
-dev-setup/tired-octopus/pico_sdk_import.cmake
-dev-setup/slaphappy-octopus/lib/
-dev-setup/slaphappy-octopus/pico_sdk_import.cmake
-dev-setup/lazy-octopus/lib/
-dev-setup/lazy-octopus/pico_sdk_import.cmake
-dev-setup/fat-octopus/lib/
-dev-setup/fat-octopus/pico_sdk_import.cmake
-dev-setup/chill-octopus/lib/
-dev-setup/chill-octopus/pico_sdk_import.cmake
-dev-setup/creepy-octopus/lib/
-dev-setup/creepy-octopus/pico_sdk_import.cmake
-dev-setup/excited-octopus/lib/
-dev-setup/excited-octopus/pico_sdk_import.cmake
-dev-setup/nostalgic-octopus/lib/
-dev-setup/nostalgic-octopus/pico_sdk_import.cmake
-dev-setup/homesick-octopus/lib/
-dev-setup/homesick-octopus/pico_sdk_import.cmake
-dev-setup/mood-selector/lib/
-dev-setup/mood-selector/pico_sdk_import.cmake
-dev-setup/joystick-mood-selector/lib/
-dev-setup/joystick-mood-selector/pico_sdk_import.cmake
+# Waveshare library symlinks and SDK import (auto-created per setup guide)
+dev-setup/*/lib
+dev-setup/*/pico_sdk_import.cmake
+# Keep hello-world/lib as the shared source (not a symlink)
+!dev-setup/hello-world/lib/
+!dev-setup/hello-world/pico_sdk_import.cmake
+
+# WiFi credentials — never commit real passwords
+dev-setup/*/wifi_config.local.h
+
+# DevTool user settings
+.config/dilder-devtool/
 
 # Python
 __pycache__/

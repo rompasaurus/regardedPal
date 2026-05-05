@@ -9,11 +9,11 @@
  */
 
 #ifndef WIFI_SSID
-#define WIFI_SSID  "Moopster 2.4"
+#define WIFI_SSID  "YOUR_WIFI_SSID"
 #endif
 
 #ifndef WIFI_PASS
-#define WIFI_PASS  "12345678901234567890123456"
+#define WIFI_PASS  "YOUR_WIFI_PASSWORD"
 #endif
 
 /* NTP server — pool.ntp.org is the standard public NTP pool */
