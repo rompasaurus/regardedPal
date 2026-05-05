@@ -319,22 +319,10 @@ void EPD_2in13_V4_Display_Partial(UBYTE *Image)
         return;
     }
 
-    /* Periodic full refresh to clear accumulated ghosting charge.
-     * Increased threshold — partial updates look fine for many cycles. */
-    if (partial_count >= EPD_2IN13_V4_MAX_PARTIAL) {
-        EPD_2in13_V4_Init();
-        EPD_2in13_V4_Display_Base(Image);
-        return;
-    }
-
-    /* Single-pass partial refresh: old frame → new frame directly.
-     * The SSD1680 controller diffs the two buffers and only drives
-     * pixels that actually changed. No intermediate white flash. */
+    /* No periodic full refresh — partial updates only.
+     * If ghosting accumulates, user can power cycle to reset. */
     EPD_2in13_V4_DoPartialDiff(prev_frame, Image);
-
-    /* Save for next cycle */
     memcpy(prev_frame, Image, EPD_BUF_SIZE);
-    partial_count++;
 }
 
 /******************************************************************************

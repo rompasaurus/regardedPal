@@ -1334,11 +1334,15 @@ static void draw_battery_icon(int x0, int y0) {
     for (int y = y0 + 2; y < y0 + 6; y++) { px_set(x0 + 14, y); px_set(x0 + 15, y); }
 
     if (pct < 0) {
-        /* USB powered — draw plug symbol inside */
-        px_set(x0 + 5, y0 + 2); px_set(x0 + 5, y0 + 3);
-        px_set(x0 + 8, y0 + 2); px_set(x0 + 8, y0 + 3);
-        for (int x = x0 + 4; x < x0 + 10; x++) px_set(x, y0 + 4);
-        px_set(x0 + 6, y0 + 5); px_set(x0 + 7, y0 + 5);
+        /* USB powered — lightning bolt inside battery */
+        px_set(x0 + 8, y0 + 1); px_set(x0 + 7, y0 + 2);
+        px_set(x0 + 6, y0 + 2); px_set(x0 + 6, y0 + 3);
+        px_set(x0 + 5, y0 + 3); px_set(x0 + 4, y0 + 3);
+        px_set(x0 + 5, y0 + 3); px_set(x0 + 9, y0 + 3);
+        px_set(x0 + 8, y0 + 3); px_set(x0 + 7, y0 + 3);
+        px_set(x0 + 8, y0 + 4); px_set(x0 + 9, y0 + 4);
+        px_set(x0 + 7, y0 + 5); px_set(x0 + 8, y0 + 5);
+        px_set(x0 + 6, y0 + 6); px_set(x0 + 5, y0 + 6);
     } else {
         /* Fill bars based on percentage (4 bars max) */
         int bars = (pct + 12) / 25;  /* 0-4 bars */
@@ -1415,16 +1419,17 @@ static void draw_inverted_line(int y, const char *text) {
 
 /* ─── Draw menu overlay ─── */
 static void render_menu(int selected) {
-    for (int y = 76; y < IMG_H; y++)
+    /* Clear bottom half of screen for menu overlay */
+    for (int y = 72; y < IMG_H; y++)
         for (int x = 0; x < IMG_ROW_BYTES; x++)
             frame[y * IMG_ROW_BYTES + x] = 0;
 
-    for (int x = 5; x < 245; x++) px_set(x, 77);
-    draw_text(8, 79, "MENU", IMG_W);
+    for (int x = 5; x < 245; x++) px_set(x, 73);
+    draw_text(8, 75, "MENU", IMG_W);
 
+    /* 5 items at 8px spacing starting at y=84 → 84,92,100,108,116 — all fit */
     for (int i = 0; i < MENU_COUNT; i++) {
-        int y = 88 + i * 9;
-        if (y + 8 > IMG_H) break;
+        int y = 84 + i * 8;
         char line[40];
         if (i == selected) {
             snprintf(line, sizeof(line), "> %s", menu_items[i]);
