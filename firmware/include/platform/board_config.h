@@ -189,6 +189,12 @@
 #define PIN_BTN_RIGHT        5   /* GP5   pin 7  — PCB pad "R"  */
 #define PIN_BTN_CENTER       6   /* GP6   pin 9  — PCB pad "C"  */
 
+/* Piezo speaker — PWM output
+ * Passive piezo disc, driven directly from GPIO via hardware PWM.
+ * No amplifier needed (piezo is high-impedance, < 5 mA draw).
+ */
+#define PIN_SPEAKER          7   /* GP7   pin 10 — piezo + lead  */
+
 /* SPI controller selection.
  * On the Pico W, we use SPI1 (the second SPI controller).
  * SPI0 is also available but we chose SPI1 based on which
@@ -230,6 +236,9 @@
 #define PIN_BTN_UP           4   /* GP4   pin 6  — PCB pad "UP" */
 #define PIN_BTN_RIGHT        5   /* GP5   pin 7  — PCB pad "R"  */
 #define PIN_BTN_CENTER       6   /* GP6   pin 9  — PCB pad "C"  */
+
+/* Piezo speaker — same pin as Pico W */
+#define PIN_SPEAKER          7   /* GP7   pin 10 — piezo + lead  */
 
 /* SPI controller — same as Pico W (SPI1). */
 #define EPD_SPI_CONTROLLER   1   /* SPI1 */
