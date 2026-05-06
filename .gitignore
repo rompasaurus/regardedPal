@@ -1,44 +1,64 @@
 website/venv/
 website/site/
 
-# Pico SDK build artifacts (all firmware projects)
+# ─── Build artifacts ───
+# Pico SDK firmware builds (all projects)
 dev-setup/*/build/
-
 # picowota bootloader build
 picowota/build/
+# Firmware build outputs anywhere
+*.o
+*.elf
+*.uf2
+*.bin
+*.hex
+*.dis
+*.map
+*.d
+.ninja_log
+.ninja_deps
+build.ninja
+CMakeCache.txt
+CMakeFiles/
+cmake_install.cmake
 
-# Generated quote data (DevTool generates at build time)
+# ─── Generated files ───
+# Quote headers (DevTool generates at build time)
 dev-setup/*/quotes.h
-
-# Waveshare library symlinks and SDK import (auto-created per setup guide)
+# Waveshare library symlinks and SDK import cmake (auto-created per setup)
 dev-setup/*/lib
 dev-setup/*/pico_sdk_import.cmake
+dev-setup/*/lwipopts.h
 # Keep hello-world/lib as the shared source (not a symlink)
 !dev-setup/hello-world/lib/
 !dev-setup/hello-world/pico_sdk_import.cmake
 
+# ─── Credentials & user config ───
 # WiFi credentials — never commit real passwords
 dev-setup/*/wifi_config.local.h
-
-# DevTool user settings
+# DevTool user settings (persisted WiFi config, etc.)
 .config/dilder-devtool/
 
-# Python
+# ─── Python ───
 __pycache__/
 *.pyc
+*.pyo
 
-# VSCode workspace settings (user-specific)
+# ─── IDE / editor ───
 .vscode/
-hardware-design/kicad/dilder-breadboard/.history
+.idea/
+*.swp
+*.swo
+*~
 
-# KiCad lock files and backups
+# ─── KiCad ───
 *.lck
 *-backups/
-hardware-design/Board Design kicad/.history/
 **/.history/
 
-# FreeCAD backup files
+# ─── FreeCAD ───
 *.FCBak
 
-# Raw camera photos (converted to JPEG before committing)
+# ─── Raw camera photos (converted to JPEG before committing) ───
 *.heic
+*.HEIC
