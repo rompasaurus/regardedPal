@@ -116,16 +116,13 @@ def load_elf(path: str) -> FirmwareImage:
     if ei_class != 1:
         raise ValueError("Only 32-bit ELF supported (Pico is ARM Cortex-M)")
 
-    (e_type, e_machine, e_version, e_entry, e_phoff, e_shoff,
-     e_flags, e_ehsize, e_phentsize, e_phnum) = struct.unpack_from(
-        "<HHIIIIIHHHH"[:-1] + "H", data, 16)
-    # More precise unpack:
-    e_type     = struct.unpack_from("<H", data, 16)[0]
-    e_machine  = struct.unpack_from("<H", data, 18)[0]
-    e_entry    = struct.unpack_from("<I", data, 24)[0]
-    e_phoff    = struct.unpack_from("<I", data, 28)[0]
+    # ELF32 header fields we need (offsets from the ELF spec)
+    e_type      = struct.unpack_from("<H", data, 16)[0]
+    e_machine   = struct.unpack_from("<H", data, 18)[0]
+    e_entry     = struct.unpack_from("<I", data, 24)[0]
+    e_phoff     = struct.unpack_from("<I", data, 28)[0]
     e_phentsize = struct.unpack_from("<H", data, 42)[0]
-    e_phnum    = struct.unpack_from("<H", data, 44)[0]
+    e_phnum     = struct.unpack_from("<H", data, 44)[0]
 
     if e_machine != EM_ARM:
         raise ValueError(f"ELF machine type {e_machine} is not ARM ({EM_ARM})")
@@ -369,6 +366,19 @@ class PicowotaClient:
         report(STAGE_INFO, 0, 1)
         info = self.query_info()
         report(STAGE_INFO, 1, 1)
+
+        # Sanity-check the INFO response.  When an RP2040 build runs on
+        # the Pico 2 W in compatibility mode the flash_addr can come back
+        # as a RAM address (e.g. 0x200023EC) — fall back to safe defaults
+        # in that case.
+        if info.flash_addr < FLASH_BASE or info.flash_addr > FLASH_END_4MB:
+            info = FlashInfo(
+                flash_addr=FLASH_BASE,
+                flash_size=4 * 1024 * 1024,  # 4MB (Pico 2 W)
+                erase_size=info.erase_size if info.erase_size in (4096, 8192) else 4096,
+                write_size=info.write_size if 0 < info.write_size <= 4096 else 256,
+                max_data_len=info.max_data_len if 0 < info.max_data_len <= 4096 else 1024,
+            )
 
         # Validate image fits in flash
         if image.addr < info.flash_addr:
